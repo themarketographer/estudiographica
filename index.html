@@ -14,12 +14,11 @@
 <meta content="https://estudiographica.netlify.app/" property="og:url"/>
 <meta content="website" property="og:type"/>
 <!-- Favicon -->
-<link href="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745619722/Logo_S_F_l66fym.png" rel="icon" type="image/png"/>
-<meta charset="utf-8">
-<meta content="width=device-width, initial-scale=1" name="viewport">
 
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
 <!-- Fuentes -->
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
 <!-- Tailwind config BEFORE CDN para evitar ReferenceError y generar clases personalizadas -->
 <script>window.tailwind={theme:{extend:{colors:{amarillo:'#FFDE59',negro:'#1A1A1A',gris:'#F7F7F5'},fontFamily:{poppins:['Poppins','sans-serif']}}}};</script>
 <!-- Tailwind CDN -->
@@ -76,10 +75,10 @@
     .logo{max-width:100%;max-height:100%;object-fit:contain;filter:none;transition:transform .2s ease}
     .logo-card:hover .logo{transform:scale(1.02)}
   </style>
-</link></meta></meta><link href="https://estudiographica.netlify.app/" rel="canonical"/><meta content="index,follow,max-image-preview:large" name="robots"/><meta content="#FFD400" name="theme-color"/><meta content="light" name="color-scheme"/><meta content="yes" name="apple-mobile-web-app-capable"/><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"/><link href="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745619722/Logo_S_F_l66fym.png" rel="apple-touch-icon" sizes="180x180"/><meta content="summary_large_image" name="twitter:card"/><meta content="Estudio Graphica | Fotografía Gastronómica Profesional" name="twitter:title"/><meta content="Más de 250 marcas ya confiaron en nuestra fotografía gastronómica." name="twitter:description"/><meta content="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745611645/patata_brava_kjzngm.jpg" name="twitter:image"/><script type="application/ld+json">{"@context": "https://schema.org", "@type": "Organization", "name": "Estudio Graphica", "url": "https://estudiographica.netlify.app/", "logo": "https://res.cloudinary.com/dplhu2z6j/image/upload/v1745619722/Logo_S_F_l66fym.png", "sameAs": ["https://www.instagram.com/estudiographica", "https://www.facebook.com/estudiographica"]}</script><script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "name": "Estudio Graphica", "url": "https://estudiographica.netlify.app/", "potentialAction": {"@type": "SearchAction", "target": "https://estudiographica.netlify.app/?q={search_term_string}", "query-input": "required name=search_term_string"}}</script><style>
+<link href="https://estudiographica.netlify.app/" rel="canonical"/><meta content="index,follow,max-image-preview:large" name="robots"/><meta content="#FFD400" name="theme-color"/><meta content="light" name="color-scheme"/><meta content="yes" name="apple-mobile-web-app-capable"/><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"/><meta content="summary_large_image" name="twitter:card"/><meta content="Estudio Graphica | Fotografía Gastronómica Profesional" name="twitter:title"/><meta content="Más de 250 marcas ya confiaron en nuestra fotografía gastronómica." name="twitter:description"/><meta content="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745611645/patata_brava_kjzngm.jpg" name="twitter:image"/><script type="application/ld+json">{"@context": "https://schema.org", "@type": "Organization", "name": "Estudio Graphica", "url": "https://estudiographica.netlify.app/", "logo": "https://res.cloudinary.com/dplhu2z6j/image/upload/v1745619722/Logo_S_F_l66fym.png", "sameAs": ["https://www.instagram.com/estudiographica", "https://www.facebook.com/estudiographica"]}</script><script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "name": "Estudio Graphica", "url": "https://estudiographica.netlify.app/", "potentialAction": {"@type": "SearchAction", "target": "https://estudiographica.netlify.app/?q={search_term_string}", "query-input": "required name=search_term_string"}}</script><style>
 h1,h2,h3,h4,h5,h6{color:#000!important;-webkit-text-fill-color:#000!important}
 a,a:visited,a:active{color:#1A1A1A!important;-webkit-text-fill-color:#1A1A1A!important;text-decoration:none!important}
-</style></head>
+</style><link href="favicon.ico" rel="icon" type="image/x-icon"/><link href="apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/><meta content="https://estudiographica.netlify.app/" name="twitter:url"/></head>
 <body class="bg-blobs">
 <!-- Header -->
 <header class="fixed w-full bg-white/85 backdrop-blur-md z-50 shadow-sm">
@@ -176,7 +175,10 @@ a,a:visited,a:active{color:#1A1A1A!important;-webkit-text-fill-color:#1A1A1A!imp
 <p class="text-sm text-gray-600">Carnes y parrilla</p>
 </div>
 </div>
-
+<div class="flex items-center justify-center gap-3 mt-6">
+<button aria-label="Anterior" class="btn btn--yellow" data-pf-prev="" type="button">◀</button>
+<button aria-label="Siguiente" class="btn btn--yellow" data-pf-next="" type="button">▶</button>
+</div>
 <div class="text-center mt-8">
 <a class="btn btn--yellow" href="https://estudiographica.myportfolio.com" rel="noopener" target="_blank">Ver portafolio completo</a>
 </div>
@@ -305,9 +307,9 @@ a,a:visited,a:active{color:#1A1A1A!important;-webkit-text-fill-color:#1A1A1A!imp
 <footer class="py-14">
 <div class="max-w-7xl mx-auto px-4">
 <div class="flex flex-col items-center justify-center">
-<img alt="Estudio Graphica" class="h-16 w-auto mb-6" decoding="async" loading="lazy" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745619722/Logo_S_F_l66fym.png">
+<img alt="Estudio Graphica" class="h-16 w-auto mb-6" decoding="async" loading="lazy" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745619722/Logo_S_F_l66fym.png"/>
 <p class="text-gray-600 text-center">© 2025 Estudio Graphica. Todos los derechos reservados.</p>
-</img></div>
+</div>
 </div>
 </footer>
 <script>
@@ -345,7 +347,15 @@ a,a:visited,a:active{color:#1A1A1A!important;-webkit-text-fill-color:#1A1A1A!imp
       modal.addEventListener('click', function(ev){ if(ev.target===modal) closeModal(); });
     })();
 
-    // Portafolio sin flechas: botones removidos
+    // Portafolio botones (scrollBy)
+    (function(){
+      var track = document.getElementById('pf'); if(!track) return;
+      var prev = document.querySelector('[data-pf-prev]');
+      var next = document.querySelector('[data-pf-next]');
+      var itemWidth = 300 + 20;
+      prev && prev.addEventListener('click', function(){ track.scrollBy({left:-itemWidth*3,behavior:'smooth'}); });
+      next && next.addEventListener('click', function(){ track.scrollBy({left:itemWidth*3,behavior:'smooth'}); });
+    })();
 
     // Comparador Before/After con divisor visible
     (function(){
@@ -368,117 +378,32 @@ a,a:visited,a:active{color:#1A1A1A!important;-webkit-text-fill-color:#1A1A1A!imp
       document.addEventListener('mouseup',end); document.addEventListener('touchend',end);
     })();
 
-    // Auto-scroll + drag para logos (inercia más rápida)
-(function(){
-  var wrap = document.getElementById('logosWrap');
-  var track = document.getElementById('logos');
-  if(!wrap||!track) return;
-
-  // Duplicar items para loop infinito
-  var items = Array.prototype.slice.call(track.children);
-  items.forEach(function(n){ track.appendChild(n.cloneNode(true)); });
-
-  var pos = 0;
-  var baseSpeed = 1.2;         // velocidad base (antes 0.8)
-  var speed = baseSpeed;
-  var raf = null;
-
-  // --- Parámetros de inercia ---
-  var dragging = false;
-  var startX = 0;
-  var startPos = 0;
-  var lastX = 0;
-  var lastT = 0;
-  var velocity = 0;            // px/ms
-  var THROW_MULTIPLIER = 3.2;  // más alto => más "vuela"
-  var FRICTION = 0.94;         // 0.92–0.97 recomendable
-  var MAX_THROW = 4.5;         // cap para el extra speed
-
-  function loop(){
-    pos += speed;
-    var half = track.scrollWidth/2;
-    if(pos>=half) pos=0;
-    track.style.transform = 'translateX(' + (-pos) + 'px)';
-    raf = requestAnimationFrame(loop);
-  }
-  function startLoop(){ if(!raf) raf = requestAnimationFrame(loop); }
-  function stopLoop(){ if(raf){ cancelAnimationFrame(raf); raf=null; } }
-
-  function normalize(){
-    var half = track.scrollWidth/2;
-    if(pos<0) pos = half + pos%half;
-    if(pos>=half) pos%=half;
-  }
-
-  function onDown(e){
-    dragging = true;
-    wrap.classList.add('dragging');
-    stopLoop();
-    startX = (e.touches?e.touches[0].pageX:e.pageX);
-    startPos = pos;
-    lastX = startX;
-    lastT = performance.now();
-    velocity = 0;
-  }
-  function onMove(e){
-    if(!dragging) return;
-    e.preventDefault();
-    var x = (e.touches?e.touches[0].pageX:e.pageX);
-    var now = performance.now();
-    var dx = x - startX;
-    pos = startPos - dx;
-    normalize();
-    track.style.transform = 'translateX(' + (-pos) + 'px)';
-    // medir velocidad instantánea
-    var dt = Math.max(1, now - lastT);
-    var v = (x - lastX) / dt; // px/ms
-    // suavizar
-    velocity = 0.8*velocity + 0.2*v;
-    lastX = x; lastT = now;
-  }
-  function onUp(){
-    if(!dragging) return;
-    dragging = false;
-    wrap.classList.remove('dragging');
-    // convertir velocidad de gesto en un "boost" temporal
-    var throwBoost = Math.max(Math.min(velocity * THROW_MULTIPLIER, MAX_THROW), -MAX_THROW);
-    // si el usuario arrastró hacia la izquierda rápidamente, queremos que avance más rápido (speed+)
-    // si fue a la derecha, invertimos para que "vaya" en ese sentido
-    var currentDirection = speed >= 0 ? 1 : -1;
-    // sumamos al speed base en el sentido del gesto (negativo = hacia la derecha visualmente)
-    speed = baseSpeed + (-throwBoost); // invertir porque arrastrar a la derecha desplaza el track a la izquierda
-    // animar decay de speed hacia baseSpeed
-    (function decay(){
-      speed = baseSpeed + (speed - baseSpeed)*FRICTION;
-      if(Math.abs(speed - baseSpeed) > 0.05){
-        requestAnimationFrame(decay);
-      } else {
-        speed = baseSpeed;
-      }
+    // Auto-scroll + drag para logos
+    (function(){
+      var wrap = document.getElementById('logosWrap');
+      var track = document.getElementById('logos');
+      if(!wrap||!track) return;
+      // Duplicar items para loop infinito
+      var items = Array.prototype.slice.call(track.children);
+      items.forEach(function(n){ track.appendChild(n.cloneNode(true)); });
+      var pos = 0, speed = 0.8, raf = null, dragging=false, startX=0, startPos=0;
+      function tick(){ pos += speed; var half = track.scrollWidth/2; if(pos>=half) pos=0; track.style.transform = 'translateX(' + (-pos) + 'px)'; raf = requestAnimationFrame(tick); }
+      function start(){ if(!raf) raf = requestAnimationFrame(tick); }
+      function stop(){ if(raf){ cancelAnimationFrame(raf); raf=null; } }
+      function onDown(e){ dragging=true; wrap.classList.add('dragging'); stop(); startX = (e.touches?e.touches[0].pageX:e.pageX); startPos = pos; }
+      function onMove(e){ if(!dragging) return; e.preventDefault(); var x=(e.touches?e.touches[0].pageX:e.pageX); var delta = x - startX; pos = startPos - delta; var half = track.scrollWidth/2; if(pos<0) pos = half + pos%half; if(pos>=half) pos%=half; track.style.transform = 'translateX(' + (-pos) + 'px)'; }
+      function onUp(){ if(!dragging) return; dragging=false; wrap.classList.remove('dragging'); start(); }
+      wrap.addEventListener('mousedown', onDown); wrap.addEventListener('touchstart', onDown, {passive:false});
+      window.addEventListener('mousemove', onMove, {passive:false}); window.addEventListener('touchmove', onMove, {passive:false});
+      window.addEventListener('mouseup', onUp); window.addEventListener('touchend', onUp);
+      wrap.addEventListener('mouseenter', stop); wrap.addEventListener('mouseleave', function(){ if(!dragging) start(); });
+      document.addEventListener('visibilitychange', function(){ if(document.hidden) stop(); else if(!dragging) start(); });
+      // iniciar
+      start();
+      track.setAttribute('data-autoscroll','on');
     })();
-    startLoop();
-  }
 
-  wrap.addEventListener('mousedown', onDown);
-  wrap.addEventListener('touchstart', onDown, {passive:false});
-  window.addEventListener('mousemove', onMove, {passive:false});
-  window.addEventListener('touchmove', onMove, {passive:false});
-  window.addEventListener('mouseup', onUp);
-  window.addEventListener('touchend', onUp);
-
-  // Pausar en hover (desktop)
-  wrap.addEventListener('mouseenter', stopLoop);
-  wrap.addEventListener('mouseleave', function(){ if(!dragging) startLoop(); });
-
-  document.addEventListener('visibilitychange', function(){
-    if(document.hidden) stopLoop(); else if(!dragging) startLoop();
-  });
-
-  // iniciar
-  startLoop();
-  track.setAttribute('data-autoscroll','on');
-})();
-// TESTS (auto-chequeos en consola)
+    // TESTS (auto-chequeos en consola)
     (function(){
       console.assert(document.querySelectorAll('.btn.btn--yellow').length>=1, 'TEST: faltan botones amarillos');
       console.assert(getComputedStyle(document.documentElement).scrollBehavior==='smooth', 'TEST: scroll suave no activo');
