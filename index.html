@@ -176,10 +176,7 @@ a,a:visited,a:active{color:#1A1A1A!important;-webkit-text-fill-color:#1A1A1A!imp
 <p class="text-sm text-gray-600">Carnes y parrilla</p>
 </div>
 </div>
-<div class="flex items-center justify-center gap-3 mt-6">
-<button aria-label="Anterior" class="btn btn--yellow" data-pf-prev="" type="button">◀</button>
-<button aria-label="Siguiente" class="btn btn--yellow" data-pf-next="" type="button">▶</button>
-</div>
+
 <div class="text-center mt-8">
 <a class="btn btn--yellow" href="https://estudiographica.myportfolio.com" rel="noopener" target="_blank">Ver portafolio completo</a>
 </div>
@@ -348,15 +345,7 @@ a,a:visited,a:active{color:#1A1A1A!important;-webkit-text-fill-color:#1A1A1A!imp
       modal.addEventListener('click', function(ev){ if(ev.target===modal) closeModal(); });
     })();
 
-    // Portafolio botones (scrollBy)
-    (function(){
-      var track = document.getElementById('pf'); if(!track) return;
-      var prev = document.querySelector('[data-pf-prev]');
-      var next = document.querySelector('[data-pf-next]');
-      var itemWidth = 300 + 20;
-      prev && prev.addEventListener('click', function(){ track.scrollBy({left:-itemWidth*3,behavior:'smooth'}); });
-      next && next.addEventListener('click', function(){ track.scrollBy({left:itemWidth*3,behavior:'smooth'}); });
-    })();
+    // Portafolio sin flechas: botones removidos
 
     // Comparador Before/After con divisor visible
     (function(){
@@ -379,32 +368,117 @@ a,a:visited,a:active{color:#1A1A1A!important;-webkit-text-fill-color:#1A1A1A!imp
       document.addEventListener('mouseup',end); document.addEventListener('touchend',end);
     })();
 
-    // Auto-scroll + drag para logos
-    (function(){
-      var wrap = document.getElementById('logosWrap');
-      var track = document.getElementById('logos');
-      if(!wrap||!track) return;
-      // Duplicar items para loop infinito
-      var items = Array.prototype.slice.call(track.children);
-      items.forEach(function(n){ track.appendChild(n.cloneNode(true)); });
-      var pos = 0, speed = 0.8, raf = null, dragging=false, startX=0, startPos=0;
-      function tick(){ pos += speed; var half = track.scrollWidth/2; if(pos>=half) pos=0; track.style.transform = 'translateX(' + (-pos) + 'px)'; raf = requestAnimationFrame(tick); }
-      function start(){ if(!raf) raf = requestAnimationFrame(tick); }
-      function stop(){ if(raf){ cancelAnimationFrame(raf); raf=null; } }
-      function onDown(e){ dragging=true; wrap.classList.add('dragging'); stop(); startX = (e.touches?e.touches[0].pageX:e.pageX); startPos = pos; }
-      function onMove(e){ if(!dragging) return; e.preventDefault(); var x=(e.touches?e.touches[0].pageX:e.pageX); var delta = x - startX; pos = startPos - delta; var half = track.scrollWidth/2; if(pos<0) pos = half + pos%half; if(pos>=half) pos%=half; track.style.transform = 'translateX(' + (-pos) + 'px)'; }
-      function onUp(){ if(!dragging) return; dragging=false; wrap.classList.remove('dragging'); start(); }
-      wrap.addEventListener('mousedown', onDown); wrap.addEventListener('touchstart', onDown, {passive:false});
-      window.addEventListener('mousemove', onMove, {passive:false}); window.addEventListener('touchmove', onMove, {passive:false});
-      window.addEventListener('mouseup', onUp); window.addEventListener('touchend', onUp);
-      wrap.addEventListener('mouseenter', stop); wrap.addEventListener('mouseleave', function(){ if(!dragging) start(); });
-      document.addEventListener('visibilitychange', function(){ if(document.hidden) stop(); else if(!dragging) start(); });
-      // iniciar
-      start();
-      track.setAttribute('data-autoscroll','on');
-    })();
+    // Auto-scroll + drag para logos (inercia más rápida)
+(function(){
+  var wrap = document.getElementById('logosWrap');
+  var track = document.getElementById('logos');
+  if(!wrap||!track) return;
 
-    // TESTS (auto-chequeos en consola)
+  // Duplicar items para loop infinito
+  var items = Array.prototype.slice.call(track.children);
+  items.forEach(function(n){ track.appendChild(n.cloneNode(true)); });
+
+  var pos = 0;
+  var baseSpeed = 1.2;         // velocidad base (antes 0.8)
+  var speed = baseSpeed;
+  var raf = null;
+
+  // --- Parámetros de inercia ---
+  var dragging = false;
+  var startX = 0;
+  var startPos = 0;
+  var lastX = 0;
+  var lastT = 0;
+  var velocity = 0;            // px/ms
+  var THROW_MULTIPLIER = 3.2;  // más alto => más "vuela"
+  var FRICTION = 0.94;         // 0.92–0.97 recomendable
+  var MAX_THROW = 4.5;         // cap para el extra speed
+
+  function loop(){
+    pos += speed;
+    var half = track.scrollWidth/2;
+    if(pos>=half) pos=0;
+    track.style.transform = 'translateX(' + (-pos) + 'px)';
+    raf = requestAnimationFrame(loop);
+  }
+  function startLoop(){ if(!raf) raf = requestAnimationFrame(loop); }
+  function stopLoop(){ if(raf){ cancelAnimationFrame(raf); raf=null; } }
+
+  function normalize(){
+    var half = track.scrollWidth/2;
+    if(pos<0) pos = half + pos%half;
+    if(pos>=half) pos%=half;
+  }
+
+  function onDown(e){
+    dragging = true;
+    wrap.classList.add('dragging');
+    stopLoop();
+    startX = (e.touches?e.touches[0].pageX:e.pageX);
+    startPos = pos;
+    lastX = startX;
+    lastT = performance.now();
+    velocity = 0;
+  }
+  function onMove(e){
+    if(!dragging) return;
+    e.preventDefault();
+    var x = (e.touches?e.touches[0].pageX:e.pageX);
+    var now = performance.now();
+    var dx = x - startX;
+    pos = startPos - dx;
+    normalize();
+    track.style.transform = 'translateX(' + (-pos) + 'px)';
+    // medir velocidad instantánea
+    var dt = Math.max(1, now - lastT);
+    var v = (x - lastX) / dt; // px/ms
+    // suavizar
+    velocity = 0.8*velocity + 0.2*v;
+    lastX = x; lastT = now;
+  }
+  function onUp(){
+    if(!dragging) return;
+    dragging = false;
+    wrap.classList.remove('dragging');
+    // convertir velocidad de gesto en un "boost" temporal
+    var throwBoost = Math.max(Math.min(velocity * THROW_MULTIPLIER, MAX_THROW), -MAX_THROW);
+    // si el usuario arrastró hacia la izquierda rápidamente, queremos que avance más rápido (speed+)
+    // si fue a la derecha, invertimos para que "vaya" en ese sentido
+    var currentDirection = speed >= 0 ? 1 : -1;
+    // sumamos al speed base en el sentido del gesto (negativo = hacia la derecha visualmente)
+    speed = baseSpeed + (-throwBoost); // invertir porque arrastrar a la derecha desplaza el track a la izquierda
+    // animar decay de speed hacia baseSpeed
+    (function decay(){
+      speed = baseSpeed + (speed - baseSpeed)*FRICTION;
+      if(Math.abs(speed - baseSpeed) > 0.05){
+        requestAnimationFrame(decay);
+      } else {
+        speed = baseSpeed;
+      }
+    })();
+    startLoop();
+  }
+
+  wrap.addEventListener('mousedown', onDown);
+  wrap.addEventListener('touchstart', onDown, {passive:false});
+  window.addEventListener('mousemove', onMove, {passive:false});
+  window.addEventListener('touchmove', onMove, {passive:false});
+  window.addEventListener('mouseup', onUp);
+  window.addEventListener('touchend', onUp);
+
+  // Pausar en hover (desktop)
+  wrap.addEventListener('mouseenter', stopLoop);
+  wrap.addEventListener('mouseleave', function(){ if(!dragging) startLoop(); });
+
+  document.addEventListener('visibilitychange', function(){
+    if(document.hidden) stopLoop(); else if(!dragging) startLoop();
+  });
+
+  // iniciar
+  startLoop();
+  track.setAttribute('data-autoscroll','on');
+})();
+// TESTS (auto-chequeos en consola)
     (function(){
       console.assert(document.querySelectorAll('.btn.btn--yellow').length>=1, 'TEST: faltan botones amarillos');
       console.assert(getComputedStyle(document.documentElement).scrollBehavior==='smooth', 'TEST: scroll suave no activo');
