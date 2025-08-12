@@ -1,480 +1,437 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+
+<!-- SEO básico -->
+<title>Estudio Graphica | Fotografía Gastronómica Profesional</title>
+<meta name="description" content="Fotografía gastronómica profesional que hace que tus clientes quieran probar cada plato. Más de 250 marcas ya confiaron.">
+<meta name="keywords" content="fotografía gastronómica, fotógrafo de comida, food styling, fotografía para restaurantes">
+<meta name="author" content="Estudio Graphica">
+
+<!-- Open Graph -->
+<meta property="og:title" content="Estudio Graphica | Fotografía Gastronómica Profesional">
+<meta property="og:description" content="Más de 250 marcas ya confiaron en nuestra fotografía gastronómica.">
+<meta property="og:image" content="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745611645/patata_brava_kjzngm.jpg">
+<meta property="og:url" content="https://graphica.netlify.app">
+<meta property="og:type" content="website">
+
+<!-- Favicon -->
+<link rel="icon" href="favicon.png" type="image/png">
+
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Catálogo de Servicios – Graphica</title>
-  <meta name="description" content="Catálogo de servicios de fotografía gastronómica: sesión de fotos, plan mensual y jornadas por hora. Ajusta cantidades y solicita por WhatsApp." />
-  <meta name="theme-color" content="#28a745" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Estudio Graphica | Fotografía Gastronómica Profesional</title>
 
-  <!-- Open Graph / Facebook / WhatsApp -->
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://tusitio.netlify.app/" />
-  <meta property="og:title" content="Catálogo de Servicios – Graphica" />
-  <meta property="og:description" content="Servicios de fotografía gastronómica profesional. Ajusta cantidades y solicita por WhatsApp." />
-  <meta property="og:image" content="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745619722/Logo_S_F_l66fym.png" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
-
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:url" content="https://tusitio.netlify.app/" />
-  <meta name="twitter:title" content="Catálogo de Servicios – Graphica" />
-  <meta name="twitter:description" content="Servicios de fotografía gastronómica profesional. Ajusta cantidades y solicita por WhatsApp." />
-  <meta name="twitter:image" content="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745619722/Logo_S_F_l66fym.png" />
-
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" sizes="32x32" href="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745619722/Logo_S_F_l66fym.png" />
-
-  <!-- Fuente -->
+  <!-- Fuentes -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 
+  <!-- Tailwind config BEFORE CDN para evitar ReferenceError y generar clases personalizadas -->
+  <script>window.tailwind={theme:{extend:{colors:{amarillo:'#FFDE59',negro:'#1A1A1A',gris:'#F7F7F5'},fontFamily:{poppins:['Poppins','sans-serif']}}}};</script>
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
   <style>
-    :root {
-      --color-primary: #333333;
-      --color-secondary: #28a745;
-      --color-tertiary: #6B66FF;
-      --whatsapp-green: #25D366;
-      --action-green: #28a745;
-      --neutral-gray: #333333;
-      --bg-gradient-start: #f5f7fa;
-      --bg-gradient-end: #e4e8f0;
-      --animation-duration: 0.3s;
-    }
+    @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+    html{scroll-behavior:smooth}
+    body{font-family:'Poppins',sans-serif;letter-spacing:-.03em;background:#fbfbfb;color:#1A1A1A}
 
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+    /* Fondo con manchas/desenfoques amarillos sutiles */
+    .bg-blobs:before,.bg-blobs:after{content:"";position:fixed;z-index:-1;border-radius:50%;filter:blur(60px);opacity:.22;pointer-events:none}
+    .bg-blobs:before{width:380px;height:380px;background:#FFDE59;top:6%;left:-120px}
+    .bg-blobs:after{width:520px;height:520px;background:radial-gradient(circle at 30% 30%, #FFDE59 0%, rgba(255,222,89,0) 70%);bottom:-120px;right:-160px}
 
-    body {
-      background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
-      min-height: 100vh; padding: 20px; color: #333;
-    }
+    /* Reveal */
+    .reveal{opacity:0;transform:translateY(20px);transition:opacity .5s ease,transform .5s ease}
+    .reveal.is-visible{opacity:1;transform:none}
 
-    .container { max-width: 1200px; width: 100%; margin: 0 auto; display: flex; flex-direction: column; align-items: center; padding-bottom: 100px; }
+    /* Botones */
+    .btn{display:inline-block;font-weight:600;border-radius:9999px;padding:.875rem 1.75rem;transition:transform .12s ease,box-shadow .2s ease,opacity .2s ease}
+    .btn--yellow{background:#FFDE59;color:#1A1A1A;box-shadow:0 8px 20px rgba(255,222,89,.35)}
+    .btn--yellow:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(255,222,89,.45)}
+    .btn--yellow:active{transform:translateY(0) scale(.98);box-shadow:0 6px 14px rgba(255,222,89,.35)}
 
-    .header { display: flex; flex-direction: column; align-items: center; margin-bottom: 40px; padding: 20px; width: 100%; animation: fadeInDown 0.8s ease; }
-    .logo { height: 80px; margin-bottom: 20px; cursor: pointer; transition: transform 0.3s ease; }
-    .logo:hover { transform: scale(1.1); }
-    .title { font-weight: 600; font-size: 2.2rem; color: #333; text-align: center; letter-spacing: -1px; }
-    .subtitle { font-weight: 400; font-size: 1.1rem; color: #666; text-align: center; margin-top: 10px; letter-spacing: -0.5px; }
+    /* Portafolio */
+    .portfolio-item{transition:transform .25s ease,box-shadow .25s ease}
+    .portfolio-item:hover{transform:translateY(-6px);box-shadow:0 20px 25px -5px rgba(0,0,0,.1),0 10px 10px -5px rgba(0,0,0,.04)}
+    .pf-carousel{display:flex;gap:1.25rem;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth}
+    .pf-carousel::-webkit-scrollbar{height:8px}
+    .pf-carousel::-webkit-scrollbar-thumb{background:#e4e4e4;border-radius:9999px}
+    .pf-item{scroll-snap-align:start;flex:0 0 auto;width:300px}
 
-    .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; width: 100%; max-width: 800px; animation: fadeInUp 0.8s ease; }
-
-    .service-card { background: white; border-radius: 15px; padding: 25px; transition: all 0.4s ease; box-shadow: 0 5px 15px rgba(0,0,0,0.1); display: flex; flex-direction: column; align-items: center; cursor: pointer; transform: translateY(0); border: 0; }
-    .service-card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.15); }
-    .service-icon { font-size: 2.5rem; margin-bottom: 15px; transition: transform 0.3s ease; display: flex; justify-content: center; align-items: center; width: 60px; height: 60px; text-align: center; }
-    .service-card:hover .service-icon { transform: scale(1.2); }
-    .service-title { font-size: 1.3rem; font-weight: 600; margin-bottom: 12px; text-align: center; letter-spacing: -0.8px; }
-    .service-description { text-align: center; font-size: 0.9rem; color: #666; letter-spacing: -0.5px; }
+    /* Fotógrafo */
+    .photographer-img{border-radius:1rem}
 
     /* Modal */
-    .modal-overlay { position: fixed; inset: 0; background-color: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 1000; opacity: 0; transition: opacity 0.3s ease; }
-    .modal-overlay.active { display: flex; opacity: 1; }
-    .modal { background: white; width: 90%; max-width: 600px; border-radius: 15px; padding: 30px; position: relative; max-height: 90vh; overflow-y: auto; transform: scale(0.9); transition: transform 0.3s ease; }
-    .modal-overlay.active .modal { transform: scale(1); }
-    .modal-close { position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #666; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; padding: 0; line-height: 1; transition: color 0.3s ease; }
-    .modal-close:hover { color: var(--color-secondary); }
-    .modal-title { font-size: 1.8rem; font-weight: 600; margin-bottom: 20px; text-align: center; color: #333; letter-spacing: -1px; }
+    .modal{display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.9)}
+    .modal__img{max-width:90%;max-height:90%;object-fit:contain}
+    .modal__close{position:absolute;top:16px;right:24px;color:#fff;font-size:36px;line-height:1;cursor:pointer}
 
-    /* Slider */
-    .slider-container { margin: 20px 0; animation: fadeIn 0.5s ease; }
-    .slider-header { display: flex; justify-content: space-between; margin-bottom: 10px; }
-    .slider-label { font-weight: 500; color: #333; letter-spacing: -0.5px; }
-    .slider-value { font-weight: 600; color: var(--color-primary); transition: all 0.3s ease; letter-spacing: -0.5px; }
-    .slider-value.updating { transform: scale(1.1); color: var(--color-secondary); }
-    .slider { width: 100%; height: 10px; -webkit-appearance: none; appearance: none; background: #ddd; border-radius: 5px; outline: none; transition: background 0.3s ease; }
-    .slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 20px; height: 20px; border-radius: 50%; background: var(--color-primary); cursor: pointer; transition: transform 0.2s ease, background 0.3s ease; }
-    .slider::-webkit-slider-thumb:hover { transform: scale(1.2); }
-    .slider::-moz-range-thumb { width: 20px; height: 20px; border-radius: 50%; background: var(--color-primary); cursor: pointer; transition: transform 0.2s ease, background 0.3s ease; }
+    /* Antes / Después */
+    .cmp{position:relative;max-width:720px;margin-inline:auto;aspect-ratio:1/1;overflow:hidden;border-radius:1rem}
+    .cmp__layer{position:absolute;inset:0}
+    .cmp__layer img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+    .cmp__before{clip-path:polygon(0 0,50% 0,50% 100%,0 100%)}
+    .cmp__slider{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:44px;height:44px;border-radius:9999px;background:#FFDE59;box-shadow:0 0 0 3px rgba(255,255,255,.7);display:flex;align-items:center;justify-content:center;cursor:ew-resize;z-index:3}
+    .cmp__divider{position:absolute;top:-30%;bottom:-30%;left:50%;width:2px;background:#FFDE59;z-index:2}
 
-    /* Package */
-    .package-details { background: #f9f9f9; border-radius: 15px; padding: 25px; margin-top: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: all 0.3s ease; animation: fadeIn 0.5s ease; }
-    .package-details:hover { box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
-    .package-title { font-size: 1.3rem; font-weight: 600; margin-bottom: 15px; color: #333; transition: all 0.3s ease; letter-spacing: -0.8px; }
-    .package-title.updating { transform: translateY(-5px); color: var(--color-secondary); }
-    .package-price { font-size: 2rem; font-weight: 700; margin-bottom: 20px; color: var(--color-primary); transition: all 0.3s ease; letter-spacing: -1px; }
-    .package-price.updating { transform: scale(1.05); color: var(--color-secondary); }
-    .package-price span { font-size: 1rem; font-weight: 400; color: #666; letter-spacing: -0.5px; }
-
-    .benefits-list { list-style: none; margin-bottom: 20px; }
-    .benefit-item { display: flex; align-items: center; margin-bottom: 10px; animation: fadeInRight 0.5s ease; transition: transform 0.3s ease; }
-    .benefit-item:hover { transform: translateX(5px); }
-    .benefit-icon { color: var(--color-primary); margin-right: 10px; font-size: 1.2rem; min-width: 20px; display: flex; justify-content: center; }
-    .benefit-text { font-size: 0.95rem; color: #555; letter-spacing: -0.5px; margin-left: 5px; }
-
-    .action-button { background: var(--action-green); color: white; border: none; padding: 12px 25px; border-radius: 10px; font-weight: 600; font-size: 1rem; cursor: pointer; transition: all 0.3s ease; width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; position: relative; overflow: hidden; letter-spacing: -0.5px; }
-    .action-button:hover { background: #218838; transform: translateY(-3px); box-shadow: 0 5px 15px rgba(40,167,69,0.4); }
-    .action-button:active { transform: translateY(0); }
-    .action-button::after { content: ''; position: absolute; top: 50%; left: 50%; width: 5px; height: 5px; background: rgba(255,255,255,0.5); opacity: 0; border-radius: 100%; transform: scale(1,1) translate(-50%); transform-origin: 50% 50%; }
-    .action-button:focus:not(:active)::after { animation: ripple 1s ease-out; }
-
-    .checkbox-container { margin: 20px 0; animation: fadeIn 0.5s ease; }
-    .checkbox-label { display: flex; align-items: center; cursor: pointer; transition: transform 0.3s ease; letter-spacing: -0.5px; }
-    .checkbox-label:hover { transform: translateX(5px); }
-    .checkbox-input { margin-right: 10px; width: 18px; height: 18px; cursor: pointer; }
-
-    .duration-selector { margin: 20px 0; animation: fadeIn 0.5s ease; }
-    .duration-options { display: flex; gap: 10px; margin-top: 10px; }
-    .duration-option { padding: 10px; border-radius: 10px; background: #f0f0f0; border: 2px solid transparent; cursor: pointer; transition: all 0.3s ease; text-align: center; flex: 1; letter-spacing: -0.5px; }
-    .duration-option:hover { background: #e5e5e5; transform: translateY(-3px); }
-    .duration-option.active { border-color: var(--color-primary); background: rgba(51,51,51,0.1); font-weight: 500; transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-
-    .meeting-btn { position: fixed; bottom: 20px; right: 20px; background: var(--neutral-gray); color: white; border: none; border-radius: 50%; width: 60px; height: 60px; font-size: 1.8rem; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.2); transition: all 0.3s ease; z-index: 100; animation: pulse 2s infinite; padding: 0; }
-    .meeting-btn:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.3); animation: none; }
-
-    @keyframes fadeIn { from {opacity:0} to {opacity:1} }
-    @keyframes fadeInUp { from {opacity:0; transform: translateY(20px)} to {opacity:1; transform: translateY(0)} }
-    @keyframes fadeInDown { from {opacity:0; transform: translateY(-20px)} to {opacity:1; transform: translateY(0)} }
-    @keyframes fadeInRight { from {opacity:0; transform: translateX(-20px)} to {opacity:1; transform: translateX(0)} }
-    @keyframes pulse { 0% {transform:scale(1); box-shadow:0 5px 15px rgba(0,0,0,0.2)} 50% {transform:scale(1.05); box-shadow:0 8px 20px rgba(0,0,0,0.3)} 100% {transform:scale(1); box-shadow:0 5px 15px rgba(0,0,0,0.2)} }
-    @keyframes ripple { 0% { transform: scale(0,0); opacity:1 } 20% { transform: scale(25,25); opacity:1 } 100% { transform: scale(40,40); opacity:0 } }
-
-    @media (max-width: 768px) {
-      .services-grid { grid-template-columns: 1fr; gap: 15px; }
-      .modal { padding: 20px; width: 95%; max-height: 85vh; }
-      .modal-title { font-size: 1.5rem; }
-      .package-price { font-size: 1.8rem; }
-      .meeting-btn { bottom: 15px; right: 15px; width: 50px; height: 50px; font-size: 1.5rem; }
-      .title { font-size: 1.8rem; }
-      .subtitle { font-size: 0.9rem; }
-      .container { padding-bottom: 80px; }
-    }
-    @media (max-width: 480px) {
-      .duration-options { flex-direction: column; gap: 8px; }
-      .duration-option { padding: 8px; }
-      .modal { padding: 15px; }
-      .modal-title { font-size: 1.3rem; }
-      .package-price { font-size: 1.5rem; }
-      .benefit-text { font-size: 0.85rem; }
-      .action-button { padding: 10px 15px; font-size: 0.9rem; }
-    }
+    /* Logos clientes: más grandes, sin sombra/borde, auto-scroll + drag */
+    .logos-scroll{overflow:hidden;cursor:grab}
+    .logos-scroll.dragging{cursor:grabbing}
+    .logos-track{display:flex;gap:2rem;padding:.5rem 0;will-change:transform}
+    .logo-card{width:180px;height:110px;flex:0 0 auto;display:flex;align-items:center;justify-content:center}
+    .logo{max-width:100%;max-height:100%;object-fit:contain;filter:none;transition:transform .2s ease}
+    .logo-card:hover .logo{transform:scale(1.02)}
   </style>
 </head>
-<body>
-  <div class="container">
-    <div class="header">
-      <a href="https://estudiographica.com" target="_blank" rel="noopener noreferrer">
-        <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745619722/Logo_S_F_l66fym.png" alt="Logo" class="logo" />
+<body class="bg-blobs">
+  <!-- Header -->
+  <header class="fixed w-full bg-white/85 backdrop-blur-md z-50 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+      <a href="#inicio" class="h-14 flex items-center" aria-label="Ir al inicio">
+        <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745619722/Logo_S_F_l66fym.png" alt="Estudio Graphica" class="h-14 w-auto" loading="eager" decoding="sync" fetchpriority="high" />
       </a>
-      <h1 class="title">Catálogo de Servicios</h1>
-      <p class="subtitle">Selecciona el tipo de servicio que necesitas</p>
+      <a href="#agendar" class="btn btn--yellow" aria-label="Agendar reunión">Agendar reunión</a>
     </div>
+  </header>
 
-    <div class="services-grid">
-      <button class="service-card" type="button" aria-haspopup="dialog" aria-controls="modal-sesion" onclick="openModal('modal-sesion')">
-        <div class="service-icon" aria-hidden="true">📸</div>
-        <h2 class="service-title">Sesión de Fotos</h2>
-        <p class="service-description">Sesiones únicas de fotografía profesional</p>
-      </button>
-
-      <button class="service-card" type="button" aria-haspopup="dialog" aria-controls="modal-plan" onclick="openModal('modal-plan')">
-        <div class="service-icon" aria-hidden="true">📅</div>
-        <h2 class="service-title">Plan Mensual</h2>
-        <p class="service-description">Servicio continuo con entregas mensuales</p>
-      </button>
-
-      <button class="service-card" type="button" aria-haspopup="dialog" aria-controls="modal-jornada" onclick="openModal('modal-jornada')">
-        <div class="service-icon" aria-hidden="true">⏱️</div>
-        <h2 class="service-title">Jornada de Trabajo</h2>
-        <p class="service-description">Sesiones por horas para gran volumen</p>
-      </button>
-    </div>
-  </div>
-
-  <!-- Modal: Sesión de Fotos -->
-  <div class="modal-overlay" id="modal-sesion" role="dialog" aria-modal="true" aria-labelledby="sesion-title">
-    <div class="modal">
-      <button class="modal-close" aria-label="Cerrar" onclick="closeModal('modal-sesion')">&times;</button>
-      <h2 class="modal-title" id="sesion-title">Sesión de Fotos</h2>
-
-      <div class="slider-container">
-        <div class="slider-header">
-          <span class="slider-label">Cantidad de fotos</span>
-          <span class="slider-value" id="fotos-value">8 fotos</span>
+  <!-- Hero -->
+  <section id="inicio" class="pt-32 md:pt-40 pb-16 md:pb-24 relative">
+    <div class="max-w-7xl mx-auto px-4 grid md:grid-cols-2 gap-10 items-center">
+      <div class="reveal">
+        <h1 class="font-poppins font-bold text-4xl md:text-5xl lg:text-6xl leading-tight mb-6 tracking-tighter">Contratar fotógrafo no es caro, caro es que tu negocio no venda.</h1>
+        <p class="text-xl md:text-2xl mb-8 text-gray-700">La gente come con los ojos primero.</p>
+        <a href="#servicios" class="btn btn--yellow" aria-label="Ver servicios">¡Quiero saber más!</a>
+      </div>
+      <div class="reveal">
+        <div class="w-full h-80 md:h-96 lg:h-[500px] rounded-2xl overflow-hidden">
+          <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745611645/patata_brava_kjzngm.jpg" alt="Fotografía gastronómica profesional" class="w-full h-full object-cover" loading="eager" decoding="async" />
         </div>
-        <input type="range" min="8" max="24" value="8" step="1" class="slider" id="fotos-slider" oninput="updateSesionFotos()" />
-      </div>
-
-      <div class="package-details">
-        <h3 class="package-title" id="sesion-package-title">Paquete Básico</h3>
-        <div class="package-price" id="sesion-package-price">Bs. 580 <span>pago único</span></div>
-        <ul class="benefits-list" id="sesion-benefits"></ul>
-        <button class="action-button" type="button" onclick="sendWhatsApp('sesion')" aria-label="Solicitar sesión por WhatsApp">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
-            <path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/>
-          </svg>
-          Solicitar este servicio
-        </button>
       </div>
     </div>
-  </div>
+  </section>
 
-  <!-- Modal: Plan Mensual -->
-  <div class="modal-overlay" id="modal-plan" role="dialog" aria-modal="true" aria-labelledby="plan-title">
-    <div class="modal">
-      <button class="modal-close" aria-label="Cerrar" onclick="closeModal('modal-plan')">&times;</button>
-      <h2 class="modal-title" id="plan-title">Plan Mensual</h2>
-
-      <div class="slider-container">
-        <div class="slider-header">
-          <span class="slider-label">Cantidad de fotos mensuales</span>
-          <span class="slider-value" id="plan-fotos-value">12 fotos/mes</span>
-        </div>
-        <input type="range" min="12" max="26" value="12" step="1" class="slider" id="plan-fotos-slider" oninput="updatePlanMensual()" />
+  <!-- Servicios -->
+  <section id="servicios" class="py-16 md:py-24 relative">
+    <div class="max-w-7xl mx-auto px-4">
+      <h2 class="font-poppins font-bold text-3xl md:text-4xl text-center mb-14 tracking-tighter reveal">Nuestros Servicios</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+        <article class="bg-white p-8 rounded-2xl shadow-lg text-center reveal">
+          <h3 class="font-semibold text-xl mb-3">Fotografía Gastronómica</h3>
+          <p class="text-gray-600">¿Vas a seguir tomando fotos de tu plato con el celular grasoso de tu cajero? Mejor deja que hagamos fotos que den hambre. Fotos que hacen que el cliente no solo vea el menú, sino que quiera lamerlo.</p>
+        </article>
+        <article class="bg-white p-8 rounded-2xl shadow-lg text-center reveal">
+          <h3 class="font-semibold text-xl mb-3">Foodstyling Profesional</h3>
+          <p class="text-gray-600">Un plato mal presentado mata más ventas que una mala reseña. Te ayudamos a que tus platos luzcan como portada de revista. Comida que posa mejor que varios influencers.</p>
+        </article>
+        <article class="bg-white p-8 rounded-2xl shadow-lg text-center reveal">
+          <h3 class="font-semibold text-xl mb-3">Planes Mensuales</h3>
+          <p class="text-gray-600">¿Publicas una vez cada eclipse? Tenemos planes mensuales para que tu contenido salga tan constante como tus cuentas por pagar. Nada de reciclar el mismo ceviche en San Valentín.</p>
+        </article>
       </div>
+      <p class="text-center italic text-lg mt-10 reveal">"Si cocinas con pasión, ¿por qué mostrarlo con vergüenza?"</p>
+    </div>
+  </section>
 
-      <div class="checkbox-container">
-        <label class="checkbox-label">
-          <input type="checkbox" class="checkbox-input" id="add-video" onchange="toggleVideoOptions()" />
-          <span class="checkbox-text">Añadir servicio de videos</span>
-        </label>
-      </div>
+  <!-- Portafolio -->
+  <section id="portfolio" class="py-16 md:py-24 relative">
+    <div class="max-w-7xl mx-auto px-4">
+      <h2 class="font-poppins font-bold text-3xl md:text-4xl text-center mb-4 tracking-tighter reveal">Nuestro Portafolio</h2>
+      <p class="text-center text-gray-600 max-w-2xl mx-auto mb-10 reveal">No ganes por ser barato. Gana porque nadie puede resistirse a verte.</p>
 
-      <div id="video-options" style="display:none">
-        <div class="slider-container">
-          <div class="slider-header">
-            <span class="slider-label">Cantidad de reels mensuales</span>
-            <span class="slider-value" id="reels-value">4 reels/mes</span>
+      <div class="reveal">
+        <div class="pf-carousel" id="pf">
+          <div class="pf-item">
+            <div class="w-full h-64 rounded-2xl relative overflow-hidden portfolio-item">
+              <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745619066/_MG_4717_de_tama%C3%B1o_grande_pq7nup.png" alt="Cookie Bar - Cafetería y galletería" class="w-full h-full object-cover" loading="lazy" decoding="async" data-caption="Cookie Bar - Cafetería y galletería" />
+            </div>
+            <h3 class="font-semibold mt-3">Cookie Bar</h3>
+            <p class="text-sm text-gray-600">Cafetería y galletería</p>
           </div>
-          <input type="range" min="4" max="12" value="4" step="1" class="slider" id="reels-slider" oninput="updatePlanMensual()" />
+          <div class="pf-item">
+            <div class="w-full h-64 rounded-2xl relative overflow-hidden portfolio-item">
+              <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745619069/IMG_9922_de_tama%C3%B1o_grande_um4gy8.png" alt="Vitz - Postres y helados" class="w-full h-full object-cover" loading="lazy" decoding="async" data-caption="Vitz - Postres y helados" />
+            </div>
+            <h3 class="font-semibold mt-3">Vitz</h3>
+            <p class="text-sm text-gray-600">Postres y helados</p>
+          </div>
+          <div class="pf-item">
+            <div class="w-full h-64 rounded-2xl relative overflow-hidden portfolio-item">
+              <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745619066/IMG_2073_de_tama%C3%B1o_grande_dsdllu.png" alt="Burger 91 - Hamburguesas y comida rápida" class="w-full h-full object-cover" loading="lazy" decoding="async" data-caption="Burger 91 - Hamburguesas y comida rápida" />
+            </div>
+            <h3 class="font-semibold mt-3">Burger 91</h3>
+            <p class="text-sm text-gray-600">Hamburguesas y comida rápida</p>
+          </div>
+          <div class="pf-item">
+            <div class="w-full h-64 rounded-2xl relative overflow-hidden portfolio-item">
+              <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745619058/_MG_2260_de_tama%C3%B1o_grande_jvlymh.png" alt="Patata Brava - Papas fritas y comida rápida" class="w-full h-full object-cover" loading="lazy" decoding="async" data-caption="Patata Brava - Papas fritas y comida rápida" />
+            </div>
+            <h3 class="font-semibold mt-3">Patata Brava</h3>
+            <p class="text-sm text-gray-600">Papas fritas y comida rápida</p>
+          </div>
+          <div class="pf-item">
+            <div class="w-full h-64 rounded-2xl relative overflow-hidden portfolio-item">
+              <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745619064/IMG_7464_de_tama%C3%B1o_grande_uz14xx.png" alt="Sansei - Comida japonesa y sushi" class="w-full h-full object-cover" loading="lazy" decoding="async" data-caption="Sansei - Comida japonesa y sushi" />
+            </div>
+            <h3 class="font-semibold mt-3">Sansei</h3>
+            <p class="text-sm text-gray-600">Comida japonesa y sushi</p>
+          </div>
+          <div class="pf-item">
+            <div class="w-full h-64 rounded-2xl relative overflow-hidden portfolio-item">
+              <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745619072/IMG_1604_de_tama%C3%B1o_grande_jnmfvb.png" alt="Terra Brasa - Carnes y parrilla" class="w-full h-full object-cover" loading="lazy" decoding="async" data-caption="Terra Brasa - Carnes y parrilla" />
+            </div>
+            <h3 class="font-semibold mt-3">Terra Brasa</h3>
+            <p class="text-sm text-gray-600">Carnes y parrilla</p>
+          </div>
         </div>
-      </div>
-
-      <div class="duration-selector">
-        <div class="slider-header"><span class="slider-label">Duración del plan</span></div>
-        <div class="duration-options">
-          <div class="duration-option" data-duration="1" onclick="selectDuration(this,1)">1 mes</div>
-          <div class="duration-option active" data-duration="3" onclick="selectDuration(this,3)">3 meses</div>
-          <div class="duration-option" data-duration="6" onclick="selectDuration(this,6)">6 meses</div>
+        <div class="flex items-center justify-center gap-3 mt-6">
+          <button type="button" class="btn btn--yellow" data-pf-prev aria-label="Anterior">◀</button>
+          <button type="button" class="btn btn--yellow" data-pf-next aria-label="Siguiente">▶</button>
         </div>
-      </div>
-
-      <div class="package-details">
-        <h3 class="package-title" id="plan-package-title">Plan Básico</h3>
-        <div class="package-price" id="plan-package-price">Bs. 580 <span>/mes</span></div>
-        <ul class="benefits-list" id="plan-benefits"></ul>
-        <button class="action-button" type="button" onclick="sendWhatsApp('plan')" aria-label="Solicitar plan por WhatsApp">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/></svg>
-          Solicitar este servicio
-        </button>
+        <div class="text-center mt-8">
+          <a href="https://estudiographica.myportfolio.com" target="_blank" rel="noopener" class="btn btn--yellow">Ver portafolio completo</a>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- Modal: Jornada -->
-  <div class="modal-overlay" id="modal-jornada" role="dialog" aria-modal="true" aria-labelledby="jornada-title">
-    <div class="modal">
-      <button class="modal-close" aria-label="Cerrar" onclick="closeModal('modal-jornada')">&times;</button>
-      <h2 class="modal-title" id="jornada-title">Jornada de Trabajo</h2>
-
-      <div class="slider-container">
-        <div class="slider-header">
-          <span class="slider-label">Duración de la jornada</span>
-          <span class="slider-value" id="jornada-value">1 hora</span>
-        </div>
-        <input type="range" min="1" max="8" value="1" step="1" class="slider" id="jornada-slider" oninput="updateJornada()" />
+    <!-- Modal -->
+    <div class="modal" id="modal" role="dialog" aria-modal="true" aria-label="Vista ampliada">
+      <button class="modal__close" id="modalClose" aria-label="Cerrar">×</button>
+      <div class="w-full h-full flex items-center justify-center">
+        <img class="modal__img" id="modalImg" alt="" />
       </div>
+      <div id="modalCap" class="text-white text-center font-poppins pb-6"></div>
+    </div>
+  </section>
 
-      <div class="package-details">
-        <h3 class="package-title" id="jornada-package-title">Jornada Básica</h3>
-        <div class="package-price" id="jornada-package-price">Bs. 300 <span>pago único</span></div>
-        <ul class="benefits-list" id="jornada-benefits"></ul>
-        <button class="action-button" type="button" onclick="sendWhatsApp('jornada')" aria-label="Solicitar jornada por WhatsApp">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/></svg>
-          Solicitar este servicio
-        </button>
+  <!-- Conoce al fotógrafo -->
+  <section id="fotografo" class="py-16 md:py-24 relative">
+    <div class="max-w-5xl mx-auto px-4">
+      <h2 class="font-poppins font-bold text-3xl md:text-4xl text-center mb-12 tracking-tighter reveal">Conoce a tu fotógrafo</h2>
+      <div class="grid md:grid-cols-3 items-center gap-10">
+        <div class="reveal md:col-span-1">
+          <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745619204/Perfil_Png_Nuevo_aosfas.png" alt="Fotógrafo de Estudio Graphica" class="w-full photographer-img" loading="lazy" decoding="async" />
+        </div>
+        <div class="reveal md:col-span-2">
+          <p class="text-lg md:text-xl mb-4 leading-relaxed">En todas las páginas hay un apartado donde el fotógrafo presume de sus títulos o años de experiencia, pero nadie lo lee. ¿Sabes por qué?</p>
+          <p class="text-lg md:text-xl mb-4 font-semibold">Porque a nadie le importa. Tú quieres resultados para tu marca.</p>
+          <p class="text-lg md:text-xl mb-6 leading-relaxed">Mi mejor carta de presentación es mi portafolio, porque eso es exactamente lo que te puedo ofrecer.</p>
+          <a href="https://estudiographica.myportfolio.com" target="_blank" rel="noopener" class="btn btn--yellow">Ver portafolio completo</a>
+        </div>
       </div>
     </div>
-  </div>
+  </section>
 
-  <!-- Botón flotante: Agenda -->
-  <button class="meeting-btn" type="button" onclick="openCalendar()" aria-label="Agendar reunión">
-    <span aria-hidden="true">☕</span>
-  </button>
+  <!-- Antes y Después -->
+  <section id="antes-despues" class="py-16 md:py-24 relative">
+    <div class="max-w-6xl mx-auto px-4">
+      <h2 class="font-poppins font-bold text-3xl md:text-4xl text-center mb-6 tracking-tighter reveal">Antes y Después</h2>
+      <p class="text-center text-gray-600 max-w-3xl mx-auto mb-10 reveal">¿Ves la diferencia? Tus clientes también la ven. La pregunta es: ¿qué versión les vas a mostrar?</p>
+      <div class="reveal">
+        <div class="cmp" id="cmp">
+          <div class="cmp__layer">
+            <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745819075/2_ylgf7o.jpg" alt="Después" />
+          </div>
+          <div class="cmp__layer cmp__before" id="cmpBefore">
+            <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745819075/1_ymdvor.jpg" alt="Antes" />
+          </div>
+          <div class="cmp__divider" id="cmpDivider"></div>
+          <button type="button" class="cmp__slider" id="cmpSlider" aria-label="Deslizar comparador">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12H3M9 6l-6 6 6 6M15 6l6 6-6 6"/></svg>
+          </button>
+        </div>
+        <p class="text-center mt-4 font-semibold">Desliza para ver la diferencia</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Beneficios -->
+  <section id="beneficios" class="py-16 md:py-24 relative">
+    <div class="max-w-7xl mx-auto px-4">
+      <h2 class="font-poppins font-bold text-3xl md:text-4xl text-center mb-14 tracking-tighter reveal">Por qué elegirnos</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-10 text-center">
+        <div class="reveal">
+          <div class="text-5xl md:text-6xl font-bold text-amarillo mb-2">8+</div>
+          <p class="text-xl">años antojando clientes</p>
+        </div>
+        <div class="reveal">
+          <div class="text-5xl md:text-6xl font-bold text-amarillo mb-2">250+</div>
+          <p class="text-xl">marcas fotografiadas</p>
+        </div>
+        <div class="reveal">
+          <div class="text-5xl md:text-6xl font-bold text-amarillo mb-2">2×</div>
+          <p class="text-xl">sesiones que duplican la intención de compra</p>
+        </div>
+      </div>
+      <div class="text-center mt-12 reveal">
+        <p class="text-xl italic mb-6">"Fotos malas cuestan más: cuestan clientes."</p>
+        <a href="#agendar" class="btn btn--yellow">Agendar reunión</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Clientes -->
+  <section id="clientes" class="py-16 md:py-24 relative">
+    <div class="max-w-7xl mx-auto px-4">
+      <h2 class="font-poppins font-bold text-3xl md:text-4xl text-center mb-12 tracking-tighter reveal">Empresas que han confiado en nosotros</h2>
+      <div class="reveal logos-scroll" id="logosWrap">
+        <div class="logos-track" id="logos">
+          <div class="logo-card"><img class="logo" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166368/1_vegdk8.png" alt="Patata Brava" loading="lazy" decoding="async"></div>
+          <div class="logo-card"><img class="logo" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166368/2_pdiecr.png" alt="Happy Fry" loading="lazy" decoding="async"></div>
+          <div class="logo-card"><img class="logo" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166369/3_dt1nfk.png" alt="Globos" loading="lazy" decoding="async"></div>
+          <div class="logo-card"><img class="logo" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166369/4_ssugqk.png" alt="Burger 91" loading="lazy" decoding="async"></div>
+          <div class="logo-card"><img class="logo" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166370/5_exwkbr.png" alt="Pedidos Ya" loading="lazy" decoding="async"></div>
+          <div class="logo-card"><img class="logo" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166371/6_gfjolm.png" alt="Terra Brasa" loading="lazy" decoding="async"></div>
+          <div class="logo-card"><img class="logo" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166373/7_wi271i.png" alt="Vitz" loading="lazy" decoding="async"></div>
+          <div class="logo-card"><img class="logo" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166374/8_pzfcfe.png" alt="Kansas" loading="lazy" decoding="async"></div>
+          <div class="logo-card"><img class="logo" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166375/9_vuxq3e.png" alt="Para Ti" loading="lazy" decoding="async"></div>
+          <div class="logo-card"><img class="logo" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166376/10_p2jdke.png" alt="Cookie Bar" loading="lazy" decoding="async"></div>
+          <div class="logo-card"><img class="logo" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166377/11_t57ngd.png" alt="Sansei" loading="lazy" decoding="async"></div>
+          <div class="logo-card"><img class="logo" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166379/12_df9xhb.png" alt="Cornicione" loading="lazy" decoding="async"></div>
+          <div class="logo-card"><img class="logo" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166380/13_boqwsk.png" alt="California The Burger Republic" loading="lazy" decoding="async"></div>
+          <div class="logo-card"><img class="logo" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166381/14_ounqzl.png" alt="Burger Haus" loading="lazy" decoding="async"></div>
+          <div class="logo-card"><img class="logo" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166383/15_wl3dap.png" alt="Bliss" loading="lazy" decoding="async"></div>
+          <div class="logo-card"><img class="logo" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166384/16_x81hwu.png" alt="Happy Tea" loading="lazy" decoding="async"></div>
+          <div class="logo-card"><img class="logo" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166386/17_uq59mt.png" alt="Camellia" loading="lazy" decoding="async"></div>
+          <div class="logo-card"><img class="logo" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166387/18_ng80jm.png" alt="Typica" loading="lazy" decoding="async"></div>
+          <div class="logo-card"><img class="logo" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166389/19_l1vgpl.png" alt="Tunari" loading="lazy" decoding="async"></div>
+          <div class="logo-card"><img class="logo" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166390/20_in2g5a.png" alt="Bros" loading="lazy" decoding="async"></div>
+          <div class="logo-card"><img class="logo" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166392/21_pyhqke.png" alt="Punto de encuentro" loading="lazy" decoding="async"></div>
+          <div class="logo-card"><img class="logo" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166393/22_pvu0jp.png" alt="Sucremanta" loading="lazy" decoding="async"></div>
+          <div class="logo-card"><img class="logo" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166408/23_q34cfb.png" alt="El Edén" loading="lazy" decoding="async"></div>
+          <div class="logo-card"><img class="logo" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166408/24_duvy1a.png" alt="Doña Panchita" loading="lazy" decoding="async"></div>
+          <div class="logo-card"><img class="logo" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166409/25_xa9plb.png" alt="Aventino" loading="lazy" decoding="async"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Agendar -->
+  <section id="agendar" class="py-16 md:py-24 relative">
+    <div class="max-w-4xl mx-auto px-4">
+      <div class="rounded-2xl p-8 md:p-12 bg-white/70 backdrop-blur">
+        <h2 class="font-poppins font-bold text-3xl md:text-4xl text-center mb-4 tracking-tighter reveal">Agenda tu reunión ☕</h2>
+        <p class="text-center text-gray-700 mb-8 reveal">Cuéntanos sobre tu proyecto y nos pondremos en contacto contigo para crear una propuesta personalizada.</p>
+        <div class="text-center reveal">
+          <a href="https://cal.com/themarketographer/reunión" target="_blank" rel="noopener" class="btn btn--yellow text-lg">Agendar reunión</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-14">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="flex flex-col items-center justify-center">
+        <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745619722/Logo_S_F_l66fym.png" alt="Estudio Graphica" class="h-16 w-auto mb-6" loading="lazy" decoding="async" />
+        <p class="text-gray-600 text-center">&copy; 2025 Estudio Graphica. Todos los derechos reservados.</p>
+      </div>
+    </div>
+  </footer>
 
   <script>
-    let selectedDuration = 3;
+    // Reveal on scroll
+    (function(){
+      var els = document.querySelectorAll('.reveal');
+      if(!('IntersectionObserver' in window)){ els.forEach(function(e){ e.classList.add('is-visible'); }); return; }
+      var io = new IntersectionObserver(function(entries){
+        entries.forEach(function(entry){ if(entry.isIntersecting){ entry.target.classList.add('is-visible'); io.unobserve(entry.target);} });
+      },{threshold:.15});
+      els.forEach(function(e){ io.observe(e); });
+    })();
 
-    function openModal(modalId) {
-      const modal = document.getElementById(modalId);
-      modal.classList.add('active');
-      document.body.style.overflow = 'hidden';
-    }
-    function closeModal(modalId) {
-      const modal = document.getElementById(modalId);
-      modal.classList.remove('active');
-      document.body.style.overflow = '';
-    }
-    function openCalendar(){ window.open('https://cal.com/themarketographer/reunion','_blank','noopener'); }
-
-    function animateChange(el, cls){ el.classList.add(cls); setTimeout(()=>el.classList.remove(cls), 300); }
-
-    function animateBenefitsList(listEl, newContent){
-      listEl.style.opacity = '0'; listEl.style.transition = 'opacity 0.3s ease';
-      setTimeout(()=>{ listEl.innerHTML = newContent; listEl.style.opacity = '1';
-        const items = listEl.querySelectorAll('.benefit-item');
-        items.forEach((item, i)=>{ item.style.opacity='0'; item.style.transform='translateX(-20px)';
-          setTimeout(()=>{ item.style.transition='opacity 0.3s ease, transform 0.3s ease'; item.style.opacity='1'; item.style.transform='translateX(0)'; }, i*100);
-        });
-      },300);
-    }
-
-    function sendWhatsApp(type){
-      let message=''; let beneficiosDetalle='';
-      if(type==='sesion'){
-        const cantidadFotos = document.getElementById('fotos-slider').value;
-        const paqueteSesion = document.getElementById('sesion-package-title').textContent;
-        const precioSesion = document.getElementById('sesion-package-price').textContent.split(' ')[1];
-        const beneficiosSesion=[]; document.querySelectorAll('#sesion-benefits .benefit-item .benefit-text').forEach(n=>beneficiosSesion.push(n.textContent));
-        beneficiosDetalle = beneficiosSesion.join('\n- ');
-        message = `Hola, estoy interesado en una sesión de fotos.\n\n*Detalles del servicio:*\n- ${paqueteSesion}\n- ${cantidadFotos} fotos\n- Precio: Bs. ${precioSesion}\n\n*Beneficios incluidos:*\n- ${beneficiosDetalle}\n\n¿Podemos coordinar?`;
-      }
-      if(type==='plan'){
-        const cantidadFotos = document.getElementById('plan-fotos-slider').value;
-        const paquetePlan = document.getElementById('plan-package-title').textContent;
-        const precioPlan = document.getElementById('plan-package-price').textContent.split(' ')[1];
-        const tieneVideo = document.getElementById('add-video').checked;
-        const beneficiosPlan=[]; document.querySelectorAll('#plan-benefits .benefit-item .benefit-text').forEach(n=>beneficiosPlan.push(n.textContent));
-        beneficiosDetalle = beneficiosPlan.join('\n- ');
-        let videoInfo=''; if(tieneVideo){ const cantidadReels = document.getElementById('reels-slider').value; videoInfo = `\n- ${cantidadReels} reels/mes`; }
-        message = `Hola, estoy interesado en un plan mensual.\n\n*Detalles del servicio:*\n- ${paquetePlan}\n- ${cantidadFotos} fotos/mes${videoInfo}\n- Duración: ${selectedDuration} meses\n- Precio: Bs. ${precioPlan}/mes\n\n*Beneficios incluidos:*\n- ${beneficiosDetalle}\n\n¿Podemos coordinar?`;
-      }
-      if(type==='jornada'){
-        const horas = document.getElementById('jornada-slider').value;
-        const paqueteJornada = document.getElementById('jornada-package-title').textContent;
-        const precioJornada = document.getElementById('jornada-package-price').textContent.split(' ')[1];
-        const fotosTotal = horas * 15;
-        const beneficiosJornada=[]; document.querySelectorAll('#jornada-benefits .benefit-item .benefit-text').forEach(n=>beneficiosJornada.push(n.textContent));
-        beneficiosDetalle = beneficiosJornada.join('\n- ');
-        message = `Hola, estoy interesado en una jornada de trabajo.\n\n*Detalles del servicio:*\n- ${paqueteJornada}\n- ${horas} hora${horas>1?'s':''} de trabajo\n- Total aproximado: ${fotosTotal} fotos\n- Precio: Bs. ${precioJornada}\n\n*Beneficios incluidos:*\n- ${beneficiosDetalle}\n\n¿Podemos coordinar?`;
-      }
-      const whatsappURL = `https://wa.me/59169422335?text=${encodeURIComponent(message)}`;
-      window.open(whatsappURL,'_blank','noopener');
-    }
-
-    function updateSesionFotos(){
-      const cantidad = parseInt(document.getElementById('fotos-slider').value,10);
-      const valEl = document.getElementById('fotos-value');
-      animateChange(valEl,'updating'); valEl.textContent = `${cantidad} fotos`;
-      let paquete, precio; const precioBasico=580, precioEstandar=980, precioPremium=1280;
-      if(cantidad<=10){ paquete='Paquete Básico'; precio = cantidad===8?precioBasico: Math.round(precioBasico + (cantidad-8)*((700-precioBasico)/2)); }
-      else if(cantidad<=18){ paquete='Paquete Estándar'; precio = Math.round(700 + (cantidad-10)*((precioEstandar-700)/8)); }
-      else { paquete='Paquete Premium'; precio = Math.round(precioEstandar + (cantidad-18)*((precioPremium-precioEstandar)/6)); }
-      const tEl = document.getElementById('sesion-package-title'); const pEl = document.getElementById('sesion-package-price');
-      animateChange(tEl,'updating'); animateChange(pEl,'updating');
-      tEl.textContent = paquete; pEl.innerHTML = `Bs. ${precio} <span>pago único</span>`;
-      let newBenefits = `
-        <li class="benefit-item"><span class="benefit-icon">✓</span><span class="benefit-text">Planificación estratégica</span></li>
-        <li class="benefit-item"><span class="benefit-icon">✓</span><span class="benefit-text">Estilismo de alimentos</span></li>`;
-      if(cantidad<=10){ newBenefits += `
-        <li class="benefit-item"><span class="benefit-icon">✓</span><span class="benefit-text">Entrega en menos de 72 horas</span></li>
-        <li class="benefit-item"><span class="benefit-icon">✓</span><span class="benefit-text">Edición básica</span></li>`; }
-      else if(cantidad<=18){ newBenefits += `
-        <li class="benefit-item"><span class="benefit-icon">✓</span><span class="benefit-text">Entrega en menos de 48 horas</span></li>
-        <li class="benefit-item"><span class="benefit-icon">✓</span><span class="benefit-text">Edición profesional</span></li>`; }
-      else { newBenefits += `
-        <li class="benefit-item"><span class="benefit-icon">✓</span><span class="benefit-text">Entrega en menos de 24 horas</span></li>
-        <li class="benefit-item"><span class="benefit-icon">✓</span><span class="benefit-text">Edición profesional</span></li>`; }
-      animateBenefitsList(document.getElementById('sesion-benefits'), newBenefits);
-    }
-
-    function updateJornada(){
-      const horas = parseInt(document.getElementById('jornada-slider').value,10);
-      const valEl = document.getElementById('jornada-value');
-      animateChange(valEl,'updating'); valEl.textContent = `${horas} hora${horas>1?'s':''}`;
-      let paquete, precio; const precioPorHora = 300;
-      if(horas===1){ precio = precioPorHora; paquete = 'Jornada Básica'; }
-      else if(horas===2){ precio = precioPorHora*2*0.95; paquete='Jornada Básica'; }
-      else if(horas<=5){ const desc = 0.07 + (horas-3)*0.04; precio = precioPorHora*horas*(1-desc); paquete='Jornada Estándar'; }
-      else { const desc = 0.17 + (horas-6)*0.04; precio = precioPorHora*horas*(1-desc); paquete='Jornada Completa'; }
-      precio = Math.round(precio);
-      const tEl = document.getElementById('jornada-package-title'); const pEl = document.getElementById('jornada-package-price');
-      animateChange(tEl,'updating'); animateChange(pEl,'updating');
-      tEl.textContent = paquete; pEl.innerHTML = `Bs. ${precio} <span>pago único</span>`;
-      const totalFotos = horas*15;
-      let newBenefits = `
-        <li class="benefit-item"><span class="benefit-icon">✓</span><span class="benefit-text">${horas} hora${horas>1?'s':''} de trabajo continuo</span></li>
-        <li class="benefit-item"><span class="benefit-icon">✓</span><span class="benefit-text">Entrega de todas las fotos en alta resolución</span></li>
-        <li class="benefit-item"><span class="benefit-icon">✓</span><span class="benefit-text">15 fotos por hora (total: ${totalFotos} fotos)</span></li>`;
-      if(horas<=2){ newBenefits += `<li class=\"benefit-item\"><span class=\"benefit-icon\">✓</span><span class=\"benefit-text\">Edición básica</span></li>`; }
-      else { newBenefits += `
-        <li class="benefit-item"><span class="benefit-icon">✓</span><span class="benefit-text">Edición profesional</span></li>
-        <li class="benefit-item"><span class="benefit-icon">✓</span><span class="benefit-text">Asistente de producción</span></li>`; }
-      animateBenefitsList(document.getElementById('jornada-benefits'), newBenefits);
-    }
-
-    function toggleVideoOptions(){
-      const videoOptions = document.getElementById('video-options');
-      const addVideo = document.getElementById('add-video');
-      if(addVideo.checked){
-        videoOptions.style.display='block'; videoOptions.style.opacity='0'; videoOptions.style.transform='translateY(-10px)';
-        setTimeout(()=>{ videoOptions.style.transition='opacity 0.3s ease, transform 0.3s ease'; videoOptions.style.opacity='1'; videoOptions.style.transform='translateY(0)'; },10);
-      } else {
-        videoOptions.style.transition='opacity 0.3s ease, transform 0.3s ease'; videoOptions.style.opacity='0'; videoOptions.style.transform='translateY(-10px)';
-        setTimeout(()=>{ videoOptions.style.display='none'; },300);
-      }
-      updatePlanMensual();
-    }
-
-    function selectDuration(el, duration){
-      document.querySelectorAll('.duration-option').forEach(o=>o.classList.remove('active'));
-      el.classList.add('active'); selectedDuration = duration; updatePlanMensual();
-    }
-
-    function updatePlanMensual(){
-      const cantidadFotos = parseInt(document.getElementById('plan-fotos-slider').value,10);
-      const valEl = document.getElementById('plan-fotos-value');
-      animateChange(valEl,'updating'); valEl.textContent = `${cantidadFotos} fotos/mes`;
-      const tieneVideo = document.getElementById('add-video').checked;
-      let cantidadReels = 4; if(tieneVideo){ cantidadReels = parseInt(document.getElementById('reels-slider').value,10); const rEl=document.getElementById('reels-value'); animateChange(rEl,'updating'); rEl.textContent = `${cantidadReels} reels/mes`; }
-      let precio, paquete; const precioBasico=580, precioEstandar=880, precioPremium=1080;
-      if(cantidadFotos<=14){ paquete='Plan Básico'; precio = cantidadFotos===12?precioBasico: Math.round(precioBasico + (cantidadFotos-12)*((680-precioBasico)/2)); }
-      else if(cantidadFotos<=20){ paquete='Plan Estándar'; precio = Math.round(680 + (cantidadFotos-14)*((precioEstandar-680)/6)); }
-      else { paquete='Plan Premium'; precio = Math.round(precioEstandar + (cantidadFotos-20)*((precioPremium-precioEstandar)/6)); }
-      if(selectedDuration===1){ precio = Math.round(precio*1.15); } else if(selectedDuration===6){ precio = Math.round(precio*0.9); }
-      if(tieneVideo){
-        let precioVideo; const vBase=1500, vStd=1970, vPrem=2290;
-        if(cantidadReels<=4){ precioVideo = vBase; }
-        else if(cantidadReels<=8){ precioVideo = Math.round(vBase + (cantidadReels-4)*((vStd-vBase)/4)); }
-        else { precioVideo = Math.round(vStd + (cantidadReels-8)*((vPrem-vStd)/4)); }
-        precio = Math.round(precio + precioVideo*0.8);
-        if(selectedDuration===1){ precio = Math.round(precio*1.1); } else if(selectedDuration===6){ precio = Math.round(precio*0.85); }
-        paquete += ' + Video';
-      }
-      const tEl=document.getElementById('plan-package-title'); const pEl=document.getElementById('plan-package-price');
-      animateChange(tEl,'updating'); animateChange(pEl,'updating');
-      tEl.textContent = paquete; pEl.innerHTML = `Bs. ${precio} <span>/mes</span>`;
-      let newBenefits = `
-        <li class="benefit-item"><span class="benefit-icon">✓</span><span class="benefit-text">${cantidadFotos} fotos/mes</span></li>
-        <li class="benefit-item"><span class="benefit-icon">✓</span><span class="benefit-text">1 visita al mes</span></li>
-        <li class="benefit-item"><span class="benefit-icon">✓</span><span class="benefit-text">Estilismo de alimentos</span></li>`;
-      if(cantidadFotos<=14){ newBenefits += `
-        <li class="benefit-item"><span class="benefit-icon">✓</span><span class="benefit-text">Entrega en menos de 72 horas</span></li>
-        <li class="benefit-item"><span class="benefit-icon">✓</span><span class="benefit-text">Edición básica</span></li>`; }
-      else if(cantidadFotos<=20){ newBenefits += `
-        <li class="benefit-item"><span class="benefit-icon">✓</span><span class="benefit-text">Entrega en menos de 48 horas</span></li>
-        <li class="benefit-item"><span class="benefit-icon">✓</span><span class="benefit-text">Edición profesional</span></li>`;
-        if(cantidadFotos>=16){ newBenefits += `<li class=\"benefit-item\"><span class=\"benefit-icon\">✓</span><span class=\"benefit-text\">Asesoría estratégica de marketing</span></li>`; }
-      } else { newBenefits += `
-        <li class="benefit-item"><span class="benefit-icon">✓</span><span class="benefit-text">Entrega en menos de 24 horas</span></li>
-        <li class="benefit-item"><span class="benefit-icon">✓</span><span class="benefit-text">Edición profesional</span></li>
-        <li class="benefit-item"><span class="benefit-icon">✓</span><span class="benefit-text">Asesoría estratégica de marketing</span></li>`; }
-      if(selectedDuration>=3 && cantidadFotos>=16){ newBenefits += `
-        <li class="benefit-item"><span class="benefit-icon">✓</span><span class="benefit-text">Implementación de página web sencilla o tienda Take App gratuita</span></li>`; }
-      if(tieneVideo){ newBenefits += `
-        <li class="benefit-item"><span class="benefit-icon">✓</span><span class="benefit-text">${cantidadReels} reels/mes</span></li>
-        <li class="benefit-item"><span class="benefit-icon">✓</span><span class="benefit-text">2 visitas al mes</span></li>
-        <li class="benefit-item"><span class="benefit-icon">✓</span><span class="benefit-text">Guión y concepto creativo</span></li>
-        <li class="benefit-item"><span class="benefit-icon">✓</span><span class="benefit-text">Música con licencia comercial</span></li>`; }
-      animateBenefitsList(document.getElementById('plan-benefits'), newBenefits);
-    }
-
-    document.addEventListener('DOMContentLoaded', ()=>{
-      updateSesionFotos(); updatePlanMensual(); updateJornada();
-      document.querySelectorAll('.modal-overlay').forEach(overlay=>{
-        overlay.addEventListener('click', e=>{ if(e.target===overlay){ overlay.classList.remove('active'); document.body.style.overflow=''; }});
+    // Modal de imágenes
+    (function(){
+      var pf = document.getElementById('pf');
+      var modal = document.getElementById('modal');
+      var modalImg = document.getElementById('modalImg');
+      var modalCap = document.getElementById('modalCap');
+      var close = document.getElementById('modalClose');
+      if(!pf) return;
+      pf.addEventListener('click', function(e){
+        var img = e.target.closest('img');
+        if(!img) return;
+        modal.style.display='flex';
+        modal.style.flexDirection='column';
+        modal.style.alignItems='center';
+        modal.style.justifyContent='center';
+        modalImg.src = img.src; modalImg.alt = img.alt || '';
+        modalCap.textContent = img.getAttribute('data-caption')||'';
+        document.body.style.overflow='hidden';
       });
-      document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ document.querySelectorAll('.modal-overlay.active').forEach(m=>m.classList.remove('active')); document.body.style.overflow=''; }});
-    });
+      function closeModal(){ modal.style.display='none'; document.body.style.overflow='auto'; }
+      close.addEventListener('click', closeModal);
+      modal.addEventListener('click', function(ev){ if(ev.target===modal) closeModal(); });
+    })();
+
+    // Portafolio botones (scrollBy)
+    (function(){
+      var track = document.getElementById('pf'); if(!track) return;
+      var prev = document.querySelector('[data-pf-prev]');
+      var next = document.querySelector('[data-pf-next]');
+      var itemWidth = 300 + 20;
+      prev && prev.addEventListener('click', function(){ track.scrollBy({left:-itemWidth*3,behavior:'smooth'}); });
+      next && next.addEventListener('click', function(){ track.scrollBy({left:itemWidth*3,behavior:'smooth'}); });
+    })();
+
+    // Comparador Before/After con divisor visible
+    (function(){
+      var slider = document.getElementById('cmpSlider');
+      var before = document.getElementById('cmpBefore');
+      var divider = document.getElementById('cmpDivider');
+      var box = document.getElementById('cmp');
+      if(!slider||!before||!box) return;
+      function setPos(px){
+        var r = box.getBoundingClientRect();
+        var p = ((px - r.left)/r.width)*100; if(p<0) p=0; if(p>100) p=100;
+        before.style.clipPath = 'polygon(0 0,'+p+'% 0,'+p+'% 100%,0 100%)';
+        slider.style.left = p+'%';
+        divider.style.left = p+'%';
+      }
+      function move(e){ setPos(e.touches?e.touches[0].clientX:e.clientX); }
+      function start(e){ e.preventDefault(); document.addEventListener('mousemove',move); document.addEventListener('touchmove',move,{passive:false}); }
+      function end(){ document.removeEventListener('mousemove',move); document.removeEventListener('touchmove',move); }
+      slider.addEventListener('mousedown',start); slider.addEventListener('touchstart',start,{passive:false});
+      document.addEventListener('mouseup',end); document.addEventListener('touchend',end);
+    })();
+
+    // Auto-scroll + drag para logos
+    (function(){
+      var wrap = document.getElementById('logosWrap');
+      var track = document.getElementById('logos');
+      if(!wrap||!track) return;
+      // Duplicar items para loop infinito
+      var items = Array.prototype.slice.call(track.children);
+      items.forEach(function(n){ track.appendChild(n.cloneNode(true)); });
+      var pos = 0, speed = 0.8, raf = null, dragging=false, startX=0, startPos=0;
+      function tick(){ pos += speed; var half = track.scrollWidth/2; if(pos>=half) pos=0; track.style.transform = 'translateX(' + (-pos) + 'px)'; raf = requestAnimationFrame(tick); }
+      function start(){ if(!raf) raf = requestAnimationFrame(tick); }
+      function stop(){ if(raf){ cancelAnimationFrame(raf); raf=null; } }
+      function onDown(e){ dragging=true; wrap.classList.add('dragging'); stop(); startX = (e.touches?e.touches[0].pageX:e.pageX); startPos = pos; }
+      function onMove(e){ if(!dragging) return; e.preventDefault(); var x=(e.touches?e.touches[0].pageX:e.pageX); var delta = x - startX; pos = startPos - delta; var half = track.scrollWidth/2; if(pos<0) pos = half + pos%half; if(pos>=half) pos%=half; track.style.transform = 'translateX(' + (-pos) + 'px)'; }
+      function onUp(){ if(!dragging) return; dragging=false; wrap.classList.remove('dragging'); start(); }
+      wrap.addEventListener('mousedown', onDown); wrap.addEventListener('touchstart', onDown, {passive:false});
+      window.addEventListener('mousemove', onMove, {passive:false}); window.addEventListener('touchmove', onMove, {passive:false});
+      window.addEventListener('mouseup', onUp); window.addEventListener('touchend', onUp);
+      wrap.addEventListener('mouseenter', stop); wrap.addEventListener('mouseleave', function(){ if(!dragging) start(); });
+      document.addEventListener('visibilitychange', function(){ if(document.hidden) stop(); else if(!dragging) start(); });
+      // iniciar
+      start();
+      track.setAttribute('data-autoscroll','on');
+    })();
+
+    // TESTS (auto-chequeos en consola)
+    (function(){
+      console.assert(document.querySelectorAll('.btn.btn--yellow').length>=1, 'TEST: faltan botones amarillos');
+      console.assert(getComputedStyle(document.documentElement).scrollBehavior==='smooth', 'TEST: scroll suave no activo');
+      var wrap = document.querySelector('#logosWrap');
+      var logos = document.querySelector('#logos');
+      console.assert(!!logos && !!wrap, 'TEST: carrusel de logos no montado');
+      console.assert(logos.getAttribute('data-autoscroll')==='on', 'TEST: auto-scroll de logos no activo');
+      var t0 = getComputedStyle(logos).transform;
+      setTimeout(function(){ var t1 = getComputedStyle(logos).transform; console.assert(t0!==t1, 'TEST: logos no se están moviendo'); }, 1200);
+      var imgPh = document.querySelector('.photographer-img');
+      if (imgPh) { var sh = getComputedStyle(imgPh).boxShadow; console.assert(!sh || sh==='none', 'TEST: la foto del fotógrafo aún tiene sombra'); }
+    })();
   </script>
 </body>
 </html>
