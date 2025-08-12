@@ -166,9 +166,12 @@
             z-index: 1000;
             opacity: 0;
             transition: opacity 0.3s ease;
-        }
+        
+  pointer-events: none;
+}
 
         .modal-overlay.active {
+  pointer-events: auto;
             display: flex;
             opacity: 1;
         }
@@ -683,7 +686,7 @@
         </div>
 
         <div class="services-grid">
-            <div class="service-card" onclick="openModal('modal-sesion')">
+            <div class="service-card" data-modal="modal-sesion">
                 <div class="service-icon">
                     <span style="display: block; text-align: center; width: 100%;">📸</span>
                 </div>
@@ -691,7 +694,7 @@
                 <p class="service-description">Sesiones únicas de fotografía profesional</p>
             </div>
 
-            <div class="service-card" onclick="openModal('modal-plan')">
+            <div class="service-card" data-modal="modal-plan">
                 <div class="service-icon">
                     <span style="display: block; text-align: center; width: 100%;">📅</span>
                 </div>
@@ -699,7 +702,7 @@
                 <p class="service-description">Servicio continuo con entregas mensuales</p>
             </div>
 
-            <div class="service-card" onclick="openModal('modal-jornada')">
+            <div class="service-card" data-modal="modal-jornada">
                 <div class="service-icon">
                     <span style="display: block; text-align: center; width: 100%;">⏱️</span>
                 </div>
@@ -774,5 +777,24 @@
     <script>
         // (scripts del usuario intactos)
     </script>
+
+// --- Robust click delegation for opening modals ---
+document.addEventListener('click', function(e){
+  var card = e.target.closest('[data-modal]');
+  if(card){
+    e.preventDefault();
+    try { openModal(card.getAttribute('data-modal')); } catch(err){ console.error(err); }
+  }
+});
+// Close on ESC (safety)
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Escape'){
+    document.querySelectorAll('.modal-overlay.active').forEach(function(m){
+      m.classList.remove('active');
+    });
+    document.body.style.overflow = '';
+  }
+});
+
 </body>
 </html>
