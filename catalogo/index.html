@@ -799,28 +799,5 @@ document.addEventListener('keydown', function(e){
 
 
 </script>
-
-<script>
-// Fallback explícito: añade listeners directos a las tarjetas
-(function(){
-  function bindCards(){
-    document.querySelectorAll('.service-card[data-modal]').forEach(function(card){
-      if(card.__bound) return;
-      card.addEventListener('click', function(e){
-        e.preventDefault();
-        var id = card.getAttribute('data-modal');
-        if(typeof openModal === 'function'){ openModal(id); }
-      });
-      card.__bound = true;
-    });
-  }
-  if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', bindCards);
-  } else {
-    bindCards();
-  }
-})();
-</script>
-
 </body>
 </html>
