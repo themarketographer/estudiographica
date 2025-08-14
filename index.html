@@ -5,11 +5,51 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Fotografía Gastronómica en Cochabamba | Estudio Graphica</title>
   <meta name="description" content="Fotografía gastronómica en Cochabamba. Restaurantes, delivery y marcas de alimentos con imágenes que venden." />
+  <meta name="robots" content="index,follow" />
+  <meta name="theme-color" content="#FFDE59" />
+
+  <!-- Open Graph / Social -->
+  <meta property="og:locale" content="es_BO" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Fotografía Gastronómica en Cochabamba | Estudio Graphica" />
+  <meta property="og:description" content="Fotografía gastronómica para restaurantes, delivery y marcas de alimentos en Cochabamba." />
+  <meta property="og:image" content="/Banner.jpg" />
+  <meta property="og:image:alt" content="Mesa con platos de comida y logo Estudio Graphica" />
+  <meta property="og:image:width" content="2048" />
+  <meta property="og:image:height" content="697" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Fotografía Gastronómica en Cochabamba | Estudio Graphica" />
+  <meta name="twitter:description" content="Sesiones que antojan y atraen clientes. Portafolio y contacto." />
+  <meta name="twitter:image" content="/Banner.jpg" />
+
   <link rel="icon" type="image/png" href="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745619722/Logo_S_F_l66fym.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-9H6Z8N5DTP"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+    gtag('js', new Date());
+    // PageView GA4
+    gtag('config', 'G-9H6Z8N5DTP');
+  </script>
+
+  <!-- Meta Pixel -->
+  <script>
+    !(function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)})(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1839594560066285');
+    // PageView Pixel
+    fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1839594560066285&ev=PageView&noscript=1"/></noscript>
+
   <style>
     :root{--y:#FFDE59;--ink:#1A1A1A}
     html{scroll-behavior:smooth}
@@ -83,27 +123,6 @@
     .reveal{opacity:0;transform:translateY(20px);transition:opacity .5s,transform .5s}
     .reveal.is-visible{opacity:1;transform:none}
   </style>
-
-  <!-- Meta Pixel Code -->
-  <script>
-    !function(f,b,e,v,n,t,s)
-    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-    if(!f._fbq)f._fbq=n; n.push=n; n.loaded=!0; n.version='2.0';
-    n.queue=[]; t=b.createElement(e); t.async=!0;
-    t.src=v; s=b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t,s)}(window, document,'script',
-    'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '1839956450606828'); 
-    fbq('track', 'PageView');
-  </script>
-  <noscript>
-    <img height="1" width="1" style="display:none"
-         src="https://www.facebook.com/tr?id=1839956450606828&ev=PageView&noscript=1"/>
-  </noscript>
-  <!-- End Meta Pixel Code -->
-
-    <meta name="facebook-domain-verification" content="k2ylwafgmxn6v0r2sq35cvpjqcsbb1" />
 </head>
 <body class="bg-blobs">
   <!-- Header -->
@@ -112,7 +131,7 @@
       <a href="#inicio" class="h-14 flex items-center">
         <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745619722/Logo_S_F_l66fym.png" alt="Estudio Graphica" class="h-14 w-auto" />
       </a>
-      <a href="#agendar" class="btn btn--glass">Agendar reunión</a>
+      <a href="#agendar" class="btn btn--glass track-agendar">Agendar reunión</a>
     </div>
   </header>
 
@@ -205,7 +224,7 @@
           </div>
         </div>
         <div class="text-center mt-8">
-          <a class="btn btn--glass" href="https://estudiographica.myportfolio.com" target="_blank" rel="noopener">Ver portafolio completo</a>
+          <a class="btn btn--glass track-portafolio" href="https://estudiographica.myportfolio.com" target="_blank" rel="noopener">Ver portafolio completo</a>
         </div>
       </div>
 
@@ -233,7 +252,7 @@
           <p class="text-lg md:text-xl mb-4">En todas las páginas hay un apartado donde el fotógrafo presume de sus títulos o años de experiencia, pero nadie lo lee. ¿Sabes por qué?</p>
           <p class="text-lg md:text-xl mb-6 font-semibold">Porque a nadie le importa. Tú quieres resultados para tu marca.</p>
           <p class="text-lg md:text-xl mb-6">Mi mejor carta de presentación es mi portafolio, porque eso es exactamente lo que te puedo ofrecer.</p>
-          <a class="btn btn--glass" href="#portafolio">Ver portafolio completo</a>
+          <a class="btn btn--glass track-portafolio" href="#portafolio">Ver portafolio completo</a>
         </div>
       </div>
     </div>
@@ -285,7 +304,7 @@
       </div>
       <div class="text-center mt-12 reveal">
         <p class="text-xl italic mb-6">"Contratar fotógrafo no es caro, no vender es caro."</p>
-        <a class="btn btn--glass" href="#agendar">Agendar reunión</a>
+        <a class="btn btn--glass track-agendar" href="#agendar">Agendar reunión</a>
       </div>
     </div>
   </section>
@@ -318,7 +337,7 @@
         <h2 class="font-bold text-3xl md:text-4xl text-center mb-4 tracking-tighter reveal">Agenda tu reunión ☕</h2>
         <p class="text-center text-gray-700 mb-8 reveal">Cuéntanos sobre tu proyecto y nos pondremos en contacto contigo para crear una propuesta personalizada.</p>
         <div class="text-center reveal">
-          <a class="btn btn--glass text-lg" href="https://cal.com/themarketographer/reunión" target="_blank" rel="noopener">Agendar reunión</a>
+          <a class="btn btn--glass text-lg track-agendar" href="https://cal.com/themarketographer/reunión" target="_blank" rel="noopener">Agendar reunión</a>
         </div>
       </div>
     </div>
@@ -333,6 +352,18 @@
       </div>
     </div>
   </footer>
+
+  <!-- Schema.org Organization -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Estudio Graphica",
+    "url": "",
+    "logo": "https://res.cloudinary.com/dplhu2z6j/image/upload/v1745619722/Logo_S_F_l66fym.png",
+    "sameAs": []
+  }
+  </script>
 
   <script>
     // Reveal on scroll
@@ -367,7 +398,7 @@
       modal && modal.addEventListener('click', function(ev){ if(ev.target===modal) closeModal(); });
     })();
 
-    // Comparador Before/After: mantiene el slider dentro del contenedor
+    // Comparador Before/After
     (function(){
       var slider = document.getElementById('cmpSlider');
       var before = document.getElementById('cmpBefore');
@@ -411,6 +442,24 @@
       wrap.addEventListener('mouseenter', stopLoop); wrap.addEventListener('mouseleave', function(){ if(!dragging) startLoop(); });
       document.addEventListener('visibilitychange', function(){ if(document.hidden) stopLoop(); else if(!dragging) startLoop(); });
       startLoop(); track.setAttribute('data-autoscroll','on');
+    })();
+
+    // ===== Tracking de conversiones: botones Agendar y Ver Portafolio =====
+    (function(){
+      function sendEvents(tag, params){
+        try { gtag('event', tag, params || {}); } catch(e){}
+        try { fbq('trackCustom', tag.replace(/_/g,' ').replace(/\b\w/g,c=>c.toUpperCase()), params || {}); } catch(e){}
+      }
+      function addClickTracking(selector, eventName){
+        document.querySelectorAll(selector).forEach(function(el){
+          el.addEventListener('click', function(){
+            var where = el.textContent.trim();
+            sendEvents(eventName, { location: where });
+          });
+        });
+      }
+      addClickTracking('a.track-agendar', 'agendar_reunion');
+      addClickTracking('a.track-portafolio', 'ver_portafolio');
     })();
   </script>
 </body>
