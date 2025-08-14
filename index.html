@@ -1,329 +1,328 @@
 <!DOCTYPE html>
-
 <html lang="es">
-<head><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="True" href="https://fonts.gstatic.com" rel="preconnect"/>
-<!-- SEO básico -->
-<title>Estudio Graphica | Fotografía Gastronómica Profesional</title>
-<meta content="Fotografía gastronómica profesional que hace que tus clientes quieran probar cada plato. Más de 250 marcas ya confiaron." name="description"/>
-<meta content="fotografía gastronómica, fotógrafo de comida, food styling, fotografía para restaurantes" name="keywords"/>
-<meta content="Estudio Graphica" name="author"/>
-<!-- Open Graph -->
-<meta content="Estudio Graphica | Fotografía Gastronómica Profesional" property="og:title"/>
-<meta content="Más de 250 marcas ya confiaron en nuestra fotografía gastronómica." property="og:description"/>
-<meta content="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745611645/patata_brava_kjzngm.jpg" property="og:image"/>
-<meta content="https://estudiographica.netlify.app/" property="og:url"/>
-<meta content="website" property="og:type"/>
-<!-- Favicon -->
-<link rel="icon" type="image/x-icon" href="/favicon.ico">
-<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<meta charset="utf-8">
-<meta content="width=device-width, initial-scale=1" name="viewport">
-
-<!-- Fuentes -->
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
-<!-- Tailwind config BEFORE CDN para evitar ReferenceError y generar clases personalizadas -->
-<script>window.tailwind={theme:{extend:{colors:{amarillo:'#FFDE59',negro:'#1A1A1A',gris:'#F7F7F5'},fontFamily:{poppins:['Poppins','sans-serif']}}}};</script>
-<!-- Tailwind CDN -->
-<script src="https://cdn.tailwindcss.com"></script>
-<style>
-    @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Fotografía Gastronómica en Cochabamba | Estudio Graphica</title>
+  <meta name="description" content="Fotografía gastronómica en Cochabamba. Restaurantes, delivery y marcas de alimentos con imágenes que venden." />
+  <link rel="icon" type="image/png" href="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745619722/Logo_S_F_l66fym.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root{--y:#FFDE59;--ink:#1A1A1A}
     html{scroll-behavior:smooth}
-    body{font-family:'Poppins',sans-serif;letter-spacing:-.03em;background:#fbfbfb;color:#1A1A1A}
+    body{font-family:'Poppins',sans-serif;background:#fbfbfb;color:#000;letter-spacing:-.02em}
 
-    /* Fondo con manchas/desenfoques amarillos sutiles */
-    .bg-blobs:before,.bg-blobs:after{content:"";position:fixed;z-index:-1;border-radius:50%;filter:blur(60px);opacity:.22;pointer-events:none}
-    .bg-blobs:before{width:380px;height:380px;background:#FFDE59;top:6%;left:-120px}
-    .bg-blobs:after{width:520px;height:520px;background:radial-gradient(circle at 30% 30%, #FFDE59 0%, rgba(255,222,89,0) 70%);bottom:-120px;right:-160px}
+    /* Fondo sutil */
+    .bg-blobs:before,.bg-blobs:after{content:"";position:fixed;z-index:-1;border-radius:50%;filter:blur(60px);opacity:.18;pointer-events:none}
+    .bg-blobs:before{width:380px;height:380px;background:var(--y);top:6%;left:-120px}
+    .bg-blobs:after{width:520px;height:520px;background:radial-gradient(circle at 30% 30%, var(--y) 0%, rgba(255,222,89,0) 70%);bottom:-120px;right:-160px}
 
-    /* Reveal */
-    .reveal{opacity:0;transform:translateY(20px);transition:opacity .5s ease,transform .5s ease}
-    .reveal.is-visible{opacity:1;transform:none}
+    /* Glass base con sombras discretas */
+    .glassize{position:relative;background:linear-gradient(135deg, rgba(255,255,255,0.22), rgba(255,255,255,0.06));
+      border:1px solid rgba(255,255,255,0.35); border-top-color:rgba(255,255,255,0.6); border-left-color:rgba(255,255,255,0.45);
+      backdrop-filter:blur(14px) saturate(130%); -webkit-backdrop-filter:blur(14px) saturate(130%);
+      box-shadow: 0 6px 18px rgba(0,0,0,.08), inset 0 1px 0 rgba(255,255,255,.3);
+    }
+    .glass-card{border-radius:1.25rem}
 
-    /* Botones */
-    .btn{display:inline-block;font-weight:600;border-radius:9999px;padding:.875rem 1.75rem;transition:transform .12s ease,box-shadow .2s ease,opacity .2s ease}
-    .btn--yellow{background:#FFDE59;color:#1A1A1A;box-shadow:0 8px 20px rgba(255,222,89,.35)}
-    .btn--yellow:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(255,222,89,.45)}
-    .btn--yellow:active{transform:translateY(0) scale(.98);box-shadow:0 6px 14px rgba(255,222,89,.35)}
+    /* Botón más amarillo, aún translúcido */
+    .btn{display:inline-block;border-radius:9999px;padding:1rem 1.8rem;font-weight:700;transition:transform .12s ease,filter .15s}
+    .btn--glass{color:#000;background:linear-gradient(135deg, rgba(255,222,89,.92), rgba(255,222,89,.82));
+      border:1px solid rgba(0,0,0,.06);box-shadow:0 10px 18px rgba(255,222,89,.24),0 1px 3px rgba(0,0,0,.06);backdrop-filter:blur(10px) saturate(120%)}
+    .btn--glass:hover{filter:saturate(112%);transform:translateY(-1px)}
 
-    /* Portafolio */
-    .portfolio-item{transition:transform .25s ease,box-shadow .25s ease}
-    .portfolio-item:hover{transform:translateY(-6px);box-shadow:0 20px 25px -5px rgba(0,0,0,.1),0 10px 10px -5px rgba(0,0,0,.04)}
-    .pf-carousel{display:flex;gap:1.25rem;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth}
-    .pf-carousel::-webkit-scrollbar{height:8px}
-    .pf-carousel::-webkit-scrollbar-thumb{background:#e4e4e4;border-radius:9999px}
+    /* Fotos con glass suave */
+    .glass-photo{position:relative;border-radius:1rem;overflow:hidden;box-shadow: 0 16px 36px rgba(0,0,0,.12), 0 6px 14px rgba(0,0,0,.06)}
+    .glass-photo>img{display:block;width:100%;height:100%;object-fit:cover}
+    .glass-photo:before{content:"";position:absolute;inset:0;background:radial-gradient(90% 60% at 10% 0%, rgba(255,255,255,.28), rgba(255,255,255,0));opacity:.3;mix-blend-mode:screen;pointer-events:none}
+
+    /* Portafolio: evitar que el scrollbar tape contenido */
+    .pf-carousel{display:flex;gap:1.25rem;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;padding-bottom:14px;scrollbar-gutter:stable both-edges}
+    .pf-carousel::-webkit-scrollbar{height:10px}
+    .pf-carousel::-webkit-scrollbar-thumb{background:#e6e6e6;border-radius:9999px}
     .pf-item{scroll-snap-align:start;flex:0 0 auto;width:300px}
-
-    /* Fotógrafo */
-    .photographer-img{border-radius:1rem}
 
     /* Modal */
     .modal{display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.9)}
     .modal__img{max-width:90%;max-height:90%;object-fit:contain}
     .modal__close{position:absolute;top:16px;right:24px;color:#fff;font-size:36px;line-height:1;cursor:pointer}
 
-    /* Antes / Después */
-    .cmp{position:relative;max-width:720px;margin-inline:auto;aspect-ratio:1/1;overflow:hidden;border-radius:1rem}
-    .cmp__layer{position:absolute;inset:0}
-    .cmp__layer img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-    .cmp__before{clip-path:polygon(0 0,50% 0,50% 100%,0 100%)}
-    .cmp__slider{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:44px;height:44px;border-radius:9999px;background:#FFDE59;box-shadow:0 0 0 3px rgba(255,255,255,.7);display:flex;align-items:center;justify-content:center;cursor:ew-resize;z-index:3}
-    .cmp__divider{position:absolute;top:-30%;bottom:-30%;left:50%;width:2px;background:#FFDE59;z-index:2}
+    /* --------------------------- */
+    /* Antes / Después: tamaño nuevo, centrado y responsive */
+    /* Wrapper controla el tamaño máximo y centra el bloque */
+    .cmp-wrap{width:min(92vw, 720px);margin-inline:auto}
+    @media (max-width:640px){
+      .cmp-wrap{width:min(94vw, 520px)}
+    }
 
-    /* Logos clientes: más grandes, sin sombra/borde, auto-scroll + drag */
+    /* Bloque comparador */
+    .cmp{position:relative;display:inline-block;border-radius:1rem;overflow:hidden;line-height:0}
+    /* La imagen base define la proporción */
+    .cmp>img{display:block;width:100%;height:auto}
+    /* Capas superpuestas exactamente al contenedor */
+    .cmp__layer{position:absolute;inset:0}
+    .cmp__layer img{width:100%;height:100%;object-fit:cover}
+    .cmp__before{clip-path:polygon(0 0,50% 0,50% 100%,0 100%);z-index:1}
+    .cmp__divider{position:absolute;top:0;bottom:0;left:50%;width:2px;background:var(--y);z-index:2}
+    .cmp__slider{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:40px;height:40px;border-radius:9999px;background:var(--y);box-shadow:0 0 0 2px rgba(255,255,255,.7);display:flex;align-items:center;justify-content:center;cursor:ew-resize;z-index:3}
+    @media (max-width:640px){
+      .cmp__slider{width:32px;height:32px}
+    }
+
+    /* Logos scroll */
     .logos-scroll{overflow:hidden;cursor:grab}
     .logos-scroll.dragging{cursor:grabbing}
     .logos-track{display:flex;gap:2rem;padding:.5rem 0;will-change:transform}
     .logo-card{width:180px;height:110px;flex:0 0 auto;display:flex;align-items:center;justify-content:center}
-    .logo{max-width:100%;max-height:100%;object-fit:contain;filter:none;transition:transform .2s ease}
-    .logo-card:hover .logo{transform:scale(1.02)}
-  </style>
-</link></meta></meta><link href="https://estudiographica.netlify.app/" rel="canonical"/><meta content="index,follow,max-image-preview:large" name="robots"/><meta content="#FFD400" name="theme-color"/><meta content="light" name="color-scheme"/><meta content="yes" name="apple-mobile-web-app-capable"/><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"/><link href="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745619722/Logo_S_F_l66fym.png" rel="apple-touch-icon" sizes="180x180"/><meta content="summary_large_image" name="twitter:card"/><meta content="Estudio Graphica | Fotografía Gastronómica Profesional" name="twitter:title"/><meta content="Más de 250 marcas ya confiaron en nuestra fotografía gastronómica." name="twitter:description"/><meta content="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745611645/patata_brava_kjzngm.jpg" name="twitter:image"/><script type="application/ld+json">{"@context": "https://schema.org", "@type": "Organization", "name": "Estudio Graphica", "url": "https://estudiographica.netlify.app/", "logo": "https://res.cloudinary.com/dplhu2z6j/image/upload/v1745619722/Logo_S_F_l66fym.png", "sameAs": ["https://www.instagram.com/estudiographica", "https://www.facebook.com/estudiographica"]}</script><script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "name": "Estudio Graphica", "url": "https://estudiographica.netlify.app/", "potentialAction": {"@type": "SearchAction", "target": "https://estudiographica.netlify.app/?q={search_term_string}", "query-input": "required name=search_term_string"}}</script><style>
-h1,h2,h3,h4,h5,h6{color:#000!important;-webkit-text-fill-color:#000!important}
-a,a:visited,a:active{color:#1A1A1A!important;-webkit-text-fill-color:#1A1A1A!important;text-decoration:none!important}
-</style></head>
-<body class="bg-blobs">
-<!-- Header -->
-<header class="fixed w-full bg-white/85 backdrop-blur-md z-50 shadow-sm">
-<div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-<a aria-label="Ir al inicio" class="h-14 flex items-center" href="#inicio">
-<img alt="Estudio Graphica" class="h-14 w-auto" decoding="sync" fetchpriority="high" loading="eager" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745619722/Logo_S_F_l66fym.png"/>
-</a>
-<a aria-label="Agendar reunión" class="btn btn--yellow" href="#agendar">Agendar reunión</a>
-</div>
-</header>
-<!-- Hero -->
-<section class="pt-32 md:pt-40 pb-16 md:pb-24 relative" id="inicio">
-<div class="max-w-7xl mx-auto px-4 grid md:grid-cols-2 gap-10 items-center">
-<div class="reveal">
-<h1 class="font-poppins font-bold text-4xl md:text-5xl lg:text-6xl leading-tight mb-6 tracking-tighter">Contratar fotógrafo no es caro, caro es que tu negocio no venda.</h1>
-<p class="text-xl md:text-2xl mb-8 text-gray-700">La gente come con los ojos primero.</p>
-<a aria-label="Ver servicios" class="btn btn--yellow" href="#servicios">¡Quiero saber más!</a>
-</div>
-<div class="reveal">
-<div class="w-full h-80 md:h-96 lg:h-[500px] rounded-2xl overflow-hidden">
-<img alt="Fotografía gastronómica profesional" class="w-full h-full object-cover" decoding="async" loading="eager" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745611645/patata_brava_kjzngm.jpg"/>
-</div>
-</div>
-</div>
-</section>
-<!-- Servicios -->
-<section class="py-16 md:py-24 relative" id="servicios">
-<div class="max-w-7xl mx-auto px-4">
-<h2 class="font-poppins font-bold text-3xl md:text-4xl text-center mb-14 tracking-tighter reveal">Nuestros Servicios</h2>
-<div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-<article class="bg-white p-8 rounded-2xl shadow-lg text-center reveal">
-<h3 class="font-semibold text-xl mb-3">Fotografía Gastronómica</h3>
-<p class="text-gray-600">¿Vas a seguir tomando fotos de tu plato con el celular grasoso de tu cajero? Mejor deja que hagamos fotos que den hambre. Fotos que hacen que el cliente no solo vea el menú, sino que quiera lamerlo.</p>
-</article>
-<article class="bg-white p-8 rounded-2xl shadow-lg text-center reveal">
-<h3 class="font-semibold text-xl mb-3">Foodstyling Profesional</h3>
-<p class="text-gray-600">Un plato mal presentado mata más ventas que una mala reseña. Te ayudamos a que tus platos luzcan como portada de revista. Comida que posa mejor que varios influencers.</p>
-</article>
-<article class="bg-white p-8 rounded-2xl shadow-lg text-center reveal">
-<h3 class="font-semibold text-xl mb-3">Planes Mensuales</h3>
-<p class="text-gray-600">¿Publicas una vez cada eclipse? Tenemos planes mensuales para que tu contenido salga tan constante como tus cuentas por pagar. Nada de reciclar el mismo ceviche en San Valentín.</p>
-</article>
-</div>
-<p class="text-center italic text-lg mt-10 reveal">"Si cocinas con pasión, ¿por qué mostrarlo con vergüenza?"</p>
-</div>
-</section>
-<!-- Portafolio -->
-<section class="py-16 md:py-24 relative" id="portfolio">
-<div class="max-w-7xl mx-auto px-4">
-<h2 class="font-poppins font-bold text-3xl md:text-4xl text-center mb-4 tracking-tighter reveal">Nuestro Portafolio</h2>
-<p class="text-center text-gray-600 max-w-2xl mx-auto mb-10 reveal">No ganes por ser barato. Gana porque nadie puede resistirse a verte.</p>
-<div class="reveal">
-<div class="pf-carousel" id="pf">
-<div class="pf-item">
-<div class="w-full h-64 rounded-2xl relative overflow-hidden portfolio-item">
-<img alt="Cookie Bar - Cafetería y galletería" class="w-full h-full object-cover" data-caption="Cookie Bar - Cafetería y galletería" decoding="async" loading="lazy" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745619066/_MG_4717_de_tama%C3%B1o_grande_pq7nup.png"/>
-</div>
-<h3 class="font-semibold mt-3">Cookie Bar</h3>
-<p class="text-sm text-gray-600">Cafetería y galletería</p>
-</div>
-<div class="pf-item">
-<div class="w-full h-64 rounded-2xl relative overflow-hidden portfolio-item">
-<img alt="Vitz - Postres y helados" class="w-full h-full object-cover" data-caption="Vitz - Postres y helados" decoding="async" loading="lazy" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745619069/IMG_9922_de_tama%C3%B1o_grande_um4gy8.png"/>
-</div>
-<h3 class="font-semibold mt-3">Vitz</h3>
-<p class="text-sm text-gray-600">Postres y helados</p>
-</div>
-<div class="pf-item">
-<div class="w-full h-64 rounded-2xl relative overflow-hidden portfolio-item">
-<img alt="Burger 91 - Hamburguesas y comida rápida" class="w-full h-full object-cover" data-caption="Burger 91 - Hamburguesas y comida rápida" decoding="async" loading="lazy" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745619066/IMG_2073_de_tama%C3%B1o_grande_dsdllu.png"/>
-</div>
-<h3 class="font-semibold mt-3">Burger 91</h3>
-<p class="text-sm text-gray-600">Hamburguesas y comida rápida</p>
-</div>
-<div class="pf-item">
-<div class="w-full h-64 rounded-2xl relative overflow-hidden portfolio-item">
-<img alt="Patata Brava - Papas fritas y comida rápida" class="w-full h-full object-cover" data-caption="Patata Brava - Papas fritas y comida rápida" decoding="async" loading="lazy" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745619058/_MG_2260_de_tama%C3%B1o_grande_jvlymh.png"/>
-</div>
-<h3 class="font-semibold mt-3">Patata Brava</h3>
-<p class="text-sm text-gray-600">Papas fritas y comida rápida</p>
-</div>
-<div class="pf-item">
-<div class="w-full h-64 rounded-2xl relative overflow-hidden portfolio-item">
-<img alt="Sansei - Comida japonesa y sushi" class="w-full h-full object-cover" data-caption="Sansei - Comida japonesa y sushi" decoding="async" loading="lazy" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745619064/IMG_7464_de_tama%C3%B1o_grande_uz14xx.png"/>
-</div>
-<h3 class="font-semibold mt-3">Sansei</h3>
-<p class="text-sm text-gray-600">Comida japonesa y sushi</p>
-</div>
-<div class="pf-item">
-<div class="w-full h-64 rounded-2xl relative overflow-hidden portfolio-item">
-<img alt="Terra Brasa - Carnes y parrilla" class="w-full h-full object-cover" data-caption="Terra Brasa - Carnes y parrilla" decoding="async" loading="lazy" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745619072/IMG_1604_de_tama%C3%B1o_grande_jnmfvb.png"/>
-</div>
-<h3 class="font-semibold mt-3">Terra Brasa</h3>
-<p class="text-sm text-gray-600">Carnes y parrilla</p>
-</div>
-</div>
+    .logo{max-width:100%;max-height:100%;object-fit:contain}
 
-<div class="text-center mt-8">
-<a class="btn btn--yellow" href="https://estudiographica.myportfolio.com" rel="noopener" target="_blank">Ver portafolio completo</a>
-</div>
-</div>
-</div>
-<!-- Modal -->
-<div aria-label="Vista ampliada" aria-modal="true" class="modal" id="modal" role="dialog">
-<button aria-label="Cerrar" class="modal__close" id="modalClose">×</button>
-<div class="w-full h-full flex items-center justify-center">
-<img alt="" class="modal__img" id="modalImg"/>
-</div>
-<div class="text-white text-center font-poppins pb-6" id="modalCap"></div>
-</div>
-</section>
-<!-- Conoce al fotógrafo -->
-<section class="py-16 md:py-24 relative" id="fotografo">
-<div class="max-w-5xl mx-auto px-4">
-<h2 class="font-poppins font-bold text-3xl md:text-4xl text-center mb-12 tracking-tighter reveal">Conoce a tu fotógrafo</h2>
-<div class="grid md:grid-cols-3 items-center gap-10">
-<div class="reveal md:col-span-1">
-<img alt="Fotógrafo de Estudio Graphica" class="w-full photographer-img" decoding="async" loading="lazy" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745619204/Perfil_Png_Nuevo_aosfas.png"/>
-</div>
-<div class="reveal md:col-span-2">
-<p class="text-lg md:text-xl mb-4 leading-relaxed">En todas las páginas hay un apartado donde el fotógrafo presume de sus títulos o años de experiencia, pero nadie lo lee. ¿Sabes por qué?</p>
-<p class="text-lg md:text-xl mb-4 font-semibold">Porque a nadie le importa. Tú quieres resultados para tu marca.</p>
-<p class="text-lg md:text-xl mb-6 leading-relaxed">Mi mejor carta de presentación es mi portafolio, porque eso es exactamente lo que te puedo ofrecer.</p>
-<a class="btn btn--yellow" href="https://estudiographica.myportfolio.com" rel="noopener" target="_blank">Ver portafolio completo</a>
-</div>
-</div>
-</div>
-</section>
-<!-- Antes y Después -->
-<section class="py-16 md:py-24 relative" id="antes-despues">
-<div class="max-w-6xl mx-auto px-4">
-<h2 class="font-poppins font-bold text-3xl md:text-4xl text-center mb-6 tracking-tighter reveal">Antes y Después</h2>
-<p class="text-center text-gray-600 max-w-3xl mx-auto mb-10 reveal">¿Ves la diferencia? Tus clientes también la ven. La pregunta es: ¿qué versión les vas a mostrar?</p>
-<div class="reveal">
-<div class="cmp" id="cmp">
-<div class="cmp__layer">
-<img alt="Después" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745819075/2_ylgf7o.jpg"/>
-</div>
-<div class="cmp__layer cmp__before" id="cmpBefore">
-<img alt="Antes" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745819075/1_ymdvor.jpg"/>
-</div>
-<div class="cmp__divider" id="cmpDivider"></div>
-<button aria-label="Deslizar comparador" class="cmp__slider" id="cmpSlider" type="button">
-<svg aria-hidden="true" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M21 12H3M9 6l-6 6 6 6M15 6l6 6-6 6"></path></svg>
-</button>
-</div>
-<p class="text-center mt-4 font-semibold">Desliza para ver la diferencia</p>
-</div>
-</div>
-</section>
-<!-- Beneficios -->
-<section class="py-16 md:py-24 relative" id="beneficios">
-<div class="max-w-7xl mx-auto px-4">
-<h2 class="font-poppins font-bold text-3xl md:text-4xl text-center mb-14 tracking-tighter reveal">¿Por qué elegirnos?</h2>
-<div class="grid grid-cols-1 md:grid-cols-3 gap-10 text-center">
-<div class="reveal">
-<div class="text-5xl md:text-6xl font-bold text-amarillo mb-2">+9</div>
-<p class="text-xl">años antojando clientes</p>
-</div>
-<div class="reveal">
-<div class="text-5xl md:text-6xl font-bold text-amarillo mb-2">+300</div>
-<p class="text-xl">marcas fotografiadas</p>
-</div>
-<div class="reveal">
-<div class="text-5xl md:text-6xl font-bold text-amarillo mb-2">x2</div>
-<p class="text-xl">sesiones que duplican la intención de compra</p>
-</div>
-</div>
-<div class="text-center mt-12 reveal">
-<p class="text-xl italic mb-6">"Contratar fotógrafo no es caro, no vender es caro."</p>
-<a class="btn btn--yellow" href="#agendar">Agendar reunión</a>
-</div>
-</div>
-</section>
-<!-- Clientes -->
-<section class="py-16 md:py-24 relative" id="clientes">
-<div class="max-w-7xl mx-auto px-4">
-<h2 class="font-poppins font-bold text-3xl md:text-4xl text-center mb-12 tracking-tighter reveal">Marcas que ya han confiado en nosotros</h2>
-<div class="reveal logos-scroll" id="logosWrap">
-<div class="logos-track" id="logos">
-<div class="logo-card"><img alt="Patata Brava" class="logo" decoding="async" loading="lazy" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166368/1_vegdk8.png"/></div>
-<div class="logo-card"><img alt="Happy Fry" class="logo" decoding="async" loading="lazy" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166368/2_pdiecr.png"/></div>
-<div class="logo-card"><img alt="Globos" class="logo" decoding="async" loading="lazy" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166369/3_dt1nfk.png"/></div>
-<div class="logo-card"><img alt="Burger 91" class="logo" decoding="async" loading="lazy" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166369/4_ssugqk.png"/></div>
-<div class="logo-card"><img alt="Pedidos Ya" class="logo" decoding="async" loading="lazy" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166370/5_exwkbr.png"/></div>
-<div class="logo-card"><img alt="Terra Brasa" class="logo" decoding="async" loading="lazy" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166371/6_gfjolm.png"/></div>
-<div class="logo-card"><img alt="Vitz" class="logo" decoding="async" loading="lazy" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166373/7_wi271i.png"/></div>
-<div class="logo-card"><img alt="Kansas" class="logo" decoding="async" loading="lazy" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166374/8_pzfcfe.png"/></div>
-<div class="logo-card"><img alt="Para Ti" class="logo" decoding="async" loading="lazy" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166375/9_vuxq3e.png"/></div>
-<div class="logo-card"><img alt="Cookie Bar" class="logo" decoding="async" loading="lazy" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166376/10_p2jdke.png"/></div>
-<div class="logo-card"><img alt="Sansei" class="logo" decoding="async" loading="lazy" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166377/11_t57ngd.png"/></div>
-<div class="logo-card"><img alt="Cornicione" class="logo" decoding="async" loading="lazy" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166379/12_df9xhb.png"/></div>
-<div class="logo-card"><img alt="California The Burger Republic" class="logo" decoding="async" loading="lazy" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166380/13_boqwsk.png"/></div>
-<div class="logo-card"><img alt="Burger Haus" class="logo" decoding="async" loading="lazy" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166381/14_ounqzl.png"/></div>
-<div class="logo-card"><img alt="Bliss" class="logo" decoding="async" loading="lazy" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166383/15_wl3dap.png"/></div>
-<div class="logo-card"><img alt="Happy Tea" class="logo" decoding="async" loading="lazy" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166384/16_x81hwu.png"/></div>
-<div class="logo-card"><img alt="Camellia" class="logo" decoding="async" loading="lazy" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166386/17_uq59mt.png"/></div>
-<div class="logo-card"><img alt="Typica" class="logo" decoding="async" loading="lazy" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166387/18_ng80jm.png"/></div>
-<div class="logo-card"><img alt="Tunari" class="logo" decoding="async" loading="lazy" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166389/19_l1vgpl.png"/></div>
-<div class="logo-card"><img alt="Bros" class="logo" decoding="async" loading="lazy" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166390/20_in2g5a.png"/></div>
-<div class="logo-card"><img alt="Punto de encuentro" class="logo" decoding="async" loading="lazy" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166392/21_pyhqke.png"/></div>
-<div class="logo-card"><img alt="Sucremanta" class="logo" decoding="async" loading="lazy" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166393/22_pvu0jp.png"/></div>
-<div class="logo-card"><img alt="El Edén" class="logo" decoding="async" loading="lazy" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166408/23_q34cfb.png"/></div>
-<div class="logo-card"><img alt="Doña Panchita" class="logo" decoding="async" loading="lazy" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166408/24_duvy1a.png"/></div>
-<div class="logo-card"><img alt="Aventino" class="logo" decoding="async" loading="lazy" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166409/25_xa9plb.png"/></div>
-</div>
-</div>
-</div>
-</section>
-<!-- Agendar -->
-<section class="py-16 md:py-24 relative" id="agendar">
-<div class="max-w-4xl mx-auto px-4">
-<div class="rounded-2xl p-8 md:p-12 bg-white/70 backdrop-blur">
-<h2 class="font-poppins font-bold text-3xl md:text-4xl text-center mb-4 tracking-tighter reveal">Agenda tu reunión ☕</h2>
-<p class="text-center text-gray-700 mb-8 reveal">Cuéntanos sobre tu proyecto y nos pondremos en contacto contigo para crear una propuesta personalizada.</p>
-<div class="text-center reveal">
-<a class="btn btn--yellow text-lg" href="https://cal.com/themarketographer/reunión" rel="noopener" target="_blank">Agendar reunión</a>
-</div>
-</div>
-</div>
-</section>
-<!-- Footer -->
-<footer class="py-14">
-<div class="max-w-7xl mx-auto px-4">
-<div class="flex flex-col items-center justify-center">
-<img alt="Estudio Graphica" class="h-16 w-auto mb-6" decoding="async" loading="lazy" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745619722/Logo_S_F_l66fym.png">
-<p class="text-gray-600 text-center">© 2025 Estudio Graphica. Todos los derechos reservados.</p>
-</img></div>
-</div>
-</footer>
-<script>
+    /* Reveal */
+    .reveal{opacity:0;transform:translateY(20px);transition:opacity .5s,transform .5s}
+    .reveal.is-visible{opacity:1;transform:none}
+  </style>
+</head>
+<body class="bg-blobs">
+  <!-- Header -->
+  <header class="fixed w-full z-50">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between glassize" style="border-radius:16px; margin-top:.5rem;">
+      <a href="#inicio" class="h-14 flex items-center">
+        <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745619722/Logo_S_F_l66fym.png" alt="Estudio Graphica" class="h-14 w-auto" />
+      </a>
+      <a href="#agendar" class="btn btn--glass">Agendar reunión</a>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section id="inicio" class="pt-32 md:pt-40 pb-16 md:pb-24">
+    <div class="max-w-7xl mx-auto px-4 grid md:grid-cols-2 gap-10 items-center">
+      <div class="reveal">
+        <h1 class="font-bold text-3xl md:text-4xl lg:text-5xl leading-tight mb-4 tracking-tighter">Contratar fotógrafo no es caro, caro es que tu negocio no venda.</h1>
+        <p class="text-lg md:text-xl mb-6 text-gray-700">La gente come con los ojos primero.</p>
+        <a href="#servicios" class="btn btn--glass">¡Quiero saber más!</a>
+      </div>
+      <div class="reveal">
+        <div class="w-full h-80 md:h-96 lg:h-[500px] glass-photo">
+          <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745611645/patata_brava_kjzngm.jpg" alt="Food photography Cochabamba" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Servicios -->
+  <section id="servicios" class="py-16 md:py-24">
+    <div class="max-w-7xl mx-auto px-4">
+      <h2 class="font-bold text-3xl md:text-4xl text-center mb-14 tracking-tighter reveal">Nuestros Servicios</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+        <article class="p-8 glassize glass-card text-center reveal">
+          <h3 class="font-semibold text-xl mb-3">Fotografía Gastronómica</h3>
+          <p class="text-gray-700">¿Vas a seguir tomando fotos de tu plato con el celular grasoso de tu cajero? Mejor deja que hagamos fotos que den hambre. Fotos que hacen que el cliente no solo vea el menú, sino que quiera lamerlo.</p>
+        </article>
+        <article class="p-8 glassize glass-card text-center reveal">
+          <h3 class="font-semibold text-xl mb-3">Foodstyling Profesional</h3>
+          <p class="text-gray-700">Un plato mal presentado mata más ventas que una mala reseña. Te ayudamos a que tus platos luzcan como portada de revista. Comida que posa mejor que varios influencers.</p>
+        </article>
+        <article class="p-8 glassize glass-card text-center reveal">
+          <h3 class="font-semibold text-xl mb-3">Planes Mensuales</h3>
+          <p class="text-gray-700">¿Publicas una vez cada eclipse? Tenemos planes mensuales para que tu contenido salga tan constante como tus cuentas por pagar. Nada de reciclar el mismo ceviche en San Valentín.</p>
+        </article>
+      </div>
+      <p class="text-center italic text-lg mt-10 reveal">"Si cocinas con pasión, ¿por qué mostrarlo con vergüenza?"</p>
+    </div>
+  </section>
+
+  <!-- Portafolio -->
+  <section id="portafolio" class="py-16 md:py-24">
+    <div class="max-w-7xl mx-auto px-4">
+      <h2 class="font-bold text-3xl md:text-4xl text-center mb-4 tracking-tighter reveal">Nuestro Portafolio</h2>
+      <p class="text-center text-gray-600 max-w-2xl mx-auto mb-10 reveal">No ganes por ser barato. Gana porque nadie puede resistirse a verte.</p>
+      <div class="reveal">
+        <div id="pf" class="pf-carousel">
+          <div class="pf-item">
+            <div class="w-full h-64 rounded-2xl overflow-hidden portfolio-item glass-photo">
+              <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745619066/_MG_4717_de_tama%C3%B1o_grande_pq7nup.png" alt="Cookie Bar - Cafetería y galletería" />
+            </div>
+            <h3 class="font-semibold mt-3">Cookie Bar</h3>
+            <p class="text-sm text-gray-600">Cafetería y galletería</p>
+          </div>
+          <div class="pf-item">
+            <div class="w-full h-64 rounded-2xl overflow-hidden portfolio-item glass-photo">
+              <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745619069/IMG_9922_de_tama%C3%B1o_grande_um4gy8.png" alt="Vitz - Postres y helados" />
+            </div>
+            <h3 class="font-semibold mt-3">Vitz</h3>
+            <p class="text-sm text-gray-600">Postres y helados</p>
+          </div>
+          <div class="pf-item">
+            <div class="w-full h-64 rounded-2xl overflow-hidden portfolio-item glass-photo">
+              <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745619066/IMG_2073_de_tama%C3%B1o_grande_dsdllu.png" alt="Burger 91 - Hamburguesas y comida rápida" />
+            </div>
+            <h3 class="font-semibold mt-3">Burger 91</h3>
+            <p class="text-sm text-gray-600">Hamburguesas y comida rápida</p>
+          </div>
+          <div class="pf-item">
+            <div class="w-full h-64 rounded-2xl overflow-hidden portfolio-item glass-photo">
+              <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745619058/_MG_2260_de_tama%C3%B1o_grande_jvlymh.png" alt="Patata Brava - Papas fritas y comida rápida" />
+            </div>
+            <h3 class="font-semibold mt-3">Patata Brava</h3>
+            <p class="text-sm text-gray-600">Papas fritas y comida rápida</p>
+          </div>
+          <div class="pf-item">
+            <div class="w-full h-64 rounded-2xl overflow-hidden portfolio-item glass-photo">
+              <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745619064/IMG_7464_de_tama%C3%B1o_grande_uz14xx.png" alt="Sansei - Comida japonesa y sushi" />
+            </div>
+            <h3 class="font-semibold mt-3">Sansei</h3>
+            <p class="text-sm text-gray-600">Comida japonesa y sushi</p>
+          </div>
+          <div class="pf-item">
+            <div class="w-full h-64 rounded-2xl overflow-hidden portfolio-item glass-photo">
+              <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745619072/IMG_1604_de_tama%C3%B1o_grande_jnmfvb.png" alt="Terra Brasa - Carnes y parrilla" />
+            </div>
+            <h3 class="font-semibold mt-3">Terra Brasa</h3>
+            <p class="text-sm text-gray-600">Carnes y parrilla</p>
+          </div>
+        </div>
+        <div class="text-center mt-8">
+          <a class="btn btn--glass" href="https://estudiographica.myportfolio.com" target="_blank" rel="noopener">Ver portafolio completo</a>
+        </div>
+      </div>
+
+      <!-- Modal -->
+      <div id="modal" class="modal" role="dialog" aria-label="Vista ampliada" aria-modal="true">
+        <button id="modalClose" class="modal__close" aria-label="Cerrar">×</button>
+        <div class="w-full h-full flex items-center justify-center">
+          <img id="modalImg" class="modal__img" alt="" />
+        </div>
+        <div id="modalCap" class="text-white text-center font-poppins pb-6"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Conoce al fotógrafo -->
+  <section id="fotografo" class="py-16 md:py-24">
+    <div class="max-w-5xl mx-auto px-4">
+      <h2 class="font-bold text-3xl md:text-4xl text-center mb-12 tracking-tighter reveal">Conoce a tu fotógrafo</h2>
+      <div class="grid md:grid-cols-3 items-center gap-10">
+        <div class="reveal md:col-span-1">
+          <!-- SIN glass ni sombras -->
+          <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745619204/Perfil_Png_Nuevo_aosfas.png" alt="Fotógrafo de Estudio Graphica" class="block w-full h-auto" />
+        </div>
+        <div class="reveal md:col-span-2 max-w-2xl text-justify leading-relaxed">
+          <p class="text-lg md:text-xl mb-4">En todas las páginas hay un apartado donde el fotógrafo presume de sus títulos o años de experiencia, pero nadie lo lee. ¿Sabes por qué?</p>
+          <p class="text-lg md:text-xl mb-6 font-semibold">Porque a nadie le importa. Tú quieres resultados para tu marca.</p>
+          <p class="text-lg md:text-xl mb-6">Mi mejor carta de presentación es mi portafolio, porque eso es exactamente lo que te puedo ofrecer.</p>
+          <a class="btn btn--glass" href="#portafolio">Ver portafolio completo</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Antes y Después -->
+  <section id="antes-despues" class="py-16 md:py-24">
+    <div class="max-w-6xl mx-auto px-4">
+      <h2 class="font-bold text-3xl md:text-4xl text-center mb-6 tracking-tighter reveal">Antes y Después</h2>
+      <p class="text-center text-gray-600 max-w-3xl mx-auto mb-10 reveal">¿Ves la diferencia? Tus clientes también la ven. La pregunta es: ¿qué versión les vas a mostrar?</p>
+      <div class="reveal">
+        <!-- WRAPPER NUEVO que reduce tamaño y centra -->
+        <div class="cmp-wrap">
+          <div id="cmp" class="cmp glass-card glassize">
+            <!-- Imagen base: define tamaño del bloque -->
+            <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745819075/2_ylgf7o.jpg" alt="Después" />
+            <!-- Capa "Antes" superpuesta -->
+            <div id="cmpBefore" class="cmp__layer cmp__before">
+              <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745819075/1_ymdvor.jpg" alt="Antes" />
+            </div>
+            <div id="cmpDivider" class="cmp__divider"></div>
+            <button id="cmpSlider" type="button" class="cmp__slider" aria-label="Deslizar comparador">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12H3M9 6l-6 6 6 6M15 6l6 6-6 6"/></svg>
+            </button>
+          </div>
+        </div>
+        <p class="text-center mt-4 font-semibold">Desliza para ver la diferencia</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Beneficios -->
+  <section id="beneficios" class="py-16 md:py-24">
+    <div class="max-w-7xl mx-auto px-4">
+      <h2 class="font-bold text-3xl md:text-4xl text-center mb-14 tracking-tighter reveal">¿Por qué elegirnos?</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-10 text-center">
+        <div class="reveal">
+          <div class="text-5xl md:text-6xl font-bold" style="color:var(--y)">+9</div>
+          <p class="text-xl">años antojando clientes</p>
+        </div>
+        <div class="reveal">
+          <div class="text-5xl md:text-6xl font-bold" style="color:var(--y)">+300</div>
+          <p class="text-xl">marcas fotografiadas</p>
+        </div>
+        <div class="reveal">
+          <div class="text-5xl md:text-6xl font-bold" style="color:var(--y)">x2</div>
+          <p class="text-xl">sesiones que duplican la intención de compra</p>
+        </div>
+      </div>
+      <div class="text-center mt-12 reveal">
+        <p class="text-xl italic mb-6">"Contratar fotógrafo no es caro, no vender es caro."</p>
+        <a class="btn btn--glass" href="#agendar">Agendar reunión</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Clientes (autoscroll más rápido) -->
+  <section id="clientes" class="py-16 md:py-24">
+    <div class="max-w-7xl mx-auto px-4">
+      <h2 class="font-bold text-3xl md:text-4xl text-center mb-12 tracking-tighter reveal">Marcas que ya han confiado en nosotros</h2>
+      <div id="logosWrap" class="reveal logos-scroll glass-card glassize">
+        <div id="logos" class="logos-track">
+          <div class="logo-card"><img class="logo" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166368/1_vegdk8.png" alt="Patata Brava" /></div>
+          <div class="logo-card"><img class="logo" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166368/2_pdiecr.png" alt="Happy Fry" /></div>
+          <div class="logo-card"><img class="logo" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166369/3_dt1nfk.png" alt="Globos" /></div>
+          <div class="logo-card"><img class="logo" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166369/4_ssugqk.png" alt="Burger 91" /></div>
+          <div class="logo-card"><img class="logo" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166370/5_exwkbr.png" alt="Pedidos Ya" /></div>
+          <div class="logo-card"><img class="logo" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166371/6_gfjolm.png" alt="Terra Brasa" /></div>
+          <div class="logo-card"><img class="logo" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166373/7_wi271i.png" alt="Vitz" /></div>
+          <div class="logo-card"><img class="logo" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166374/8_pzfcfe.png" alt="Kansas" /></div>
+          <div class="logo-card"><img class="logo" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166375/9_vuxq3e.png" alt="Para Ti" /></div>
+          <div class="logo-card"><img class="logo" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166376/10_p2jdke.png" alt="Cookie Bar" /></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Agendar -->
+  <section id="agendar" class="py-16 md:py-24">
+    <div class="max-w-4xl mx-auto px-4">
+      <div class="p-8 md:p-12 glassize glass-card">
+        <h2 class="font-bold text-3xl md:text-4xl text-center mb-4 tracking-tighter reveal">Agenda tu reunión ☕</h2>
+        <p class="text-center text-gray-700 mb-8 reveal">Cuéntanos sobre tu proyecto y nos pondremos en contacto contigo para crear una propuesta personalizada.</p>
+        <div class="text-center reveal">
+          <a class="btn btn--glass text-lg" href="https://cal.com/themarketographer/reunión" target="_blank" rel="noopener">Agendar reunión</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-14">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="flex flex-col items-center justify-center">
+        <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745619722/Logo_S_F_l66fym.png" alt="Estudio Graphica" class="h-16 w-auto mb-6" />
+        <p class="text-gray-600 text-center">© 2025 Estudio Graphica. Fotografía gastronómica en Cochabamba.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
     // Reveal on scroll
     (function(){
       var els = document.querySelectorAll('.reveal');
       if(!('IntersectionObserver' in window)){ els.forEach(function(e){ e.classList.add('is-visible'); }); return; }
-      var io = new IntersectionObserver(function(entries){
-        entries.forEach(function(entry){ if(entry.isIntersecting){ entry.target.classList.add('is-visible'); io.unobserve(entry.target);} });
-      },{threshold:.15});
+      var io = new IntersectionObserver(function(entries){ entries.forEach(function(entry){ if(entry.isIntersecting){ entry.target.classList.add('is-visible'); io.unobserve(entry.target);} }); },{threshold:.15});
       els.forEach(function(e){ io.observe(e); });
     })();
 
-    // Modal de imágenes
+    // Modal de imágenes del portafolio
     (function(){
       var pf = document.getElementById('pf');
       var modal = document.getElementById('modal');
@@ -343,13 +342,11 @@ a,a:visited,a:active{color:#1A1A1A!important;-webkit-text-fill-color:#1A1A1A!imp
         document.body.style.overflow='hidden';
       });
       function closeModal(){ modal.style.display='none'; document.body.style.overflow='auto'; }
-      close.addEventListener('click', closeModal);
-      modal.addEventListener('click', function(ev){ if(ev.target===modal) closeModal(); });
+      if(close) close.addEventListener('click', closeModal);
+      modal && modal.addEventListener('click', function(ev){ if(ev.target===modal) closeModal(); });
     })();
 
-    // Portafolio sin flechas: botones removidos
-
-    // Comparador Before/After con divisor visible
+    // Comparador Before/After: mantiene el slider dentro del contenedor
     (function(){
       var slider = document.getElementById('cmpSlider');
       var before = document.getElementById('cmpBefore');
@@ -370,128 +367,29 @@ a,a:visited,a:active{color:#1A1A1A!important;-webkit-text-fill-color:#1A1A1A!imp
       document.addEventListener('mouseup',end); document.addEventListener('touchend',end);
     })();
 
-    // Auto-scroll + drag para logos (inercia más rápida)
-(function(){
-  var wrap = document.getElementById('logosWrap');
-  var track = document.getElementById('logos');
-  if(!wrap||!track) return;
-
-  // Duplicar items para loop infinito
-  var items = Array.prototype.slice.call(track.children);
-  items.forEach(function(n){ track.appendChild(n.cloneNode(true)); });
-
-  var pos = 0;
-  var baseSpeed = 1.2;         // velocidad base (antes 0.8)
-  var speed = baseSpeed;
-  var raf = null;
-
-  // --- Parámetros de inercia ---
-  var dragging = false;
-  var startX = 0;
-  var startPos = 0;
-  var lastX = 0;
-  var lastT = 0;
-  var velocity = 0;            // px/ms
-  var THROW_MULTIPLIER = 3.2;  // más alto => más "vuela"
-  var FRICTION = 0.94;         // 0.92–0.97 recomendable
-  var MAX_THROW = 4.5;         // cap para el extra speed
-
-  function loop(){
-    pos += speed;
-    var half = track.scrollWidth/2;
-    if(pos>=half) pos=0;
-    track.style.transform = 'translateX(' + (-pos) + 'px)';
-    raf = requestAnimationFrame(loop);
-  }
-  function startLoop(){ if(!raf) raf = requestAnimationFrame(loop); }
-  function stopLoop(){ if(raf){ cancelAnimationFrame(raf); raf=null; } }
-
-  function normalize(){
-    var half = track.scrollWidth/2;
-    if(pos<0) pos = half + pos%half;
-    if(pos>=half) pos%=half;
-  }
-
-  function onDown(e){
-    dragging = true;
-    wrap.classList.add('dragging');
-    stopLoop();
-    startX = (e.touches?e.touches[0].pageX:e.pageX);
-    startPos = pos;
-    lastX = startX;
-    lastT = performance.now();
-    velocity = 0;
-  }
-  function onMove(e){
-    if(!dragging) return;
-    e.preventDefault();
-    var x = (e.touches?e.touches[0].pageX:e.pageX);
-    var now = performance.now();
-    var dx = x - startX;
-    pos = startPos - dx;
-    normalize();
-    track.style.transform = 'translateX(' + (-pos) + 'px)';
-    // medir velocidad instantánea
-    var dt = Math.max(1, now - lastT);
-    var v = (x - lastX) / dt; // px/ms
-    // suavizar
-    velocity = 0.8*velocity + 0.2*v;
-    lastX = x; lastT = now;
-  }
-  function onUp(){
-    if(!dragging) return;
-    dragging = false;
-    wrap.classList.remove('dragging');
-    // convertir velocidad de gesto en un "boost" temporal
-    var throwBoost = Math.max(Math.min(velocity * THROW_MULTIPLIER, MAX_THROW), -MAX_THROW);
-    // si el usuario arrastró hacia la izquierda rápidamente, queremos que avance más rápido (speed+)
-    // si fue a la derecha, invertimos para que "vaya" en ese sentido
-    var currentDirection = speed >= 0 ? 1 : -1;
-    // sumamos al speed base en el sentido del gesto (negativo = hacia la derecha visualmente)
-    speed = baseSpeed + (-throwBoost); // invertir porque arrastrar a la derecha desplaza el track a la izquierda
-    // animar decay de speed hacia baseSpeed
-    (function decay(){
-      speed = baseSpeed + (speed - baseSpeed)*FRICTION;
-      if(Math.abs(speed - baseSpeed) > 0.05){
-        requestAnimationFrame(decay);
-      } else {
-        speed = baseSpeed;
-      }
-    })();
-    startLoop();
-  }
-
-  wrap.addEventListener('mousedown', onDown);
-  wrap.addEventListener('touchstart', onDown, {passive:false});
-  window.addEventListener('mousemove', onMove, {passive:false});
-  window.addEventListener('touchmove', onMove, {passive:false});
-  window.addEventListener('mouseup', onUp);
-  window.addEventListener('touchend', onUp);
-
-  // Pausar en hover (desktop)
-  wrap.addEventListener('mouseenter', stopLoop);
-  wrap.addEventListener('mouseleave', function(){ if(!dragging) startLoop(); });
-
-  document.addEventListener('visibilitychange', function(){
-    if(document.hidden) stopLoop(); else if(!dragging) startLoop();
-  });
-
-  // iniciar
-  startLoop();
-  track.setAttribute('data-autoscroll','on');
-})();
-// TESTS (auto-chequeos en consola)
+    // Auto-scroll + drag para logos (más rápido)
     (function(){
-      console.assert(document.querySelectorAll('.btn.btn--yellow').length>=1, 'TEST: faltan botones amarillos');
-      console.assert(getComputedStyle(document.documentElement).scrollBehavior==='smooth', 'TEST: scroll suave no activo');
-      var wrap = document.querySelector('#logosWrap');
-      var logos = document.querySelector('#logos');
-      console.assert(!!logos && !!wrap, 'TEST: carrusel de logos no montado');
-      console.assert(logos.getAttribute('data-autoscroll')==='on', 'TEST: auto-scroll de logos no activo');
-      var t0 = getComputedStyle(logos).transform;
-      setTimeout(function(){ var t1 = getComputedStyle(logos).transform; console.assert(t0!==t1, 'TEST: logos no se están moviendo'); }, 1200);
-      var imgPh = document.querySelector('.photographer-img');
-      if (imgPh) { var sh = getComputedStyle(imgPh).boxShadow; console.assert(!sh || sh==='none', 'TEST: la foto del fotógrafo aún tiene sombra'); }
+      var wrap = document.getElementById('logosWrap');
+      var track = document.getElementById('logos');
+      if(!wrap||!track) return;
+      var items = Array.prototype.slice.call(track.children);
+      items.forEach(function(n){ track.appendChild(n.cloneNode(true)); });
+      var pos = 0, baseSpeed = 2.6, speed = baseSpeed, raf = null;
+      var dragging=false, startX=0, startPos=0, lastX=0, lastT=0, velocity=0;
+      var THROW_MULTIPLIER = 3.2, FRICTION = 0.94, MAX_THROW = 4.5;
+      function loop(){ pos += speed; var half = track.scrollWidth/2; if(pos>=half) pos=0; track.style.transform='translateX(' + (-pos) + 'px)'; raf = requestAnimationFrame(loop); }
+      function startLoop(){ if(!raf) raf = requestAnimationFrame(loop); }
+      function stopLoop(){ if(raf){ cancelAnimationFrame(raf); raf=null; } }
+      function normalize(){ var half = track.scrollWidth/2; if(pos<0) pos = half + pos%half; if(pos>=half) pos%=half; }
+      function onDown(e){ dragging=true; wrap.classList.add('dragging'); stopLoop(); startX=(e.touches?e.touches[0].pageX:e.pageX); startPos=pos; lastX=startX; lastT=performance.now(); velocity=0; }
+      function onMove(e){ if(!dragging) return; e.preventDefault(); var x=(e.touches?e.touches[0].pageX:e.pageX); var now=performance.now(); var dx=x-startX; pos=startPos-dx; normalize(); track.style.transform='translateX(' + (-pos) + 'px)'; var dt=Math.max(1, now-lastT); var v=(x-lastX)/dt; velocity=0.8*velocity+0.2*v; lastX=x; lastT=now; }
+      function onUp(){ if(!dragging) return; dragging=false; wrap.classList.remove('dragging'); var throwBoost = Math.max(Math.min(velocity*THROW_MULTIPLIER, MAX_THROW), -MAX_THROW); speed = baseSpeed + (-throwBoost); (function decay(){ speed = baseSpeed + (speed - baseSpeed)*FRICTION; if(Math.abs(speed - baseSpeed) > 0.05){ requestAnimationFrame(decay); } else { speed = baseSpeed; } })(); startLoop(); }
+      wrap.addEventListener('mousedown', onDown); wrap.addEventListener('touchstart', onDown, {passive:false});
+      window.addEventListener('mousemove', onMove, {passive:false}); window.addEventListener('touchmove', onMove, {passive:false});
+      window.addEventListener('mouseup', onUp); window.addEventListener('touchend', onUp);
+      wrap.addEventListener('mouseenter', stopLoop); wrap.addEventListener('mouseleave', function(){ if(!dragging) startLoop(); });
+      document.addEventListener('visibilitychange', function(){ if(document.hidden) stopLoop(); else if(!dragging) startLoop(); });
+      startLoop(); track.setAttribute('data-autoscroll','on');
     })();
   </script>
 </body>
