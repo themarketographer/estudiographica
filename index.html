@@ -1,523 +1,466 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Finite Estudio - Sesiones Save The Date</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
-    <script>
-        // Custom color palette configuration for Tailwind CSS
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#f8f7f3',   // Off-white for backgrounds
-                        secondary: '#2b2b2b', // Dark charcoal for text
-                        terciary: '#937b63',   // Muted tan for accents
-                        'terciary-dark': '#7d6852', // Darker tan for hover effects
-                    },
-                    aspectRatio: {
-                        '9/16': '9 / 16',
-                    },
-                }
-            }
-        }
-    </script>
-    <style>
-        @font-face {
-            font-family: 'TheSeasons';
-            src: url('https://res.cloudinary.com/drrhn6t1c/raw/upload/v1755826797/Fontspring-DEMO-theseasons-reg_evnlrs.otf') format('opentype');
-        }
-        @font-face {
-            font-family: 'GlacialIndifference';
-            src: url('https://res.cloudinary.com/drrhn6t1c/raw/upload/v1755827417/GlacialIndifference-Regular_z5pngu.otf') format('opentype');
-        }
-        html {
-            scroll-behavior: smooth;
-        }
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-        h1, h2, h3 {
-            font-family: 'TheSeasons', serif;
-        }
-        .font-subtitle {
-            font-family: 'GlacialIndifference', sans-serif;
-        }
-        .hero-bg {
-            background-image: url('https://res.cloudinary.com/drrhn6t1c/image/upload/v1756832323/save-the-date-syb-21_yhbnqh.jpg');
-            background-size: cover;
-            background-position: center;
-        }
-        /* Flip Card Styles */
-        .plan-card {
-            perspective: 1500px;
-            min-height: 550px;
-            cursor: pointer;
-        }
-        .plan-card-inner {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            transition: transform 1s;
-            transform-style: preserve-3d;
-        }
-        .plan-card-inner.is-flipped {
-            transform: rotateY(180deg);
-        }
-        .plan-card-front, .plan-card-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
-            border-radius: 1rem;
-            overflow: hidden;
-        }
-        .plan-card-back {
-            transform: rotateY(180deg);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-        /* Masonry Gallery styles */
-        .masonry-gallery {
-            column-count: 2;
-            column-gap: 0.25rem; /* Corresponds to Tailwind's gap-1 */
-        }
-        @media (min-width: 768px) { /* md breakpoint */
-            .masonry-gallery {
-                column-count: 4;
-            }
-        }
-        .masonry-gallery .gallery-item {
-            display: inline-block;
-            width: 100%;
-            margin-bottom: 0.25rem; /* Vertical gap */
-            break-inside: avoid;
-        }
-        /* Lightbox styles */
-        .lightbox {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.9);
-            justify-content: center;
-            align-items: center;
-        }
-        .lightbox-content {
-            max-width: 90vw;
-            max-height: 85vh;
-            animation: fadeIn 0.3s ease-in-out;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
-        }
-        .lightbox-nav {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            color: white;
-            font-size: 3rem;
-            cursor: pointer;
-            user-select: none;
-            padding: 1rem;
-            transition: background-color 0.2s;
-        }
-        .lightbox-nav:hover {
-            background-color: rgba(255,255,255,0.1);
-        }
-        .lightbox-prev {
-            left: 0;
-        }
-        .lightbox-next {
-            right: 0;
-        }
-        .lightbox-close {
-            position: absolute;
-            top: 1rem;
-            right: 2rem;
-            color: white;
-            font-size: 3rem;
-            cursor: pointer;
-            line-height: 1;
-        }
-    </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Fotografía Gastronómica en Cochabamba | Estudio Graphica</title>
+  <meta name="description" content="Fotografía gastronómica en Cochabamba. Restaurantes, delivery y marcas de alimentos con imágenes que venden." />
+  <meta name="robots" content="index,follow" />
+  <meta name="theme-color" content="#FFDE59" />
+
+  <!-- Open Graph / Social -->
+  <meta property="og:locale" content="es_BO" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Fotografía Gastronómica en Cochabamba | Estudio Graphica" />
+  <meta property="og:description" content="Fotografía gastronómica para restaurantes, delivery y marcas de alimentos en Cochabamba." />
+  <meta property="og:image" content="/Banner.jpg" />
+  <meta property="og:image:alt" content="Mesa con platos de comida y logo Estudio Graphica" />
+  <meta property="og:image:width" content="2048" />
+  <meta property="og:image:height" content="697" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Fotografía Gastronómica en Cochabamba | Estudio Graphica" />
+  <meta name="twitter:description" content="Sesiones que antojan y atraen clientes. Portafolio y contacto." />
+  <meta name="twitter:image" content="/Banner.jpg" />
+
+  <link rel="icon" type="image/png" href="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745619722/Logo_S_F_l66fym.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-9H6Z8N5DTP"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+    gtag('js', new Date());
+    // PageView GA4
+    gtag('config', 'G-9H6Z8N5DTP');
+  </script>
+
+  <!-- Meta Pixel -->
+  <script>
+    !(function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)})(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1839594560066285');
+    // PageView Pixel
+    fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1839594560066285&ev=PageView&noscript=1"/></noscript>
+
+  <style>
+    :root{--y:#FFDE59;--ink:#1A1A1A}
+    html{scroll-behavior:smooth}
+    body{font-family:'Poppins',sans-serif;background:#fbfbfb;color:#000;letter-spacing:-.02em}
+
+    /* Fondo sutil */
+    .bg-blobs:before,.bg-blobs:after{content:"";position:fixed;z-index:-1;border-radius:50%;filter:blur(60px);opacity:.18;pointer-events:none}
+    .bg-blobs:before{width:380px;height:380px;background:var(--y);top:6%;left:-120px}
+    .bg-blobs:after{width:520px;height:520px;background:radial-gradient(circle at 30% 30%, var(--y) 0%, rgba(255,222,89,0) 70%);bottom:-120px;right:-160px}
+
+    /* Glass base con sombras discretas */
+    .glassize{position:relative;background:linear-gradient(135deg, rgba(255,255,255,0.22), rgba(255,255,255,0.06));
+      border:1px solid rgba(255,255,255,0.35); border-top-color:rgba(255,255,255,0.6); border-left-color:rgba(255,255,255,0.45);
+      backdrop-filter:blur(14px) saturate(130%); -webkit-backdrop-filter:blur(14px) saturate(130%);
+      box-shadow: 0 6px 18px rgba(0,0,0,.08), inset 0 1px 0 rgba(255,255,255,.3);
+    }
+    .glass-card{border-radius:1.25rem}
+
+    /* Botón más amarillo, aún translúcido */
+    .btn{display:inline-block;border-radius:9999px;padding:1rem 1.8rem;font-weight:700;transition:transform .12s ease,filter .15s}
+    .btn--glass{color:#000;background:linear-gradient(135deg, rgba(255,222,89,.92), rgba(255,222,89,.82));
+      border:1px solid rgba(0,0,0,.06);box-shadow:0 10px 18px rgba(255,222,89,.24),0 1px 3px rgba(0,0,0,.06);backdrop-filter:blur(10px) saturate(120%)}
+    .btn--glass:hover{filter:saturate(112%);transform:translateY(-1px)}
+
+    /* Fotos con glass suave */
+    .glass-photo{position:relative;border-radius:1rem;overflow:hidden;box-shadow: 0 16px 36px rgba(0,0,0,.12), 0 6px 14px rgba(0,0,0,.06)}
+    .glass-photo>img{display:block;width:100%;height:100%;object-fit:cover}
+    .glass-photo:before{content:"";position:absolute;inset:0;background:radial-gradient(90% 60% at 10% 0%, rgba(255,255,255,.28), rgba(255,255,255,0));opacity:.3;mix-blend-mode:screen;pointer-events:none}
+
+    /* Portafolio: evitar que el scrollbar tape contenido */
+    .pf-carousel{display:flex;gap:1.25rem;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;padding-bottom:14px;scrollbar-gutter:stable both-edges}
+    .pf-carousel::-webkit-scrollbar{height:10px}
+    .pf-carousel::-webkit-scrollbar-thumb{background:#e6e6e6;border-radius:9999px}
+    .pf-item{scroll-snap-align:start;flex:0 0 auto;width:300px}
+
+    /* Modal */
+    .modal{display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.9)}
+    .modal__img{max-width:90%;max-height:90%;object-fit:contain}
+    .modal__close{position:absolute;top:16px;right:24px;color:#fff;font-size:36px;line-height:1;cursor:pointer}
+
+    /* --------------------------- */
+    /* Antes / Después: tamaño nuevo, centrado y responsive */
+    /* Wrapper controla el tamaño máximo y centra el bloque */
+    .cmp-wrap{width:min(92vw, 720px);margin-inline:auto}
+    @media (max-width:640px){
+      .cmp-wrap{width:min(94vw, 520px)}
+    }
+
+    /* Bloque comparador */
+    .cmp{position:relative;display:inline-block;border-radius:1rem;overflow:hidden;line-height:0}
+    /* La imagen base define la proporción */
+    .cmp>img{display:block;width:100%;height:auto}
+    /* Capas superpuestas exactamente al contenedor */
+    .cmp__layer{position:absolute;inset:0}
+    .cmp__layer img{width:100%;height:100%;object-fit:cover}
+    .cmp__before{clip-path:polygon(0 0,50% 0,50% 100%,0 100%);z-index:1}
+    .cmp__divider{position:absolute;top:0;bottom:0;left:50%;width:2px;background:var(--y);z-index:2}
+    .cmp__slider{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:40px;height:40px;border-radius:9999px;background:var(--y);box-shadow:0 0 0 2px rgba(255,255,255,.7);display:flex;align-items:center;justify-content:center;cursor:ew-resize;z-index:3}
+    @media (max-width:640px){
+      .cmp__slider{width:32px;height:32px}
+    }
+
+    /* Logos scroll */
+    .logos-scroll{overflow:hidden;cursor:grab}
+    .logos-scroll.dragging{cursor:grabbing}
+    .logos-track{display:flex;gap:2rem;padding:.5rem 0;will-change:transform}
+    .logo-card{width:180px;height:110px;flex:0 0 auto;display:flex;align-items:center;justify-content:center}
+    .logo{max-width:100%;max-height:100%;object-fit:contain}
+
+    /* Reveal */
+    .reveal{opacity:0;transform:translateY(20px);transition:opacity .5s,transform .5s}
+    .reveal.is-visible{opacity:1;transform:none}
+  </style>
 </head>
-<body class="bg-primary text-secondary">
-
-    <!-- Header & Hero Section -->
-    <header class="hero-bg text-white shadow-lg">
-        <div class="bg-black bg-opacity-40 w-full h-full flex items-center justify-start min-h-screen p-6 md:p-12 lg:p-24">
-            <div class="bg-white/10 rounded-3xl border border-white/20 p-8 md:p-12 w-full shadow-lg text-left">
-                <img src="https://res.cloudinary.com/drrhn6t1c/image/upload/v1752514553/logo-FE-fondonegro_bctsg7.png" alt="Finite Estudio Logo" class="h-12 w-auto mb-8">
-                <h2 class="text-4xl md:text-5xl mb-4 uppercase">EMPIEZA ANTES DE LA BODA</h2>
-                <p class="text-lg mb-8 font-subtitle">Antes del vestido, antes del estrés, hacemos una sesión sin presión. Es para que sientas que puedes estar frente a una cámara… y seguir siendo tú, sin actuar.</p>
-                <a href="#planes" class="bg-primary text-terciary font-bold py-3 px-8 rounded-lg text-lg hover:bg-primary/80 transition duration-300 inline-block">
-                    Ver Planes
-                </a>
-            </div>
-        </div>
-    </header>
-
-    <!-- Original Benefits Section -->
-    <section class="py-12 bg-white">
-        <div class="container mx-auto px-6">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 text-center">
-                <!-- Benefit 1 -->
-                <div>
-                    <div class="flex justify-center mb-3">
-                        <div class="bg-primary p-3 rounded-full shadow-sm border border-tertiary/20">
-                             <svg class="w-6 h-6 text-terciary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                        </div>
-                    </div>
-                    <h3 class="text-lg mb-1">Conexión genuina</h3>
-                    <p class="text-gray-600 text-sm font-subtitle">Un espacio para conocernos y que se sientan cómodos frente a la cámara, asegurando naturalidad el día de su boda.</p>
-                </div>
-                <!-- Benefit 2 -->
-                <div>
-                     <div class="flex justify-center mb-3">
-                        <div class="bg-primary p-3 rounded-full shadow-sm border border-tertiary/20">
-                           <svg class="w-6 h-6 text-terciary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                        </div>
-                    </div>
-                    <h3 class="text-lg mb-1">Anuncio con estilo</h3>
-                    <p class="text-gray-600 text-sm font-subtitle">Tendrán fotografías profesionales para usar en sus invitaciones, página web de la boda y para compartir la gran noticia.</p>
-                </div>
-                <!-- Benefit 3 -->
-                <div>
-                     <div class="flex justify-center mb-3">
-                        <div class="bg-primary p-3 rounded-full shadow-sm border border-tertiary/20">
-                            <svg class="w-6 h-6 text-terciary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
-                        </div>
-                    </div>
-                    <h3 class="text-lg mb-1">Recuerdos invaluables</h3>
-                    <p class="text-gray-600 text-sm font-subtitle">Atesoren esta etapa tan especial de su compromiso con recuerdos auténticos que durarán para siempre.</p>
-                </div>
-                <!-- Benefit 4 -->
-                <div>
-                     <div class="flex justify-center mb-3">
-                        <div class="bg-primary p-3 rounded-full shadow-sm border border-tertiary/20">
-                           <svg class="w-6 h-6 text-terciary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                        </div>
-                    </div>
-                    <h3 class="text-lg mb-1">Ensayo perfecto</h3>
-                    <p class="text-gray-600 text-sm font-subtitle">Es la oportunidad ideal para experimentar con locaciones y estilos, definiendo la estética visual para su gran día.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Planes Section -->
-    <main id="planes" class="py-20 bg-primary">
-        <div class="container mx-auto px-6">
-            <h2 class="text-4xl text-center mb-4">Planes 2025</h2>
-            <p class="text-center text-gray-600 mb-12 font-subtitle">Haz clic sobre un plan para ver los detalles.</p>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                
-                <!-- Plan Card: Piloto -->
-                <div class="plan-card">
-                    <div class="plan-card-inner shadow-lg">
-                        <div class="plan-card-front">
-                            <img src="https://res.cloudinary.com/drrhn6t1c/image/upload/v1756832432/sart-insta-2_v9kmil.jpg" alt="Imagen del Plan Piloto" class="w-full h-full object-cover">
-                            <div class="absolute inset-0 bg-black bg-opacity-30 flex flex-col items-center justify-center text-white">
-                                <h3 class="text-3xl uppercase">PLAN PILOTO</h3>
-                            </div>
-                        </div>
-                        <div class="plan-card-back bg-white border border-gray-200 p-8">
-                             <div class="flex flex-col h-full text-center">
-                                <h3 class="text-2xl mb-1 uppercase">PLAN PILOTO</h3>
-                                <p class="text-gray-600 italic text-sm mb-3 font-subtitle">"Para calentar motores. Rápido, sencillo y todo sobre ustedes."</p>
-                                <p class="text-3xl font-bold my-2">$3,300 <span class="text-base font-normal">MXN</span></p>
-                                <div class="border-t my-3"></div>
-                                <ul class="space-y-2 text-gray-700 mb-4 text-left flex-grow font-subtitle">
-                                    <li class="flex items-center"><svg class="w-5 h-5 mr-2 text-terciary flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span>Sesión en exterior</span></li>
-                                    <li class="flex items-center"><svg class="w-5 h-5 mr-2 text-terciary flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span>Sesión de 30min</span></li>
-                                    <li class="flex items-center"><svg class="w-5 h-5 mr-2 text-terciary flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span>10 fotos editadas (digitales)</span></li>
-                                    <li class="flex items-center"><svg class="w-5 h-5 mr-2 text-terciary flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span>Galería Online</span></li>
-                                </ul>
-                                <a href="#contacto" class="w-full text-center bg-terciary text-white font-bold py-3 px-4 rounded-lg hover:bg-terciary-dark transition duration-300 mt-auto">Reservar</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Plan Card: Secuela -->
-                <div class="plan-card">
-                     <div class="plan-card-inner shadow-lg">
-                        <div class="plan-card-front">
-                            <img src="https://res.cloudinary.com/drrhn6t1c/image/upload/v1756833314/sart-insta-36_engkrd.jpg" alt="Imagen del Plan Secuela" class="w-full h-full object-cover">
-                            <div class="absolute inset-0 bg-black bg-opacity-30 flex flex-col items-center justify-center text-white">
-                                <h3 class="text-3xl uppercase">PLAN SECUELA</h3>
-                            </div>
-                        </div>
-                        <div class="plan-card-back bg-white border-2 border-terciary p-8 relative overflow-visible">
-                             <span class="absolute -top-3 right-5 bg-terciary text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">MÁS POPULAR</span>
-                             <div class="flex flex-col h-full text-center">
-                                <h3 class="text-2xl mb-1 uppercase">PLAN SECUELA</h3>
-                                <p class="text-gray-600 italic text-sm mb-3 font-subtitle">"Un poco más de tiempo, un montón más de historias."</p>
-                                <p class="text-3xl font-bold my-2">$3,500 <span class="text-base font-normal">MXN</span></p>
-                                <div class="border-t my-3"></div>
-                                <ul class="space-y-2 text-gray-700 mb-4 text-left flex-grow font-subtitle">
-                                    <li class="flex items-center"><svg class="w-5 h-5 mr-2 text-terciary flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span>Sesión en exterior</span></li>
-                                    <li class="flex items-center"><svg class="w-5 h-5 mr-2 text-terciary flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span>Sesión de 1hr</span></li>
-                                    <li class="flex items-center"><svg class="w-5 h-5 mr-2 text-terciary flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span>18 fotos editadas (digitales)</span></li>
-                                    <li class="flex items-center"><svg class="w-5 h-5 mr-2 text-terciary flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span>Galería Online</span></li>
-                                    <li class="flex items-center"><svg class="w-5 h-5 mr-2 text-terciary flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span>Check list para tu boda</span></li>
-                                </ul>
-                                <a href="#contacto" class="w-full text-center bg-terciary text-white font-bold py-3 px-4 rounded-lg hover:bg-terciary-dark transition duration-300 mt-auto">Reservar</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Plan Card: Trilogia -->
-                <div class="plan-card">
-                     <div class="plan-card-inner shadow-lg">
-                        <div class="plan-card-front">
-                            <img src="https://res.cloudinary.com/drrhn6t1c/image/upload/v1756832323/save-the-date-syb-46_oqd5kn.jpg" alt="Imagen del Plan Trilogía" class="w-full h-full object-cover">
-                            <div class="absolute inset-0 bg-black bg-opacity-30 flex flex-col items-center justify-center text-white">
-                                <h3 class="text-3xl uppercase">PLAN TRILOGIA</h3>
-                            </div>
-                        </div>
-                        <div class="plan-card-back bg-white border border-gray-200 p-8">
-                            <div class="flex flex-col h-full text-center">
-                                <h3 class="text-2xl mb-1 uppercase">PLAN TRILOGIA</h3>
-                                <p class="text-gray-600 italic text-sm mb-3 font-subtitle">"Ustedes, el atardecer, y cero prisas."</p>
-                                <p class="text-3xl font-bold my-2">$4,200 <span class="text-base font-normal">MXN</span></p>
-                                <div class="border-t my-3"></div>
-                                <ul class="space-y-2 text-gray-700 mb-4 text-left flex-grow font-subtitle">
-                                    <li class="flex items-center"><svg class="w-5 h-5 mr-2 text-terciary flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span>Sesión en exterior</span></li>
-                                    <li class="flex items-center"><svg class="w-5 h-5 mr-2 text-terciary flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span>Sesión de 1:30hr</span></li>
-                                    <li class="flex items-center"><svg class="w-5 h-5 mr-2 text-terciary flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span>24 fotos editadas (digitales)</span></li>
-                                    <li class="flex items-center"><svg class="w-5 h-5 mr-2 text-terciary flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span>Galería Online</span></li>
-                                    <li class="flex items-center"><svg class="w-5 h-5 mr-2 text-terciary flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span>Check list para tu boda</span></li>
-                                </ul>
-                                <a href="#contacto" class="w-full text-center bg-terciary text-white font-bold py-3 px-4 rounded-lg hover:bg-terciary-dark transition duration-300 mt-auto">Reservar</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </main>
-
-    <!-- Special Offers Section -->
-    <section class="bg-white py-20">
-        <div class="container mx-auto px-6">
-            <div class="bg-primary rounded-2xl shadow-lg p-8 md:p-12 lg:p-16 flex flex-col lg:flex-row items-center gap-12">
-                <!-- Left Text Block -->
-                <div class="lg:w-1/3 text-center lg:text-left w-full">
-                    <h2 class="text-4xl mb-4">Ofertas Especiales</h2>
-                    <p class="font-subtitle text-gray-600">Además de tu sesión, aprovecha estos beneficios exclusivos.</p>
-                </div>
-                <!-- Right Benefits Cards -->
-                <div class="lg:w-2/3 grid grid-cols-1 sm:grid-cols-2 gap-8 w-full">
-                    <!-- Card 1: Invitations -->
-                    <div class="text-left">
-                        <img src="https://res.cloudinary.com/drrhn6t1c/image/upload/v1756838332/Captura_de_pantalla_2025-09-02_113843_pthive.jpg" alt="Descuento en invitaciones" class="rounded-lg shadow-md mb-4 w-full h-36 object-cover">
-                        <h3 class="text-xl mb-1">Descuento en invitaciones</h3>
-                        <p class="font-subtitle text-gray-600 text-sm">Obtienes 10% de descuento para el diseño de tus invitaciones de boda.</p>
-                    </div>
-                    <!-- Card 2: Extra Photos -->
-                    <div class="text-left">
-                         <img src="https://res.cloudinary.com/drrhn6t1c/image/upload/v1756832323/save-the-date-syb-38_fait9b.jpg" alt="Fotos extras gratis" class="rounded-lg shadow-md mb-4 w-full h-36 object-cover">
-                        <h3 class="text-xl mb-1">Fotos extras gratis</h3>
-                        <p class="font-subtitle text-gray-600 text-sm">Si reservas tu sesión dentro de las próximas 48 horas, te regalamos 5 fotos adicionales completamente editadas.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <!-- Gallery Section -->
-    <section id="galeria" class="bg-secondary py-2">
-        <div class="masonry-gallery">
-            <img class="gallery-item cursor-pointer" src="https://res.cloudinary.com/drrhn6t1c/image/upload/v1756832323/save-the-date-syb-36_mnjhkr.jpg" alt="Foto de galeria 20">
-            <img class="gallery-item cursor-pointer" src="https://res.cloudinary.com/drrhn6t1c/image/upload/v1756833526/sart-insta-10_hnsiav.jpg" alt="Foto de galeria 1">
-            <img class="gallery-item cursor-pointer" src="https://res.cloudinary.com/drrhn6t1c/image/upload/v1756833522/sart-insta-23_ww6vqy.jpg" alt="Foto de galeria 2">
-            <img class="gallery-item cursor-pointer" src="https://res.cloudinary.com/drrhn6t1c/image/upload/v1756833316/sart-insta-3_el3zww.jpg" alt="Foto de galeria 3">
-            <img class="gallery-item cursor-pointer" src="https://res.cloudinary.com/drrhn6t1c/image/upload/v1756833314/sart-insta-36_engkrd.jpg" alt="Foto de galeria 4">
-            <img class="gallery-item cursor-pointer" src="https://res.cloudinary.com/drrhn6t1c/image/upload/v1756833313/sart-insta-28_z2gzey.jpg" alt="Foto de galeria 6">
-            <img class="gallery-item cursor-pointer" src="https://res.cloudinary.com/drrhn6t1c/image/upload/v1756833314/sart-insta-30_suuqbe.jpg" alt="Foto de galeria 5">
-            <img class="gallery-item cursor-pointer" src="https://res.cloudinary.com/drrhn6t1c/image/upload/v1756833266/sart-insta-27_b18x5q.jpg" alt="Foto de galeria 7">
-            <img class="gallery-item cursor-pointer" src="https://res.cloudinary.com/drrhn6t1c/image/upload/v1756832431/sart-insta-12_owyu7c.jpg" alt="Foto de galeria 11">
-            <img class="gallery-item cursor-pointer" src="https://res.cloudinary.com/drrhn6t1c/image/upload/v1756832436/sart-insta-15_quso3b.jpg" alt="Foto de galeria 8">
-            <img class="gallery-item cursor-pointer" src="https://res.cloudinary.com/drrhn6t1c/image/upload/v1756832432/sart-insta-13_tyoezr.jpg" alt="Foto de galeria 10">
-            <img class="gallery-item cursor-pointer" src="https://res.cloudinary.com/drrhn6t1c/image/upload/v1756832432/sart-insta-2_v9kmil.jpg" alt="Foto de galeria 9">
-            <img class="gallery-item cursor-pointer" src="https://res.cloudinary.com/drrhn6t1c/image/upload/v1756832431/sart-insta-16_dm4fj4.jpg" alt="Foto de galeria 12">
-            <img class="gallery-item cursor-pointer" src="https://res.cloudinary.com/drrhn6t1c/image/upload/v1756832431/sart-insta-22_ebckt7.jpg" alt="Foto de galeria 13">
-            <img class="gallery-item cursor-pointer" src="https://res.cloudinary.com/drrhn6t1c/image/upload/v1756832324/save-the-date-syb-30_kdwup7.jpg" alt="Foto de galeria 14">
-            <img class="gallery-item cursor-pointer" src="https://res.cloudinary.com/drrhn6t1c/image/upload/v1756832323/save-the-date-syb-46_oqd5kn.jpg" alt="Foto de galeria 15">
-            <img class="gallery-item cursor-pointer" src="https://res.cloudinary.com/drrhn6t1c/image/upload/v1756832323/save-the-date-syb-38_fait9b.jpg" alt="Foto de galeria 16">
-            <img class="gallery-item cursor-pointer" src="https://res.cloudinary.com/drrhn6t1c/image/upload/v1756832323/save-the-date-syb-42_fpbjd1.jpg" alt="Foto de galeria 17">
-            <img class="gallery-item cursor-pointer" src="https://res.cloudinary.com/drrhn6t1c/image/upload/v1756832323/save-the-date-syb-21_yhbnqh.jpg" alt="Foto de galeria 18">
-            <img class="gallery-item cursor-pointer" src="https://res.cloudinary.com/drrhn6t1c/image/upload/v1756832323/save-the-date-syb-41_ltm20b.jpg" alt="Foto de galeria 19">
-        </div>
-    </section>
-    
-    <!-- Video Highlight Section -->
-    <section class="bg-white py-20">
-        <div class="container mx-auto px-6">
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
-                <!-- Left Video -->
-                <div class="w-full max-w-xs mx-auto">
-                    <div class="rounded-lg overflow-hidden shadow-xl aspect-w-9 aspect-h-16">
-                        <video class="w-full h-full object-cover" autoplay loop muted playsinline>
-                            <source src="https://res.cloudinary.com/drrhn6t1c/video/upload/v1756840049/pexels-mikhail-nilov-8254413_2160p_fph7yl.mp4" type="video/mp4">
-                            Tu navegador no soporta videos.
-                        </video>
-                    </div>
-                </div>
-
-                <!-- Center Text -->
-                <div class="text-center">
-                    <h2 class="text-4xl mb-4">Highlight Reel</h2>
-                    <p class="font-subtitle text-gray-600 mb-6">
-                        Añade un video corto y dinámico a tu sesión para un recuerdo aún más vivo.
-                    </p>
-                    <a href="#contacto" class="bg-terciary text-white font-bold py-3 px-8 rounded-lg text-lg hover:bg-terciary-dark transition duration-300 inline-block">
-                        Reservar
-                    </a>
-                </div>
-
-                <!-- Right Video -->
-                 <div class="w-full max-w-xs mx-auto">
-                    <div class="rounded-lg overflow-hidden shadow-xl aspect-w-9 aspect-h-16">
-                        <video class="w-full h-full object-cover" autoplay loop muted playsinline>
-                            <source src="https://res.cloudinary.com/drrhn6t1c/video/upload/v1756840047/pexels-kelly-2953258_2160p_s6xwzk.mp4" type="video/mp4">
-                            Tu navegador no soporta videos.
-                        </video>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Info Section -->
-    <section id="info" class="bg-white">
-        <div class="grid grid-cols-1 md:grid-cols-5 items-stretch">
-            <!-- Image Column -->
-            <div class="md:col-span-2 bg-cover bg-center min-h-[60vh] md:min-h-0" style="background-image: url('https://res.cloudinary.com/drrhn6t1c/image/upload/v1756836896/minisesion-j_b-25_mss2ee.jpg');">
-            </div>
-    
-            <!-- Text Column -->
-            <div class="md:col-span-3 flex items-center p-12 sm:p-16 md:p-24 bg-primary">
-                <div class="w-full">
-                    <h2 class="text-4xl mb-8">Más información</h2>
-                    <div class="space-y-4 font-subtitle text-gray-700">
-                        <p><strong>Impresiones y extras:</strong> Se pueden incluir servicios como fotos impresas, álbumes o cuadros. Estos se cotizan por separado.</p>
-                        <p><strong>Locación:</strong> El lugar para la sesión en exterior lo eligen ustedes o podemos sugerirles algunos sitios increíbles.</p>
-                        <p><strong>Fotos adicionales:</strong> Si desean más fotos editadas de las que incluye su plan, cada una tiene un costo de $120 MXN.</p>
-                        <p><strong>Reservación:</strong> Apartamos su fecha con un anticipo del 30%, el cual no es reembolsable.</p>
-                        <p><strong>Pago final:</strong> El 70% restante debe cubrirse al finalizar la sesión.</p>
-                        <p><strong>Viáticos:</strong> El precio de los paquetes aplica para sesiones dentro de Tijuana y Rosarito. Sesiones en otras ciudades pueden generar un costo adicional por viáticos.</p>
-                        <p><strong>Cambios:</strong> Tienen una oportunidad para solicitar cambios o ajustes en el material final que les entregamos.</p>
-                        <p><strong>Tiempos de entrega:</strong> Su galería digital estará lista en un plazo de 5 a 7 días hábiles después de la sesión.</p>
-                        <p class="pt-4 text-sm text-gray-500 italic">*Esta cotización es válida por 5 días a partir de su envío.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <!-- Footer / Contact Section -->
-    <footer id="contacto" class="bg-secondary text-white py-16">
-        <div class="container mx-auto px-6 text-center">
-            <h2 class="text-4xl mb-4">Te vas a ver bien, porque te vas a sentir bien</h2>
-            <p class="max-w-xl mx-auto mb-8 font-subtitle">¿Listos para su sesión?</p>
-            <a href="https://wa.me/5216643372791?text=Hola,%20me%20gustaría%20reservar%20una%20sesión%20Save%20the%20Date." target="_blank" class="bg-terciary hover:bg-terciary-dark text-white font-bold py-4 px-10 rounded-lg text-xl transition duration-300 inline-block mb-12 uppercase">
-                RESERVAR MI SESION SAVE THE DATE
-            </a>
-            <p class="mt-10 text-gray-400 text-sm">&copy; 2025 Finite Estudio. Todos los derechos reservados.</p>
-        </div>
-    </footer>
-
-    <!-- Lightbox Modal -->
-    <div id="lightbox" class="lightbox">
-        <span id="lightbox-close" class="lightbox-close">&times;</span>
-        <span id="lightbox-prev" class="lightbox-nav lightbox-prev">&#10094;</span>
-        <img id="lightbox-image" class="lightbox-content" src="" alt="Vista ampliada de la foto de la galería">
-        <span id="lightbox-next" class="lightbox-nav lightbox-next">&#10095;</span>
+<body class="bg-blobs">
+  <!-- Header -->
+  <header class="fixed w-full z-50">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between glassize" style="border-radius:16px; margin-top:.5rem;">
+      <a href="#inicio" class="h-14 flex items-center">
+        <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745619722/Logo_S_F_l66fym.png" alt="Estudio Graphica" class="h-14 w-auto" />
+      </a>
+      <a href="#agendar" class="btn btn--glass track-agendar">Agendar reunión</a>
     </div>
+  </header>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-             // Plan cards functionality
-            const planCards = document.querySelectorAll('.plan-card');
-            planCards.forEach(card => {
-                card.addEventListener('click', () => {
-                    card.querySelector('.plan-card-inner').classList.toggle('is-flipped');
-                });
-            });
+  <!-- Hero -->
+  <section id="inicio" class="pt-32 md:pt-40 pb-16 md:pb-24">
+    <div class="max-w-7xl mx-auto px-4 grid md:grid-cols-2 gap-10 items-center">
+      <div class="reveal">
+        <h1 class="font-bold text-3xl md:text-4xl lg:text-5xl leading-tight mb-4 tracking-tighter">Contratar fotógrafo no es caro, caro es que tu negocio no venda.</h1>
+        <p class="text-lg md:text-xl mb-6 text-gray-700">La gente come con los ojos primero.</p>
+        <a href="#servicios" class="btn btn--glass">¡Quiero saber más!</a>
+      </div>
+      <div class="reveal">
+        <div class="w-full h-80 md:h-96 lg:h-[500px] glass-photo">
+          <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745611645/patata_brava_kjzngm.jpg" alt="Food photography Cochabamba" />
+        </div>
+      </div>
+    </div>
+  </section>
 
-            // Lightbox functionality
-            const galleryItems = document.querySelectorAll('.gallery-item');
-            const lightbox = document.getElementById('lightbox');
-            const lightboxImage = document.getElementById('lightbox-image');
-            const lightboxClose = document.getElementById('lightbox-close');
-            const lightboxPrev = document.getElementById('lightbox-prev');
-            const lightboxNext = document.getElementById('lightbox-next');
-            const imageSources = Array.from(galleryItems).map(item => item.src);
-            let currentIndex = 0;
+  <!-- Servicios -->
+  <section id="servicios" class="py-16 md:py-24">
+    <div class="max-w-7xl mx-auto px-4">
+      <h2 class="font-bold text-3xl md:text-4xl text-center mb-14 tracking-tighter reveal">Nuestros Servicios</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+        <article class="p-8 glassize glass-card text-center reveal">
+          <h3 class="font-semibold text-xl mb-3">Fotografía Gastronómica</h3>
+          <p class="text-gray-700">¿Vas a seguir tomando fotos de tu plato con el celular grasoso de tu cajero? Mejor deja que hagamos fotos que den hambre. Fotos que hacen que el cliente no solo vea el menú, sino que quiera lamerlo.</p>
+        </article>
+        <article class="p-8 glassize glass-card text-center reveal">
+          <h3 class="font-semibold text-xl mb-3">Foodstyling Profesional</h3>
+          <p class="text-gray-700">Un plato mal presentado mata más ventas que una mala reseña. Te ayudamos a que tus platos luzcan como portada de revista. Comida que posa mejor que varios influencers.</p>
+        </article>
+        <article class="p-8 glassize glass-card text-center reveal">
+          <h3 class="font-semibold text-xl mb-3">Planes Mensuales</h3>
+          <p class="text-gray-700">¿Publicas una vez cada eclipse? Tenemos planes mensuales para que tu contenido salga tan constante como tus cuentas por pagar. Nada de reciclar el mismo ceviche en San Valentín.</p>
+        </article>
+      </div>
+      <p class="text-center italic text-lg mt-10 reveal">"Si cocinas con pasión, ¿por qué mostrarlo con vergüenza?"</p>
+    </div>
+  </section>
 
-            function showLightbox(index) {
-                currentIndex = index;
-                lightboxImage.src = imageSources[currentIndex];
-                lightbox.style.display = 'flex';
-            }
+  <!-- Portafolio -->
+  <section id="portafolio" class="py-16 md:py-24">
+    <div class="max-w-7xl mx-auto px-4">
+      <h2 class="font-bold text-3xl md:text-4xl text-center mb-4 tracking-tighter reveal">Nuestro Portafolio</h2>
+      <p class="text-center text-gray-600 max-w-2xl mx-auto mb-10 reveal">No ganes por ser barato. Gana porque nadie puede resistirse a verte.</p>
+      <div class="reveal">
+        <div id="pf" class="pf-carousel">
+          <div class="pf-item">
+            <div class="w-full h-64 rounded-2xl overflow-hidden portfolio-item glass-photo">
+              <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745619066/_MG_4717_de_tama%C3%B1o_grande_pq7nup.png" alt="Cookie Bar - Cafetería y galletería" />
+            </div>
+            <h3 class="font-semibold mt-3">Cookie Bar</h3>
+            <p class="text-sm text-gray-600">Cafetería y galletería</p>
+          </div>
+          <div class="pf-item">
+            <div class="w-full h-64 rounded-2xl overflow-hidden portfolio-item glass-photo">
+              <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745619069/IMG_9922_de_tama%C3%B1o_grande_um4gy8.png" alt="Vitz - Postres y helados" />
+            </div>
+            <h3 class="font-semibold mt-3">Vitz</h3>
+            <p class="text-sm text-gray-600">Postres y helados</p>
+          </div>
+          <div class="pf-item">
+            <div class="w-full h-64 rounded-2xl overflow-hidden portfolio-item glass-photo">
+              <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745619066/IMG_2073_de_tama%C3%B1o_grande_dsdllu.png" alt="Burger 91 - Hamburguesas y comida rápida" />
+            </div>
+            <h3 class="font-semibold mt-3">Burger 91</h3>
+            <p class="text-sm text-gray-600">Hamburguesas y comida rápida</p>
+          </div>
+          <div class="pf-item">
+            <div class="w-full h-64 rounded-2xl overflow-hidden portfolio-item glass-photo">
+              <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745619058/_MG_2260_de_tama%C3%B1o_grande_jvlymh.png" alt="Patata Brava - Papas fritas y comida rápida" />
+            </div>
+            <h3 class="font-semibold mt-3">Patata Brava</h3>
+            <p class="text-sm text-gray-600">Papas fritas y comida rápida</p>
+          </div>
+          <div class="pf-item">
+            <div class="w-full h-64 rounded-2xl overflow-hidden portfolio-item glass-photo">
+              <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745619064/IMG_7464_de_tama%C3%B1o_grande_uz14xx.png" alt="Sansei - Comida japonesa y sushi" />
+            </div>
+            <h3 class="font-semibold mt-3">Sansei</h3>
+            <p class="text-sm text-gray-600">Comida japonesa y sushi</p>
+          </div>
+          <div class="pf-item">
+            <div class="w-full h-64 rounded-2xl overflow-hidden portfolio-item glass-photo">
+              <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745619072/IMG_1604_de_tama%C3%B1o_grande_jnmfvb.png" alt="Terra Brasa - Carnes y parrilla" />
+            </div>
+            <h3 class="font-semibold mt-3">Terra Brasa</h3>
+            <p class="text-sm text-gray-600">Carnes y parrilla</p>
+          </div>
+        </div>
+        <div class="text-center mt-8">
+          <a class="btn btn--glass track-portafolio" href="https://estudiographica.myportfolio.com" target="_blank" rel="noopener">Ver portafolio completo</a>
+        </div>
+      </div>
 
-            function hideLightbox() {
-                lightbox.style.display = 'none';
-            }
+      <!-- Modal -->
+      <div id="modal" class="modal" role="dialog" aria-label="Vista ampliada" aria-modal="true">
+        <button id="modalClose" class="modal__close" aria-label="Cerrar">×</button>
+        <div class="w-full h-full flex items-center justify-center">
+          <img id="modalImg" class="modal__img" alt="" />
+        </div>
+        <div id="modalCap" class="text-white text-center font-poppins pb-6"></div>
+      </div>
+    </div>
+  </section>
 
-            function showNextImage() {
-                const nextIndex = (currentIndex + 1) % imageSources.length;
-                showLightbox(nextIndex);
-            }
+  <!-- Conoce al fotógrafo -->
+  <section id="fotografo" class="py-16 md:py-24">
+    <div class="max-w-5xl mx-auto px-4">
+      <h2 class="font-bold text-3xl md:text-4xl text-center mb-12 tracking-tighter reveal">Conoce a tu fotógrafo</h2>
+      <div class="grid md:grid-cols-3 items-center gap-10">
+        <div class="reveal md:col-span-1">
+          <!-- SIN glass ni sombras -->
+          <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745619204/Perfil_Png_Nuevo_aosfas.png" alt="Fotógrafo de Estudio Graphica" class="block w-full h-auto" />
+        </div>
+        <div class="reveal md:col-span-2 max-w-2xl text-justify leading-relaxed">
+          <p class="text-lg md:text-xl mb-4">En todas las páginas hay un apartado donde el fotógrafo presume de sus títulos o años de experiencia, pero nadie lo lee. ¿Sabes por qué?</p>
+          <p class="text-lg md:text-xl mb-6 font-semibold">Porque a nadie le importa. Tú quieres resultados para tu marca.</p>
+          <p class="text-lg md:text-xl mb-6">Mi mejor carta de presentación es mi portafolio, porque eso es exactamente lo que te puedo ofrecer.</p>
+          <a class="btn btn--glass track-portafolio" href="#portafolio">Ver portafolio completo</a>
+        </div>
+      </div>
+    </div>
+  </section>
 
-            function showPrevImage() {
-                const prevIndex = (currentIndex - 1 + imageSources.length) % imageSources.length;
-                showLightbox(prevIndex);
-            }
+  <!-- Antes y Después -->
+  <section id="antes-despues" class="py-16 md:py-24">
+    <div class="max-w-6xl mx-auto px-4">
+      <h2 class="font-bold text-3xl md:text-4xl text-center mb-6 tracking-tighter reveal">Antes y Después</h2>
+      <p class="text-center text-gray-600 max-w-3xl mx-auto mb-10 reveal">¿Ves la diferencia? Tus clientes también la ven. La pregunta es: ¿qué versión les vas a mostrar?</p>
+      <div class="reveal">
+        <!-- WRAPPER NUEVO que reduce tamaño y centra -->
+        <div class="cmp-wrap">
+          <div id="cmp" class="cmp glass-card glassize">
+            <!-- Imagen base: define tamaño del bloque -->
+            <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745819075/2_ylgf7o.jpg" alt="Después" />
+            <!-- Capa "Antes" superpuesta -->
+            <div id="cmpBefore" class="cmp__layer cmp__before">
+              <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745819075/1_ymdvor.jpg" alt="Antes" />
+            </div>
+            <div id="cmpDivider" class="cmp__divider"></div>
+            <button id="cmpSlider" type="button" class="cmp__slider" aria-label="Deslizar comparador">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12H3M9 6l-6 6 6 6M15 6l6 6-6 6"/></svg>
+            </button>
+          </div>
+        </div>
+        <p class="text-center mt-4 font-semibold">Desliza para ver la diferencia</p>
+      </div>
+    </div>
+  </section>
 
-            galleryItems.forEach((item, index) => {
-                item.addEventListener('click', () => {
-                    showLightbox(index);
-                });
-            });
+  <!-- Beneficios -->
+  <section id="beneficios" class="py-16 md:py-24">
+    <div class="max-w-7xl mx-auto px-4">
+      <h2 class="font-bold text-3xl md:text-4xl text-center mb-14 tracking-tighter reveal">¿Por qué elegirnos?</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-10 text-center">
+        <div class="reveal">
+          <div class="text-5xl md:text-6xl font-bold" style="color:var(--y)">+9</div>
+          <p class="text-xl">años antojando clientes</p>
+        </div>
+        <div class="reveal">
+          <div class="text-5xl md:text-6xl font-bold" style="color:var(--y)">+300</div>
+          <p class="text-xl">marcas fotografiadas</p>
+        </div>
+        <div class="reveal">
+          <div class="text-5xl md:text-6xl font-bold" style="color:var(--y)">x2</div>
+          <p class="text-xl">sesiones que duplican la intención de compra</p>
+        </div>
+      </div>
+      <div class="text-center mt-12 reveal">
+        <p class="text-xl italic mb-6">"Contratar fotógrafo no es caro, no vender es caro."</p>
+        <a class="btn btn--glass track-agendar" href="#agendar">Agendar reunión</a>
+      </div>
+    </div>
+  </section>
 
-            lightboxClose.addEventListener('click', hideLightbox);
-            lightbox.addEventListener('click', (e) => {
-                if (e.target === lightbox) {
-                    hideLightbox();
-                }
-            });
-            lightboxPrev.addEventListener('click', showPrevImage);
-            lightboxNext.addEventListener('click', showNextImage);
-            
-            document.addEventListener('keydown', (e) => {
-                if (lightbox.style.display === 'flex') {
-                    if (e.key === 'ArrowRight') {
-                        showNextImage();
-                    } else if (e.key === 'ArrowLeft') {
-                        showPrevImage();
-                    } else if (e.key === 'Escape') {
-                        hideLightbox();
-                    }
-                }
-            });
+  <!-- Clientes (autoscroll más rápido) -->
+  <section id="clientes" class="py-16 md:py-24">
+    <div class="max-w-7xl mx-auto px-4">
+      <h2 class="font-bold text-3xl md:text-4xl text-center mb-12 tracking-tighter reveal">Marcas que ya han confiado en nosotros</h2>
+      <div id="logosWrap" class="reveal logos-scroll glass-card glassize">
+        <div id="logos" class="logos-track">
+          <div class="logo-card"><img class="logo" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166368/1_vegdk8.png" alt="Patata Brava" /></div>
+          <div class="logo-card"><img class="logo" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166368/2_pdiecr.png" alt="Happy Fry" /></div>
+          <div class="logo-card"><img class="logo" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166369/3_dt1nfk.png" alt="Globos" /></div>
+          <div class="logo-card"><img class="logo" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166369/4_ssugqk.png" alt="Burger 91" /></div>
+          <div class="logo-card"><img class="logo" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166370/5_exwkbr.png" alt="Pedidos Ya" /></div>
+          <div class="logo-card"><img class="logo" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166371/6_gfjolm.png" alt="Terra Brasa" /></div>
+          <div class="logo-card"><img class="logo" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166373/7_wi271i.png" alt="Vitz" /></div>
+          <div class="logo-card"><img class="logo" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166374/8_pzfcfe.png" alt="Kansas" /></div>
+          <div class="logo-card"><img class="logo" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166375/9_vuxq3e.png" alt="Para Ti" /></div>
+          <div class="logo-card"><img class="logo" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1749166376/10_p2jdke.png" alt="Cookie Bar" /></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Agendar -->
+  <section id="agendar" class="py-16 md:py-24">
+    <div class="max-w-4xl mx-auto px-4">
+      <div class="p-8 md:p-12 glassize glass-card">
+        <h2 class="font-bold text-3xl md:text-4xl text-center mb-4 tracking-tighter reveal">Agenda tu reunión ☕</h2>
+        <p class="text-center text-gray-700 mb-8 reveal">Cuéntanos sobre tu proyecto y nos pondremos en contacto contigo para crear una propuesta personalizada.</p>
+        <div class="text-center reveal">
+          <a class="btn btn--glass text-lg track-agendar" href="https://cal.com/themarketographer/reunión" target="_blank" rel="noopener">Agendar reunión</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-14">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="flex flex-col items-center justify-center">
+        <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745619722/Logo_S_F_l66fym.png" alt="Estudio Graphica" class="h-16 w-auto mb-6" />
+        <p class="text-gray-600 text-center">© 2025 Estudio Graphica. Fotografía gastronómica en Cochabamba.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Schema.org Organization -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Estudio Graphica",
+    "url": "",
+    "logo": "https://res.cloudinary.com/dplhu2z6j/image/upload/v1745619722/Logo_S_F_l66fym.png",
+    "sameAs": []
+  }
+  </script>
+
+  <script>
+    // Reveal on scroll
+    (function(){
+      var els = document.querySelectorAll('.reveal');
+      if(!('IntersectionObserver' in window)){ els.forEach(function(e){ e.classList.add('is-visible'); }); return; }
+      var io = new IntersectionObserver(function(entries){ entries.forEach(function(entry){ if(entry.isIntersecting){ entry.target.classList.add('is-visible'); io.unobserve(entry.target);} }); },{threshold:.15});
+      els.forEach(function(e){ io.observe(e); });
+    })();
+
+    // Modal de imágenes del portafolio
+    (function(){
+      var pf = document.getElementById('pf');
+      var modal = document.getElementById('modal');
+      var modalImg = document.getElementById('modalImg');
+      var modalCap = document.getElementById('modalCap');
+      var close = document.getElementById('modalClose');
+      if(!pf) return;
+      pf.addEventListener('click', function(e){
+        var img = e.target.closest('img');
+        if(!img) return;
+        modal.style.display='flex';
+        modal.style.flexDirection='column';
+        modal.style.alignItems='center';
+        modal.style.justifyContent='center';
+        modalImg.src = img.src; modalImg.alt = img.alt || '';
+        modalCap.textContent = img.getAttribute('data-caption')||'';
+        document.body.style.overflow='hidden';
+      });
+      function closeModal(){ modal.style.display='none'; document.body.style.overflow='auto'; }
+      if(close) close.addEventListener('click', closeModal);
+      modal && modal.addEventListener('click', function(ev){ if(ev.target===modal) closeModal(); });
+    })();
+
+    // Comparador Before/After
+    (function(){
+      var slider = document.getElementById('cmpSlider');
+      var before = document.getElementById('cmpBefore');
+      var divider = document.getElementById('cmpDivider');
+      var box = document.getElementById('cmp');
+      if(!slider||!before||!box) return;
+      function setPos(px){
+        var r = box.getBoundingClientRect();
+        var p = ((px - r.left)/r.width)*100; if(p<0) p=0; if(p>100) p=100;
+        before.style.clipPath = 'polygon(0 0,'+p+'% 0,'+p+'% 100%,0 100%)';
+        slider.style.left = p+'%';
+        divider.style.left = p+'%';
+      }
+      function move(e){ setPos(e.touches?e.touches[0].clientX:e.clientX); }
+      function start(e){ e.preventDefault(); document.addEventListener('mousemove',move); document.addEventListener('touchmove',move,{passive:false}); }
+      function end(){ document.removeEventListener('mousemove',move); document.removeEventListener('touchmove',move); }
+      slider.addEventListener('mousedown',start); slider.addEventListener('touchstart',start,{passive:false});
+      document.addEventListener('mouseup',end); document.addEventListener('touchend',end);
+    })();
+
+    // Auto-scroll + drag para logos (más rápido)
+    (function(){
+      var wrap = document.getElementById('logosWrap');
+      var track = document.getElementById('logos');
+      if(!wrap||!track) return;
+      var items = Array.prototype.slice.call(track.children);
+      items.forEach(function(n){ track.appendChild(n.cloneNode(true)); });
+      var pos = 0, baseSpeed = 2.6, speed = baseSpeed, raf = null;
+      var dragging=false, startX=0, startPos=0, lastX=0, lastT=0, velocity=0;
+      var THROW_MULTIPLIER = 3.2, FRICTION = 0.94, MAX_THROW = 4.5;
+      function loop(){ pos += speed; var half = track.scrollWidth/2; if(pos>=half) pos=0; track.style.transform='translateX(' + (-pos) + 'px)'; raf = requestAnimationFrame(loop); }
+      function startLoop(){ if(!raf) raf = requestAnimationFrame(loop); }
+      function stopLoop(){ if(raf){ cancelAnimationFrame(raf); raf=null; } }
+      function normalize(){ var half = track.scrollWidth/2; if(pos<0) pos = half + pos%half; if(pos>=half) pos%=half; }
+      function onDown(e){ dragging=true; wrap.classList.add('dragging'); stopLoop(); startX=(e.touches?e.touches[0].pageX:e.pageX); startPos=pos; lastX=startX; lastT=performance.now(); velocity=0; }
+      function onMove(e){ if(!dragging) return; e.preventDefault(); var x=(e.touches?e.touches[0].pageX:e.pageX); var now=performance.now(); var dx=x-startX; pos=startPos-dx; normalize(); track.style.transform='translateX(' + (-pos) + 'px)'; var dt=Math.max(1, now-lastT); var v=(x-lastX)/dt; velocity=0.8*velocity+0.2*v; lastX=x; lastT=now; }
+      function onUp(){ if(!dragging) return; dragging=false; wrap.classList.remove('dragging'); var throwBoost = Math.max(Math.min(velocity*THROW_MULTIPLIER, MAX_THROW), -MAX_THROW); speed = baseSpeed + (-throwBoost); (function decay(){ speed = baseSpeed + (speed - baseSpeed)*FRICTION; if(Math.abs(speed - baseSpeed) > 0.05){ requestAnimationFrame(decay); } else { speed = baseSpeed; } })(); startLoop(); }
+      wrap.addEventListener('mousedown', onDown); wrap.addEventListener('touchstart', onDown, {passive:false});
+      window.addEventListener('mousemove', onMove, {passive:false}); window.addEventListener('touchmove', onMove, {passive:false});
+      window.addEventListener('mouseup', onUp); window.addEventListener('touchend', onUp);
+      wrap.addEventListener('mouseenter', stopLoop); wrap.addEventListener('mouseleave', function(){ if(!dragging) startLoop(); });
+      document.addEventListener('visibilitychange', function(){ if(document.hidden) stopLoop(); else if(!dragging) startLoop(); });
+      startLoop(); track.setAttribute('data-autoscroll','on');
+    })();
+
+    // ===== Tracking de conversiones: botones Agendar y Ver Portafolio =====
+    (function(){
+      function sendEvents(tag, params){
+        try { gtag('event', tag, params || {}); } catch(e){}
+        try { fbq('trackCustom', tag.replace(/_/g,' ').replace(/\b\w/g,c=>c.toUpperCase()), params || {}); } catch(e){}
+      }
+      function addClickTracking(selector, eventName){
+        document.querySelectorAll(selector).forEach(function(el){
+          el.addEventListener('click', function(){
+            var where = el.textContent.trim();
+            sendEvents(eventName, { location: where });
+          });
         });
-    </script>
+      }
+      addClickTracking('a.track-agendar', 'agendar_reunion');
+      addClickTracking('a.track-portafolio', 'ver_portafolio');
+    })();
+  </script>
 </body>
 </html>
-
