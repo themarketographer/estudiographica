@@ -1,0 +1,14 @@
+:root {
+  --y: #FFDE59;
+  --ink: #1A1A1A;
+}
+html {
+  scroll-behavior: smooth;
+}
+body {
+  font-family: 'Poppins', sans-serif;
+  background: #fbfbfb;
+  color: #000;
+  letter-spacing: -.02em;
+}
+/* ... Resto de estilos extraídos del original ... */
