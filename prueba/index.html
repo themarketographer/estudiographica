@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Wireframe demo — Página de ejemplo</title>
+  <meta name="description" content="Demo educativa: landing con estructura de wireframe para clase.">
+  <meta property="og:title" content="Wireframe demo — Página de ejemplo">
+  <meta property="og:description" content="Demo educativa: landing con estructura de wireframe para clase.">
+  <meta property="og:image" content="/assets/og-placeholder.png">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo">MiLogo</div>
+      <nav aria-label="Navegación principal">
+        <ul>
+          <li><a href="#home">Inicio</a></li>
+          <li><a href="#servicios">Servicios</a></li>
+          <li><a href="#testimonios">Testimonios</a></li>
+          <li><a href="#contacto">Contacto</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main id="home">
+      <section class="hero" aria-labelledby="hero-title">
+        <div>
+          <h1 id="hero-title">Hook</h1>
+          <p class="small">Subtítulo que complementa el hook y explica brevemente la propuesta.</p>
+          <a class="btn" href="#contacto">CTA</a>
+        </div>
+        <div class="box" role="img" aria-label="Imagen principal - placeholder">Imagen: espacio para hero</div>
+      </section>
+
+      <section aria-labelledby="problema-title">
+        <div class="two-col">
+          <div class="box" role="img" aria-label="Imagen problema">Imagen problema</div>
+          <div>
+            <h2 id="problema-title">Problema</h2>
+            <p class="small">Texto que describe el problema que tu producto/servicio soluciona. Corto y directo.</p>
+          </div>
+        </div>
+      </section>
+
+      <section aria-labelledby="promesa-title">
+        <div class="two-col">
+          <div>
+            <h2 id="promesa-title">Promesa</h2>
+            <p class="small">Breve promesa de valor o beneficios clave.</p>
+          </div>
+          <div class="box" role="img" aria-label="Imagen promesa">Imagen promesa</div>
+        </div>
+      </section>
+
+      <section aria-labelledby="proceso-title">
+        <div class="two-col">
+          <div class="box" role="img" aria-label="Imagen proceso">Imagen proceso</div>
+          <div>
+            <h2 id="proceso-title">Proceso</h2>
+            <p class="small">Explicación simple del proceso en pasos claros.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="testimonios" aria-labelledby="testimonios-title">
+        <h2 id="testimonios-title">Testimonios</h2>
+        <p class="small">Opiniones de clientes o alumnos que usan tu producto.</p>
+        <div class="grid-3" style="margin-top:18px">
+          <div class="testimonial">
+            <div class="box avatar" style="height:120px">Avatar</div>
+            <strong>Testimonio</strong>
+            <p class="small">Texto breve</p>
+          </div>
+          <div class="testimonial">
+            <div class="box avatar" style="height:120px">Avatar</div>
+            <strong>Testimonio</strong>
+            <p class="small">Texto breve</p>
+          </div>
+          <div class="testimonial">
+            <div class="box avatar" style="height:120px">Avatar</div>
+            <strong>Testimonio</strong>
+            <p class="small">Texto breve</p>
+          </div>
+        </div>
+      </section>
+
+      <section aria-labelledby="beneficios-title">
+        <h2 id="beneficios-title">Beneficios</h2>
+        <p class="small">Lista con los principales beneficios que obtiene el usuario.</p>
+        <div class="benefits">
+          <div class="benefit-list">
+            <div class="check"><div class="icon">✓</div><div><strong>Beneficio</strong><div class="small">Texto</div></div></div>
+            <div class="check"><div class="icon">✓</div><div><strong>Beneficio</strong><div class="small">Texto</div></div></div>
+            <div class="check"><div class="icon">✓</div><div><strong>Beneficio</strong><div class="small">Texto</div></div></div>
+          </div>
+          <div class="box" style="width:240px;height:160px">Imagen beneficios</div>
+        </div>
+      </section>
+
+      <section aria-labelledby="faq-title">
+        <h2 id="faq-title">Preguntas frecuentes</h2>
+        <div class="faq" role="list">
+          <div role="listitem"><button aria-expanded="false" aria-controls="p1" class="faq-btn">Pregunta 1</button><div id="p1" class="panel" hidden>Respuesta corta para la pregunta 1.</div></div>
+          <div role="listitem"><button aria-expanded="false" aria-controls="p2" class="faq-btn">Pregunta 2</button><div id="p2" class="panel" hidden>Respuesta corta para la pregunta 2.</div></div>
+          <div role="listitem"><button aria-expanded="false" aria-controls="p3" class="faq-btn">Pregunta 3</button><div id="p3" class="panel" hidden>Respuesta corta para la pregunta 3.</div></div>
+        </div>
+      </section>
+
+      <section id="contacto" class="hero" aria-labelledby="ctatitle">
+        <div>
+          <h1 id="ctatitle">Hook</h1>
+          <p class="small">Subtítulo final que empuja a la acción.</p>
+          <a class="btn" href="mailto:ejemplo@tucorreo.com">CTA</a>
+        </div>
+        <div class="box">Form / Imagen</div>
+      </section>
+
+    </main>
+
+    <footer>
+      <div class="small">© 2025 — Wireframe demo. Archivo de ejemplo para clase.</div>
+      <div class="small">Diseño minimal para enseñar estructura HTML/CSS/JS.</div>
+    </footer>
+
+  </div>
+  <script src="/js/main.js"></script>
+</body>
+</html>
