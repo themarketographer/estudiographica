@@ -380,7 +380,7 @@
         <li class="benefit-item"><span class="benefit-icon">✓</span><span class="benefit-text">Estilismo de alimentos</span></li>`;
       if(cantidad<=10){ newBenefits += `
         <li class="benefit-item"><span class="benefit-icon">✓</span><span class="benefit-text">Entrega en menos de 72 horas</span></li>
-        <li class="benefit-item"><span class="benefit-icon">✓</span><span class="benefit-text">Edición básica</span></li>`; }
+        <li class="benefit-item"><span class="benefit-icon">✓</span><span class="benefit-text">Edición profesional</span></li>`; }
       else if(cantidad<=18){ newBenefits += `
         <li class="benefit-item"><span class="benefit-icon">✓</span><span class="benefit-text">Entrega en menos de 48 horas</span></li>
         <li class="benefit-item"><span class="benefit-icon">✓</span><span class="benefit-text">Edición profesional</span></li>`; }
@@ -410,7 +410,7 @@
         <li class="benefit-item"><span class="benefit-icon">✓</span><span class="benefit-text">15 fotos por hora (total: ${totalFotos} fotos)</span></li>`;
       if(horas<=2){ newBenefits += `<li class=\"benefit-item\"><span class=\"benefit-icon\">✓</span><span class=\"benefit-text\">Edición básica</span></li>`; }
       else { newBenefits += `
-        <li class="benefit-item"><span class="benefit-icon">✓</span><span class="benefit-text">Edición profesional</span></li>
+        <li class="benefit-item"><span class="benefit-icon">✓</span><span class="benefit-text">Edición básica</span></li>
         <li class="benefit-item"><span class="benefit-icon">✓</span><span class="benefit-text">Asistente de producción</span></li>`; }
       animateBenefitsList(document.getElementById('jornada-benefits'), newBenefits);
     }
