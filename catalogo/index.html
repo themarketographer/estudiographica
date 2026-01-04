@@ -394,7 +394,7 @@
       const horas = parseInt(document.getElementById('jornada-slider').value,10);
       const valEl = document.getElementById('jornada-value');
       animateChange(valEl,'updating'); valEl.textContent = `${horas} hora${horas>1?'s':''}`;
-      let paquete, precio; const precioPorHora = 300;
+      let paquete, precio; const precioPorHora = 350;
       if(horas===1){ precio = precioPorHora; paquete = 'Jornada Básica'; }
       else if(horas===2){ precio = precioPorHora*2*0.95; paquete='Jornada Básica'; }
       else if(horas<=5){ const desc = 0.07 + (horas-3)*0.04; precio = precioPorHora*horas*(1-desc); paquete='Jornada Estándar'; }
