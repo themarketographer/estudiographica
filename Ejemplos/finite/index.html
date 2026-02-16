@@ -1,525 +1,347 @@
 <!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lucas Milde - Sesiones de fotos de patas peludas</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
-    <script>
-        // Custom color palette configuration for Tailwind CSS
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Marketing para Fotógrafos | Hagamos mierda a tu competencia</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
         tailwind.config = {
+            darkMode: "class",
             theme: {
                 extend: {
                     colors: {
-                        primary: '#f8f7f3',   // Off-white for backgrounds
-                        secondary: '#2b2b2b', // Dark charcoal for text
-                        terciary: '#937b63',   // Muted tan for accents
-                        'terciary-dark': '#7d6852', // Darker tan for hover effects
+                        "primary": "#f9f906",
+                        "background-light": "#f8f8f5",
+                        "background-dark": "#000000",
                     },
-                    aspectRatio: {
-                        '9/16': '9 / 16',
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
                     },
-                }
-            }
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
         }
     </script>
-    <style>
-        @font-face {
-            font-family: 'TheSeasons';
-            src: url('https://res.cloudinary.com/drrhn6t1c/raw/upload/v1755826797/Fontspring-DEMO-theseasons-reg_evnlrs.otf') format('opentype');
-        }
-        @font-face {
-            font-family: 'GlacialIndifference';
-            src: url('https://res.cloudinary.com/drrhn6t1c/raw/upload/v1755827417/GlacialIndifference-Regular_z5pngu.otf') format('opentype');
-        }
-        html {
-            scroll-behavior: smooth;
-        }
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-        h1, h2, h3 {
-            font-family: 'TheSeasons', serif;
-        }
-        .font-subtitle {
-            font-family: 'GlacialIndifference', sans-serif;
-        }
-        .hero-bg {
-            background-image: url('https://res.cloudinary.com/drrhn6t1c/image/upload/v1756832323/save-the-date-syb-21_yhbnqh.jpg');
-            background-size: cover;
-            background-position: center;
-        }
-        /* Flip Card Styles */
-        .plan-card {
-            perspective: 1500px;
-            min-height: 550px;
-            cursor: pointer;
-        }
-        .plan-card-inner {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            transition: transform 1s;
-            transform-style: preserve-3d;
-        }
-        .plan-card-inner.is-flipped {
-            transform: rotateY(180deg);
-        }
-        .plan-card-front, .plan-card-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
-            border-radius: 1rem;
-            overflow: hidden;
-        }
-        .plan-card-back {
-            transform: rotateY(180deg);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-        /* Masonry Gallery styles */
-        .masonry-gallery {
-            column-count: 2;
-            column-gap: 0.25rem; /* Corresponds to Tailwind's gap-1 */
-        }
-        @media (min-width: 768px) { /* md breakpoint */
-            .masonry-gallery {
-                column-count: 4;
-            }
-        }
-        .masonry-gallery .gallery-item {
-            display: inline-block;
-            width: 100%;
-            margin-bottom: 0.25rem; /* Vertical gap */
-            break-inside: avoid;
-        }
-        /* Lightbox styles */
-        .lightbox {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.9);
-            justify-content: center;
-            align-items: center;
-        }
-        .lightbox-content {
-            max-width: 90vw;
-            max-height: 85vh;
-            animation: fadeIn 0.3s ease-in-out;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
-        }
-        .lightbox-nav {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            color: white;
-            font-size: 3rem;
-            cursor: pointer;
-            user-select: none;
-            padding: 1rem;
-            transition: background-color 0.2s;
-        }
-        .lightbox-nav:hover {
-            background-color: rgba(255,255,255,0.1);
-        }
-        .lightbox-prev {
-            left: 0;
-        }
-        .lightbox-next {
-            right: 0;
-        }
-        .lightbox-close {
-            position: absolute;
-            top: 1rem;
-            right: 2rem;
-            color: white;
-            font-size: 3rem;
-            cursor: pointer;
-            line-height: 1;
-        }
-    </style>
+<style>body {
+    font-family: "Space Grotesk", sans-serif;
+    background-color: #000000;
+    color: white
+    }
+.text-stroke {
+    -webkit-text-stroke: 1px #f9f906;
+    color: transparent
+    }
+.gritty-overlay {
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuDhvMXldimFG6tzrFXSFO3l8k3hahYOGEoCTut3vtroO-dPpj_q3JdcjdxoiBquHElTTQgLNaY6ISD1L8wLYatdyckQCLiVUhS_HlV1IGOyEAO9-tNOlxlnw94WAqmmua881yoZ1ojQg_PAprhii1V_BKiusoMIao2bAMqi9Bz0Ypqr5uOfpFArDnIctBhvuJbcXzfnJcIIl1ACDMaPUAVr3jvEI-ePbY4OLp5cggu8TujqTtAlG-3POKctqheuUbIqXIWWv4kR314);
+    opacity: 0.05;
+    pointer-events: none
+    }
+* {
+    font-style: normal !important;
+}
+.tracking-tighter {
+    letter-spacing: -0.05em;
+}</style>
 </head>
-<body class="bg-primary text-secondary">
-
-    <!-- Header & Hero Section -->
-    <header class="hero-bg text-white shadow-lg">
-        <div class="bg-black bg-opacity-40 w-full h-full flex items-center justify-start min-h-screen p-6 md:p-12 lg:p-24">
-            <div class="bg-white/10 rounded-3xl border border-white/20 p-8 md:p-12 w-full shadow-lg text-left">
-                <img src="https://res.cloudinary.com/drrhn6t1c/image/upload/v1752514553/logo-FE-fondonegro_bctsg7.png" alt="Finite Estudio Logo" class="h-12 w-auto mb-8">
-                <h2 class="text-4xl md:text-5xl mb-4 uppercase">Lucas Milde - Fotos de patas peludas</h2>
-                <p class="text-lg mb-8 font-subtitle">Antes del vestido, antes del estrés, hacemos una sesión sin presión. Es para que sientas que puedes estar frente a una cámara… y seguir siendo tú, sin actuar.</p>
-                <a href="#planes" class="bg-primary text-terciary font-bold py-3 px-8 rounded-lg text-lg hover:bg-primary/80 transition duration-300 inline-block">
-                    Ver Planes
-                </a>
-            </div>
+<body class="bg-background-light dark:bg-background-dark text-white selection:bg-primary selection:text-black overflow-x-hidden">
+<div class="gritty-overlay fixed inset-0 z-50"></div>
+<!-- Navigation -->
+<nav class="sticky top-0 z-[100] border-b border-primary/20 bg-background-dark/80 backdrop-blur-md px-6 lg:px-20 py-4">
+<div class="max-w-7xl mx-auto flex items-center justify-between">
+<div class="flex items-center gap-3">
+<img alt="Marketographers Logo" class="h-12 w-auto" src="{{DATA:IMAGE:IMAGE_2}}"/>
+<span class="font-display font-black text-xl uppercase tracking-tighter">Marketographers</span>
+</div>
+<div class="hidden md:flex items-center gap-8 font-medium text-sm uppercase tracking-widest">
+<a class="hover:text-primary transition-colors" href="#metodo">El Método</a>
+<a class="hover:text-primary transition-colors" href="#comunidad">Comunidad</a>
+<a class="hover:text-primary transition-colors" href="#faq">FAQ</a>
+</div>
+<button class="bg-primary text-black px-6 py-2 rounded font-black uppercase text-sm hover:scale-105 transition-transform">
+                Entra hoy
+            </button>
+</div>
+</nav>
+<!-- Hero Section -->
+<section class="relative min-h-[90vh] flex items-center justify-center px-6 lg:px-20 py-20 overflow-hidden bg-black">
+<div class="absolute inset-0 z-0">
+<div class="absolute inset-0 bg-gradient-to-t from-background-dark via-background-dark/80 to-transparent"></div>
+<img alt="Professional camera on dark background" class="w-full h-full object-cover opacity-30 grayscale" data-alt="Professional camera gear on dark surface" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBqoBOwCcfXntnPXlxoTtgftkzJr_Ifwq7vajdJuS3o8WuxxRkfGTDveqrDcauIi_QPziKEiJ2_an9iwz8R62Ja1v3tC6e8ZH4V2iiXxD9D-f0v32ZdVVA5R5VabxqYZMPo8FwU7qktOnFS1t8K8pJmxoOu_ElsWnxvrG1OfK9ckuqKl6ob5R48tQZMTR2miIsHmMHLkNhpSZ31fBm6NljdBO1DcdxX_S8uVX4X_AUg6Vq7UjHBvOTROwLx5lo1GeOHwkqHJy4UHPY"/>
+</div>
+<div class="relative z-10 max-w-5xl text-center">
+<span class="bg-primary text-black px-3 py-1 text-xs font-black uppercase tracking-widest mb-6 inline-block">Advertencia: Realidad sin filtro</span>
+<h1 class="text-5xl lg:text-8xl font-black leading-[0.9] tracking-tighter mb-8">
+                TU CLIENTE IDEAL ESTÁ TRABAJANDO CON <span class="text-primary">OTRO FOTÓGRAFO</span> QUE SÍ SABE DE MARKETING.
+            </h1>
+<p class="text-xl lg:text-2xl text-white/80 max-w-2xl mx-auto mb-10 font-light">
+                ¿Vas a seguir viviendo del 'boca a boca' o te vas a poner los pantalones con tu negocio?
+            </p>
+<div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+<button class="w-full sm:w-auto bg-primary text-black px-10 py-5 rounded-lg font-black text-xl uppercase tracking-tight hover:bg-white transition-colors flex items-center justify-center gap-2 group">
+                    ¡Hagamos mierda a tu competencia!
+                    <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">trending_up</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Stats Marquee -->
+<div class="bg-primary py-4 overflow-hidden border-y-4 border-black">
+<div class="flex whitespace-nowrap gap-20 items-center justify-center animate-pulse">
+<span class="text-black font-black uppercase text-2xl">+500 FOTÓGRAFOS</span>
+<span class="text-black font-black uppercase text-2xl">+17 PAÍSES</span>
+<span class="text-black font-black uppercase text-2xl">100% HONESTIDAD</span>
+<span class="text-black font-black uppercase text-2xl">+500 FOTÓGRAFOS</span>
+<span class="text-black font-black uppercase text-2xl">+17 PAÍSES</span>
+</div>
+</div>
+<!-- The 3 Options -->
+<section class="py-24 px-6 lg:px-20 bg-background-dark">
+<div class="max-w-7xl mx-auto">
+<h2 class="text-4xl lg:text-6xl font-black mb-16 text-center tracking-tighter uppercase">ELIGE TU <span class="text-stroke">VENENO</span></h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<!-- Option 1 -->
+<div class="group relative bg-white/5 border border-white/10 p-8 rounded-xl hover:border-primary/50 transition-all flex flex-col justify-between">
+<div>
+<div class="text-primary mb-6"><span class="material-symbols-outlined text-5xl">event_available</span></div>
+<h3 class="text-2xl font-bold mb-2 tracking-tighter">Admisiones</h3>
+<p class="text-white/60 mb-6">15 min Zoom de diagnóstico rápido.</p>
+<ul class="space-y-4 text-sm font-medium mb-8">
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-primary text-lg">check_circle</span> Filtro de perfil</li>
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-primary text-lg">check_circle</span> Diagnóstico brutal</li>
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-primary text-lg">check_circle</span> Cupos limitados</li>
+</ul>
+</div>
+<button class="w-full py-4 border-2 border-primary text-primary font-black uppercase hover:bg-primary hover:text-black transition-all">Agendar Llamada</button>
+</div>
+<!-- Option 2 (Featured) -->
+<div class="relative bg-primary p-8 rounded-xl flex flex-col justify-between transform md:scale-110 z-10 shadow-2xl">
+<div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-black text-primary px-4 py-1 text-xs font-black uppercase">RECOMENDADO</div>
+<div>
+<div class="text-black mb-6"><span class="material-symbols-outlined text-5xl">groups_3</span></div>
+<h3 class="text-2xl text-black font-black mb-2 tracking-tighter">COMUNIDAD HOY</h3>
+<p class="text-black/70 mb-6 font-bold uppercase tracking-tighter">Lanzarse como gorda en tobogán</p>
+<ul class="space-y-4 text-sm font-bold text-black mb-8">
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-lg">bolt</span> Clases en vivo semanales</li>
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-lg">bolt</span> Grupo de WhatsApp 24/7</li>
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-lg">bolt</span> Acceso inmediato</li>
+</ul>
+</div>
+<button class="w-full py-4 bg-black text-primary font-black uppercase hover:bg-white hover:text-black transition-all shadow-xl">¡ENTRAR YA!</button>
+</div>
+<!-- Option 3 -->
+<div class="group relative bg-white/5 border border-white/10 p-8 rounded-xl opacity-50 grayscale hover:grayscale-0 transition-all flex flex-col justify-between">
+<div>
+<div class="text-white/30 mb-6"><span class="material-symbols-outlined text-5xl">sentiment_very_dissatisfied</span></div>
+<h3 class="text-2xl font-bold mb-2 tracking-tighter">No hagas ni mierda</h3>
+<p class="text-white/40 mb-6">Stay in your comfort zone.</p>
+<ul class="space-y-4 text-sm text-white/40 mb-8">
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-lg">block</span> Cero crecimiento</li>
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-lg">block</span> Quejas diarias</li>
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-lg">block</span> Mismo ingreso de siempre</li>
+</ul>
+</div>
+<button class="w-full py-4 border-2 border-white/20 text-white/40 font-black uppercase cursor-not-allowed">Seguir Igual</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Value Prop -->
+<section class="py-24 px-6 lg:px-20 border-t border-white/10" id="metodo">
+<div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+<div>
+<h2 class="text-4xl lg:text-6xl font-black mb-8 tracking-tighter uppercase">ESTO NO ES UN CURSO DE <span class="text-primary">HOTMART</span> DE MIERDA</h2>
+<p class="text-xl text-white/70 mb-12">Aquí venimos a trabajar de verdad, con gente real y resultados que duelen de lo buenos que son.</p>
+<div class="space-y-8"><div class="overflow-x-auto pb-8 flex gap-8 snap-x no-scrollbar">
+<div class="flex-none w-full sm:w-[400px] snap-center bg-white/5 p-8 border border-white/10 rounded-xl group hover:border-primary transition-colors">
+<div class="bg-primary/20 p-4 h-fit w-fit rounded group-hover:bg-primary transition-colors group-hover:text-black mb-6">
+<span class="material-symbols-outlined text-4xl">live_tv</span>
+</div>
+<h4 class="text-2xl font-bold mb-4 uppercase tracking-tighter">Clases en Vivo</h4>
+<p class="text-white/60">Nada de videos grabados de hace 3 años. Interacción pura y dura para resolver tus dudas en el momento.</p>
+</div>
+<div class="flex-none w-full sm:w-[400px] snap-center bg-white/5 p-8 border border-white/10 rounded-xl group hover:border-primary transition-colors">
+<div class="bg-primary/20 p-4 h-fit w-fit rounded group-hover:bg-primary transition-colors group-hover:text-black mb-6">
+<span class="material-symbols-outlined text-4xl">inventory_2</span>
+</div>
+<h4 class="text-2xl font-bold mb-4 uppercase tracking-tighter">Recursos Reales</h4>
+<p class="text-white/60">Plantillas, desafíos y mentorías 1-on-1 que sí mueven la aguja de tu facturación.</p>
+</div>
+<div class="flex-none w-full sm:w-[400px] snap-center bg-white/5 p-8 border border-white/10 rounded-xl group hover:border-primary transition-colors">
+<div class="bg-primary/20 p-4 h-fit w-fit rounded group-hover:bg-primary transition-colors group-hover:text-black mb-6">
+<span class="material-symbols-outlined text-4xl">emoji_events</span>
+</div>
+<h4 class="text-2xl font-bold mb-4 uppercase tracking-tighter">Retos y Eventos</h4>
+<p class="text-white/60">Competencias trimestrales con premios reales para que dejes de procrastinar de una vez.</p>
+</div>
+<div class="flex-none w-full sm:w-[400px] snap-center bg-white/5 p-8 border border-white/10 rounded-xl group hover:border-primary transition-colors">
+<div class="bg-primary/20 p-4 h-fit w-fit rounded group-hover:bg-primary transition-colors group-hover:text-black mb-6">
+<span class="material-symbols-outlined text-4xl">person</span>
+</div>
+<h4 class="text-2xl font-bold mb-4 uppercase tracking-tighter">Sesiones 1 a 1</h4>
+<p class="text-white/60">Revisión personalizada de tu portafolio y estrategia de ventas cada mes.</p>
+</div>
+</div></div>
+</div>
+<div class="relative">
+<div class="absolute -inset-4 border-2 border-primary/30 rounded-lg"></div>
+<img alt="Photographer editing photos" class="relative z-10 w-full rounded-lg grayscale hover:grayscale-0 transition-all duration-700" data-alt="Photographer at a desk working on laptop" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBo5lbrjQGiLEBwSvjORXxSdP6vtE8oICLGvNGYSEL9pmjvxQKLjtcHxNU5c2TPprC-jwPvKdb5DCZM9hmAkU03nPzNgKngmi-p0l6N0LIZxzAAdnU5h7TF1ro-zTMkR-ESmvpNkA4bjFZSq9ykU1bUUgDdtQQbG97B5IKyd-QYuGKpXwobYjoZo-qZ4sp3QJb1yQvuZO9WK04-ymsLJ_yDzana6yf8phSPNqWFdfH5feXxoU78YEIGby1BkjR3naYuIYd_ZpaKxrk"/>
+<div class="absolute -bottom-10 -right-10 bg-primary text-black p-8 rounded z-20 hidden lg:block">
+<p class="font-black text-4xl tracking-tighter">"HAZLO AHORA"</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Social Proof -->
+<section class="py-24 px-6 lg:px-20 bg-white/5">
+<div class="max-w-7xl mx-auto">
+<div class="text-center mb-16">
+<h2 class="text-4xl lg:text-6xl font-black mb-4 tracking-tighter uppercase">MARKETOGRAPHERS QUE YA APLICARON</h2>
+<div class="h-1 w-24 bg-primary mx-auto"></div>
+</div>
+<div class="relative">
+<div class="flex overflow-x-auto snap-x no-scrollbar gap-8 pb-4">
+<div class="flex-none w-full md:w-1/2 lg:w-1/3 snap-center bg-background-dark p-8 border border-white/10 rounded-lg">
+<p class="text-lg mb-6">"Pasé de cobrar 200 USD a 1500 USD por sesión. Pablo no tiene pelos en la lengua y eso es lo que necesitaba."</p>
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center text-primary font-bold">JD</div>
+<div>
+<p class="font-bold">Juan Delgado</p>
+<p class="text-xs text-white/50">Fotógrafo de Bodas</p>
+</div>
+</div>
+</div>
+<div class="flex-none w-full md:w-1/2 lg:w-1/3 snap-center bg-background-dark p-8 border border-white/10 rounded-lg">
+<p class="text-lg mb-6">"La comunidad vale cada maldito centavo. Es como tener un ejército de colegas apoyándote 24/7."</p>
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center text-primary font-bold">ML</div>
+<div>
+<p class="font-bold">Maria Lopez</p>
+<p class="text-xs text-white/50">Retratista</p>
+</div>
+</div>
+</div>
+<div class="flex-none w-full md:w-1/2 lg:w-1/3 snap-center bg-background-dark p-8 border border-white/10 rounded-lg">
+<p class="text-lg mb-6">"Si buscas alguien que te acaricie la espalda, vete a otro lado. Aquí vienes a facturar o a irte a casa."</p>
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center text-primary font-bold">CR</div>
+<div>
+<p class="font-bold">Carlos Ruiz</p>
+<p class="text-xs text-white/50">Producto &amp; Publicidad</p>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-8 flex justify-center items-center gap-4">
+<div class="h-1 flex-1 bg-white/10 max-w-[200px]"><div class="h-full bg-primary w-1/4"></div></div>
+<span class="text-primary font-black text-sm uppercase tracking-widest">1 of 20</span>
+</div>
+</div>
+</div>
+</section>
+<!-- The Mentor -->
+<section class="py-24 px-6 lg:px-20">
+<div class="max-w-7xl mx-auto flex flex-col lg:flex-row gap-16 items-center">
+<div class="w-full lg:w-1/2 relative">
+<div class="aspect-square bg-primary/10 border-4 border-dashed border-primary/40 rounded-full absolute inset-0 animate-spin-slow opacity-20"></div>
+<img alt="Pablo Villarroel Portrait" class="w-full aspect-square object-cover rounded-full grayscale border-8 border-primary relative z-10" data-alt="Close up portrait of a man with intense look" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJGTn7PEo2hjAdQ8yOrq6UazkZ1m0eeGPTnLOKGo-nTRO8oL-Ytyk9yC5uAJpW0VS5swL6kDT5JKlPBEqmOZCWef-bBU43R8m43TViu-94ffr9xsyccCms2-a-7scSDGW_2LZDQpfpM1G2L-iWJSfQXS7XlI5K3og1t13fwOoJyZGWcZHnDpTCpwOdK8TGF6iEXlSwmyJzweb370599U2Z032QH_3flu0IWRna7K69UV8MrfZpFsYr5M_-Qq78y1b4megrm9z_csA"/>
+</div>
+<div class="w-full lg:w-1/2">
+<span class="text-primary font-black uppercase text-sm tracking-widest mb-4 inline-block">Tu mentor (el demacrado)</span>
+<h2 class="text-5xl lg:text-7xl font-black mb-6 tracking-tighter">PABLO <br/>VILLARROEL</h2>
+<div class="space-y-4 text-xl text-white/80">
+<p>Especialista en Storytelling y Persuasión. He generado más de <span class="text-primary font-bold">+100k USD</span> con mi negocio de fotografía y formación.</p>
+<p class="border-l-4 border-primary pl-6 font-light">"Sí, tengo ojeras. Sí, estoy demacrado. Es el precio de trabajar mientras mi competencia duerme soñando con likes de Instagram."</p>
+<p>No te voy a enseñar a usar Photoshop. Te voy a enseñar a que tu cliente te quiera pagar lo que vales sin pedir rebaja.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- FAQ Section -->
+<section class="py-24 px-6 lg:px-20 bg-background-dark/50" id="faq">
+<div class="max-w-3xl mx-auto">
+<h2 class="text-4xl lg:text-6xl font-black mb-16 text-center tracking-tighter">PREGUNTAS <span class="text-stroke">INCÓMODAS</span></h2>
+<div class="space-y-6">
+<details class="group border-b border-white/10 pb-6">
+<summary class="flex items-center justify-between cursor-pointer list-none font-bold text-xl uppercase tracking-tighter">
+                        ¿HAY DEVOLUCIONES SI NO ME GUSTA?
+                        <span class="material-symbols-outlined text-primary group-open:rotate-180 transition-transform">expand_more</span>
+</summary>
+<p class="mt-4 text-white/60">No. Si entras con miedo a perder tu dinero, ya perdiste. Esto es para gente comprometida. Entra, aplica y factura. Si quieres garantías de algodón, vete a Disney.</p>
+</details>
+<details class="group border-b border-white/10 pb-6">
+<summary class="flex items-center justify-between cursor-pointer list-none font-bold text-xl uppercase tracking-tighter">
+                        ¿POR QUÉ DICES TANTAS GROSERÍAS?
+                        <span class="material-symbols-outlined text-primary group-open:rotate-180 transition-transform">expand_more</span>
+</summary>
+<p class="mt-4 text-white/60">Porque el mundo real no tiene subtítulos aptos para todo público. Si te ofende una palabra, imagínate cuando veas tu cuenta bancaria en cero a final de mes.</p>
+</details>
+<details class="group border-b border-white/10 pb-6">
+<summary class="flex items-center justify-between cursor-pointer list-none font-bold text-xl uppercase tracking-tighter">
+                        ¿PUEDO CANCELAR MI SUSCRIPCIÓN?
+                        <span class="material-symbols-outlined text-primary group-open:rotate-180 transition-transform">expand_more</span>
+</summary>
+<p class="mt-4 text-white/60">Sí, cuando quieras. No amarramos a nadie. Pero dudo que quieras irte una vez que veas lo que la "bola de locos" está logrando.</p>
+</details>
+<details class="group border-b border-white/10 pb-6">
+<summary class="flex items-center justify-between cursor-pointer list-none font-bold text-xl uppercase tracking-tighter">
+                        ¿TENGO QUE SER FOTÓGRAFO PROFESIONAL?
+                        <span class="material-symbols-outlined text-primary group-open:rotate-180 transition-transform">expand_more</span>
+</summary>
+<p class="mt-4 text-white/60">Tienes que querer vivir de esto. Si eres hobbyista y no quieres ganar dinero, este lugar te va a parecer un manicomio.</p>
+</details>
+</div>
+</div>
+</section>
+<!-- Final CTA -->
+<section class="py-24 px-6 lg:px-20 bg-primary text-black text-center relative overflow-hidden">
+<div class="absolute inset-0 opacity-10 flex flex-wrap gap-10 font-black text-9xl pointer-events-none select-none whitespace-nowrap leading-none items-center justify-center">
+            HAGAMOS MIERDA HAGAMOS MIERDA HAGAMOS MIERDA
         </div>
-    </header>
-
-    <!-- Original Benefits Section -->
-    <section class="py-12 bg-white">
-        <div class="container mx-auto px-6">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 text-center">
-                <!-- Benefit 1 -->
-                <div>
-                    <div class="flex justify-center mb-3">
-                        <div class="bg-primary p-3 rounded-full shadow-sm border border-tertiary/20">
-                             <svg class="w-6 h-6 text-terciary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                        </div>
-                    </div>
-                    <h3 class="text-lg mb-1">Conexión genuina</h3>
-                    <p class="text-gray-600 text-sm font-subtitle">Un espacio para conocernos y que se sientan cómodos frente a la cámara, asegurando naturalidad el día de su boda.</p>
-                </div>
-                <!-- Benefit 2 -->
-                <div>
-                     <div class="flex justify-center mb-3">
-                        <div class="bg-primary p-3 rounded-full shadow-sm border border-tertiary/20">
-                           <svg class="w-6 h-6 text-terciary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                        </div>
-                    </div>
-                    <h3 class="text-lg mb-1">Anuncio con estilo</h3>
-                    <p class="text-gray-600 text-sm font-subtitle">Tendrán fotografías profesionales para usar en sus invitaciones, página web de la boda y para compartir la gran noticia.</p>
-                </div>
-                <!-- Benefit 3 -->
-                <div>
-                     <div class="flex justify-center mb-3">
-                        <div class="bg-primary p-3 rounded-full shadow-sm border border-tertiary/20">
-                            <svg class="w-6 h-6 text-terciary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
-                        </div>
-                    </div>
-                    <h3 class="text-lg mb-1">Recuerdos invaluables</h3>
-                    <p class="text-gray-600 text-sm font-subtitle">Atesoren esta etapa tan especial de su compromiso con recuerdos auténticos que durarán para siempre.</p>
-                </div>
-                <!-- Benefit 4 -->
-                <div>
-                     <div class="flex justify-center mb-3">
-                        <div class="bg-primary p-3 rounded-full shadow-sm border border-tertiary/20">
-                           <svg class="w-6 h-6 text-terciary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                        </div>
-                    </div>
-                    <h3 class="text-lg mb-1">Ensayo perfecto</h3>
-                    <p class="text-gray-600 text-sm font-subtitle">Es la oportunidad ideal para experimentar con locaciones y estilos, definiendo la estética visual para su gran día.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Planes Section -->
-    <main id="planes" class="py-20 bg-primary">
-        <div class="container mx-auto px-6">
-            <h2 class="text-4xl text-center mb-4">Planes 2025</h2>
-            <p class="text-center text-gray-600 mb-12 font-subtitle">Haz clic sobre un plan para ver los detalles.</p>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                
-                <!-- Plan Card: Piloto -->
-                <div class="plan-card">
-                    <div class="plan-card-inner shadow-lg">
-                        <div class="plan-card-front">
-                            <img src="https://res.cloudinary.com/drrhn6t1c/image/upload/v1756832432/sart-insta-2_v9kmil.jpg" alt="Imagen del Plan Piloto" class="w-full h-full object-cover">
-                            <div class="absolute inset-0 bg-black bg-opacity-30 flex flex-col items-center justify-center text-white">
-                                <h3 class="text-3xl uppercase">PLAN PILOTO</h3>
-                            </div>
-                        </div>
-                        <div class="plan-card-back bg-white border border-gray-200 p-8">
-                             <div class="flex flex-col h-full text-center">
-                                <h3 class="text-2xl mb-1 uppercase">PLAN PILOTO</h3>
-                                <p class="text-gray-600 italic text-sm mb-3 font-subtitle">"Para calentar motores. Rápido, sencillo y todo sobre ustedes."</p>
-                                <p class="text-3xl font-bold my-2">$3,300 <span class="text-base font-normal">MXN</span></p>
-                                <div class="border-t my-3"></div>
-                                <ul class="space-y-2 text-gray-700 mb-4 text-left flex-grow font-subtitle">
-                                    <li class="flex items-center"><svg class="w-5 h-5 mr-2 text-terciary flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span>Sesión en exterior</span></li>
-                                    <li class="flex items-center"><svg class="w-5 h-5 mr-2 text-terciary flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span>Sesión de 30min</span></li>
-                                    <li class="flex items-center"><svg class="w-5 h-5 mr-2 text-terciary flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span>10 fotos editadas (digitales)</span></li>
-                                    <li class="flex items-center"><svg class="w-5 h-5 mr-2 text-terciary flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span>Galería Online</span></li>
-                                </ul>
-                                <a href="#contacto" class="w-full text-center bg-terciary text-white font-bold py-3 px-4 rounded-lg hover:bg-terciary-dark transition duration-300 mt-auto">Reservar</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Plan Card: Secuela -->
-                <div class="plan-card">
-                     <div class="plan-card-inner shadow-lg">
-                        <div class="plan-card-front">
-                            <img src="https://res.cloudinary.com/drrhn6t1c/image/upload/v1756833314/sart-insta-36_engkrd.jpg" alt="Imagen del Plan Secuela" class="w-full h-full object-cover">
-                            <div class="absolute inset-0 bg-black bg-opacity-30 flex flex-col items-center justify-center text-white">
-                                <h3 class="text-3xl uppercase">PLAN SECUELA</h3>
-                            </div>
-                        </div>
-                        <div class="plan-card-back bg-white border-2 border-terciary p-8 relative overflow-visible">
-                             <span class="absolute -top-3 right-5 bg-terciary text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">MÁS POPULAR</span>
-                             <div class="flex flex-col h-full text-center">
-                                <h3 class="text-2xl mb-1 uppercase">PLAN SECUELA</h3>
-                                <p class="text-gray-600 italic text-sm mb-3 font-subtitle">"Un poco más de tiempo, un montón más de historias."</p>
-                                <p class="text-3xl font-bold my-2">$3,500 <span class="text-base font-normal">MXN</span></p>
-                                <div class="border-t my-3"></div>
-                                <ul class="space-y-2 text-gray-700 mb-4 text-left flex-grow font-subtitle">
-                                    <li class="flex items-center"><svg class="w-5 h-5 mr-2 text-terciary flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span>Sesión en exterior</span></li>
-                                    <li class="flex items-center"><svg class="w-5 h-5 mr-2 text-terciary flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span>Sesión de 1hr</span></li>
-                                    <li class="flex items-center"><svg class="w-5 h-5 mr-2 text-terciary flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span>18 fotos editadas (digitales)</span></li>
-                                    <li class="flex items-center"><svg class="w-5 h-5 mr-2 text-terciary flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span>Galería Online</span></li>
-                                    <li class="flex items-center"><svg class="w-5 h-5 mr-2 text-terciary flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span>Check list para tu boda</span></li>
-                                </ul>
-                                <a href="#contacto" class="w-full text-center bg-terciary text-white font-bold py-3 px-4 rounded-lg hover:bg-terciary-dark transition duration-300 mt-auto">Reservar</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Plan Card: Trilogia -->
-                <div class="plan-card">
-                     <div class="plan-card-inner shadow-lg">
-                        <div class="plan-card-front">
-                            <img src="https://res.cloudinary.com/drrhn6t1c/image/upload/v1756832323/save-the-date-syb-46_oqd5kn.jpg" alt="Imagen del Plan Trilogía" class="w-full h-full object-cover">
-                            <div class="absolute inset-0 bg-black bg-opacity-30 flex flex-col items-center justify-center text-white">
-                                <h3 class="text-3xl uppercase">PLAN TRILOGIA</h3>
-                            </div>
-                        </div>
-                        <div class="plan-card-back bg-white border border-gray-200 p-8">
-                            <div class="flex flex-col h-full text-center">
-                                <h3 class="text-2xl mb-1 uppercase">PLAN TRILOGIA</h3>
-                                <p class="text-gray-600 italic text-sm mb-3 font-subtitle">"Ustedes, el atardecer, y cero prisas."</p>
-                                <p class="text-3xl font-bold my-2">$4,200 <span class="text-base font-normal">MXN</span></p>
-                                <div class="border-t my-3"></div>
-                                <ul class="space-y-2 text-gray-700 mb-4 text-left flex-grow font-subtitle">
-                                    <li class="flex items-center"><svg class="w-5 h-5 mr-2 text-terciary flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span>Sesión en exterior</span></li>
-                                    <li class="flex items-center"><svg class="w-5 h-5 mr-2 text-terciary flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span>Sesión de 1:30hr</span></li>
-                                    <li class="flex items-center"><svg class="w-5 h-5 mr-2 text-terciary flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span>24 fotos editadas (digitales)</span></li>
-                                    <li class="flex items-center"><svg class="w-5 h-5 mr-2 text-terciary flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span>Galería Online</span></li>
-                                    <li class="flex items-center"><svg class="w-5 h-5 mr-2 text-terciary flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span>Check list para tu boda</span></li>
-                                </ul>
-                                <a href="#contacto" class="w-full text-center bg-terciary text-white font-bold py-3 px-4 rounded-lg hover:bg-terciary-dark transition duration-300 mt-auto">Reservar</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </main>
-
-    <!-- Special Offers Section -->
-    <section class="bg-white py-20">
-        <div class="container mx-auto px-6">
-            <div class="bg-primary rounded-2xl shadow-lg p-8 md:p-12 lg:p-16 flex flex-col lg:flex-row items-center gap-12">
-                <!-- Left Text Block -->
-                <div class="lg:w-1/3 text-center lg:text-left w-full">
-                    <h2 class="text-4xl mb-4">Ofertas Especiales</h2>
-                    <p class="font-subtitle text-gray-600">Además de tu sesión, aprovecha estos beneficios exclusivos.</p>
-                </div>
-                <!-- Right Benefits Cards -->
-                <div class="lg:w-2/3 grid grid-cols-1 sm:grid-cols-2 gap-8 w-full">
-                    <!-- Card 1: Invitations -->
-                    <div class="text-left">
-                        <img src="https://res.cloudinary.com/drrhn6t1c/image/upload/v1756838332/Captura_de_pantalla_2025-09-02_113843_pthive.jpg" alt="Descuento en invitaciones" class="rounded-lg shadow-md mb-4 w-full h-36 object-cover">
-                        <h3 class="text-xl mb-1">Descuento en invitaciones</h3>
-                        <p class="font-subtitle text-gray-600 text-sm">Obtienes 10% de descuento para el diseño de tus invitaciones de boda.</p>
-                    </div>
-                    <!-- Card 2: Extra Photos -->
-                    <div class="text-left">
-                         <img src="https://res.cloudinary.com/drrhn6t1c/image/upload/v1756832323/save-the-date-syb-38_fait9b.jpg" alt="Fotos extras gratis" class="rounded-lg shadow-md mb-4 w-full h-36 object-cover">
-                        <h3 class="text-xl mb-1">Fotos extras gratis</h3>
-                        <p class="font-subtitle text-gray-600 text-sm">Si reservas tu sesión dentro de las próximas 48 horas, te regalamos 5 fotos adicionales completamente editadas.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <!-- Gallery Section -->
-    <section id="galeria" class="bg-secondary py-2">
-        <div class="masonry-gallery">
-            <img class="gallery-item cursor-pointer" src="https://res.cloudinary.com/drrhn6t1c/image/upload/v1756832323/save-the-date-syb-36_mnjhkr.jpg" alt="Foto de galeria 20">
-            <img class="gallery-item cursor-pointer" src="https://res.cloudinary.com/drrhn6t1c/image/upload/v1756833526/sart-insta-10_hnsiav.jpg" alt="Foto de galeria 1">
-            <img class="gallery-item cursor-pointer" src="https://res.cloudinary.com/drrhn6t1c/image/upload/v1756833522/sart-insta-23_ww6vqy.jpg" alt="Foto de galeria 2">
-            <img class="gallery-item cursor-pointer" src="https://res.cloudinary.com/drrhn6t1c/image/upload/v1756833316/sart-insta-3_el3zww.jpg" alt="Foto de galeria 3">
-            <img class="gallery-item cursor-pointer" src="https://res.cloudinary.com/drrhn6t1c/image/upload/v1756833314/sart-insta-36_engkrd.jpg" alt="Foto de galeria 4">
-            <img class="gallery-item cursor-pointer" src="https://res.cloudinary.com/drrhn6t1c/image/upload/v1756833313/sart-insta-28_z2gzey.jpg" alt="Foto de galeria 6">
-            <img class="gallery-item cursor-pointer" src="https://res.cloudinary.com/drrhn6t1c/image/upload/v1756833314/sart-insta-30_suuqbe.jpg" alt="Foto de galeria 5">
-            <img class="gallery-item cursor-pointer" src="https://res.cloudinary.com/drrhn6t1c/image/upload/v1756833266/sart-insta-27_b18x5q.jpg" alt="Foto de galeria 7">
-            <img class="gallery-item cursor-pointer" src="https://res.cloudinary.com/drrhn6t1c/image/upload/v1756832431/sart-insta-12_owyu7c.jpg" alt="Foto de galeria 11">
-            <img class="gallery-item cursor-pointer" src="https://res.cloudinary.com/drrhn6t1c/image/upload/v1756832436/sart-insta-15_quso3b.jpg" alt="Foto de galeria 8">
-            <img class="gallery-item cursor-pointer" src="https://res.cloudinary.com/drrhn6t1c/image/upload/v1756832432/sart-insta-13_tyoezr.jpg" alt="Foto de galeria 10">
-            <img class="gallery-item cursor-pointer" src="https://res.cloudinary.com/drrhn6t1c/image/upload/v1756832432/sart-insta-2_v9kmil.jpg" alt="Foto de galeria 9">
-            <img class="gallery-item cursor-pointer" src="https://res.cloudinary.com/drrhn6t1c/image/upload/v1756832431/sart-insta-16_dm4fj4.jpg" alt="Foto de galeria 12">
-            <img class="gallery-item cursor-pointer" src="https://res.cloudinary.com/drrhn6t1c/image/upload/v1756832431/sart-insta-22_ebckt7.jpg" alt="Foto de galeria 13">
-            <img class="gallery-item cursor-pointer" src="https://res.cloudinary.com/drrhn6t1c/image/upload/v1756832324/save-the-date-syb-30_kdwup7.jpg" alt="Foto de galeria 14">
-            <img class="gallery-item cursor-pointer" src="https://res.cloudinary.com/drrhn6t1c/image/upload/v1756832323/save-the-date-syb-46_oqd5kn.jpg" alt="Foto de galeria 15">
-            <img class="gallery-item cursor-pointer" src="https://res.cloudinary.com/drrhn6t1c/image/upload/v1756832323/save-the-date-syb-38_fait9b.jpg" alt="Foto de galeria 16">
-            <img class="gallery-item cursor-pointer" src="https://res.cloudinary.com/drrhn6t1c/image/upload/v1756832323/save-the-date-syb-42_fpbjd1.jpg" alt="Foto de galeria 17">
-            <img class="gallery-item cursor-pointer" src="https://res.cloudinary.com/drrhn6t1c/image/upload/v1756832323/save-the-date-syb-21_yhbnqh.jpg" alt="Foto de galeria 18">
-            <img class="gallery-item cursor-pointer" src="https://res.cloudinary.com/drrhn6t1c/image/upload/v1756832323/save-the-date-syb-41_ltm20b.jpg" alt="Foto de galeria 19">
-        </div>
-    </section>
-    
-    <!-- Video Highlight Section -->
-    <section class="bg-white py-20">
-        <div class="container mx-auto px-6">
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
-                <!-- Left Video -->
-                <div class="w-full max-w-xs mx-auto">
-                    <div class="rounded-lg overflow-hidden shadow-xl aspect-w-9 aspect-h-16">
-                        <video class="w-full h-full object-cover" autoplay loop muted playsinline>
-                            <source src="https://res.cloudinary.com/drrhn6t1c/video/upload/v1756840049/pexels-mikhail-nilov-8254413_2160p_fph7yl.mp4" type="video/mp4">
-                            Tu navegador no soporta videos.
-                        </video>
-                    </div>
-                </div>
-
-                <!-- Center Text -->
-                <div class="text-center">
-                    <h2 class="text-4xl mb-4">Highlight Reel</h2>
-                    <p class="font-subtitle text-gray-600 mb-6">
-                        Añade un video corto y dinámico a tu sesión para un recuerdo aún más vivo.
-                    </p>
-                    <a href="#contacto" class="bg-terciary text-white font-bold py-3 px-8 rounded-lg text-lg hover:bg-terciary-dark transition duration-300 inline-block">
-                        Reservar
-                    </a>
-                </div>
-
-                <!-- Right Video -->
-                 <div class="w-full max-w-xs mx-auto">
-                    <div class="rounded-lg overflow-hidden shadow-xl aspect-w-9 aspect-h-16">
-                        <video class="w-full h-full object-cover" autoplay loop muted playsinline>
-                            <source src="https://res.cloudinary.com/drrhn6t1c/video/upload/v1756840047/pexels-kelly-2953258_2160p_s6xwzk.mp4" type="video/mp4">
-                            Tu navegador no soporta videos.
-                        </video>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Info Section -->
-    <section id="info" class="bg-white">
-        <div class="grid grid-cols-1 md:grid-cols-5 items-stretch">
-            <!-- Image Column -->
-            <div class="md:col-span-2 bg-cover bg-center min-h-[60vh] md:min-h-0" style="background-image: url('https://res.cloudinary.com/drrhn6t1c/image/upload/v1756836896/minisesion-j_b-25_mss2ee.jpg');">
-            </div>
-    
-            <!-- Text Column -->
-            <div class="md:col-span-3 flex items-center p-12 sm:p-16 md:p-24 bg-primary">
-                <div class="w-full">
-                    <h2 class="text-4xl mb-8">Más información</h2>
-                    <div class="space-y-4 font-subtitle text-gray-700">
-                        <p><strong>Impresiones y extras:</strong> Se pueden incluir servicios como fotos impresas, álbumes o cuadros. Estos se cotizan por separado.</p>
-                        <p><strong>Locación:</strong> El lugar para la sesión en exterior lo eligen ustedes o podemos sugerirles algunos sitios increíbles.</p>
-                        <p><strong>Fotos adicionales:</strong> Si desean más fotos editadas de las que incluye su plan, cada una tiene un costo de $120 MXN.</p>
-                        <p><strong>Reservación:</strong> Apartamos su fecha con un anticipo del 30%, el cual no es reembolsable.</p>
-                        <p><strong>Pago final:</strong> El 70% restante debe cubrirse al finalizar la sesión.</p>
-                        <p><strong>Viáticos:</strong> El precio de los paquetes aplica para sesiones dentro de Tijuana y Rosarito. Sesiones en otras ciudades pueden generar un costo adicional por viáticos.</p>
-                        <p><strong>Cambios:</strong> Tienen una oportunidad para solicitar cambios o ajustes en el material final que les entregamos.</p>
-                        <p><strong>Tiempos de entrega:</strong> Su galería digital estará lista en un plazo de 5 a 7 días hábiles después de la sesión.</p>
-                        <p class="pt-4 text-sm text-gray-500 italic">*Esta cotización es válida por 5 días a partir de su envío.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <!-- Footer / Contact Section -->
-    <footer id="contacto" class="bg-secondary text-white py-16">
-        <div class="container mx-auto px-6 text-center">
-            <h2 class="text-4xl mb-4">Te vas a ver bien, porque te vas a sentir bien</h2>
-            <p class="max-w-xl mx-auto mb-8 font-subtitle">¿Listos para su sesión?</p>
-            <a href="https://wa.me/5216643372791?text=Hola,%20me%20gustaría%20reservar%20una%20sesión%20Save%20the%20Date." target="_blank" class="bg-terciary hover:bg-terciary-dark text-white font-bold py-4 px-10 rounded-lg text-xl transition duration-300 inline-block mb-12 uppercase">
-                RESERVAR MI SESION SAVE THE DATE
-            </a>
-            <p class="mt-10 text-gray-400 text-sm">&copy; 2025 Finite Estudio. Todos los derechos reservados.</p>
-        </div>
-    </footer>
-
-    <!-- Lightbox Modal -->
-    <div id="lightbox" class="lightbox">
-        <span id="lightbox-close" class="lightbox-close">&times;</span>
-        <span id="lightbox-prev" class="lightbox-nav lightbox-prev">&#10094;</span>
-        <img id="lightbox-image" class="lightbox-content" src="" alt="Vista ampliada de la foto de la galería">
-        <span id="lightbox-next" class="lightbox-nav lightbox-next">&#10095;</span>
-    </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-             // Plan cards functionality
-            const planCards = document.querySelectorAll('.plan-card');
-            planCards.forEach(card => {
-                card.addEventListener('click', () => {
-                    card.querySelector('.plan-card-inner').classList.toggle('is-flipped');
-                });
-            });
-
-            // Lightbox functionality
-            const galleryItems = document.querySelectorAll('.gallery-item');
-            const lightbox = document.getElementById('lightbox');
-            const lightboxImage = document.getElementById('lightbox-image');
-            const lightboxClose = document.getElementById('lightbox-close');
-            const lightboxPrev = document.getElementById('lightbox-prev');
-            const lightboxNext = document.getElementById('lightbox-next');
-            const imageSources = Array.from(galleryItems).map(item => item.src);
-            let currentIndex = 0;
-
-            function showLightbox(index) {
-                currentIndex = index;
-                lightboxImage.src = imageSources[currentIndex];
-                lightbox.style.display = 'flex';
-            }
-
-            function hideLightbox() {
-                lightbox.style.display = 'none';
-            }
-
-            function showNextImage() {
-                const nextIndex = (currentIndex + 1) % imageSources.length;
-                showLightbox(nextIndex);
-            }
-
-            function showPrevImage() {
-                const prevIndex = (currentIndex - 1 + imageSources.length) % imageSources.length;
-                showLightbox(prevIndex);
-            }
-
-            galleryItems.forEach((item, index) => {
-                item.addEventListener('click', () => {
-                    showLightbox(index);
-                });
-            });
-
-            lightboxClose.addEventListener('click', hideLightbox);
-            lightbox.addEventListener('click', (e) => {
-                if (e.target === lightbox) {
-                    hideLightbox();
-                }
-            });
-            lightboxPrev.addEventListener('click', showPrevImage);
-            lightboxNext.addEventListener('click', showNextImage);
-            
-            document.addEventListener('keydown', (e) => {
-                if (lightbox.style.display === 'flex') {
-                    if (e.key === 'ArrowRight') {
-                        showNextImage();
-                    } else if (e.key === 'ArrowLeft') {
-                        showPrevImage();
-                    } else if (e.key === 'Escape') {
-                        hideLightbox();
-                    }
-                }
-            });
-        });
-    </script>
-</body>
-</html>
-
-
-
+<div class="relative z-10">
+<h2 class="text-5xl lg:text-9xl font-black mb-8 tracking-tighter">¿DENTRO O FUERA?</h2>
+<button class="bg-black text-primary px-12 py-6 rounded-lg font-black text-2xl uppercase tracking-tighter hover:bg-white hover:text-black transition-all shadow-2xl scale-110">
+                ¡Hagamos mierda a tu competencia!
+            </button>
+<p class="mt-10 font-bold uppercase text-sm tracking-widest">Últimos cupos disponibles para el trimestre actual.</p>
+</div>
+</section>
+<!-- Footer -->
+<footer class="bg-background-dark py-12 px-6 lg:px-20 border-t border-white/5">
+<div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+<div class="flex items-center gap-3">
+<img alt="Marketographers Logo" class="h-8 w-auto" src="{{DATA:IMAGE:IMAGE_2}}"/>
+<span class="font-display font-black text-lg uppercase tracking-tighter">Marketographers</span>
+</div>
+<p class="text-white/40 text-sm">© 2024 Pablo Villarroel. No apto para gente con piel de cristal.</p>
+<div class="flex gap-6">
+<a class="hover:text-primary transition-colors uppercase text-xs font-bold tracking-widest" href="#">Instagram</a>
+<a class="hover:text-primary transition-colors uppercase text-xs font-bold tracking-widest" href="#">YouTube</a>
+<a class="hover:text-primary transition-colors uppercase text-xs font-bold tracking-widest" href="#">Twitter (X)</a>
+</div>
+</div>
+</footer>
+<style>body {
+    font-family: "Space Grotesk", sans-serif;
+    background-color: #000000;
+    color: white
+    }
+.text-stroke {
+    -webkit-text-stroke: 1px #f9f906;
+    color: transparent
+    }
+.gritty-overlay {
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuDhvMXldimFG6tzrFXSFO3l8k3hahYOGEoCTut3vtroO-dPpj_q3JdcjdxoiBquHElTTQgLNaY6ISD1L8wLYatdyckQCLiVUhS_HlV1IGOyEAO9-tNOlxlnw94WAqmmua881yoZ1ojQg_PAprhii1V_BKiusoMIao2bAMqi9Bz0Ypqr5uOfpFArDnIctBhvuJbcXzfnJcIIl1ACDMaPUAVr3jvEI-ePbY4OLp5cggu8TujqTtAlG-3POKctqheuUbIqXIWWv4kR314);
+    opacity: 0.05;
+    pointer-events: none
+    }
+* {
+    font-style: normal !important;
+}
+.tracking-tighter {
+    letter-spacing: -0.05em;
+}</style>
+</body></html>
