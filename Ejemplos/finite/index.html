@@ -1,323 +1,215 @@
 <!DOCTYPE html>
-
-<html class="dark" lang="es"><head>
+<html class="dark" lang="es">
+<head>
 <meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Marketing para Fotógrafos | Hagamos mierda a tu competencia</title>
+
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        "primary": "#f9f906",
-                        "background-light": "#f8f8f5",
-                        "background-dark": "#000000",
-                    },
-                    fontFamily: {
-                        "display": ["Space Grotesk", "sans-serif"]
-                    },
-                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
-                },
-            },
-        }
-    </script>
-<style>body {
-    font-family: "Space Grotesk", sans-serif;
-    background-color: #23230f;
-    color: white
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+
+<script>
+tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        primary: "#f9f906",
+        "background-light": "#f8f8f5",
+        "background-dark": "#000000",
+      },
+      fontFamily: {
+        display: ["Poppins", "sans-serif"]
+      }
     }
-.text-stroke {
-    -webkit-text-stroke: 1px #f9f906;
-    color: transparent
-    }
-.gritty-overlay {
-    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuDhvMXldimFG6tzrFXSFO3l8k3hahYOGEoCTut3vtroO-dPpj_q3JdcjdxoiBquHElTTQgLNaY6ISD1L8wLYatdyckQCLiVUhS_HlV1IGOyEAO9-tNOlxlnw94WAqmmua881yoZ1ojQg_PAprhii1V_BKiusoMIao2bAMqi9Bz0Ypqr5uOfpFArDnIctBhvuJbcXzfnJcIIl1ACDMaPUAVr3jvEI-ePbY4OLp5cggu8TujqTtAlG-3POKctqheuUbIqXIWWv4kR314);
-    opacity: 0.05;
-    pointer-events: none
-    }</style>
+  }
+}
+</script>
+
+<style>
+body{
+  font-family:'Poppins',sans-serif;
+  background:#000;
+  color:white;
+  letter-spacing:-0.01em;
+}
+
+.text-stroke{
+  -webkit-text-stroke:1px #f9f906;
+  color:transparent;
+}
+
+.carousel-slide{
+  display:none;
+}
+.carousel-slide.active{
+  display:block;
+}
+
+@keyframes spin-slow{
+  from{transform:rotate(0deg);}
+  to{transform:rotate(360deg);}
+}
+.animate-spin-slow{
+  animation:spin-slow 15s linear infinite;
+}
+</style>
 </head>
-<body class="bg-background-light dark:bg-background-dark text-white selection:bg-primary selection:text-black overflow-x-hidden">
-<div class="gritty-overlay fixed inset-0 z-50"></div>
-<!-- Navigation -->
-<nav class="sticky top-0 z-[100] border-b border-primary/20 bg-background-dark/80 backdrop-blur-md px-6 lg:px-20 py-4">
+
+<body class="overflow-x-hidden">
+
+<!-- NAV -->
+<nav class="sticky top-0 z-50 border-b border-primary/20 bg-black/80 backdrop-blur-md px-6 lg:px-20 py-4">
 <div class="max-w-7xl mx-auto flex items-center justify-between">
+
 <div class="flex items-center gap-3">
-<span class="material-symbols-outlined text-primary text-3xl">photo_camera</span>
-<span class="font-display font-black text-xl uppercase tracking-tighter">Marketógrafos</span>
+<img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1755314903/Marketographers_Blanco_S_F_p1toov.png" class="h-8"/>
+<span class="font-black text-lg uppercase">Marrketographers</span>
 </div>
-<div class="hidden md:flex items-center gap-8 font-medium text-sm uppercase tracking-widest">
-<a class="hover:text-primary transition-colors" href="#metodo">El Método</a>
-<a class="hover:text-primary transition-colors" href="#comunidad">Comunidad</a>
-<a class="hover:text-primary transition-colors" href="#faq">FAQ</a>
+
+<div class="hidden md:flex gap-8 text-xs uppercase font-semibold">
+<a href="#metodo" class="hover:text-primary">El Método</a>
+<a href="#faq" class="hover:text-primary">FAQ</a>
 </div>
-<button class="bg-primary text-black px-6 py-2 rounded font-black uppercase text-sm hover:scale-105 transition-transform">
-                Entra hoy
-            </button>
+
+<a href="https://nas.io/marketographers" target="_blank"
+class="bg-primary text-black px-5 py-2 text-xs font-black uppercase rounded">
+Entrar
+</a>
+
 </div>
 </nav>
-<!-- Hero Section -->
-<section class="relative min-h-[90vh] flex items-center justify-center px-6 lg:px-20 py-20 overflow-hidden">
-<div class="absolute inset-0 z-0">
-<div class="absolute inset-0 bg-gradient-to-t from-background-dark via-background-dark/80 to-transparent"></div>
-<img alt="Professional camera on dark background" class="w-full h-full object-cover opacity-30 grayscale" data-alt="Professional camera gear on dark surface" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBqoBOwCcfXntnPXlxoTtgftkzJr_Ifwq7vajdJuS3o8WuxxRkfGTDveqrDcauIi_QPziKEiJ2_an9iwz8R62Ja1v3tC6e8ZH4V2iiXxD9D-f0v32ZdVVA5R5VabxqYZMPo8FwU7qktOnFS1t8K8pJmxoOu_ElsWnxvrG1OfK9ckuqKl6ob5R48tQZMTR2miIsHmMHLkNhpSZ31fBm6NljdBO1DcdxX_S8uVX4X_AUg6Vq7UjHBvOTROwLx5lo1GeOHwkqHJy4UHPY"/>
-</div>
-<div class="relative z-10 max-w-5xl text-center">
-<span class="bg-primary text-black px-3 py-1 text-xs font-black uppercase tracking-widest mb-6 inline-block">Advertencia: Realidad sin filtro</span>
-<h1 class="text-5xl lg:text-8xl font-black leading-[0.9] tracking-tighter mb-8 italic">
-                TU CLIENTE IDEAL ESTÁ TRABAJANDO CON <span class="text-primary">OTRO FOTÓGRAFO</span> QUE SÍ SABE DE MARKETING.
-            </h1>
-<p class="text-xl lg:text-2xl text-white/80 max-w-2xl mx-auto mb-10 font-light">
-                ¿Vas a seguir viviendo del 'boca a boca' o te vas a poner los pantalones con tu negocio?
-            </p>
-<div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-<button class="w-full sm:w-auto bg-primary text-black px-10 py-5 rounded-lg font-black text-xl uppercase tracking-tight hover:bg-white transition-colors flex items-center justify-center gap-2 group">
-                    ¡Hagamos mierda a tu competencia!
-                    <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">trending_up</span>
-</button>
-</div>
-</div>
-</section>
-<!-- Stats Marquee -->
-<div class="bg-primary py-4 overflow-hidden border-y-4 border-black">
-<div class="flex whitespace-nowrap gap-20 items-center justify-center animate-pulse">
-<span class="text-black font-black uppercase text-2xl">+500 FOTÓGRAFOS</span>
-<span class="text-black font-black uppercase text-2xl">+17 PAÍSES</span>
-<span class="text-black font-black uppercase text-2xl">100% HONESTIDAD</span>
-<span class="text-black font-black uppercase text-2xl">+500 FOTÓGRAFOS</span>
-<span class="text-black font-black uppercase text-2xl">+17 PAÍSES</span>
-</div>
-</div>
-<!-- The 3 Options -->
-<section class="py-24 px-6 lg:px-20 bg-background-dark">
-<div class="max-w-7xl mx-auto">
-<h2 class="text-4xl lg:text-6xl font-black mb-16 text-center tracking-tighter uppercase">ELIGE TU <span class="text-stroke">VENENO</span></h2>
-<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-<!-- Option 1 -->
-<div class="group relative bg-white/5 border border-white/10 p-8 rounded-xl hover:border-primary/50 transition-all flex flex-col justify-between">
-<div>
-<div class="text-primary mb-6"><span class="material-symbols-outlined text-5xl">event_available</span></div>
-<h3 class="text-2xl font-bold mb-2">Admisiones</h3>
-<p class="text-white/60 mb-6 italic">15 min Zoom de diagnóstico rápido.</p>
-<ul class="space-y-4 text-sm font-medium mb-8">
-<li class="flex items-center gap-2"><span class="material-symbols-outlined text-primary text-lg">check_circle</span> Filtro de perfil</li>
-<li class="flex items-center gap-2"><span class="material-symbols-outlined text-primary text-lg">check_circle</span> Diagnóstico brutal</li>
-<li class="flex items-center gap-2"><span class="material-symbols-outlined text-primary text-lg">check_circle</span> Cupos limitados</li>
-</ul>
-</div>
-<button class="w-full py-4 border-2 border-primary text-primary font-black uppercase hover:bg-primary hover:text-black transition-all">Agendar Llamada</button>
-</div>
-<!-- Option 2 (Featured) -->
-<div class="relative bg-primary p-8 rounded-xl flex flex-col justify-between transform md:scale-110 z-10 shadow-2xl">
-<div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-black text-primary px-4 py-1 text-xs font-black uppercase">RECOMENDADO</div>
-<div>
-<div class="text-black mb-6"><span class="material-symbols-outlined text-5xl">groups_3</span></div>
-<h3 class="text-2xl text-black font-black mb-2 italic">COMUNIDAD HOY</h3>
-<p class="text-black/70 mb-6 font-bold uppercase tracking-tighter">Lanzarse como gorda en tobogán</p>
-<ul class="space-y-4 text-sm font-bold text-black mb-8">
-<li class="flex items-center gap-2"><span class="material-symbols-outlined text-lg">bolt</span> Clases en vivo semanales</li>
-<li class="flex items-center gap-2"><span class="material-symbols-outlined text-lg">bolt</span> Grupo de WhatsApp 24/7</li>
-<li class="flex items-center gap-2"><span class="material-symbols-outlined text-lg">bolt</span> Acceso inmediato</li>
-</ul>
-</div>
-<button class="w-full py-4 bg-black text-primary font-black uppercase hover:bg-white hover:text-black transition-all shadow-xl">¡ENTRAR YA!</button>
-</div>
-<!-- Option 3 -->
-<div class="group relative bg-white/5 border border-white/10 p-8 rounded-xl opacity-50 grayscale hover:grayscale-0 transition-all flex flex-col justify-between">
-<div>
-<div class="text-white/30 mb-6"><span class="material-symbols-outlined text-5xl">sentiment_very_dissatisfied</span></div>
-<h3 class="text-2xl font-bold mb-2">No hagas ni mierda</h3>
-<p class="text-white/40 mb-6 italic">Stay in your comfort zone.</p>
-<ul class="space-y-4 text-sm text-white/40 mb-8">
-<li class="flex items-center gap-2"><span class="material-symbols-outlined text-lg">block</span> Cero crecimiento</li>
-<li class="flex items-center gap-2"><span class="material-symbols-outlined text-lg">block</span> Quejas diarias</li>
-<li class="flex items-center gap-2"><span class="material-symbols-outlined text-lg">block</span> Mismo ingreso de siempre</li>
-</ul>
-</div>
-<button class="w-full py-4 border-2 border-white/20 text-white/40 font-black uppercase cursor-not-allowed">Seguir Igual</button>
-</div>
-</div>
+
+<!-- HERO -->
+<section class="min-h-[85vh] flex items-center justify-center text-center px-6">
+<div class="max-w-4xl">
+
+<h1 class="text-4xl lg:text-6xl font-extrabold leading-tight mb-6">
+TU CLIENTE IDEAL ESTÁ TRABAJANDO CON 
+<span class="text-primary">OTRO FOTÓGRAFO</span>
+</h1>
+
+<p class="text-base text-white/70 mb-8">
+¿Vas a seguir viviendo del boca a boca?
+</p>
+
+<a href="https://cal.com/themarketographer/reunion" target="_blank"
+class="bg-primary text-black px-8 py-4 font-black text-sm uppercase rounded">
+Agendar llamada
+</a>
+
 </div>
 </section>
-<!-- Value Prop -->
-<section class="py-24 px-6 lg:px-20 border-t border-white/10" id="metodo">
-<div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-<div>
-<h2 class="text-4xl lg:text-6xl font-black mb-8 tracking-tighter italic uppercase">ESTO NO ES UN CURSO DE <span class="text-primary italic">HOTMART</span> DE MIERDA</h2>
-<p class="text-xl text-white/70 mb-12">Aquí venimos a trabajar de verdad, con gente real y resultados que duelen de lo buenos que son.</p>
-<div class="space-y-8">
-<div class="flex gap-6 group">
-<div class="bg-primary/20 p-4 h-fit rounded group-hover:bg-primary transition-colors group-hover:text-black">
-<span class="material-symbols-outlined text-4xl">live_tv</span>
+
+<!-- CARRUSEL HOTMART -->
+<section id="metodo" class="py-20 px-6 border-t border-white/10">
+
+<div class="max-w-4xl mx-auto relative">
+
+<div class="carousel-slide active text-center">
+<h2 class="text-3xl font-extrabold mb-4 uppercase">
+ESTO NO ES UN CURSO DE <span class="text-primary">HOTMART</span>
+</h2>
+<p class="text-sm text-white/60">
+Aquí venimos a trabajar con sesiones en vivo y comunidad real.
+</p>
 </div>
-<div>
-<h4 class="text-xl font-bold mb-2">Clases en Vivo</h4>
-<p class="text-white/60">Nada de videos grabados de hace 3 años. Interacción pura y dura para resolver tus dudas en el momento.</p>
+
+<div class="carousel-slide text-center">
+<h2 class="text-3xl font-extrabold mb-4 uppercase">
+ESTO NO ES UN CURSO DE <span class="text-primary">HOTMART</span>
+</h2>
+<p class="text-sm text-white/60">
+Aquí venimos a trabajar con sesiones en vivo y comunidad real.
+</p>
 </div>
+
+<div class="carousel-slide text-center">
+<h2 class="text-3xl font-extrabold mb-4 uppercase">
+ESTO NO ES UN CURSO DE <span class="text-primary">HOTMART</span>
+</h2>
+<p class="text-sm text-white/60">
+Aquí venimos a trabajar con sesiones en vivo y comunidad real.
+</p>
 </div>
-<div class="flex gap-6 group">
-<div class="bg-primary/20 p-4 h-fit rounded group-hover:bg-primary transition-colors group-hover:text-black">
-<span class="material-symbols-outlined text-4xl">inventory_2</span>
-</div>
-<div>
-<h4 class="text-xl font-bold mb-2">Recursos Reales</h4>
-<p class="text-white/60">Plantillas, desafíos y mentorías 1-on-1 que sí mueven la aguja de tu facturación.</p>
-</div>
-</div>
-<div class="flex gap-6 group">
-<div class="bg-primary/20 p-4 h-fit rounded group-hover:bg-primary transition-colors group-hover:text-black">
-<span class="material-symbols-outlined text-4xl">forum</span>
-</div>
-<div>
-<h4 class="text-xl font-bold mb-2">La Bola de Locos</h4>
-<p class="text-white/60">Un grupo de WhatsApp 24/7 donde nos empujamos a ser mejores cada puto día.</p>
-</div>
-</div>
-</div>
-</div>
-<div class="relative">
-<div class="absolute -inset-4 border-2 border-primary/30 rounded-lg"></div>
-<img alt="Photographer editing photos" class="relative z-10 w-full rounded-lg grayscale hover:grayscale-0 transition-all duration-700" data-alt="Photographer at a desk working on laptop" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBo5lbrjQGiLEBwSvjORXxSdP6vtE8oICLGvNGYSEL9pmjvxQKLjtcHxNU5c2TPprC-jwPvKdb5DCZM9hmAkU03nPzNgKngmi-p0l6N0LIZxzAAdnU5h7TF1ro-zTMkR-ESmvpNkA4bjFZSq9ykU1bUUgDdtQQbG97B5IKyd-QYuGKpXwobYjoZo-qZ4sp3QJb1yQvuZO9WK04-ymsLJ_yDzana6yf8phSPNqWFdfH5feXxoU78YEIGby1BkjR3naYuIYd_ZpaKxrk"/>
-<div class="absolute -bottom-10 -right-10 bg-primary text-black p-8 rounded z-20 hidden lg:block">
-<p class="font-black text-4xl tracking-tighter italic">"HAZLO AHORA"</p>
-</div>
-</div>
+
 </div>
 </section>
-<!-- Social Proof -->
-<section class="py-24 px-6 lg:px-20 bg-white/5">
-<div class="max-w-7xl mx-auto">
-<div class="text-center mb-16">
-<h2 class="text-4xl lg:text-6xl font-black mb-4 tracking-tighter uppercase italic">MARKETÓGRAFOS QUE YA APLICARON</h2>
-<div class="h-1 w-24 bg-primary mx-auto"></div>
+
+<!-- MENTOR -->
+<section class="py-20 px-6">
+<div class="max-w-6xl mx-auto flex flex-col lg:flex-row items-center gap-12">
+
+<div class="w-72 relative">
+<div class="absolute inset-0 border-4 border-dashed border-primary/30 rounded-full animate-spin-slow opacity-30"></div>
+<img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1756354892/v3_1_1_p3ne1x.png"
+class="rounded-full border-4 border-primary relative z-10"/>
 </div>
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-<div class="bg-background-dark p-8 border border-white/10 rounded-lg">
-<p class="text-lg italic mb-6">"Pasé de cobrar 200 USD a 1500 USD por sesión. Pablo no tiene pelos en la lengua y eso es lo que necesitaba."</p>
-<div class="flex items-center gap-4">
-<div class="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center text-primary font-bold">JD</div>
-<div>
-<p class="font-bold">Juan Delgado</p>
-<p class="text-xs text-white/50">Fotógrafo de Bodas</p>
+
+<div class="max-w-xl">
+<h2 class="text-4xl font-extrabold mb-4 uppercase">
+Pablo Villarroel
+</h2>
+<p class="text-sm text-white/70">
+Especialista en Storytelling y ventas para fotógrafos.
+</p>
 </div>
-</div>
-</div>
-<div class="bg-background-dark p-8 border border-white/10 rounded-lg lg:mt-8">
-<p class="text-lg italic mb-6">"La comunidad vale cada maldito centavo. Es como tener un ejército de colegas apoyándote 24/7."</p>
-<div class="flex items-center gap-4">
-<div class="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center text-primary font-bold">ML</div>
-<div>
-<p class="font-bold">Maria Lopez</p>
-<p class="text-xs text-white/50">Retratista</p>
-</div>
-</div>
-</div>
-<div class="bg-background-dark p-8 border border-white/10 rounded-lg lg:mt-16">
-<p class="text-lg italic mb-6">"Si buscas alguien que te acaricie la espalda, vete a otro lado. Aquí vienes a facturar o a irte a casa."</p>
-<div class="flex items-center gap-4">
-<div class="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center text-primary font-bold">CR</div>
-<div>
-<p class="font-bold">Carlos Ruiz</p>
-<p class="text-xs text-white/50">Producto &amp; Publicidad</p>
-</div>
-</div>
-</div>
-</div>
+
 </div>
 </section>
-<!-- The Mentor -->
-<section class="py-24 px-6 lg:px-20">
-<div class="max-w-7xl mx-auto flex flex-col lg:flex-row gap-16 items-center">
-<div class="w-full lg:w-1/2 relative">
-<div class="aspect-square bg-primary/10 border-4 border-dashed border-primary/40 rounded-full absolute inset-0 animate-spin-slow opacity-20"></div>
-<img alt="Pablo Villarroel Portrait" class="w-full aspect-square object-cover rounded-full grayscale border-8 border-primary relative z-10" data-alt="Close up portrait of a man with intense look" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJGTn7PEo2hjAdQ8yOrq6UazkZ1m0eeGPTnLOKGo-nTRO8oL-Ytyk9yC5uAJpW0VS5swL6kDT5JKlPBEqmOZCWef-bBU43R8m43TViu-94ffr9xsyccCms2-a-7scSDGW_2LZDQpfpM1G2L-iWJSfQXS7XlI5K3og1t13fwOoJyZGWcZHnDpTCpwOdK8TGF6iEXlSwmyJzweb370599U2Z032QH_3flu0IWRna7K69UV8MrfZpFsYr5M_-Qq78y1b4megrm9z_csA"/>
-</div>
-<div class="w-full lg:w-1/2">
-<span class="text-primary font-black uppercase text-sm tracking-widest mb-4 inline-block">Tu mentor (el demacrado)</span>
-<h2 class="text-5xl lg:text-7xl font-black mb-6 tracking-tighter italic">PABLO <br/>VILLARROEL</h2>
-<div class="space-y-4 text-xl text-white/80">
-<p>Especialista en Storytelling y Persuasión. He generado más de <span class="text-primary font-bold">+100k USD</span> con mi negocio de fotografía y formación.</p>
-<p class="border-l-4 border-primary pl-6 italic font-light">"Sí, tengo ojeras. Sí, estoy demacrado. Es el precio de trabajar mientras mi competencia duerme soñando con likes de Instagram."</p>
-<p>No te voy a enseñar a usar Photoshop. Te voy a enseñar a que tu cliente te quiera pagar lo que vales sin pedir rebaja.</p>
-</div>
-</div>
+
+<!-- FAQ -->
+<section id="faq" class="py-20 px-6 border-t border-white/10">
+<div class="max-w-3xl mx-auto text-center">
+<h2 class="text-3xl font-extrabold mb-10 uppercase">
+Preguntas Incómodas
+</h2>
 </div>
 </section>
-<!-- FAQ Section -->
-<section class="py-24 px-6 lg:px-20 bg-background-dark/50" id="faq">
-<div class="max-w-3xl mx-auto">
-<h2 class="text-4xl lg:text-6xl font-black mb-16 text-center tracking-tighter italic">PREGUNTAS <span class="text-stroke">INCÓMODAS</span></h2>
-<div class="space-y-6">
-<details class="group border-b border-white/10 pb-6">
-<summary class="flex items-center justify-between cursor-pointer list-none font-bold text-xl uppercase tracking-tighter">
-                        ¿HAY DEVOLUCIONES SI NO ME GUSTA?
-                        <span class="material-symbols-outlined text-primary group-open:rotate-180 transition-transform">expand_more</span>
-</summary>
-<p class="mt-4 text-white/60">No. Si entras con miedo a perder tu dinero, ya perdiste. Esto es para gente comprometida. Entra, aplica y factura. Si quieres garantías de algodón, vete a Disney.</p>
-</details>
-<details class="group border-b border-white/10 pb-6">
-<summary class="flex items-center justify-between cursor-pointer list-none font-bold text-xl uppercase tracking-tighter">
-                        ¿POR QUÉ DICES TANTAS GROSERÍAS?
-                        <span class="material-symbols-outlined text-primary group-open:rotate-180 transition-transform">expand_more</span>
-</summary>
-<p class="mt-4 text-white/60">Porque el mundo real no tiene subtítulos aptos para todo público. Si te ofende una palabra, imagínate cuando veas tu cuenta bancaria en cero a final de mes.</p>
-</details>
-<details class="group border-b border-white/10 pb-6">
-<summary class="flex items-center justify-between cursor-pointer list-none font-bold text-xl uppercase tracking-tighter">
-                        ¿PUEDO CANCELAR MI SUSCRIPCIÓN?
-                        <span class="material-symbols-outlined text-primary group-open:rotate-180 transition-transform">expand_more</span>
-</summary>
-<p class="mt-4 text-white/60">Sí, cuando quieras. No amarramos a nadie. Pero dudo que quieras irte una vez que veas lo que la "bola de locos" está logrando.</p>
-</details>
-<details class="group border-b border-white/10 pb-6">
-<summary class="flex items-center justify-between cursor-pointer list-none font-bold text-xl uppercase tracking-tighter">
-                        ¿TENGO QUE SER FOTÓGRAFO PROFESIONAL?
-                        <span class="material-symbols-outlined text-primary group-open:rotate-180 transition-transform">expand_more</span>
-</summary>
-<p class="mt-4 text-white/60">Tienes que querer vivir de esto. Si eres hobbyista y no quieres ganar dinero, este lugar te va a parecer un manicomio.</p>
-</details>
-</div>
-</div>
+
+<!-- CTA -->
+<section class="py-20 bg-primary text-black text-center">
+<h2 class="text-4xl font-extrabold mb-6 uppercase">
+¿Dentro o fuera?
+</h2>
+<a href="https://nas.io/marketographers" target="_blank"
+class="bg-black text-primary px-10 py-4 text-sm font-black uppercase rounded">
+Entrar ahora
+</a>
 </section>
-<!-- Final CTA -->
-<section class="py-24 px-6 lg:px-20 bg-primary text-black text-center relative overflow-hidden">
-<div class="absolute inset-0 opacity-10 flex flex-wrap gap-10 font-black text-9xl pointer-events-none select-none italic whitespace-nowrap leading-none items-center justify-center">
-            HAGAMOS MIERDA HAGAMOS MIERDA HAGAMOS MIERDA
-        </div>
-<div class="relative z-10">
-<h2 class="text-5xl lg:text-9xl font-black mb-8 tracking-tighter italic">¿DENTRO O FUERA?</h2>
-<button class="bg-black text-primary px-12 py-6 rounded-lg font-black text-2xl uppercase tracking-tighter hover:bg-white hover:text-black transition-all shadow-2xl scale-110">
-                ¡Hagamos mierda a tu competencia!
-            </button>
-<p class="mt-10 font-bold uppercase text-sm tracking-widest">Últimos cupos disponibles para el trimestre actual.</p>
-</div>
-</section>
-<!-- Footer -->
-<footer class="bg-background-dark py-12 px-6 lg:px-20 border-t border-white/5">
-<div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+
+<!-- FOOTER -->
+<footer class="py-10 px-6 border-t border-white/10">
+<div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+
 <div class="flex items-center gap-3">
-<span class="material-symbols-outlined text-primary text-2xl">photo_camera</span>
-<span class="font-display font-black text-lg uppercase tracking-tighter">Marketógrafos</span>
+<img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1755314903/Marketographers_Blanco_S_F_p1toov.png" class="h-6"/>
+<span class="text-sm uppercase font-bold">Marrketographers</span>
 </div>
-<p class="text-white/40 text-sm">© 2024 Pablo Villarroel. No apto para gente con piel de cristal.</p>
-<div class="flex gap-6">
-<a class="hover:text-primary transition-colors uppercase text-xs font-bold tracking-widest" href="#">Instagram</a>
-<a class="hover:text-primary transition-colors uppercase text-xs font-bold tracking-widest" href="#">YouTube</a>
-<a class="hover:text-primary transition-colors uppercase text-xs font-bold tracking-widest" href="#">Twitter (X)</a>
-</div>
+
+<p class="text-xs text-white/40">
+© 2026 Pablo Villarroel
+</p>
+
+<a href="https://www.instagram.com/themarketographer" target="_blank"
+class="text-xs uppercase font-bold hover:text-primary">
+Instagram
+</a>
+
 </div>
 </footer>
-<style>
-        @keyframes spin-slow {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-        .animate-spin-slow {
-            animation: spin-slow 15s linear infinite;
-        }
-    </style>
-</body></html>
+
+<script>
+let slides=document.querySelectorAll(".carousel-slide");
+let index=0;
+
+setInterval(()=>{
+slides[index].classList.remove("active");
+index=(index+1)%slides.length;
+slides[index].classList.add("active");
+},4000);
+</script>
+
+</body>
+</html>
