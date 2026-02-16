@@ -280,13 +280,17 @@
   <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
  </head>
  <body class="h-full overflow-auto">
-  <div id="app-wrapper" class="w-full min-h-full noise-bg relative"><!-- Header -->
+  <div id="app-wrapper" class="w-full min-h-full noise-bg relative">
+   <!-- Header -->
    <header id="header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500">
     <div class="max-w-7xl mx-auto px-6 py-4">
-     <nav class="flex items-center justify-between"><a href="#" class="flex items-center gap-3"> <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1755314903/Marketographers_Blanco_S_F_p1toov.png" alt="Marketographers" class="h-8 w-auto"> </a>
-      <div class="hidden md:flex items-center gap-8"><a href="#problema" class="text-sm text-zinc-400 hover:text-white transition-colors">Problema</a> <a href="#proceso" class="text-sm text-zinc-400 hover:text-white transition-colors">Proceso</a> <a href="#planes" class="text-sm text-zinc-400 hover:text-white transition-colors">Planes</a> <a href="#testimonios" class="text-sm text-zinc-400 hover:text-white transition-colors">Testimonios</a>
+     <nav class="flex items-center justify-between">
+      <a href="#" class="flex items-center gap-3"> <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1755314903/Marketographers_Blanco_S_F_p1toov.png" alt="Marketographers" class="h-8 w-auto"> </a>
+      <div class="hidden md:flex items-center gap-8">
+       <a href="#problema" class="text-sm text-zinc-400 hover:text-white transition-colors">Problema</a> <a href="#proceso" class="text-sm text-zinc-400 hover:text-white transition-colors">Proceso</a> <a href="#planes" class="text-sm text-zinc-400 hover:text-white transition-colors">Planes</a> <a href="#testimonios" class="text-sm text-zinc-400 hover:text-white transition-colors">Testimonios</a>
       </div>
-      <div class="flex items-center gap-3"><a href="https://cal.com/themarketographer/reunion" target="_blank" rel="noopener noreferrer" class="btn-secondary text-xs py-2 px-4">Llamada</a> <a href="#planes" class="btn-primary text-xs py-2 px-4">Únete</a>
+      <div class="flex items-center gap-3">
+       <a href="https://cal.com/themarketographer/reunion" target="_blank" rel="noopener noreferrer" class="btn-secondary text-xs py-2 px-4">Llamada</a> <a href="#planes" class="btn-primary text-xs py-2 px-4">Únete</a>
       </div>
      </nav>
     </div>
@@ -295,11 +299,13 @@
     <div class="absolute top-1/4 left-10 w-72 h-72 bg-yellow-400/10 rounded-full blur-[100px] animate-float"></div>
     <div class="absolute bottom-1/4 right-10 w-96 h-96 bg-yellow-400/5 rounded-full blur-[120px] animate-float delay-300"></div>
     <div class="max-w-6xl mx-auto px-6 text-center relative z-10">
-     <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-yellow-400/30 bg-yellow-400/5 mb-6 animate-fade-in text-sm"><span class="w-2 h-2 rounded-full bg-yellow-400 animate-pulse"></span> <span class="text-yellow-400">Comunidad de Marketing para Fotógrafos</span>
+     <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-yellow-400/30 bg-yellow-400/5 mb-6 animate-fade-in text-sm">
+      <span class="w-2 h-2 rounded-full bg-yellow-400 animate-pulse"></span> <span class="text-yellow-400">Comunidad de Marketing para Fotógrafos</span>
      </div>
      <h1 id="hero-title" class="font-display text-3xl md:text-5xl lg:text-6xl font-bold leading-tight mb-4 animate-slide-up">Tu cliente ideal está trabajando con<br><span class="gradient-text text-glow">otro fotógrafo que sí sabe de marketing.</span></h1>
      <p id="hero-subtitle" class="text-lg md:text-xl text-zinc-400 max-w-3xl mx-auto mb-10 animate-slide-up delay-200">¿Vas a seguir viviendo del "boca a boca" o te vas a poner los pantalones con tu negocio?</p>
-     <div class="flex flex-col sm:flex-row items-center justify-center gap-4 animate-slide-up delay-300"><a href="#planes" id="cta-button" class="btn-primary text-base animate-pulse-glow">Únete a la comunidad</a>
+     <div class="flex flex-col sm:flex-row items-center justify-center gap-4 animate-slide-up delay-300">
+      <a href="#planes" id="cta-button" class="btn-primary text-base animate-pulse-glow">Únete a la comunidad</a>
      </div><!-- Stats -->
      <div class="grid grid-cols-3 gap-6 md:gap-12 mt-16 max-w-2xl mx-auto animate-slide-up delay-400 text-sm md:text-base">
       <div class="text-center">
@@ -328,7 +334,8 @@
       </div>
      </div><!-- Video Section -->
      <div class="mt-16 max-w-3xl mx-auto animate-slide-up delay-500">
-      <div class="relative rounded-2xl overflow-hidden border border-zinc-800 bg-zinc-900/50" style="padding-bottom: 56.25%;"><iframe id="hero-video" src="https://www.youtube.com/embed/-hzyPg-rIoA?si=BpvIEOAmAQAfI7X6" class="absolute top-0 left-0 w-full h-full" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen> </iframe>
+      <div class="relative rounded-2xl overflow-hidden border border-zinc-800 bg-zinc-900/50" style="padding-bottom: 56.25%;">
+       <iframe id="hero-video" src="https://www.youtube.com/embed/-hzyPg-rIoA?si=BpvIEOAmAQAfI7X6" class="absolute top-0 left-0 w-full h-full" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen> </iframe>
       </div>
      </div>
     </div>
@@ -341,14 +348,12 @@
      <div class="grid md:grid-cols-3 gap-6">
       <div class="card-hover rounded-2xl p-6 bg-gradient-to-b from-zinc-900 to-zinc-950 border border-zinc-800 reveal text-sm">
        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center mb-4 glow-subtle">
-        <svg class="w-6 h-6 text-black" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        <svg class="w-6 h-6 text-black" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
         </svg>
        </div>
        <h3 class="font-display text-lg font-bold mb-2">1. Agenda tu llamada</h3>
        <p class="text-zinc-400 text-sm mb-4">Si tienes dudas, consultas o preguntas. Nos vemos 15 minutos por Zoom.</p><a href="https://cal.com/themarketographer/reunion" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-yellow-400 font-medium hover:gap-4 transition-all text-sm">Agendar llamada 
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
         </svg></a>
       </div>
       <div class="card-hover rounded-2xl p-6 plan-featured reveal delay-100 text-sm">
@@ -356,20 +361,17 @@
         RECOMENDADO
        </div>
        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center mb-4 animate-pulse-glow">
-        <svg class="w-6 h-6 text-black" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+        <svg class="w-6 h-6 text-black" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
         </svg>
        </div>
        <h3 class="font-display text-lg font-bold mb-2">2. Entra a la comunidad</h3>
        <p class="text-zinc-400 mb-4">Si ya estás listo, ve los planes de membresía y elige el que mejor te quede.</p><a href="#planes" class="btn-primary inline-flex items-center gap-2 text-sm py-2 px-4">Ver planes 
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
         </svg></a>
       </div>
       <div class="card-hover rounded-2xl p-6 bg-gradient-to-b from-zinc-900 to-zinc-950 border border-zinc-800 reveal delay-200 text-sm">
        <div class="w-12 h-12 rounded-xl bg-zinc-800 flex items-center justify-center mb-4">
-        <svg class="w-6 h-6 text-zinc-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+        <svg class="w-6 h-6 text-zinc-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
         </svg>
        </div>
        <h3 class="font-display text-lg font-bold mb-2 text-zinc-500">3. No hagas nada</h3>
@@ -383,16 +385,14 @@
     <div class="max-w-6xl mx-auto px-6 relative z-10">
      <div class="grid lg:grid-cols-2 gap-12 items-center">
       <div class="reveal">
-       <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-red-400/30 bg-red-400/5 mb-4 text-sm">
-        <span class="text-red-400">El problema real</span>
+       <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-red-400/30 bg-red-400/5 mb-4 text-sm"><span class="text-red-400">El problema real</span>
        </div>
        <h2 class="font-display text-2xl md:text-4xl font-bold mb-4">El 90% de los fotógrafos <span class="text-red-400">fracasan</span> en sus primeros 3 años</h2>
        <p class="text-zinc-400 mb-6 text-sm leading-relaxed">No es porque sean malos fotógrafos. Es porque nadie les enseñó a vender, a posicionarse, a crear una marca que atraiga clientes premium.</p>
        <div class="space-y-3">
         <div class="flex items-start gap-3">
          <div class="w-7 h-7 rounded-lg bg-red-400/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-          <svg class="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          <svg class="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
           </svg>
          </div>
          <div>
@@ -402,8 +402,7 @@
         </div>
         <div class="flex items-start gap-3">
          <div class="w-7 h-7 rounded-lg bg-red-400/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-          <svg class="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          <svg class="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
           </svg>
          </div>
          <div>
@@ -413,8 +412,7 @@
         </div>
         <div class="flex items-start gap-3">
          <div class="w-7 h-7 rounded-lg bg-red-400/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-          <svg class="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          <svg class="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
           </svg>
          </div>
          <div>
@@ -464,21 +462,21 @@
     <div class="max-w-6xl mx-auto px-6">
      <div class="grid md:grid-cols-2 gap-8">
       <div class="reveal">
-       <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-yellow-400/30 bg-yellow-400/5 mb-4 text-xs">
-        <span class="text-yellow-400">Nuestras clases</span>
+       <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-yellow-400/30 bg-yellow-400/5 mb-4 text-xs"><span class="text-yellow-400">Nuestras clases</span>
        </div>
        <h3 class="font-display text-2xl md:text-3xl font-bold mb-3">Clases en vivo por Zoom</h3>
        <p class="text-zinc-400 text-sm mb-6">Nos vemos cada semana para resolver dudas y compartir estrategias que realmente funcionan.</p>
-       <div class="relative rounded-2xl overflow-hidden w-full aspect-square bg-gradient-to-br from-zinc-900 to-zinc-950 border border-zinc-800 flex items-center justify-center"><img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1771217256/Captura_clase_vzvoyr.jpg" alt="Clases en vivo" class="w-full h-full object-cover" loading="lazy" onerror="console.error('Image failed to load:', this.src); this.style.background='#18181b'; this.alt='Imagen no disponible';">
+       <div class="relative rounded-2xl overflow-hidden w-full aspect-square bg-gradient-to-br from-zinc-900 to-zinc-950 border border-zinc-800 flex items-center justify-center">
+        <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1771217256/Captura_clase_vzvoyr.jpg" alt="Clases en vivo" class="w-full h-full object-cover" loading="lazy" onerror="console.error('Image failed to load:', this.src); this.style.background='#18181b'; this.alt='Imagen no disponible';">
        </div>
       </div>
       <div class="reveal delay-100">
-       <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-yellow-400/30 bg-yellow-400/5 mb-4 text-xs">
-        <span class="text-yellow-400">Recursos</span>
+       <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-yellow-400/30 bg-yellow-400/5 mb-4 text-xs"><span class="text-yellow-400">Recursos</span>
        </div>
        <h3 class="font-display text-2xl md:text-3xl font-bold mb-3">Todos los cursos disponibles</h3>
        <p class="text-zinc-400 text-sm mb-6">Acceso a masterclasses, plantillas, libros y estrategias que funcionan en fotografía y marketing.</p>
-       <div class="relative rounded-2xl overflow-hidden w-full aspect-square bg-gradient-to-br from-zinc-900 to-zinc-950 border border-zinc-800 flex items-center justify-center"><img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1771217256/Incluye_todo_esto_penpvs.jpg" alt="Recursos y cursos" class="w-full h-full object-cover" loading="lazy" onerror="console.error('Image failed to load:', this.src); this.style.background='#18181b'; this.alt='Imagen no disponible';">
+       <div class="relative rounded-2xl overflow-hidden w-full aspect-square bg-gradient-to-br from-zinc-900 to-zinc-950 border border-zinc-800 flex items-center justify-center">
+        <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1771217256/Incluye_todo_esto_penpvs.jpg" alt="Recursos y cursos" class="w-full h-full object-cover" loading="lazy" onerror="console.error('Image failed to load:', this.src); this.style.background='#18181b'; this.alt='Imagen no disponible';">
        </div>
       </div>
      </div>
@@ -487,8 +485,7 @@
    <section id="proceso" class="py-20 relative">
     <div class="max-w-6xl mx-auto px-6">
      <div class="text-center mb-12 reveal">
-      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-yellow-400/30 bg-yellow-400/5 mb-3 text-sm">
-       <span class="text-yellow-400">Lo que incluyes</span>
+      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-yellow-400/30 bg-yellow-400/5 mb-3 text-sm"><span class="text-yellow-400">Lo que incluyes</span>
       </div>
       <h2 class="font-display text-2xl md:text-4xl font-bold mb-3">Qué incluye la <span class="gradient-text">membresía</span></h2>
       <p class="text-zinc-400 max-w-2xl mx-auto text-sm">Todo lo que necesitas para convertirte en un fotógrafo que vive de su arte.</p>
@@ -496,8 +493,7 @@
      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
       <div class="card-hover rounded-2xl p-5 bg-gradient-to-b from-zinc-900 to-zinc-950 border border-zinc-800 reveal text-sm">
        <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center mb-3">
-        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
         </svg>
        </div>
        <h3 class="font-display font-bold mb-2">Clases en vivo por Zoom</h3>
@@ -505,8 +501,7 @@
       </div>
       <div class="card-hover rounded-2xl p-5 bg-gradient-to-b from-zinc-900 to-zinc-950 border border-zinc-800 reveal delay-100 text-sm">
        <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center mb-3">
-        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
         </svg>
        </div>
        <h3 class="font-display font-bold mb-2">Cursos y recursos</h3>
@@ -514,8 +509,7 @@
       </div>
       <div class="card-hover rounded-2xl p-5 bg-gradient-to-b from-zinc-900 to-zinc-950 border border-zinc-800 reveal delay-200 text-sm">
        <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center mb-3">
-        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
         </svg>
        </div>
        <h3 class="font-display font-bold mb-2">Grupo exclusivo 24/7</h3>
@@ -523,8 +517,7 @@
       </div>
       <div class="card-hover rounded-2xl p-5 bg-gradient-to-b from-zinc-900 to-zinc-950 border border-zinc-800 reveal delay-300 text-sm">
        <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center mb-3">
-        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
         </svg>
        </div>
        <h3 class="font-display font-bold mb-2">Estrategias probadas</h3>
@@ -532,8 +525,7 @@
       </div>
       <div class="card-hover rounded-2xl p-5 bg-gradient-to-b from-zinc-900 to-zinc-950 border border-zinc-800 reveal delay-400 text-sm">
        <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-pink-400 to-pink-600 flex items-center justify-center mb-3">
-        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
+        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
         </svg>
        </div>
        <h3 class="font-display font-bold mb-2">Feedback honesto</h3>
@@ -541,8 +533,7 @@
       </div>
       <div class="card-hover rounded-2xl p-5 bg-gradient-to-b from-zinc-900 to-zinc-950 border border-zinc-800 reveal delay-500 text-sm">
        <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center mb-3">
-        <svg class="w-5 h-5 text-black" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+        <svg class="w-5 h-5 text-black" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
         </svg>
        </div>
        <h3 class="font-display font-bold mb-2">Resultados reales</h3>
@@ -559,8 +550,7 @@
       <p class="text-lg text-zinc-400 mb-6 text-sm">Todos nuestros casos de éxitos comparten algo en común:</p>
       <p class="text-xl md:text-2xl font-display font-bold mb-8"><span class="gradient-text">Se quieren comer el puto mundo.</span><br><span class="text-zinc-300 text-base">Y por eso lo logran.</span></p>
       <p class="text-base text-zinc-500 mb-8">¿Y tú? ¿Te quieres comer el mundo?</p><a href="#planes" class="btn-primary text-base inline-flex items-center gap-3">Quiero comerme el mundo 
-       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
        </svg></a>
      </div>
     </div>
@@ -568,32 +558,30 @@
    <section id="planes" class="py-20 relative">
     <div class="max-w-6xl mx-auto px-6">
      <div class="text-center mb-12 reveal">
-      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-yellow-400/30 bg-yellow-400/5 mb-3 text-sm"><span class="text-yellow-400">Planes de membresía</span>
+      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-yellow-400/30 bg-yellow-400/5 mb-3 text-sm">
+       <span class="text-yellow-400">Planes de membresía</span>
       </div>
       <h2 class="font-display text-2xl md:text-4xl font-bold mb-3">Elige tu <span class="gradient-text">arma</span></h2>
       <p class="text-zinc-400 max-w-2xl mx-auto text-sm">Todos los planes tienen acceso a la comunidad.</p>
      </div>
-     <div class="grid md:grid-cols-3 gap-6"><!-- Flow Plan -->
+     <div class="grid md:grid-cols-3 gap-6">
+      <!-- Flow Plan -->
       <div class="card-hover rounded-3xl p-6 bg-gradient-to-b from-zinc-900 to-zinc-950 border border-zinc-800 reveal">
        <div class="mb-4">
         <h3 class="font-display text-lg font-bold mb-1">Flow</h3>
         <p class="text-zinc-500 text-xs">Para los que quieren probar</p>
        </div>
-       <div class="mb-4">
-        <span class="font-display text-3xl font-bold">$10</span> <span class="text-zinc-500 text-sm">/mes</span>
+       <div class="mb-4"><span class="font-display text-3xl font-bold">$10</span> <span class="text-zinc-500 text-sm">/mes</span>
        </div>
        <ul class="space-y-2 mb-6 text-xs">
         <li class="flex items-center gap-2 text-zinc-300">
-         <svg class="w-4 h-4 text-yellow-400 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+         <svg class="w-4 h-4 text-yellow-400 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
          </svg> Masterclasses gratuitas</li>
         <li class="flex items-center gap-2 text-zinc-300">
-         <svg class="w-4 h-4 text-yellow-400 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+         <svg class="w-4 h-4 text-yellow-400 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
          </svg> Newsletter semanal</li>
         <li class="flex items-center gap-2 text-zinc-300">
-         <svg class="w-4 h-4 text-yellow-400 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+         <svg class="w-4 h-4 text-yellow-400 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
          </svg> Acceso limitado a cursos</li>
        </ul><a href="https://nas.io/es-mx/checkout-global?communityId=651b8edf31cdf8bd41bbf336&amp;communityCode=MARKETOGRAPHERS__2&amp;requestor=signupRequestor&amp;linkClicked=https%3A%2F%2Fnas.io%2Fes-mx%2Fmarketographers&amp;tierId=6921d8a0a7278acccb683a5d" target="_blank" rel="noopener noreferrer" class="w-full btn-secondary text-sm py-2">Comenzar</a>
       </div><!-- Motion Plan - Featured -->
@@ -605,33 +593,26 @@
         <h3 class="font-display text-lg font-bold mb-1">Motion</h3>
         <p class="text-zinc-500 text-xs">Para los que van en serio</p>
        </div>
-       <div class="mb-4">
-        <span class="font-display text-3xl font-bold gradient-text">$30</span> <span class="text-zinc-500 text-sm">/mes</span>
+       <div class="mb-4"><span class="font-display text-3xl font-bold gradient-text">$30</span> <span class="text-zinc-500 text-sm">/mes</span>
        </div>
        <ul class="space-y-2 mb-6 text-xs">
         <li class="flex items-center gap-2 text-zinc-300">
-         <svg class="w-4 h-4 text-yellow-400 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+         <svg class="w-4 h-4 text-yellow-400 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
          </svg> Masterclasses gratuitas</li>
         <li class="flex items-center gap-2 text-zinc-300">
-         <svg class="w-4 h-4 text-yellow-400 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+         <svg class="w-4 h-4 text-yellow-400 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
          </svg> Newsletter semanal</li>
         <li class="flex items-center gap-2 text-zinc-300">
-         <svg class="w-4 h-4 text-yellow-400 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+         <svg class="w-4 h-4 text-yellow-400 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
          </svg> Acceso ilimitado a cursos</li>
         <li class="flex items-center gap-2 text-zinc-300">
-         <svg class="w-4 h-4 text-yellow-400 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+         <svg class="w-4 h-4 text-yellow-400 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
          </svg> Clases en vivo por Zoom</li>
         <li class="flex items-center gap-2 text-zinc-300">
-         <svg class="w-4 h-4 text-yellow-400 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+         <svg class="w-4 h-4 text-yellow-400 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
          </svg> Grupo de WhatsApp exclusivo</li>
         <li class="flex items-center gap-2 text-zinc-300">
-         <svg class="w-4 h-4 text-yellow-400 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+         <svg class="w-4 h-4 text-yellow-400 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
          </svg> Recursos únicos y libros</li>
        </ul><a href="https://nas.io/es-mx/checkout-global?communityId=651b8edf31cdf8bd41bbf336&amp;communityCode=MARKETOGRAPHERS__2&amp;requestor=signupRequestor&amp;linkClicked=https%3A%2F%2Fnas.io%2Fes-mx%2Fmarketographers&amp;tierId=690025802c8123e0f9b762ef" target="_blank" rel="noopener noreferrer" class="w-full btn-primary text-sm py-2">Unirme ahora</a>
       </div><!-- Focus Plan -->
@@ -640,37 +621,29 @@
         <h3 class="font-display text-lg font-bold mb-1">Focus</h3>
         <p class="text-zinc-500 text-xs">Para los que quieren todo</p>
        </div>
-       <div class="mb-4">
-        <span class="font-display text-3xl font-bold">$100</span> <span class="text-zinc-500 text-sm">/mes</span>
+       <div class="mb-4"><span class="font-display text-3xl font-bold">$100</span> <span class="text-zinc-500 text-sm">/mes</span>
        </div>
        <ul class="space-y-2 mb-6 text-xs">
         <li class="flex items-center gap-2 text-zinc-300">
-         <svg class="w-4 h-4 text-yellow-400 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+         <svg class="w-4 h-4 text-yellow-400 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
          </svg> Masterclasses gratuitas</li>
         <li class="flex items-center gap-2 text-zinc-300">
-         <svg class="w-4 h-4 text-yellow-400 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+         <svg class="w-4 h-4 text-yellow-400 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
          </svg> Newsletter semanal</li>
         <li class="flex items-center gap-2 text-zinc-300">
-         <svg class="w-4 h-4 text-yellow-400 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+         <svg class="w-4 h-4 text-yellow-400 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
          </svg> Acceso ilimitado a cursos</li>
         <li class="flex items-center gap-2 text-zinc-300">
-         <svg class="w-4 h-4 text-yellow-400 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+         <svg class="w-4 h-4 text-yellow-400 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
          </svg> Clases en vivo por Zoom</li>
         <li class="flex items-center gap-2 text-zinc-300">
-         <svg class="w-4 h-4 text-yellow-400 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+         <svg class="w-4 h-4 text-yellow-400 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
          </svg> Grupo de WhatsApp exclusivo</li>
         <li class="flex items-center gap-2 text-zinc-300">
-         <svg class="w-4 h-4 text-yellow-400 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+         <svg class="w-4 h-4 text-yellow-400 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
          </svg> Recursos únicos y libros</li>
         <li class="flex items-center gap-2 text-zinc-300">
-         <svg class="w-4 h-4 text-yellow-400 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+         <svg class="w-4 h-4 text-yellow-400 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
          </svg> 2 Sesiones 1 a 1 personalizadas</li>
        </ul><a href="https://nas.io/es-mx/checkout-global?communityId=651b8edf31cdf8bd41bbf336&amp;communityCode=MARKETOGRAPHERS__2&amp;requestor=signupRequestor&amp;linkClicked=https%3A%2F%2Fnas.io%2Fes-mx%2Fmarketographers&amp;tierId=6921d9032452a798a913b672" target="_blank" rel="noopener noreferrer" class="w-full btn-secondary text-sm py-2">Contáctame</a>
       </div>
@@ -685,14 +658,14 @@
         <div class="absolute inset-0 bg-gradient-to-br from-yellow-400/30 to-transparent rounded-3xl blur-3xl"></div>
         <div class="relative w-64 h-64 md:w-72 md:h-72 mx-auto">
          <div class="absolute inset-0 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-3xl rotate-6 glow-yellow"></div>
-         <div class="absolute inset-0 bg-gradient-to-br from-zinc-900 to-zinc-800 rounded-3xl overflow-hidden flex items-center justify-center"><img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1771217266/IMG_6859_1_1_ujmxsg.png" alt="Pablo" class="w-full h-full object-cover" loading="lazy" onerror="console.error('Image failed to load:', this.src); this.style.background='#18181b'; this.alt='Imagen no disponible';">
+         <div class="absolute inset-0 bg-gradient-to-br from-zinc-900 to-zinc-800 rounded-3xl overflow-hidden flex items-center justify-center">
+          <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1771217266/IMG_6859_1_1_ujmxsg.png" alt="Pablo" class="w-full h-full object-cover" loading="lazy" onerror="console.error('Image failed to load:', this.src); this.style.background='#18181b'; this.alt='Imagen no disponible';">
          </div>
         </div>
        </div>
       </div>
       <div class="reveal delay-200">
-       <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-yellow-400/30 bg-yellow-400/5 mb-4 text-sm">
-        <span class="text-yellow-400">¿Quién soy?</span>
+       <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-yellow-400/30 bg-yellow-400/5 mb-4 text-sm"><span class="text-yellow-400">¿Quién soy?</span>
        </div>
        <h2 id="founder-name" class="font-display text-2xl md:text-3xl font-bold mb-4">Pablo Villarroel</h2>
        <p class="text-zinc-400 leading-relaxed mb-4 text-sm">Lic. en Marketing &amp; Publicidad, TEDx speaker, especialista en StoryTelling y Persuasión. Con más de 100k USD de facturación entre 2024 y 2025.</p>
@@ -705,24 +678,22 @@
    <section id="testimonios" class="py-20 relative">
     <div class="max-w-6xl mx-auto px-6">
      <div class="text-center mb-12 reveal">
-      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-yellow-400/30 bg-yellow-400/5 mb-3 text-sm">
-       <span class="text-yellow-400">Casos de éxito</span>
+      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-yellow-400/30 bg-yellow-400/5 mb-3 text-sm"><span class="text-yellow-400">Casos de éxito</span>
       </div>
       <h2 class="font-display text-2xl md:text-4xl font-bold mb-3">Marketographers que ya <span class="gradient-text">la rompen</span></h2>
      </div>
-     <div class="carousel-container reveal">
-      <button id="carousel-prev" class="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-yellow-400/20 hover:bg-yellow-400/40 flex items-center justify-center transition-all text-yellow-400 hover:text-yellow-300 -ml-5 md:-ml-8">
-       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+     <div class="carousel-container reveal"><button id="carousel-prev" class="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-yellow-400/20 hover:bg-yellow-400/40 flex items-center justify-center transition-all text-yellow-400 hover:text-yellow-300 -ml-5 md:-ml-8">
+       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
        </svg></button> <button id="carousel-next" class="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-yellow-400/20 hover:bg-yellow-400/40 flex items-center justify-center transition-all text-yellow-400 hover:text-yellow-300 -mr-5 md:-mr-8">
-       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
        </svg></button>
-      <div class="carousel-wrapper" id="testimonials-wrapper"><!-- Testimonial 1 -->
+      <div class="carousel-wrapper" id="testimonials-wrapper">
+       <!-- Testimonial 1 -->
        <div class="carousel-item">
         <div class="testimonial-card rounded-2xl p-5 h-full">
          <div class="flex items-center gap-3 mb-3">
-          <div class="w-10 h-10 rounded-full overflow-hidden flex-shrink-0"><img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1771217266/IMG_6859_1_1_ujmxsg.png" alt="Pablo" class="w-full h-full object-cover" loading="lazy" onerror="console.error('Image failed to load:', this.src); this.style.background='#18181b';">
+          <div class="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
+           <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1771217266/IMG_6859_1_1_ujmxsg.png" alt="Pablo" class="w-full h-full object-cover" loading="lazy" onerror="console.error('Image failed to load:', this.src); this.style.background='#18181b';">
           </div>
           <div class="min-w-0">
            <h4 class="font-semibold text-sm">María García</h4>
@@ -731,20 +702,15 @@
          </div>
          <p class="text-zinc-300 text-xs leading-relaxed mb-3">"En 3 meses tripliqué mis precios y ahora tengo lista de espera. Pablo me enseñó a vender lo que realmente valgo."</p>
          <div class="flex gap-1">
-          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20">
-           <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
           </svg>
-          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20">
-           <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
           </svg>
-          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20">
-           <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
           </svg>
-          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20">
-           <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
           </svg>
-          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20">
-           <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
           </svg>
          </div>
         </div>
@@ -752,7 +718,8 @@
        <div class="carousel-item">
         <div class="testimonial-card rounded-2xl p-5 h-full">
          <div class="flex items-center gap-3 mb-3">
-          <div class="w-10 h-10 rounded-full overflow-hidden flex-shrink-0"><img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1771217266/IMG_6859_1_1_ujmxsg.png" alt="Pablo" class="w-full h-full object-cover" loading="lazy" onerror="console.error('Image failed to load:', this.src); this.style.background='#18181b';">
+          <div class="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
+           <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1771217266/IMG_6859_1_1_ujmxsg.png" alt="Pablo" class="w-full h-full object-cover" loading="lazy" onerror="console.error('Image failed to load:', this.src); this.style.background='#18181b';">
           </div>
           <div class="min-w-0">
            <h4 class="font-semibold text-sm">Carlos Rodríguez</h4>
@@ -761,20 +728,15 @@
          </div>
          <p class="text-zinc-300 text-xs leading-relaxed mb-3">"Pasé de cobrar $200 a $1,500 por sesión. La comunidad siempre está ahí para ayudarte."</p>
          <div class="flex gap-1">
-          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20">
-           <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
           </svg>
-          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20">
-           <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
           </svg>
-          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20">
-           <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
           </svg>
-          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20">
-           <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
           </svg>
-          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20">
-           <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
           </svg>
          </div>
         </div>
@@ -782,7 +744,8 @@
        <div class="carousel-item">
         <div class="testimonial-card rounded-2xl p-5 h-full">
          <div class="flex items-center gap-3 mb-3">
-          <div class="w-10 h-10 rounded-full overflow-hidden flex-shrink-0"><img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1771217266/IMG_6859_1_1_ujmxsg.png" alt="Pablo" class="w-full h-full object-cover" loading="lazy" onerror="console.error('Image failed to load:', this.src); this.style.background='#18181b';">
+          <div class="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
+           <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1771217266/IMG_6859_1_1_ujmxsg.png" alt="Pablo" class="w-full h-full object-cover" loading="lazy" onerror="console.error('Image failed to load:', this.src); this.style.background='#18181b';">
           </div>
           <div class="min-w-0">
            <h4 class="font-semibold text-sm">Ana López</h4>
@@ -791,20 +754,15 @@
          </div>
          <p class="text-zinc-300 text-xs leading-relaxed mb-3">"Dejé mi trabajo de oficina. Ahora facturo más haciendo lo que amo. Sin la comunidad no lo habría logrado."</p>
          <div class="flex gap-1">
-          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20">
-           <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
           </svg>
-          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20">
-           <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
           </svg>
-          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20">
-           <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
           </svg>
-          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20">
-           <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
           </svg>
-          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20">
-           <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
           </svg>
          </div>
         </div>
@@ -812,4 +770,467 @@
        <div class="carousel-item">
         <div class="testimonial-card rounded-2xl p-5 h-full">
          <div class="flex items-center gap-3 mb-3">
-          <div class="w-10 
+          <div class="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
+           <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1771217266/IMG_6859_1_1_ujmxsg.png" alt="Pablo" class="w-full h-full object-cover" loading="lazy" onerror="console.error('Image failed to load:', this.src); this.style.background='#18181b';">
+          </div>
+          <div class="min-w-0">
+           <h4 class="font-semibold text-sm">Luis Sánchez</h4>
+           <p class="text-zinc-500 text-xs">Fotógrafo de eventos</p>
+          </div>
+         </div>
+         <p class="text-zinc-300 text-xs leading-relaxed mb-3">"Increíble comunidad. He aprendido más en 3 meses que en 5 años de experiencia."</p>
+         <div class="flex gap-1">
+          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+          </svg>
+          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+          </svg>
+          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+          </svg>
+          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+          </svg>
+          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+          </svg>
+         </div>
+        </div>
+       </div><!-- Testimonial 5 -->
+       <div class="carousel-item">
+        <div class="testimonial-card rounded-2xl p-5 h-full">
+         <div class="flex items-center gap-3 mb-3">
+          <div class="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
+           <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1771217266/IMG_6859_1_1_ujmxsg.png" alt="Pablo" class="w-full h-full object-cover" loading="lazy" onerror="console.error('Image failed to load:', this.src); this.style.background='#18181b';">
+          </div>
+          <div class="min-w-0">
+           <h4 class="font-semibold text-sm">Jessica Martinez</h4>
+           <p class="text-zinc-500 text-xs">Fotógrafa freelance</p>
+          </div>
+         </div>
+         <p class="text-zinc-300 text-xs leading-relaxed mb-3">"Finalmente entiendo cómo posicionarme en el mercado. Mis clientes ahora buscan directamente mis servicios."</p>
+         <div class="flex gap-1">
+          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+          </svg>
+          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+          </svg>
+          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+          </svg>
+          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+          </svg>
+          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+          </svg>
+         </div>
+        </div>
+       </div><!-- Testimonial 6 -->
+       <div class="carousel-item">
+        <div class="testimonial-card rounded-2xl p-5 h-full">
+         <div class="flex items-center gap-3 mb-3">
+          <div class="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
+           <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1771217266/IMG_6859_1_1_ujmxsg.png" alt="Pablo" class="w-full h-full object-cover" loading="lazy" onerror="console.error('Image failed to load:', this.src); this.style.background='#18181b';">
+          </div>
+          <div class="min-w-0">
+           <h4 class="font-semibold text-sm">Diego Hernández</h4>
+           <p class="text-zinc-500 text-xs">Fotografía comercial</p>
+          </div>
+         </div>
+         <p class="text-zinc-300 text-xs leading-relaxed mb-3">"El mejor inversor. Pablo y la comunidad me tienen ansioso cada semana por más contenido."</p>
+         <div class="flex gap-1">
+          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+          </svg>
+          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+          </svg>
+          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+          </svg>
+          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+          </svg>
+          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+          </svg>
+         </div>
+        </div>
+       </div><!-- Testimonial 7 -->
+       <div class="carousel-item">
+        <div class="testimonial-card rounded-2xl p-5 h-full">
+         <div class="flex items-center gap-3 mb-3">
+          <div class="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
+           <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1771217266/IMG_6859_1_1_ujmxsg.png" alt="Pablo" class="w-full h-full object-cover" loading="lazy" onerror="console.error('Image failed to load:', this.src); this.style.background='#18181b';">
+          </div>
+          <div class="min-w-0">
+           <h4 class="font-semibold text-sm">Marcela Vargas</h4>
+           <p class="text-zinc-500 text-xs">Fotografía de estudio</p>
+          </div>
+         </div>
+         <p class="text-zinc-300 text-xs leading-relaxed mb-3">"Estaba perdida, no sabía cómo crecer. Aquí encontré el roadmap que necesitaba."</p>
+         <div class="flex gap-1">
+          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+          </svg>
+          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+          </svg>
+          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+          </svg>
+          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+          </svg>
+          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+          </svg>
+         </div>
+        </div>
+       </div><!-- Testimonial 8 -->
+       <div class="carousel-item">
+        <div class="testimonial-card rounded-2xl p-5 h-full">
+         <div class="flex items-center gap-3 mb-3">
+          <div class="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
+           <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1771217266/IMG_6859_1_1_ujmxsg.png" alt="Pablo" class="w-full h-full object-cover" loading="lazy" onerror="console.error('Image failed to load:', this.src); this.style.background='#18181b';">
+          </div>
+          <div class="min-w-0">
+           <h4 class="font-semibold text-sm">Rafael Flores</h4>
+           <p class="text-zinc-500 text-xs">Fotografía de viajes</p>
+          </div>
+         </div>
+         <p class="text-zinc-300 text-xs leading-relaxed mb-3">"Convertí mi pasión en un negocio rentable. Gracias a los estrategias que aprendí aquí."</p>
+         <div class="flex gap-1">
+          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+          </svg>
+          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+          </svg>
+          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+          </svg>
+          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+          </svg>
+          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+          </svg>
+         </div>
+        </div>
+       </div><!-- Testimonial 9 -->
+       <div class="carousel-item">
+        <div class="testimonial-card rounded-2xl p-5 h-full">
+         <div class="flex items-center gap-3 mb-3">
+          <div class="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
+           <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1771217266/IMG_6859_1_1_ujmxsg.png" alt="Pablo" class="w-full h-full object-cover" loading="lazy" onerror="console.error('Image failed to load:', this.src); this.style.background='#18181b';">
+          </div>
+          <div class="min-w-0">
+           <h4 class="font-semibold text-sm">Sofía Peña</h4>
+           <p class="text-zinc-500 text-xs">Fotógrafa de moda</p>
+          </div>
+         </div>
+         <p class="text-zinc-300 text-xs leading-relaxed mb-3">"El feedback de Pablo es invaluable. Me ayuda a crecer cada semana en la comunidad."</p>
+         <div class="flex gap-1">
+          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+          </svg>
+          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+          </svg>
+          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+          </svg>
+          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+          </svg>
+          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+          </svg>
+         </div>
+        </div>
+       </div><!-- Testimonial 10 -->
+       <div class="carousel-item">
+        <div class="testimonial-card rounded-2xl p-5 h-full">
+         <div class="flex items-center gap-3 mb-3">
+          <div class="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
+           <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1771217266/IMG_6859_1_1_ujmxsg.png" alt="Pablo" class="w-full h-full object-cover" loading="lazy" onerror="console.error('Image failed to load:', this.src); this.style.background='#18181b';">
+          </div>
+          <div class="min-w-0">
+           <h4 class="font-semibold text-sm">Nicolás Carrasco</h4>
+           <p class="text-zinc-500 text-xs">Fotografía documental</p>
+          </div>
+         </div>
+         <p class="text-zinc-300 text-xs leading-relaxed mb-3">"Aquí entendí que la fotografía es solo el 30% del negocio. El resto es marketing y ventas."</p>
+         <div class="flex gap-1">
+          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+          </svg>
+          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+          </svg>
+          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+          </svg>
+          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+          </svg>
+          <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+          </svg>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+     <div class="carousel-dots" id="carousel-dots"></div>
+    </div>
+   </section><!-- FAQ Section -->
+   <section id="faq" class="py-20 relative">
+    <div class="max-w-3xl mx-auto px-6">
+     <div class="text-center mb-12 reveal">
+      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-yellow-400/30 bg-yellow-400/5 mb-3 text-sm"><span class="text-yellow-400">Preguntas frecuentes</span>
+      </div>
+      <h2 class="font-display text-2xl md:text-4xl font-bold">¿Tienes <span class="gradient-text">dudas?</span></h2>
+     </div>
+     <div class="space-y-3 reveal">
+      <div class="faq-item rounded-2xl bg-zinc-900/50 border border-zinc-800 overflow-hidden">
+       <button class="faq-toggle w-full p-5 text-left flex items-center justify-between gap-4 text-sm md:text-base"> <span class="font-semibold">¿Para quién es esta comunidad?</span> <span class="faq-icon w-7 h-7 rounded-full bg-yellow-400/20 flex items-center justify-center flex-shrink-0">
+         <svg class="w-3 h-3 text-yellow-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+         </svg></span> </button>
+       <div class="faq-content px-5">
+        <p class="text-zinc-400 pb-5 text-sm">Para fotógrafos que quieren dejar de depender del boca a boca, cobrar lo que realmente valen y construir un negocio sostenible. No importa si estás empezando o ya tienes experiencia.</p>
+       </div>
+      </div>
+      <div class="faq-item rounded-2xl bg-zinc-900/50 border border-zinc-800 overflow-hidden">
+       <button class="faq-toggle w-full p-5 text-left flex items-center justify-between gap-4 text-sm md:text-base"> <span class="font-semibold">¿Cuánto tiempo tengo que dedicarle?</span> <span class="faq-icon w-7 h-7 rounded-full bg-yellow-400/20 flex items-center justify-center flex-shrink-0">
+         <svg class="w-3 h-3 text-yellow-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+         </svg></span> </button>
+       <div class="faq-content px-5">
+        <p class="text-zinc-400 pb-5 text-sm">Las clases en vivo son 1 vez por semana (1-2 horas). El resto del contenido lo puedes consumir a tu ritmo. El grupo está activo 24/7, pero tú decides cuánto participar.</p>
+       </div>
+      </div>
+      <div class="faq-item rounded-2xl bg-zinc-900/50 border border-zinc-800 overflow-hidden">
+       <button class="faq-toggle w-full p-5 text-left flex items-center justify-between gap-4 text-sm md:text-base"> <span class="font-semibold">¿Puedo cancelar cuando quiera?</span> <span class="faq-icon w-7 h-7 rounded-full bg-yellow-400/20 flex items-center justify-center flex-shrink-0">
+         <svg class="w-3 h-3 text-yellow-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+         </svg></span> </button>
+       <div class="faq-content px-5">
+        <p class="text-zinc-400 pb-5 text-sm">Sí, puedes cancelar en cualquier momento. Sin preguntas, sin drama, sin letras pequeñas. Aunque honestamente, pocos se van una vez que entran.</p>
+       </div>
+      </div>
+      <div class="faq-item rounded-2xl bg-zinc-900/50 border border-zinc-800 overflow-hidden">
+       <button class="faq-toggle w-full p-5 text-left flex items-center justify-between gap-4 text-sm md:text-base"> <span class="font-semibold">¿Funciona para mi tipo de fotografía?</span> <span class="faq-icon w-7 h-7 rounded-full bg-yellow-400/20 flex items-center justify-center flex-shrink-0">
+         <svg class="w-3 h-3 text-yellow-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+         </svg></span> </button>
+       <div class="faq-content px-5">
+        <p class="text-zinc-400 pb-5 text-sm">Sí. Tenemos fotógrafos de bodas, producto, retratos, eventos, inmobiliaria y más. Los principios de marketing y ventas aplican a cualquier nicho.</p>
+       </div>
+      </div>
+      <div class="faq-item rounded-2xl bg-zinc-900/50 border border-zinc-800 overflow-hidden">
+       <button class="faq-toggle w-full p-5 text-left flex items-center justify-between gap-4 text-sm md:text-base"> <span class="font-semibold">¿Hay garantía de dinero de vuelta?</span> <span class="faq-icon w-7 h-7 rounded-full bg-yellow-400/20 flex items-center justify-center flex-shrink-0">
+         <svg class="w-3 h-3 text-yellow-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+         </svg></span> </button>
+       <div class="faq-content px-5">
+        <p class="text-zinc-400 pb-5 text-sm">Lo que garantizamos es que vas a aprender estrategias reales. Pero si después de probar todo sinceramente no te sientes parte de la comunidad, te devolvemos tu dinero. Confiamos en nuestro trabajo.</p>
+       </div>
+      </div>
+     </div>
+    </div>
+   </section><!-- Final CTA Section -->
+   <section class="py-20 relative overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-t from-yellow-400/20 via-yellow-400/5 to-transparent"></div>
+    <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-yellow-400/20 rounded-full blur-[150px]"></div>
+    <div class="max-w-4xl mx-auto px-6 text-center relative z-10">
+     <div class="reveal">
+      <h2 class="font-display text-2xl md:text-4xl font-bold mb-4">¿Listo para dejar de ser <span class="gradient-text">uno más?</span></h2>
+      <p class="text-lg text-zinc-400 mb-8 text-sm">Tu cliente ideal está esperando. La pregunta es: ¿lo vas a dejar ir con otro?</p>
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+       <a href="#planes" class="btn-primary text-base px-10 py-3 glow-yellow">Únete a Marketographers</a> <a href="https://cal.com/themarketographer/reunion" target="_blank" rel="noopener noreferrer" class="btn-secondary text-base px-8 py-3">Agendar llamada</a>
+      </div>
+      <p class="text-zinc-500 text-xs mt-6">+500 fotógrafos ya están adentro. ¿Y tú?</p>
+     </div>
+    </div>
+   </section><!-- Footer -->
+   <footer class="py-10 border-t border-zinc-800">
+    <div class="max-w-6xl mx-auto px-6">
+     <div class="flex flex-col md:flex-row items-center justify-between gap-4 text-xs md:text-sm">
+      <div class="flex items-center gap-3">
+       <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1755314903/Marketographers_Blanco_S_F_p1toov.png" alt="Marketographers" class="h-8 w-auto"> <span class="font-display font-bold">Marketographers</span>
+      </div>
+      <div class="flex items-center gap-4 md:gap-6 text-zinc-500">
+       <a href="https://nas.io/marketographers" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors">Comunidad</a> <a href="#" class="hover:text-white transition-colors">Términos</a> <a href="#" class="hover:text-white transition-colors">Privacidad</a>
+      </div>
+      <p class="text-zinc-600 text-xs">© 2025 Marketographers. Todos los derechos.</p>
+     </div>
+    </div>
+   </footer>
+  </div>
+  <script>
+    const defaultConfig = {
+      hero_title: 'Tu cliente ideal está trabajando con otro fotógrafo que sí sabe de marketing.',
+      hero_subtitle: '¿Vas a seguir viviendo del "boca a boca" o te vas a poner los pantalones con tu negocio?',
+      cta_text: 'Únete a la comunidad',
+      founder_name: 'Pablo Villarroel',
+      video_url: 'https://www.youtube.com/embed/-hzyPg-rIoA?si=BpvIEOAmAQAfI7X6'
+    };
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange: async (config) => {
+          const heroTitleEl = document.getElementById('hero-title');
+          if (heroTitleEl) {
+            heroTitleEl.innerHTML = `${config.hero_title || defaultConfig.hero_title}<br><span class="gradient-text text-glow">otro fotógrafo que sí sabe de marketing.</span>`;
+          }
+          
+          const heroSubtitleEl = document.getElementById('hero-subtitle');
+          if (heroSubtitleEl) {
+            heroSubtitleEl.textContent = config.hero_subtitle || defaultConfig.hero_subtitle;
+          }
+          
+          const ctaButton = document.getElementById('cta-button');
+          if (ctaButton) {
+            ctaButton.textContent = config.cta_text || defaultConfig.cta_text;
+          }
+          
+          const founderName = document.getElementById('founder-name');
+          if (founderName) {
+            founderName.textContent = config.founder_name || defaultConfig.founder_name;
+          }
+
+          const videoFrame = document.getElementById('hero-video');
+          if (videoFrame) {
+            videoFrame.src = config.video_url || defaultConfig.video_url;
+          }
+        },
+        mapToCapabilities: (config) => ({
+          recolorables: [],
+          borderables: [],
+          fontEditable: undefined,
+          fontSizeable: undefined
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ['hero_title', config.hero_title || defaultConfig.hero_title],
+          ['hero_subtitle', config.hero_subtitle || defaultConfig.hero_subtitle],
+          ['cta_text', config.cta_text || defaultConfig.cta_text],
+          ['founder_name', config.founder_name || defaultConfig.founder_name],
+          ['video_url', config.video_url || defaultConfig.video_url]
+        ])
+      });
+    }
+
+    // Scroll reveal
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // Header scroll effect
+    const header = document.getElementById('header');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 100) {
+        header.classList.add('header-scrolled');
+      } else {
+        header.classList.remove('header-scrolled');
+      }
+    });
+
+    // FAQ accordion
+    document.querySelectorAll('.faq-toggle').forEach(toggle => {
+      toggle.addEventListener('click', () => {
+        const item = toggle.closest('.faq-item');
+        const isActive = item.classList.contains('active');
+        
+        document.querySelectorAll('.faq-item').forEach(faq => {
+          faq.classList.remove('active');
+        });
+        
+        if (!isActive) {
+          item.classList.add('active');
+        }
+      });
+    });
+
+    // Testimonials Carousel with autoplay
+    const wrapper = document.getElementById('testimonials-wrapper');
+    const dotsContainer = document.getElementById('carousel-dots');
+    const prevBtn = document.getElementById('carousel-prev');
+    const nextBtn = document.getElementById('carousel-next');
+    
+    let currentIndex = 0;
+    const itemsPerView = window.innerWidth >= 1024 ? 3 : window.innerWidth >= 768 ? 2 : 1;
+    const totalItems = document.querySelectorAll('.carousel-item').length;
+    const totalSlides = Math.ceil(totalItems / itemsPerView);
+    let autoplayInterval;
+
+    function createDots() {
+      dotsContainer.innerHTML = '';
+      for (let i = 0; i < totalSlides; i++) {
+        const dot = document.createElement('button');
+        dot.className = `carousel-dot ${i === 0 ? 'active' : ''}`;
+        dot.addEventListener('click', () => {
+          clearInterval(autoplayInterval);
+          goToSlide(i);
+          startAutoplay();
+        });
+        dotsContainer.appendChild(dot);
+      }
+    }
+
+    function updateCarousel() {
+      const offset = -(currentIndex * (100 / itemsPerView));
+      wrapper.style.transform = `translateX(${offset}%)`;
+      
+      document.querySelectorAll('.carousel-dot').forEach((dot, i) => {
+        dot.classList.toggle('active', i === currentIndex);
+      });
+    }
+
+    function goToSlide(index) {
+      currentIndex = Math.max(0, Math.min(index, totalSlides - 1));
+      updateCarousel();
+    }
+
+    function nextSlide() {
+      currentIndex = (currentIndex + 1) % totalSlides;
+      updateCarousel();
+    }
+
+    function prevSlide() {
+      currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+      updateCarousel();
+    }
+
+    function startAutoplay() {
+      autoplayInterval = setInterval(nextSlide, 5000);
+    }
+
+    // Button controls
+    nextBtn.addEventListener('click', () => {
+      clearInterval(autoplayInterval);
+      nextSlide();
+      startAutoplay();
+    });
+
+    prevBtn.addEventListener('click', () => {
+      clearInterval(autoplayInterval);
+      prevSlide();
+      startAutoplay();
+    });
+
+    // Touch/swipe support
+    let touchStartX = 0;
+    wrapper.addEventListener('touchstart', (e) => {
+      touchStartX = e.touches[0].clientX;
+      clearInterval(autoplayInterval);
+    });
+
+    wrapper.addEventListener('touchend', (e) => {
+      const touchEndX = e.changedTouches[0].clientX;
+      if (touchStartX - touchEndX > 50) {
+        nextSlide();
+      } else if (touchEndX - touchStartX > 50) {
+        prevSlide();
+      }
+      startAutoplay();
+    });
+
+    createDots();
+    startAutoplay();
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        if (this.getAttribute('href') !== '#') {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute('href'));
+          if (target) {
+            target.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
+          }
+        }
+      });
+    });
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9cea7eb35669c877',t:'MTc3MTIxODE2OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
