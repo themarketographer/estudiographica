@@ -2,7 +2,7 @@
 <html class="dark" lang="es">
 <head>
 <meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Marketing para Fotógrafos | Hagamos mierda a tu competencia</title>
 
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
@@ -13,126 +13,123 @@
 
 <script>
 tailwind.config = {
-    darkMode: "class",
-    theme: {
-        extend: {
-            colors: {
-                primary: "#f9f906",
-                "background-light": "#f8f8f5",
-                "background-dark": "#000000",
-            },
-            fontFamily: {
-                display: ["Poppins", "sans-serif"]
-            }
-        }
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        primary: "#f9f906",
+        "background-dark": "#000000",
+      },
+      fontFamily: {
+        display: ["Poppins", "sans-serif"]
+      }
     }
+  }
 }
 </script>
 
 <style>
 body {
-    font-family: "Poppins", sans-serif;
-    background-color: #23230f;
-    color: white;
-    font-size: 15px;
-    letter-spacing: -0.2px;
-}
-
-.text-stroke {
-    -webkit-text-stroke: 1px #f9f906;
-    color: transparent;
-}
-
-.gritty-overlay {
-    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuDhvMXldimFG6tzrFXSFO3l8k3hahYOGEoCTut3vtroO-dPpj_q3JdcjdxoiBquHElTTQgLNaY6ISD1L8wLYatdyckQCLiVUhS_HlV1IGOyEAO9-tNOlxlnw94WAqmmua881yoZ1ojQg_PAprhii1V_BKiusoMIao2bAMqi9Bz0Ypqr5uOfpFArDnIctBhvuJbcXzfnJcIIl1ACDMaPUAVr3jvEI-ePbY4OLp5cggu8TujqTtAlG-3POKctqheuUbIqXIWWv4kR314);
-    opacity: 0.05;
-    pointer-events: none;
+  font-family: "Poppins", sans-serif;
+  background-color: #23230f;
+  color: white;
+  font-size: 15px;
+  letter-spacing: -0.2px;
 }
 
 .carousel-slide {
-    min-width: 100%;
-    transition: transform 0.6s ease-in-out;
+  min-width: 100%;
+}
+
+.text-stroke {
+  -webkit-text-stroke: 1px #f9f906;
+  color: transparent;
 }
 </style>
 </head>
 
-<body class="bg-background-light dark:bg-background-dark text-white selection:bg-primary selection:text-black overflow-x-hidden">
-
-<div class="gritty-overlay fixed inset-0 z-50"></div>
+<body class="bg-background-dark text-white overflow-x-hidden">
 
 <!-- NAV -->
-<nav class="sticky top-0 z-[100] border-b border-primary/20 bg-background-dark/80 backdrop-blur-md px-6 lg:px-20 py-4">
-<div class="max-w-7xl mx-auto flex items-center justify-between">
-<div class="flex items-center gap-3">
-<img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1755314903/Marketographers_Blanco_S_F_p1toov.png" class="h-8"/>
-<span class="font-black text-lg uppercase tracking-tight">Marrketographers</span>
-</div>
+<nav class="sticky top-0 z-50 border-b border-primary/20 bg-black/80 backdrop-blur-md px-6 lg:px-20 py-4">
+  <div class="max-w-7xl mx-auto flex justify-between items-center">
+    <div class="flex items-center gap-3">
+      <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1755314903/Marketographers_Blanco_S_F_p1toov.png" class="h-8"/>
+      <span class="font-bold uppercase tracking-tight text-sm">Marrketographers</span>
+    </div>
 
-<div class="hidden md:flex items-center gap-8 font-medium text-xs uppercase tracking-wider">
-<a href="#metodo" class="hover:text-primary transition-colors">El Método</a>
-<a href="#comunidad" class="hover:text-primary transition-colors">Comunidad</a>
-<a href="#faq" class="hover:text-primary transition-colors">FAQ</a>
-</div>
-
-<a href="https://nas.io/marketographers" target="_blank">
-<button class="bg-primary text-black px-6 py-2 rounded font-bold uppercase text-xs hover:scale-105 transition-transform">
-Entra hoy
-</button>
-</a>
-
-</div>
+    <a href="https://nas.io/marketographers" target="_blank">
+      <button class="bg-primary text-black px-6 py-2 rounded font-semibold uppercase text-xs hover:scale-105 transition">
+        Entra hoy
+      </button>
+    </a>
+  </div>
 </nav>
 
+<!-- HERO -->
+<section class="min-h-[80vh] flex items-center justify-center text-center px-6">
+  <div class="max-w-4xl">
+    <h1 class="text-4xl lg:text-7xl font-extrabold tracking-tight leading-[0.9] italic mb-8">
+      TU CLIENTE IDEAL ESTÁ TRABAJANDO CON 
+      <span class="text-primary">OTRO FOTÓGRAFO</span>
+    </h1>
 
-<!-- CARRUSEL HOTMART -->
-<section class="py-24 px-6 lg:px-20 border-t border-white/10 overflow-hidden" id="metodo">
+    <a href="https://cal.com/themarketographer/reunion" target="_blank">
+      <button class="bg-primary text-black px-10 py-4 rounded font-bold uppercase text-sm hover:bg-white transition">
+        Agendar llamada
+      </button>
+    </a>
+  </div>
+</section>
 
+<!-- CARRUSEL -->
+<section class="py-20 px-6 lg:px-20 overflow-hidden border-t border-white/10">
 <div class="max-w-7xl mx-auto relative">
 
-<div id="carousel" class="flex transition-transform duration-700">
+<div id="carousel" class="flex transition-transform duration-500">
 
 <!-- SLIDE 1 -->
-<div class="carousel-slide grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+<div class="carousel-slide grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
 <div>
-<h2 class="text-4xl lg:text-6xl font-black mb-8 tracking-tight italic uppercase">
+<h2 class="text-3xl lg:text-5xl font-black italic uppercase tracking-tight mb-6">
 ESTO NO ES UN CURSO DE <span class="text-primary">HOTMART</span> DE MIERDA
 </h2>
-<p class="text-lg text-white/70 mb-10">
-Aquí venimos a trabajar de verdad, con gente real y resultados medibles.
+<p class="text-base text-white/70">
+Aquí se trabaja en vivo. Sin PDFs eternos. Sin humo.
 </p>
 </div>
 <div>
-<img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1756354892/v3_1_1_p3ne1x.png" class="rounded-lg grayscale hover:grayscale-0 transition-all"/>
+<img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1756354892/v3_1_1_p3ne1x.png" class="rounded-lg grayscale hover:grayscale-0 transition"/>
 </div>
 </div>
 
 <!-- SLIDE 2 -->
-<div class="carousel-slide grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+<div class="carousel-slide grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
 <div>
-<h2 class="text-4xl lg:text-6xl font-black mb-8 tracking-tight italic uppercase">
+<h2 class="text-3xl lg:text-5xl font-black italic uppercase tracking-tight mb-6">
 ESTO NO ES UN CURSO DE <span class="text-primary">HOTMART</span> DE MIERDA
 </h2>
-<p class="text-lg text-white/70 mb-10">
-Aquí venimos a trabajar de verdad, con gente real y resultados medibles.
+<p class="text-base text-white/70">
+Aquí se trabaja en vivo. Sin PDFs eternos. Sin humo.
 </p>
 </div>
 <div>
-<img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1756354892/v3_1_1_p3ne1x.png" class="rounded-lg grayscale hover:grayscale-0 transition-all"/>
+<img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1756354892/v3_1_1_p3ne1x.png" class="rounded-lg grayscale hover:grayscale-0 transition"/>
 </div>
 </div>
 
 <!-- SLIDE 3 -->
-<div class="carousel-slide grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+<div class="carousel-slide grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
 <div>
-<h2 class="text-4xl lg:text-6xl font-black mb-8 tracking-tight italic uppercase">
+<h2 class="text-3xl lg:text-5xl font-black italic uppercase tracking-tight mb-6">
 ESTO NO ES UN CURSO DE <span class="text-primary">HOTMART</span> DE MIERDA
 </h2>
-<p class="text-lg text-white/70 mb-10">
-Aquí venimos a trabajar de verdad, con gente real y resultados medibles.
+<p class="text-base text-white/70">
+Aquí se trabaja en vivo. Sin PDFs eternos. Sin humo.
 </p>
 </div>
 <div>
-<img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1756354892/v3_1_1_p3ne1x.png" class="rounded-lg grayscale hover:grayscale-0 transition-all"/>
+<img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1756354892/v3_1_1_p3ne1x.png" class="rounded-lg grayscale hover:grayscale-0 transition"/>
 </div>
 </div>
 
@@ -144,35 +141,81 @@ Aquí venimos a trabajar de verdad, con gente real y resultados medibles.
 let currentIndex = 0;
 const carousel = document.getElementById("carousel");
 const slides = document.querySelectorAll(".carousel-slide");
+const totalSlides = slides.length;
 
-setInterval(() => {
-currentIndex = (currentIndex + 1) % slides.length;
-carousel.style.transform = `translateX(-${currentIndex * 100}%)`;
-}, 4000);
+let startX = 0;
+let currentTranslate = 0;
+let isDragging = false;
+let autoPlay;
+
+function startAutoPlay() {
+  autoPlay = setInterval(() => {
+    goToSlide((currentIndex + 1) % totalSlides);
+  }, 4000);
+}
+
+function stopAutoPlay() {
+  clearInterval(autoPlay);
+}
+
+function goToSlide(index) {
+  currentIndex = index;
+  currentTranslate = -currentIndex * 100;
+  carousel.style.transform = `translateX(${currentTranslate}%)`;
+}
+
+carousel.addEventListener("touchstart", (e) => {
+  stopAutoPlay();
+  isDragging = true;
+  startX = e.touches[0].clientX;
+});
+
+carousel.addEventListener("touchmove", (e) => {
+  if (!isDragging) return;
+  const currentX = e.touches[0].clientX;
+  const diff = currentX - startX;
+  const percentage = (diff / window.innerWidth) * 100;
+  carousel.style.transform = `translateX(${currentTranslate + percentage}%)`;
+});
+
+carousel.addEventListener("touchend", (e) => {
+  isDragging = false;
+  const endX = e.changedTouches[0].clientX;
+  const diff = endX - startX;
+  const threshold = 50;
+
+  if (diff > threshold && currentIndex > 0) {
+    goToSlide(currentIndex - 1);
+  } else if (diff < -threshold && currentIndex < totalSlides - 1) {
+    goToSlide(currentIndex + 1);
+  } else {
+    goToSlide(currentIndex);
+  }
+
+  startAutoPlay();
+});
+
+startAutoPlay();
 </script>
 
-
 <!-- FOOTER -->
-<footer class="bg-background-dark py-12 px-6 lg:px-20 border-t border-white/5">
-<div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+<footer class="bg-black py-10 px-6 border-t border-white/10">
+  <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
 
-<div class="flex items-center gap-3">
-<img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1755314903/Marketographers_Blanco_S_F_p1toov.png" class="h-6"/>
-<span class="font-black text-sm uppercase tracking-tight">Marrketographers</span>
-</div>
+    <div class="flex items-center gap-3">
+      <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1755314903/Marketographers_Blanco_S_F_p1toov.png" class="h-6"/>
+      <span class="uppercase text-xs tracking-tight">Marrketographers</span>
+    </div>
 
-<p class="text-white/40 text-xs">
-© 2026 Pablo Villarroel.
-</p>
+    <p class="text-white/40 text-xs">
+      © 2026 Pablo Villarroel
+    </p>
 
-<div>
-<a href="https://www.instagram.com/themarketographer" target="_blank"
-class="hover:text-primary transition-colors uppercase text-xs font-bold tracking-widest">
-Instagram
-</a>
-</div>
+    <a href="https://www.instagram.com/themarketographer" target="_blank" class="uppercase text-xs hover:text-primary transition">
+      Instagram
+    </a>
 
-</div>
+  </div>
 </footer>
 
 </body>
