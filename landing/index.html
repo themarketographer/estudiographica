@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Estudio Graphica | Fotografía de Comida en Cochabamba</title>
+  <meta name="description" content="Fotografía y video de comida para restaurantes en Cochabamba. Contenido constante y coherente para tu Instagram y redes sociales. Agenda una reunión." />
+  <meta property="og:title" content="Estudio Graphica — Fotos que hacen salivar a tus clientes" />
+  <meta property="og:description" content="Fotografía gastronómica en Cochabamba. Contenido que vende antes de que el cliente llegue a tu precio." />
+  <meta property="og:image" content="images/og-image.jpg" />
+  <link rel="icon" type="image/png" href="images/logo.png" />
+
+  <!-- META PIXEL: pega aquí tu código de Meta Pixel (obtenerlo en Business Manager → Events Manager) -->
+  <!-- GOOGLE TAG: pega aquí tu Google Tag / GA4 (obtenerlo en analytics.google.com) -->
+  <!-- TIKTOK PIXEL: pega aquí tu TikTok Pixel (obtenerlo en TikTok Ads Manager → Assets → Events) -->
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ── VARIABLES ── */
+    :root {
+      --bg:        #0a0a0a;
+      --bg2:       #111111;
+      --bg3:       #161616;
+      --white:     #ffffff;
+      --gray:      #a0a0a0;
+      --gold:      #c9a84c;
+      --orange:    #d4622a;
+      --pill-r:    50px;
+      --serif:     'Playfair Display', Georgia, serif;
+      --sans:      'DM Sans', sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--white);
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 5vw;
+      background: linear-gradient(to bottom, rgba(10,10,10,0.95), transparent);
+      backdrop-filter: blur(6px);
+    }
+
+    .nav-logo {
+      font-family: var(--serif);
+      font-size: 1.3rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: var(--white);
+      text-decoration: none;
+    }
+
+    .nav-logo span { color: var(--gold); }
+
+    .nav-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--gold);
+      color: #0a0a0a;
+      font-family: var(--sans);
+      font-weight: 500;
+      font-size: 0.85rem;
+      padding: 10px 22px;
+      border-radius: var(--pill-r);
+      text-decoration: none;
+      transition: background 0.25s, transform 0.2s;
+    }
+    .nav-cta:hover { background: #e0b955; transform: translateY(-1px); }
+
+    /* ── HERO ── */
+    #inicio {
+      position: relative;
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 0 5vw;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      /* REEMPLAZAR: cambia el src por tu mejor foto hero */
+      background: url('images/hero-desktop.jpg') center/cover no-repeat;
+    }
+
+    .hero-bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(10,10,10,0.55) 0%,
+        rgba(10,10,10,0.3) 40%,
+        rgba(10,10,10,0.75) 100%
+      );
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 820px;
+    }
+
+    .hero-eyebrow {
+      display: inline-block;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 20px;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.2s forwards;
+    }
+
+    .hero-title {
+      font-family: var(--serif);
+      font-size: clamp(2.4rem, 6vw, 5rem);
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 24px;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.4s forwards;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .hero-sub {
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      color: rgba(255,255,255,0.85);
+      max-width: 560px;
+      margin: 0 auto 36px;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.6s forwards;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      justify-content: center;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.8s forwards;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--gold);
+      color: #0a0a0a;
+      font-family: var(--sans);
+      font-weight: 500;
+      font-size: 1rem;
+      padding: 14px 32px;
+      border-radius: var(--pill-r);
+      text-decoration: none;
+      box-shadow: 0 0 28px rgba(201,168,76,0.35);
+      transition: background 0.25s, transform 0.2s, box-shadow 0.25s;
+    }
+    .btn-primary:hover {
+      background: #e0b955;
+      transform: translateY(-2px);
+      box-shadow: 0 0 40px rgba(201,168,76,0.5);
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: transparent;
+      color: var(--white);
+      font-family: var(--sans);
+      font-weight: 400;
+      font-size: 1rem;
+      padding: 14px 32px;
+      border-radius: var(--pill-r);
+      border: 1px solid rgba(255,255,255,0.3);
+      text-decoration: none;
+      transition: border-color 0.25s, background 0.25s;
+    }
+    .btn-secondary:hover { border-color: var(--gold); background: rgba(201,168,76,0.08); }
+
+    .hero-micro {
+      margin-top: 14px;
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.5);
+      opacity: 0;
+      animation: fadeUp 0.8s 1s forwards;
+    }
+
+    /* availability band */
+    .avail-band {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      background: rgba(201,168,76,0.12);
+      border-top: 1px solid rgba(201,168,76,0.25);
+      text-align: center;
+      padding: 12px 20px;
+      font-size: 0.82rem;
+      color: var(--gold);
+      letter-spacing: 0.06em;
+      z-index: 3;
+    }
+
+    /* ── SECTION SHARED ── */
+    section { padding: 80px 5vw; }
+    .section-label {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 16px;
+    }
+    .section-title {
+      font-family: var(--serif);
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 24px;
+    }
+    .section-title em { font-style: italic; color: var(--gold); }
+    .section-body {
+      font-size: 1.05rem;
+      color: rgba(255,255,255,0.75);
+      max-width: 600px;
+      line-height: 1.75;
+    }
+    .divider {
+      width: 48px; height: 2px;
+      background: var(--gold);
+      margin: 0 auto 60px;
+      opacity: 0.5;
+    }
+
+    /* ── PROBLEMA ── */
+    #problema {
+      background: var(--bg2);
+      text-align: center;
+    }
+    #problema .section-body {
+      margin: 0 auto;
+      font-size: 1.1rem;
+    }
+    .big-quote {
+      font-family: var(--serif);
+      font-size: clamp(2rem, 5vw, 4rem);
+      font-weight: 700;
+      font-style: italic;
+      color: var(--white);
+      line-height: 1.2;
+      margin: 40px auto;
+      max-width: 760px;
+    }
+    .big-quote span { color: var(--gold); }
+
+    /* ── SERVICIOS ── */
+    #servicios { background: var(--bg); }
+    .services-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 28px;
+      margin-top: 48px;
+    }
+    .service-card {
+      background: var(--bg2);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 20px;
+      padding: 36px 32px;
+      transition: border-color 0.3s, transform 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--gold), var(--orange));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s;
+    }
+    .service-card:hover { border-color: rgba(201,168,76,0.25); transform: translateY(-4px); }
+    .service-card:hover::before { transform: scaleX(1); }
+
+    .service-icon {
+      font-size: 2rem;
+      margin-bottom: 16px;
+    }
+    .service-card h3 {
+      font-family: var(--serif);
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .service-card p {
+      color: rgba(255,255,255,0.65);
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+
+    /* ── QUOTE CENTRAL ── */
+    .quote-section {
+      background: var(--bg3);
+      text-align: center;
+      padding: 60px 5vw;
+    }
+    .quote-section blockquote {
+      font-family: var(--serif);
+      font-size: clamp(1.4rem, 3.5vw, 2.4rem);
+      font-style: italic;
+      font-weight: 700;
+      color: var(--white);
+      max-width: 700px;
+      margin: 0 auto;
+      line-height: 1.35;
+    }
+    .quote-section blockquote::before { content: '\201C'; color: var(--gold); }
+    .quote-section blockquote::after { content: '\201D'; color: var(--gold); }
+
+    /* ── PORTAFOLIO ── */
+    #portafolio { background: var(--bg2); text-align: center; }
+
+    .carousel-wrapper {
+      position: relative;
+      max-width: 900px;
+      margin: 48px auto 0;
+      overflow: hidden;
+      border-radius: 16px;
+    }
+    .carousel-track {
+      display: flex;
+      transition: transform 0.55s cubic-bezier(0.77,0,0.18,1);
+    }
+    .carousel-slide {
+      min-width: 100%;
+      aspect-ratio: 4/3;
+      background: var(--bg3);
+    }
+    /* REEMPLAZAR: cambia cada src por tus imágenes de portafolio */
+    .carousel-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      loading: lazy;
+    }
+    .carousel-btn {
+      position: absolute;
+      top: 50%; transform: translateY(-50%);
+      background: rgba(10,10,10,0.7);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: var(--white);
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s, border-color 0.2s;
+      z-index: 5;
+    }
+    .carousel-btn:hover { background: rgba(201,168,76,0.25); border-color: var(--gold); }
+    .carousel-prev { left: 14px; }
+    .carousel-next { right: 14px; }
+
+    .carousel-dots {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 20px;
+    }
+    .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      cursor: pointer;
+      transition: background 0.3s, transform 0.3s;
+    }
+    .dot.active { background: var(--gold); transform: scale(1.3); }
+
+    /* client logos under portafolio */
+    .client-label {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gray);
+      text-align: center;
+      margin: 16px 0 12px;
+    }
+    .portfolio-clients {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      max-width: 700px;
+      margin: 0 auto 32px;
+    }
+    .portfolio-client-tag {
+      background: var(--bg3);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 50px;
+      padding: 6px 16px;
+      font-size: 0.8rem;
+      color: var(--gray);
+    }
+    .portfolio-client-tag span { color: rgba(255,255,255,0.35); font-size: 0.7rem; margin-left: 6px; }
+
+    .portfolio-cta-row {
+      margin-top: 36px;
+    }
+
+    /* ── SOBRE MÍ ── */
+    #sobre { background: var(--bg); }
+    .sobre-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 48px;
+      align-items: center;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+    .sobre-img {
+      border-radius: 20px;
+      overflow: hidden;
+      aspect-ratio: 3/4;
+      max-height: 480px;
+    }
+    /* REEMPLAZAR: src por tu foto de perfil */
+    .sobre-img img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .sobre-text .section-label { margin-bottom: 12px; }
+    .sobre-text .section-title { margin-bottom: 20px; }
+    .sobre-text p {
+      font-size: 1rem;
+      color: rgba(255,255,255,0.72);
+      line-height: 1.8;
+      margin-bottom: 16px;
+    }
+    .sobre-text p strong { color: var(--white); }
+    .sobre-text p em { color: var(--gold); font-style: normal; }
+
+    /* ── ANTES Y DESPUÉS ── */
+    #comparar { background: var(--bg2); text-align: center; }
+    .compare-wrapper {
+      position: relative;
+      max-width: 800px;
+      margin: 48px auto 0;
+      border-radius: 16px;
+      overflow: hidden;
+      user-select: none;
+      cursor: col-resize;
+      aspect-ratio: 4/3;
+    }
+    .compare-after {
+      position: absolute;
+      inset: 0;
+      /* REEMPLAZAR: foto tomada con cámara profesional */
+      background: url('images/compare-after.jpg') center/cover no-repeat;
+    }
+    .compare-before {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      /* REEMPLAZAR: foto tomada con celular */
+    }
+    .compare-before img,
+    .compare-after-img {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+    .compare-divider {
+      position: absolute;
+      top: 0; bottom: 0;
+      left: 50%;
+      width: 3px;
+      background: var(--gold);
+      z-index: 10;
+      cursor: col-resize;
+    }
+    .compare-handle {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: var(--gold);
+      display: flex; align-items: center; justify-content: center;
+      color: #0a0a0a;
+      font-size: 1rem;
+      box-shadow: 0 0 20px rgba(201,168,76,0.5);
+      z-index: 11;
+    }
+    .compare-label {
+      position: absolute;
+      bottom: 14px;
+      padding: 5px 14px;
+      background: rgba(10,10,10,0.75);
+      border-radius: 50px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      z-index: 12;
+    }
+    .compare-label.before { left: 14px; color: var(--gray); }
+    .compare-label.after { right: 14px; color: var(--gold); }
+    .compare-note {
+      margin-top: 20px;
+      font-size: 0.9rem;
+      color: var(--gray);
+    }
+    .compare-note strong { color: var(--white); }
+
+    /* ── STATS ── */
+    #stats { background: var(--bg3); }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 32px;
+      max-width: 860px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .stat-card {
+      padding: 36px 24px;
+    }
+    .stat-number {
+      font-family: var(--serif);
+      font-size: clamp(3rem, 8vw, 5rem);
+      font-weight: 900;
+      color: var(--gold);
+      line-height: 1;
+      margin-bottom: 12px;
+    }
+    .stat-label {
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.65);
+      max-width: 200px;
+      margin: 0 auto;
+      line-height: 1.5;
+    }
+
+    .stats-callout {
+      text-align: center;
+      font-family: var(--serif);
+      font-size: clamp(1.2rem, 3vw, 2rem);
+      font-weight: 700;
+      font-style: italic;
+      color: var(--white);
+      margin-top: 48px;
+      padding: 0 5vw;
+    }
+    .stats-callout span { color: var(--gold); }
+
+    /* ── CLIENTES ── */
+    #clientes { background: var(--bg2); text-align: center; }
+    .logos-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 24px;
+      max-width: 800px;
+      margin: 48px auto 0;
+    }
+    .logo-item {
+      width: 120px; height: 60px;
+      display: flex; align-items: center; justify-content: center;
+      /* REEMPLAZAR: logos de tus clientes */
+      background: var(--bg3);
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.06);
+      overflow: hidden;
+      filter: grayscale(100%) brightness(0.7);
+      transition: filter 0.35s, transform 0.3s;
+    }
+    .logo-item:hover { filter: grayscale(0%) brightness(1); transform: scale(1.06); }
+    .logo-item img {
+      max-width: 90%; max-height: 90%;
+      object-fit: contain;
+    }
+
+    /* ── CTA FINAL ── */
+    #agendar {
+      background: var(--bg);
+      text-align: center;
+      padding: 100px 5vw;
+    }
+    #agendar .section-title {
+      max-width: 700px;
+      margin: 0 auto 20px;
+    }
+    #agendar .section-body {
+      margin: 0 auto 40px;
+      text-align: center;
+    }
+    .cta-micro {
+      margin-top: 16px;
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.4);
+    }
+    .cta-micro strong { color: var(--gold); font-weight: 500; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #080808;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      padding: 32px 5vw;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      text-align: center;
+    }
+    .footer-logo {
+      font-family: var(--serif);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--white);
+    }
+    .footer-logo span { color: var(--gold); }
+    .footer-social a {
+      color: var(--gray);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.2s;
+    }
+    .footer-social a:hover { color: var(--gold); }
+    .footer-copy {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.25);
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ── DESKTOP ── */
+    @media (min-width: 768px) {
+      section { padding: 100px 8vw; }
+
+      .services-grid { grid-template-columns: repeat(3, 1fr); }
+
+      .sobre-grid { grid-template-columns: 1fr 1.3fr; }
+      .sobre-img { max-height: 560px; }
+
+      .stats-grid { grid-template-columns: repeat(3, 1fr); }
+
+      footer { flex-direction: row; justify-content: space-between; text-align: left; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <a href="#inicio" class="nav-logo">Estudio <span>Graphica</span></a>
+  <a href="https://cal.com/themarketographer/reuni%C3%B3n" class="nav-cta" target="_blank" rel="noopener">
+    Agenda una reunión ☕
+  </a>
+</nav>
+
+<!-- ── HERO ── -->
+<section id="inicio">
+  <!-- REEMPLAZAR: agrega tu imagen hero en images/hero-desktop.jpg -->
+  <div class="hero-bg"></div>
+
+  <div class="hero-content">
+    <span class="hero-eyebrow">Fotografía gastronómica · Cochabamba</span>
+    <h1 class="hero-title">Fotos que hacen<br /><em>salivar</em> a tus clientes.</h1>
+    <p class="hero-sub">Cochabamba es una ciudad repleta de restaurantes. ¿De verdad quieres resaltar con fotos hechas con tu celu?</p>
+    <div class="hero-actions">
+      <a href="https://estudiographica.com/#agendar" class="btn-primary">Vamos por un cafecito ☕</a>
+      <a href="#servicios" class="btn-secondary">Ver qué ofrecemos</a>
+    </div>
+    <p class="hero-micro">Sin compromiso · Respondemos en menos de 24h</p>
+  </div>
+
+  <div class="avail-band">
+    ☕ Disponibilidad limitada — solo aceptamos nuevos clientes cada mes
+  </div>
+</section>
+
+<!-- ── PROBLEMA ── -->
+<section id="problema">
+  <p class="section-label reveal">El problema que nadie te dice en voz alta</p>
+  <div class="big-quote reveal">
+    Tu comida es deliciosa.<br />
+    Tus fotos no lo <span>demuestran</span>.
+  </div>
+  <p class="section-body reveal">
+    El cliente promedio decide en 0.3 segundos si se detiene o sigue scrolleando. Y esa decisión la toma antes de leer tu precio, tu descripción o tu nombre. Las marcas que venden más en redes tienen mejor imagen — punto.
+  </p>
+</section>
+
+<!-- ── SERVICIOS ── -->
+<section id="servicios">
+  <p class="section-label reveal">¿Qué cosita ofrecemos?</p>
+  <h2 class="section-title reveal">Tres formas de hacer<br /><em>que tu marca se vea bien</em></h2>
+  <div class="divider"></div>
+
+  <div class="services-grid">
+    <div class="service-card reveal">
+      <div class="service-icon">📸</div>
+      <h3>Foto y video de tu comida</h3>
+      <p>Amamos las 3C: <strong>Contenido Constante y Coherente</strong>. Creamos contenido para todo el mes en pocas horas, para que pases más tiempo haciendo lo que amas.</p>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-icon">📊</div>
+      <h3>Asesoría de marketing</h3>
+      <p>Si te esfuerzas mucho en vender, y no vendes, usualmente el problema está en el marketing. Revisamos tus campañas, tu feed, página web y las mejoramos.</p>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-icon">📲</div>
+      <h3>Tienda virtual</h3>
+      <p>No deberías pasar tiempo revisando un excel horrible para saber cómo va todo. Te diseñamos un sistema probado para gestionar tus pedidos y contactos directamente en tu WhatsApp.</p>
+    </div>
+  </div>
+
+  <div style="text-align:center; margin-top: 48px;">
+    <a href="https://estudiographica.com/#agendar" class="btn-secondary reveal">Agendaremos reunión →</a>
+  </div>
+</section>
+
+<!-- ── QUOTE ── -->
+<div class="quote-section">
+  <blockquote class="reveal">La comida entra primero por los ojos</blockquote>
+</div>
+
+<!-- ── PORTAFOLIO ── -->
+<section id="portafolio">
+  <p class="section-label">Nuestro portafolio</p>
+  <h2 class="section-title reveal">Una IA no puede hacer<br /><em>fotos así de antojables.</em></h2>
+
+  <!-- Etiquetas de clientes -->
+  <div class="client-label">Marcas que ya confían en nosotros</div>
+  <div class="portfolio-clients reveal">
+    <div class="portfolio-client-tag">Cookie Bar <span>Cafetería y galletería</span></div>
+    <div class="portfolio-client-tag">Vitz <span>Postres y helados</span></div>
+    <div class="portfolio-client-tag">Burger 91 <span>Hamburguesas</span></div>
+    <div class="portfolio-client-tag">Patata Brava <span>Papas fritas</span></div>
+    <div class="portfolio-client-tag">Sansei <span>Comida japonesa</span></div>
+    <div class="portfolio-client-tag">Terra Brasa <span>Carnes y parrilla</span></div>
+  </div>
+
+  <!-- Carrusel -->
+  <div class="carousel-wrapper reveal" id="carousel">
+    <div class="carousel-track" id="carouselTrack">
+      <!-- REEMPLAZAR: cambia cada src por tus fotos de portafolio (portfolio-1.jpg … portfolio-15.jpg) -->
+      <div class="carousel-slide"><img src="images/portfolio-1.jpg" alt="Fotografía gastronómica 1" loading="lazy" /></div>
+      <div class="carousel-slide"><img src="images/portfolio-2.jpg" alt="Fotografía gastronómica 2" loading="lazy" /></div>
+      <div class="carousel-slide"><img src="images/portfolio-3.jpg" alt="Fotografía gastronómica 3" loading="lazy" /></div>
+      <div class="carousel-slide"><img src="images/portfolio-4.jpg" alt="Fotografía gastronómica 4" loading="lazy" /></div>
+      <div class="carousel-slide"><img src="images/portfolio-5.jpg" alt="Fotografía gastronómica 5" loading="lazy" /></div>
+      <div class="carousel-slide"><img src="images/portfolio-6.jpg" alt="Fotografía gastronómica 6" loading="lazy" /></div>
+      <div class="carousel-slide"><img src="images/portfolio-7.jpg" alt="Fotografía gastronómica 7" loading="lazy" /></div>
+      <div class="carousel-slide"><img src="images/portfolio-8.jpg" alt="Fotografía gastronómica 8" loading="lazy" /></div>
+      <div class="carousel-slide"><img src="images/portfolio-9.jpg" alt="Fotografía gastronómica 9" loading="lazy" /></div>
+      <div class="carousel-slide"><img src="images/portfolio-10.jpg" alt="Fotografía gastronómica 10" loading="lazy" /></div>
+      <div class="carousel-slide"><img src="images/portfolio-11.jpg" alt="Fotografía gastronómica 11" loading="lazy" /></div>
+      <div class="carousel-slide"><img src="images/portfolio-12.jpg" alt="Fotografía gastronómica 12" loading="lazy" /></div>
+      <div class="carousel-slide"><img src="images/portfolio-13.jpg" alt="Fotografía gastronómica 13" loading="lazy" /></div>
+      <div class="carousel-slide"><img src="images/portfolio-14.jpg" alt="Fotografía gastronómica 14" loading="lazy" /></div>
+      <div class="carousel-slide"><img src="images/portfolio-15.jpg" alt="Fotografía gastronómica 15" loading="lazy" /></div>
+    </div>
+    <button class="carousel-btn carousel-prev" id="prevBtn" aria-label="Anterior">&#8592;</button>
+    <button class="carousel-btn carousel-next" id="nextBtn" aria-label="Siguiente">&#8594;</button>
+  </div>
+
+  <div class="carousel-dots" id="carouselDots"></div>
+
+  <div class="portfolio-cta-row reveal">
+    <a href="https://estudiographica.myportfolio.com/" class="btn-secondary" target="_blank" rel="noopener">Ver portafolio completo →</a>
+  </div>
+</section>
+
+<!-- ── SOBRE MÍ ── -->
+<section id="sobre">
+  <div class="sobre-grid">
+    <div class="sobre-img reveal">
+      <!-- REEMPLAZAR: tu foto de perfil en images/profile.jpg -->
+      <img src="images/profile.jpg" alt="Pablo Villarroel — Estudio Graphica" loading="lazy" />
+    </div>
+    <div class="sobre-text">
+      <p class="section-label reveal">¿Y este cuate quién es?</p>
+      <h2 class="section-title reveal">Me llamo <em>Pablo</em></h2>
+      <p class="reveal">
+        Y en todas las páginas siempre hay un bloque enorme de texto donde el fotógrafo presume de sus títulos o años de experiencia, pero nadie lo lee. ¿Sabes por qué?
+      </p>
+      <p class="reveal">
+        <strong>Porque a nadie le importa jajaja.</strong> Tú quieres resultados para tu marca.
+      </p>
+      <p class="reveal">
+        Mi mejor carta de presentación es mi portafolio, porque eso es exactamente lo que te puedo ofrecer.
+      </p>
+      <div class="reveal" style="margin-top: 28px;">
+        <a href="#portafolio" class="btn-primary">Quiero chismosear tu portafolio</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ANTES Y DESPUÉS ── -->
+<section id="comparar">
+  <p class="section-label reveal">Antes y Después</p>
+  <h2 class="section-title reveal">Desliza para ver la diferencia entre una foto<br /><em>tomada con el celu y una tomada con intención</em></h2>
+  <p class="section-body reveal" style="margin: 0 auto;">
+    (y cámara, obvio)
+  </p>
+
+  <div class="compare-wrapper reveal" id="compareWrapper">
+    <!-- REEMPLAZAR: compare-before.jpg = foto con celu, compare-after.jpg = foto profesional -->
+    <div class="compare-after" style="background: url('images/compare-after.jpg') center/cover no-repeat;"></div>
+    <div class="compare-before" id="compareBefore" style="width: 50%; position: absolute; left: 0; top: 0; bottom: 0; overflow: hidden;">
+      <img src="images/compare-before.jpg" alt="Foto con celular" style="position:absolute; width: auto; height: 100%; max-width: none; left: 0;" loading="lazy" />
+    </div>
+    <div class="compare-divider" id="compareDivider">
+      <div class="compare-handle">⇔</div>
+    </div>
+    <span class="compare-label before">📱 Celu</span>
+    <span class="compare-label after">📷 Graphica</span>
+  </div>
+
+  <p class="compare-note reveal"><strong>Jodida la diferencia ¿no?</strong></p>
+</section>
+
+<!-- ── STATS ── -->
+<section id="stats">
+  <p class="section-label" style="text-align:center;" >¿Por qué elegirnos?</p>
+  <div class="stats-grid">
+    <div class="stat-card reveal">
+      <div class="stat-number">+10</div>
+      <p class="stat-label">años haciendo felices a nuestros clientes</p>
+    </div>
+    <div class="stat-card reveal">
+      <div class="stat-number">+352</div>
+      <p class="stat-label">marcas fotografiadas en Cocha</p>
+    </div>
+    <div class="stat-card reveal">
+      <div class="stat-number">100%</div>
+      <p class="stat-label">tiempo ahorrado en hacer las fotos tú con tu celu</p>
+    </div>
+  </div>
+
+  <p class="stats-callout reveal">
+    Contratar fotógrafo no es caro.<br />
+    <span>No vender es caro.</span>
+  </p>
+
+  <div style="text-align:center; margin-top: 40px;">
+    <a href="https://estudiographica.com/#agendar" class="btn-primary reveal">Agendaremos reunión →</a>
+  </div>
+</section>
+
+<!-- ── LOGOS CLIENTES ── -->
+<section id="clientes">
+  <p class="section-label reveal">Empresas que ya han quedado chochas</p>
+  <h2 class="section-title reveal">Marcas que confían<br /><em>en Estudio Graphica</em></h2>
+
+  <div class="logos-grid">
+    <!-- REEMPLAZAR: agrega los logos de tus clientes en images/cliente-1.png … cliente-8.png -->
+    <div class="logo-item reveal"><img src="images/cliente-1.png" alt="Cliente 1" loading="lazy" /></div>
+    <div class="logo-item reveal"><img src="images/cliente-2.png" alt="Cliente 2" loading="lazy" /></div>
+    <div class="logo-item reveal"><img src="images/cliente-3.png" alt="Cliente 3" loading="lazy" /></div>
+    <div class="logo-item reveal"><img src="images/cliente-4.png" alt="Cliente 4" loading="lazy" /></div>
+    <div class="logo-item reveal"><img src="images/cliente-5.png" alt="Cliente 5" loading="lazy" /></div>
+    <div class="logo-item reveal"><img src="images/cliente-6.png" alt="Cliente 6" loading="lazy" /></div>
+    <div class="logo-item reveal"><img src="images/cliente-7.png" alt="Cliente 7" loading="lazy" /></div>
+    <div class="logo-item reveal"><img src="images/cliente-8.png" alt="Cliente 8" loading="lazy" /></div>
+  </div>
+</section>
+
+<!-- ── CTA FINAL ── -->
+<section id="agendar">
+  <p class="section-label reveal">Agendaremos reunión pues ☕</p>
+  <h2 class="section-title reveal">Le meteremos un cafecito o una charla<br /><em>en tu boliche</em> y veamos qué necesitas.</h2>
+  <p class="section-body reveal">Sin costo. Sin compromiso. Solo para ver si podemos trabajar juntos.</p>
+
+  <div class="reveal" style="margin-top: 40px;">
+    <a href="https://cal.com/themarketographer/reuni%C3%B3n" class="btn-primary" target="_blank" rel="noopener">
+      Agendar reunión ☕
+    </a>
+    <p class="cta-micro">Disponibilidad limitada · <strong>Solo X sesiones por mes</strong></p>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-logo">Estudio <span>Graphica</span></div>
+  <div class="footer-social">
+    <a href="https://www.instagram.com/estudiographica" target="_blank" rel="noopener">@estudiographica</a>
+  </div>
+  <p class="footer-copy">© 2026 Estudio Graphica. Fotografía de comida en Cocha.</p>
+</footer>
+
+<script>
+  /* ── CAROUSEL ── */
+  const track  = document.getElementById('carouselTrack');
+  const slides = track.querySelectorAll('.carousel-slide');
+  const dotsEl = document.getElementById('carouselDots');
+  const total  = slides.length;
+  let current  = 0;
+  let timer;
+
+  // Build dots
+  slides.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    d.addEventListener('click', () => goTo(i));
+    dotsEl.appendChild(d);
+  });
+
+  function goTo(n) {
+    current = (n + total) % total;
+    track.style.transform = `translateX(-${current * 100}%)`;
+    dotsEl.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === current));
+  }
+
+  document.getElementById('prevBtn').addEventListener('click', () => { clearInterval(timer); goTo(current - 1); startAuto(); });
+  document.getElementById('nextBtn').addEventListener('click', () => { clearInterval(timer); goTo(current + 1); startAuto(); });
+
+  function startAuto() { timer = setInterval(() => goTo(current + 1), 4000); }
+  startAuto();
+
+  const cw = document.getElementById('carousel');
+  cw.addEventListener('mouseenter', () => clearInterval(timer));
+  cw.addEventListener('mouseleave', startAuto);
+
+  // Touch swipe
+  let startX = 0;
+  track.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, { passive: true });
+  track.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - startX;
+    if (Math.abs(dx) > 40) { clearInterval(timer); goTo(current + (dx < 0 ? 1 : -1)); startAuto(); }
+  });
+
+  /* ── COMPARE SLIDER ── */
+  const wrapper  = document.getElementById('compareWrapper');
+  const before   = document.getElementById('compareBefore');
+  const divider  = document.getElementById('compareDivider');
+  let dragging   = false;
+
+  function setPos(x) {
+    const rect = wrapper.getBoundingClientRect();
+    let pct = Math.min(Math.max((x - rect.left) / rect.width, 0.05), 0.95);
+    before.style.width  = (pct * 100) + '%';
+    divider.style.left  = (pct * 100) + '%';
+  }
+
+  divider.addEventListener('mousedown',  () => dragging = true);
+  divider.addEventListener('touchstart', () => dragging = true, { passive: true });
+  window.addEventListener('mouseup',   () => dragging = false);
+  window.addEventListener('touchend',  () => dragging = false);
+  window.addEventListener('mousemove', e => { if (dragging) setPos(e.clientX); });
+  window.addEventListener('touchmove', e => { if (dragging) setPos(e.touches[0].clientX); }, { passive: true });
+
+  /* ── REVEAL ON SCROLL ── */
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer  = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  revealEls.forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
