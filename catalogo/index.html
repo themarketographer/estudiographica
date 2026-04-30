@@ -9,7 +9,7 @@
 
   <!-- Open Graph / Facebook / WhatsApp -->
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://estudiographica.com/" />
+  <meta property="og:url" content="https://tusitio.netlify.app/" />
   <meta property="og:title" content="Catálogo de Servicios – Graphica" />
   <meta property="og:description" content="Servicios de fotografía gastronómica profesional. Ajusta cantidades y solicita por WhatsApp." />
   <meta property="og:image" content="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745619722/Logo_S_F_l66fym.png" />
@@ -185,11 +185,6 @@
         <p class="service-description">Servicio continuo con entregas mensuales</p>
       </button>
 
-      <button class="service-card" type="button" aria-haspopup="dialog" aria-controls="modal-jornada" onclick="openModal('modal-jornada')">
-        <div class="service-icon" aria-hidden="true">⏱️</div>
-        <h2 class="service-title">Jornada de Trabajo</h2>
-        <p class="service-description">Sesiones por horas para gran volumen</p>
-      </button>
     </div>
   </div>
 
@@ -202,14 +197,14 @@
       <div class="slider-container">
         <div class="slider-header">
           <span class="slider-label">Cantidad de fotos</span>
-          <span class="slider-value" id="fotos-value">10 fotos</span>
+          <span class="slider-value" id="fotos-value">8 fotos</span>
         </div>
-        <input type="range" min="10" max="30" value="10" step="1" class="slider" id="fotos-slider" oninput="updateSesionFotos()" />
+        <input type="range" min="8" max="35" value="8" step="1" class="slider" id="fotos-slider" oninput="updateSesionFotos()" />
       </div>
 
       <div class="package-details">
         <h3 class="package-title" id="sesion-package-title">Paquete Básico</h3>
-        <div class="package-price" id="sesion-package-price">Bs. 900 <span>pago único</span></div>
+        <div class="package-price" id="sesion-package-price">Bs. 580 <span>pago único</span></div>
         <ul class="benefits-list" id="sesion-benefits"></ul>
         <button class="action-button" type="button" onclick="sendWhatsApp('sesion')" aria-label="Solicitar sesión por WhatsApp">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
@@ -255,9 +250,9 @@
       <div class="duration-selector">
         <div class="slider-header"><span class="slider-label">Duración del plan</span></div>
         <div class="duration-options">
-          <div class="duration-option" data-duration="1" onclick="selectDuration(this,1)">3 meses</div>
-          <div class="duration-option active" data-duration="3" onclick="selectDuration(this,3)">6 meses</div>
-          <div class="duration-option" data-duration="6" onclick="selectDuration(this,6)">12 meses</div>
+          <div class="duration-option" data-duration="1" onclick="selectDuration(this,1)">1 mes</div>
+          <div class="duration-option active" data-duration="3" onclick="selectDuration(this,3)">3 meses</div>
+          <div class="duration-option" data-duration="6" onclick="selectDuration(this,6)">6 meses</div>
         </div>
       </div>
 
@@ -266,32 +261,6 @@
         <div class="package-price" id="plan-package-price">Bs. 580 <span>/mes</span></div>
         <ul class="benefits-list" id="plan-benefits"></ul>
         <button class="action-button" type="button" onclick="sendWhatsApp('plan')" aria-label="Solicitar plan por WhatsApp">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/></svg>
-          Solicitar este servicio
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal: Jornada -->
-  <div class="modal-overlay" id="modal-jornada" role="dialog" aria-modal="true" aria-labelledby="jornada-title">
-    <div class="modal">
-      <button class="modal-close" aria-label="Cerrar" onclick="closeModal('modal-jornada')">&times;</button>
-      <h2 class="modal-title" id="jornada-title">Jornada de Trabajo</h2>
-
-      <div class="slider-container">
-        <div class="slider-header">
-          <span class="slider-label">Duración de la jornada</span>
-          <span class="slider-value" id="jornada-value">1 hora</span>
-        </div>
-        <input type="range" min="1" max="8" value="1" step="1" class="slider" id="jornada-slider" oninput="updateJornada()" />
-      </div>
-
-      <div class="package-details">
-        <h3 class="package-title" id="jornada-package-title">Jornada Básica</h3>
-        <div class="package-price" id="jornada-package-price">Bs. 350 <span>pago único</span></div>
-        <ul class="benefits-list" id="jornada-benefits"></ul>
-        <button class="action-button" type="button" onclick="sendWhatsApp('jornada')" aria-label="Solicitar jornada por WhatsApp">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/></svg>
           Solicitar este servicio
         </button>
@@ -368,10 +337,11 @@
       const cantidad = parseInt(document.getElementById('fotos-slider').value,10);
       const valEl = document.getElementById('fotos-value');
       animateChange(valEl,'updating'); valEl.textContent = `${cantidad} fotos`;
-      let paquete, precio; const precioBasico=580, precioEstandar=980, precioPremium=1280;
+      let paquete, precio; const precioBasico=580, precioEstandar=980, precioPremium=1280, precioUltra=1680;
       if(cantidad<=10){ paquete='Paquete Básico'; precio = cantidad===8?precioBasico: Math.round(precioBasico + (cantidad-8)*((700-precioBasico)/2)); }
       else if(cantidad<=18){ paquete='Paquete Estándar'; precio = Math.round(700 + (cantidad-10)*((precioEstandar-700)/8)); }
-      else { paquete='Paquete Premium'; precio = Math.round(precioEstandar + (cantidad-18)*((precioPremium-precioEstandar)/6)); }
+      else if(cantidad<=24){ paquete='Paquete Premium'; precio = Math.round(precioEstandar + (cantidad-18)*((precioPremium-precioEstandar)/6)); }
+      else { paquete='Paquete Ultra'; precio = Math.round(precioPremium + (cantidad-24)*((precioUltra-precioPremium)/11)); }
       const tEl = document.getElementById('sesion-package-title'); const pEl = document.getElementById('sesion-package-price');
       animateChange(tEl,'updating'); animateChange(pEl,'updating');
       tEl.textContent = paquete; pEl.innerHTML = `Bs. ${precio} <span>pago único</span>`;
@@ -380,39 +350,18 @@
         <li class="benefit-item"><span class="benefit-icon">✓</span><span class="benefit-text">Estilismo de alimentos</span></li>`;
       if(cantidad<=10){ newBenefits += `
         <li class="benefit-item"><span class="benefit-icon">✓</span><span class="benefit-text">Entrega en menos de 72 horas</span></li>
-        <li class="benefit-item"><span class="benefit-icon">✓</span><span class="benefit-text">Edición profesional</span></li>`; }
+        <li class="benefit-item"><span class="benefit-icon">✓</span><span class="benefit-text">Edición básica</span></li>`; }
       else if(cantidad<=18){ newBenefits += `
         <li class="benefit-item"><span class="benefit-icon">✓</span><span class="benefit-text">Entrega en menos de 48 horas</span></li>
         <li class="benefit-item"><span class="benefit-icon">✓</span><span class="benefit-text">Edición profesional</span></li>`; }
-      else { newBenefits += `
+      else if(cantidad<=24){ newBenefits += `
         <li class="benefit-item"><span class="benefit-icon">✓</span><span class="benefit-text">Entrega en menos de 24 horas</span></li>
         <li class="benefit-item"><span class="benefit-icon">✓</span><span class="benefit-text">Edición profesional</span></li>`; }
-      animateBenefitsList(document.getElementById('sesion-benefits'), newBenefits);
-    }
-
-    function updateJornada(){
-      const horas = parseInt(document.getElementById('jornada-slider').value,10);
-      const valEl = document.getElementById('jornada-value');
-      animateChange(valEl,'updating'); valEl.textContent = `${horas} hora${horas>1?'s':''}`;
-      let paquete, precio; const precioPorHora = 350;
-      if(horas===1){ precio = precioPorHora; paquete = 'Jornada Básica'; }
-      else if(horas===2){ precio = precioPorHora*2*0.95; paquete='Jornada Básica'; }
-      else if(horas<=5){ const desc = 0.07 + (horas-3)*0.04; precio = precioPorHora*horas*(1-desc); paquete='Jornada Estándar'; }
-      else { const desc = 0.17 + (horas-6)*0.04; precio = precioPorHora*horas*(1-desc); paquete='Jornada Completa'; }
-      precio = Math.round(precio);
-      const tEl = document.getElementById('jornada-package-title'); const pEl = document.getElementById('jornada-package-price');
-      animateChange(tEl,'updating'); animateChange(pEl,'updating');
-      tEl.textContent = paquete; pEl.innerHTML = `Bs. ${precio} <span>pago único</span>`;
-      const totalFotos = horas*15;
-      let newBenefits = `
-        <li class="benefit-item"><span class="benefit-icon">✓</span><span class="benefit-text">${horas} hora${horas>1?'s':''} de trabajo continuo</span></li>
-        <li class="benefit-item"><span class="benefit-icon">✓</span><span class="benefit-text">Entrega de todas las fotos en alta resolución</span></li>
-        <li class="benefit-item"><span class="benefit-icon">✓</span><span class="benefit-text">15 fotos por hora aprox. (total aprox: ${totalFotos} fotos)</span></li>`;
-      if(horas<=2){ newBenefits += `<li class=\"benefit-item\"><span class=\"benefit-icon\">✓</span><span class=\"benefit-text\">Edición básica</span></li>`; }
       else { newBenefits += `
-        <li class="benefit-item"><span class="benefit-icon">✓</span><span class="benefit-text">Edición básica</span></li>
+        <li class="benefit-item"><span class="benefit-icon">✓</span><span class="benefit-text">Entrega en menos de 24 horas</span></li>
+        <li class="benefit-item"><span class="benefit-icon">✓</span><span class="benefit-text">Edición profesional</span></li>
         <li class="benefit-item"><span class="benefit-icon">✓</span><span class="benefit-text">Asistente de producción</span></li>`; }
-      animateBenefitsList(document.getElementById('jornada-benefits'), newBenefits);
+      animateBenefitsList(document.getElementById('sesion-benefits'), newBenefits);
     }
 
     function toggleVideoOptions(){
@@ -482,7 +431,7 @@
     }
 
     document.addEventListener('DOMContentLoaded', ()=>{
-      updateSesionFotos(); updatePlanMensual(); updateJornada();
+      updateSesionFotos(); updatePlanMensual();
       document.querySelectorAll('.modal-overlay').forEach(overlay=>{
         overlay.addEventListener('click', e=>{ if(e.target===overlay){ overlay.classList.remove('active'); document.body.style.overflow=''; }});
       });
