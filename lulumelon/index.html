@@ -204,8 +204,8 @@ function buildMessage(contact, tpl){
     .replaceAll('{sucursal}', contact.sucursal);
 }
 
-function waLink(celular){
-  return 'https://wa.me/' + celular;
+function waLink(celular, message){
+  return 'https://api.whatsapp.com/send?phone=+' + celular + '&text=' + encodeURIComponent(message);
 }
 
 async function copyText(text){
@@ -295,11 +295,11 @@ function renderList(){
     sendBtn.className = 'btn-send';
     sendBtn.textContent = isSent ? 'Copiar y abrir de nuevo' : 'Copiar y enviar';
     sendBtn.disabled = !hasPhone;
-    sendBtn.onclick = async ()=>{
+    sendBtn.onclick = ()=>{
       const msg = buildMessage(c, tpl);
-      await copyText(msg);
-      showToast('Mensaje copiado. Abriendo WhatsApp...');
-      window.open(waLink(c.celular), '_blank');
+      window.open(waLink(c.celular, msg), '_blank');
+      copyText(msg);
+      showToast('Abriendo WhatsApp. Mensaje también copiado por si acaso.');
       if (!isSent){
         sentMap[c.nro] = true;
         persistSent();
