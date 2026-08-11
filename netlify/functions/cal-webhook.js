@@ -33,7 +33,7 @@ exports.handler = async (event) => {
   }
   
   const rawBody = event.body || '';
-  const signature = event.headers['cal-signature-256'] || event.headers['Cal-Signature-256'];
+  const signature = event.headers['x-cal-signature-256'] || event.headers['X-Cal-Signature-256'];
   const secret = process.env.CALCOM_WEBHOOK_SECRET;
   
   if (!verificarFirma(rawBody, signature, secret)) {
