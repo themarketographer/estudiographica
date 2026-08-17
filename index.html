@@ -6,15 +6,32 @@
 <meta name="p:domain_verify" content="6372dfca8d46f2a0c989ce74a7852b16"/>
 <title>Estudio Graphica — Fotografía gastronómica en Cochabamba</title>
 
+<!-- ═══════════ PIXEL + GA4 (reemplazar IDs) ═══════════ -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=TU_GA4_ID"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){ dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'TU_GA4_ID');
+</script>
+<script>
+  !(function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)})(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', 'TU_PIXEL_ID');
+  fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=TU_PIXEL_ID&ev=PageView&noscript=1"/></noscript>
+<script src="/assets/js/tracking.js"></script>
+<!-- ═══════════════════════════════════════════════════ -->
+
 <!-- Cal.com element-click embed -->
 <script type="text/javascript">
   (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if(typeof namespace === "string"){cal.ns[namespace] = cal.ns[namespace] || api;p(cal.ns[namespace], ar);p(cal, ["initNamespace", namespace]);} else p(cal, ar); return;} p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
   Cal("init", "reunion", {origin:"https://app.cal.com"});
   Cal.ns.reunion("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-brand":"#181818"},"dark":{"cal-brand":"#f8f8f8"}},"hideEventTypeDetails":false,"layout":"month_view"});
-  Cal("init", "sesion", {origin:"https://app.cal.com"});
-  Cal.ns.sesion("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-brand":"#181818"},"dark":{"cal-brand":"#f8f8f8"}},"hideEventTypeDetails":false,"layout":"month_view"});
-  Cal("init", "plan-mensual", {origin:"https://app.cal.com"});
-  Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-brand":"#181818"},"dark":{"cal-brand":"#f8f8f8"}},"hideEventTypeDetails":false,"layout":"month_view"});
 </script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -122,7 +139,7 @@ const NAV_LINKS = [
   { label: 'Inicio', href: '#hero' },
   { label: 'Proceso', href: '#proceso' },
   { label: 'Portafolio', href: '#portafolio' },
-  { label: 'Planes', href: '#pricing' },
+  { label: 'Planes', href: '/precios', external: true },
   { label: 'Pablo', href: '#sobre' },
 ];
 
@@ -163,6 +180,7 @@ function NavBar({ onCTA }) {
   }, []);
 
   const handleNav = (e, href) => {
+    if (!href.startsWith('#')) return; // link externo (ej. /precios): navegación normal
     e.preventDefault();
     const el = document.querySelector(href);
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -1148,426 +1166,6 @@ Object.assign(window, { Tag, Cursive, Reveal, ProblemSection, ProcesoSection, Pr
 </script>
 
 <script type="text/babel">
-// Pricing
-// Pricing.jsx — Sesión de Fotos vs Plan Mensual (con sliders dinámicos)
-
-function PricingSection({ onCTA }) {
-  const [tipo, setTipo] = React.useState('sesion'); // 'sesion' | 'mensual'
-  const [fotos, setFotos] = React.useState(15);
-  const [planFotos, setPlanFotos] = React.useState(16);
-  const [duracion, setDuracion] = React.useState(3);
-  const [addVideo, setAddVideo] = React.useState(false);
-  const [reels, setReels] = React.useState(4);
-
-  // Pricing logic
-  const calcSesion = (cant) => {
-    if (cant <= 10) return { paquete: 'Básico', precio: cant === 8 ? 680 : Math.round(680 + (cant - 8) * 65) };
-    if (cant <= 18) return { paquete: 'Estándar', precio: Math.round(820 + (cant - 10) * 40) };
-    return { paquete: 'Premium', precio: Math.round(1150 + (cant - 18) * 55) };
-  };
-  // Precio de videos según presupuestos de referencia (Bs/mes)
-  // Tabla por duración: [4 reels, 8 reels, 12 reels]; se interpola para valores intermedios
-  const calcVideo = (rls, dur) => {
-    const table = {
-      3:  [1900, 2900, 3400],
-      6:  [1850, 2750, 3000],
-      12: [1750, 2600, 2800],
-    };
-    const t = table[dur] || table[3];
-    const pv = rls <= 8
-      ? t[0] + (t[1] - t[0]) * (rls - 4) / 4
-      : t[1] + (t[2] - t[1]) * (rls - 8) / 4;
-    return Math.round(pv);
-  };
-
-  const calcPlan = (cant, dur, video, rls) => {
-    let paquete, precio;
-    if (cant <= 14) { paquete = 'Básico'; precio = cant === 12 ? 580 : Math.round(580 + (cant - 12) * 50); }
-    else if (cant <= 20) { paquete = 'Estándar'; precio = Math.round(680 + (cant - 14) * 33); }
-    else { paquete = 'Premium'; precio = Math.round(880 + (cant - 20) * 33); }
-    if (dur === 6) precio = Math.round(precio * 0.9);
-    else if (dur === 12) precio = Math.round(precio * 0.82);
-    if (video) {
-      precio = precio + calcVideo(rls, dur);
-      paquete += ' + Video';
-    }
-    return { paquete, precio };
-  };
-
-  const sesionData = calcSesion(fotos);
-  const planData = calcPlan(planFotos, duracion, addVideo, reels);
-
-  const sesionBenefits = [
-    'Planificación estratégica',
-    'Foodstyling profesional',
-    fotos <= 10 ? 'Entrega en menos de 72h' : fotos <= 18 ? 'Entrega en menos de 48h' : 'Entrega en menos de 24h',
-    fotos <= 10 ? 'Edición básica' : 'Edición profesional',
-    `${fotos} fotos en alta calidad`,
-  ];
-  const planBenefits = [
-    `${planFotos} fotos/mes`,
-    '1 visita al mes',
-    'Foodstyling de alimentos',
-    planFotos <= 14 ? 'Entrega en 72h' : planFotos <= 20 ? 'Entrega en 48h' : 'Entrega en 24h',
-    planFotos <= 14 ? 'Edición básica' : 'Edición profesional',
-    ...(planFotos >= 16 ? ['Asesoría estratégica de marketing'] : []),
-    ...(duracion >= 3 && planFotos >= 16 ? ['Página web sencilla o tienda Take App'] : []),
-    ...(addVideo ? [`${reels} reels/mes`, 'Guion + concepto creativo', 'Música con licencia'] : []),
-  ];
-
-  const s = {
-    section: { background: TOKEN.cream, padding: 'clamp(72px, 10vw, 120px) 0', position: 'relative', overflow: 'hidden' },
-    blob: {
-      position: 'absolute', width: 460, height: 460,
-      background: 'radial-gradient(circle, rgba(255,221,90,0.35) 0%, transparent 70%)',
-      borderRadius: '50%', top: '40%', left: '-180px', pointerEvents: 'none',
-      animation: 'eg-pulse-blob 9s ease-in-out infinite',
-    },
-    container: { maxWidth: 1100, margin: '0 auto', padding: '0 24px', position: 'relative', zIndex: 2 },
-    header: { textAlign: 'center', marginBottom: 40 },
-    h2: {
-      fontFamily: "'Izmir', 'Syne', sans-serif", fontWeight: 800,
-      fontSize: 'clamp(2rem, 4.2vw, 3.2rem)', lineHeight: 1.05,
-      letterSpacing: '-0.025em', color: TOKEN.dark,
-    },
-    cursive: { fontFamily: "'Playfair Display', serif", fontStyle: 'italic', fontWeight: 700 },
-    h2Accent: { color: TOKEN.dark, position: 'relative', display: 'inline-block',
-      fontFamily: "'Playfair Display', serif", fontStyle: 'italic', fontWeight: 700 },
-    accentLine: {
-      position: 'absolute', bottom: '0.06em', left: 0, right: 0, height: '0.20em',
-      background: TOKEN.yellow, zIndex: -1,
-    },
-    sub: { fontSize: 16, color: TOKEN.grayText, maxWidth: 560, margin: '14px auto 0', lineHeight: 1.65 },
-
-    // Toggle tipo de servicio
-    toggleWrap: {
-      display: 'flex', justifyContent: 'center', marginBottom: 36,
-    },
-    toggle: {
-      display: 'inline-flex', background: '#fff', borderRadius: 9999, padding: 6,
-      boxShadow: '0 4px 18px rgba(24,24,24,0.06)', border: '1px solid rgba(24,24,24,0.06)',
-    },
-    toggleBtn: (active) => ({
-      fontFamily: "'Izmir', 'Syne', sans-serif", fontWeight: 700, fontSize: 14,
-      padding: '12px 26px', borderRadius: 9999, border: 'none', cursor: 'pointer',
-      background: active ? TOKEN.dark : 'transparent',
-      color: active ? TOKEN.offWhite : TOKEN.grayText,
-      transition: 'all 0.28s',
-      display: 'inline-flex', alignItems: 'center', gap: 8,
-    }),
-
-    // Card central
-    card: {
-      background: '#fff', borderRadius: 24, padding: 36,
-      boxShadow: '0 20px 60px rgba(24,24,24,0.10)',
-      border: '1px solid rgba(24,24,24,0.06)',
-      display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: 40,
-      animation: 'eg-fade-in-up 0.5s ease both',
-    },
-
-    leftCol: {},
-    rightCol: { borderLeft: `1px dashed rgba(24,24,24,0.12)`, paddingLeft: 36, display: 'flex', flexDirection: 'column' },
-
-    sliderBlock: { marginBottom: 26 },
-    sliderHead: { display: 'flex', justifyContent: 'space-between', marginBottom: 10 },
-    sliderLabel: { fontFamily: "'Izmir', 'Syne', sans-serif", fontWeight: 700, fontSize: 13, color: TOKEN.dark, letterSpacing: '0.02em' },
-    sliderValue: {
-      fontFamily: "'Izmir', 'Syne', sans-serif", fontWeight: 800, fontSize: 14,
-      color: TOKEN.dark,
-      background: TOKEN.yellow, padding: '4px 12px', borderRadius: 9999,
-    },
-    slider: {
-      width: '100%', height: 8, WebkitAppearance: 'none', appearance: 'none',
-      background: '#e8e5dd', borderRadius: 9999, outline: 'none', cursor: 'pointer',
-    },
-
-    durChips: { display: 'flex', gap: 8, marginTop: 8 },
-    durChip: (active) => ({
-      flex: 1, padding: '10px 8px', textAlign: 'center', borderRadius: 12,
-      border: `1.5px solid ${active ? TOKEN.dark : 'rgba(24,24,24,0.10)'}`,
-      background: active ? TOKEN.yellow : '#fff',
-      color: TOKEN.dark, fontWeight: active ? 700 : 500, fontSize: 13,
-      cursor: 'pointer', transition: 'all 0.2s',
-    }),
-
-    checkbox: {
-      display: 'flex', alignItems: 'center', gap: 10, padding: '12px 14px',
-      borderRadius: 12, border: '1px dashed rgba(24,24,24,0.18)',
-      cursor: 'pointer', marginTop: 6, transition: 'all 0.2s',
-    },
-    checkSquare: (active) => ({
-      width: 18, height: 18, minWidth: 18, borderRadius: 5,
-      border: `1.5px solid ${active ? TOKEN.dark : 'rgba(24,24,24,0.3)'}`,
-      background: active ? TOKEN.dark : 'transparent',
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-      color: TOKEN.yellow, fontSize: 11, fontWeight: 700,
-    }),
-
-    // Tier guide (sesion mode)
-    tierGuide: { marginTop: 28 },
-    tierGuideLabel: {
-      fontFamily: "'Izmir', 'Syne', sans-serif", fontWeight: 700,
-      fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase',
-      color: TOKEN.grayText, marginBottom: 14,
-    },
-    tierList: { display: 'flex', flexDirection: 'column', gap: 10 },
-    tierRow: (active) => ({
-      display: 'flex', alignItems: 'flex-start', gap: 12,
-      padding: '12px 14px', borderRadius: 12,
-      background: active ? TOKEN.yellow : 'transparent',
-      border: `1.5px solid ${active ? TOKEN.dark : 'rgba(24,24,24,0.08)'}`,
-      transition: 'all 0.28s',
-    }),
-    tierDot: (active) => ({
-      width: 10, height: 10, minWidth: 10, marginTop: 6, borderRadius: '50%',
-      background: active ? TOKEN.dark : 'rgba(24,24,24,0.25)',
-      transition: 'background 0.28s',
-    }),
-    tierName: (active) => ({
-      fontFamily: "'Izmir','Syne',sans-serif", fontWeight: 700,
-      fontSize: 14, color: TOKEN.dark, marginBottom: 2,
-    }),
-    tierRange: { fontFamily: "'DM Sans',sans-serif", fontWeight: 400, fontSize: 12, color: TOKEN.grayText },
-    tierDesc: { fontSize: 12, color: TOKEN.grayText, lineHeight: 1.4 },
-
-    // Right col
-    paqueteLabel: { fontSize: 11, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: TOKEN.grayText, marginBottom: 8 },
-    paqueteName: { fontFamily: "'Izmir', 'Syne', sans-serif", fontWeight: 800, fontSize: '1.6rem', color: TOKEN.dark, marginBottom: 14, lineHeight: 1.1, letterSpacing: '-0.01em' },
-    price: { fontFamily: "'Izmir', 'Syne', sans-serif", fontWeight: 800, fontSize: '2.6rem', color: TOKEN.dark, lineHeight: 1, marginBottom: 4, letterSpacing: '-0.02em', transition: 'all 0.3s' },
-    priceUnit: { fontSize: 14, fontWeight: 400, color: TOKEN.grayText, marginLeft: 4 },
-    priceNote: { fontSize: 12, color: TOKEN.grayText, marginBottom: 22, fontStyle: 'italic' },
-
-    benefits: { listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 24, padding: 0, flex: 1 },
-    benefitItem: { display: 'flex', alignItems: 'flex-start', gap: 10, fontSize: 13.5, color: TOKEN.dark, lineHeight: 1.45 },
-    check: {
-      width: 16, height: 16, minWidth: 16, marginTop: 2, borderRadius: '50%',
-      background: TOKEN.dark, color: TOKEN.yellow,
-      display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-      fontSize: 10, fontWeight: 700,
-    },
-
-    btnPrimary: {
-      display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
-      fontFamily: "'Izmir', 'Syne', sans-serif", fontWeight: 700, fontSize: 15,
-      padding: '16px 24px', borderRadius: 9999, background: TOKEN.dark,
-      color: TOKEN.offWhite, border: 'none', cursor: 'pointer', textDecoration: 'none',
-      width: '100%', transition: 'all 0.28s',
-    },
-    waLink: {
-      display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
-      marginTop: 10, fontFamily: "'DM Sans', sans-serif", fontSize: 12.5,
-      color: TOKEN.grayText, textDecoration: 'none', transition: 'color 0.2s',
-    },
-  };
-
-  const [hoverBtn, setHoverBtn] = React.useState(false);
-  const [hoverWA, setHoverWA] = React.useState(false);
-
-  const buildWAUrl = () => {
-    let text;
-    if (tipo === 'sesion') {
-      text = `¡Hola, Estudio Graphica! Quiero una *Sesión de Fotos*:\n- Paquete ${sesionData.paquete}\n- ${fotos} fotos\n- Bs. ${sesionData.precio}\n\n¿Cuándo agendamos? 📸`;
-    } else {
-      text = `¡Hola, Estudio Graphica! Quiero un *Plan Mensual*:\n- Paquete ${planData.paquete}\n- ${planFotos} fotos/mes${addVideo ? ` + ${reels} reels/mes` : ''}\n- Duración: ${duracion} mes${duracion > 1 ? 'es' : ''}\n- Bs. ${planData.precio}/mes\n\n¿Cuándo agendamos? 📸`;
-    }
-    return `https://api.whatsapp.com/send?phone=+59169422335&text=${encodeURIComponent(text)}`;
-  };
-
-  return (
-    <section id="pricing" style={s.section}>
-      <div style={s.blob}></div>
-      <div style={s.container}>
-        <div style={s.header}>
-          <Tag>Planes & precios</Tag>
-          <h2 style={s.h2}>
-            Configura tu paquete y{' '}
-            <span style={s.h2Accent}>
-              agendamos
-              <span style={s.accentLine}></span>
-            </span>{' '}
-            tu llamada.
-          </h2>
-          <p style={s.sub}>Elige entre una <span style={s.cursive}>sesión puntual</span> o un <span style={s.cursive}>plan mensual</span>. Ajusta cantidades y solicita por WhatsApp.</p>
-        </div>
-
-        {/* Toggle tipo */}
-        <div style={s.toggleWrap}>
-          <div style={s.toggle}>
-            <button style={s.toggleBtn(tipo === 'sesion')} onClick={() => setTipo('sesion')}>
-              <span>📸</span> Sesión de Fotos
-            </button>
-            <button style={s.toggleBtn(tipo === 'mensual')} onClick={() => setTipo('mensual')}>
-              <span>📅</span> Plan Mensual
-            </button>
-          </div>
-        </div>
-
-        <div style={s.card} key={tipo}>
-          <div style={s.leftCol}>
-            {tipo === 'sesion' && (
-              <>
-                <div style={s.sliderBlock}>
-                  <div style={s.sliderHead}>
-                    <span style={s.sliderLabel}>Cantidad de fotos</span>
-                    <span style={s.sliderValue}>{fotos} fotos</span>
-                  </div>
-                  <input type="range" min="8" max="24" step="1" value={fotos}
-                    onChange={e => setFotos(parseInt(e.target.value))}
-                    style={s.slider} className="eg-slider" />
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 6, fontSize: 11, color: TOKEN.grayText }}>
-                    <span>8</span><span>24</span>
-                  </div>
-                </div>
-
-                {/* Tier guide */}
-                <div style={s.tierGuide}>
-                  <p style={s.tierGuideLabel}>Paquetes disponibles</p>
-                  <div style={s.tierList}>
-                    {[
-                      { name: 'Básico', range: '8–10 fotos', desc: 'Ideal para refrescar carta o redes', match: fotos <= 10 },
-                      { name: 'Estándar', range: '11–18 fotos', desc: 'Ideal para cobertura completa de menú', match: fotos > 10 && fotos <= 18 },
-                      { name: 'Premium', range: '19–24 fotos', desc: 'Ideal para menú + ambiente + ingredientes', match: fotos > 18 },
-                    ].map(t => (
-                      <div key={t.name} style={s.tierRow(t.match)}>
-                        <div style={s.tierDot(t.match)}></div>
-                        <div style={{ flex: 1 }}>
-                          <div style={s.tierName(t.match)}>{t.name}<span style={s.tierRange}> · {t.range}</span></div>
-                          <div style={s.tierDesc}>{t.desc}</div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </>
-            )}
-
-            {tipo === 'mensual' && (
-              <>
-                <div style={s.sliderBlock}>
-                  <div style={s.sliderHead}>
-                    <span style={s.sliderLabel}>Fotos mensuales</span>
-                    <span style={s.sliderValue}>{planFotos} fotos/mes</span>
-                  </div>
-                  <input type="range" min="12" max="26" step="1" value={planFotos}
-                    onChange={e => setPlanFotos(parseInt(e.target.value))}
-                    style={s.slider} className="eg-slider" />
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 6, fontSize: 11, color: TOKEN.grayText }}>
-                    <span>12</span><span>26</span>
-                  </div>
-                </div>
-
-                <div style={s.sliderBlock}>
-                  <div style={s.sliderHead}>
-                    <span style={s.sliderLabel}>Duración del plan</span>
-                  </div>
-                  <div style={s.durChips}>
-                    {[3, 6, 12].map(d => (
-                      <div key={d} style={s.durChip(duracion === d)} onClick={() => setDuracion(d)}>
-                        {d} meses
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div style={s.checkbox} onClick={() => setAddVideo(v => !v)}>
-                  <span style={s.checkSquare(addVideo)}>{addVideo ? '✓' : ''}</span>
-                  <span style={{ fontSize: 14, color: TOKEN.dark, fontWeight: 500 }}>Añadir servicio de videos</span>
-                </div>
-
-                {addVideo && (
-                  <div style={{ ...s.sliderBlock, marginTop: 18, animation: 'eg-fade-in-up 0.3s ease both' }}>
-                    <div style={s.sliderHead}>
-                      <span style={s.sliderLabel}>Reels mensuales</span>
-                      <span style={s.sliderValue}>{reels} reels/mes</span>
-                    </div>
-                    <input type="range" min="4" max="12" step="1" value={reels}
-                      onChange={e => setReels(parseInt(e.target.value))}
-                      style={s.slider} className="eg-slider" />
-                    <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 6, fontSize: 11, color: TOKEN.grayText }}>
-                      <span>4</span><span>12</span>
-                    </div>
-                  </div>
-                )}
-              </>
-            )}
-          </div>
-
-          <div style={s.rightCol}>
-            <div style={s.paqueteLabel}>{tipo === 'sesion' ? 'Sesión' : 'Plan'} {tipo === 'sesion' ? sesionData.paquete : planData.paquete}</div>
-            <div style={s.paqueteName}>{tipo === 'sesion' ? `Paquete ${sesionData.paquete}` : `Plan ${planData.paquete}`}</div>
-            <div style={s.price} key={tipo === 'sesion' ? sesionData.precio : planData.precio}>
-              Bs. {tipo === 'sesion' ? sesionData.precio : planData.precio}
-              <span style={s.priceUnit}>{tipo === 'sesion' ? 'pago único' : '/mes'}</span>
-            </div>
-            <div style={s.priceNote}>Precio referencial. Lo ajustamos en tu llamada.</div>
-
-            <ul style={s.benefits}>
-              {(tipo === 'sesion' ? sesionBenefits : planBenefits).map((b, i) => (
-                <li key={`${tipo}-${i}-${b}`} style={{ ...s.benefitItem, animation: `eg-fade-in-right 0.4s ease ${i * 0.06}s both` }}>
-                  <span style={s.check}>✓</span>
-                  <span>{b}</span>
-                </li>
-              ))}
-            </ul>
-
-            <button
-              {...(tipo === 'sesion'
-                ? { 'data-cal-namespace': 'sesion', 'data-cal-link': 'themarketographer/sesion' }
-                : { 'data-cal-namespace': 'plan-mensual', 'data-cal-link': 'themarketographer/plan-mensual' })}
-              data-cal-config='{"layout":"month_view","useSlotsViewOnSmallScreen":"true","theme":"light"}'
-              style={{ ...s.btnPrimary, ...(hoverBtn ? { background: '#000', transform: 'translateY(-2px)', boxShadow: '0 12px 28px rgba(24,24,24,0.25)' } : {}) }}
-              onMouseEnter={() => setHoverBtn(true)} onMouseLeave={() => setHoverBtn(false)}
-            >
-              Reservar →
-            </button>
-            <a
-              href={buildWAUrl()} target="_blank" rel="noopener"
-              style={{ ...s.waLink, color: hoverWA ? TOKEN.dark : TOKEN.grayText }}
-              onMouseEnter={() => setHoverWA(true)} onMouseLeave={() => setHoverWA(false)}
-            >
-              o pídelo directo por WhatsApp →
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <style>{`
-        @keyframes eg-pulse-blob {
-          0%, 100% { transform: scale(1); opacity: 0.35; }
-          50% { transform: scale(1.15); opacity: 0.5; }
-        }
-        .eg-slider::-webkit-slider-thumb {
-          -webkit-appearance: none; appearance: none;
-          width: 22px; height: 22px; border-radius: 50%;
-          background: ${TOKEN.dark}; cursor: pointer;
-          border: 3px solid ${TOKEN.yellow};
-          box-shadow: 0 4px 12px rgba(24,24,24,0.25);
-          transition: transform 0.2s;
-        }
-        .eg-slider::-webkit-slider-thumb:hover { transform: scale(1.15); }
-        .eg-slider::-moz-range-thumb {
-          width: 22px; height: 22px; border-radius: 50%;
-          background: ${TOKEN.dark}; cursor: pointer;
-          border: 3px solid ${TOKEN.yellow};
-        }
-        @media (max-width: 880px) {
-          #pricing div[style*="1.2fr 1fr"] { grid-template-columns: 1fr !important; gap: 24px !important; padding: 24px !important; }
-          #pricing div[style*="border-left: 1px dashed"] {
-            border-left: none !important;
-            border-top: 1px dashed rgba(24,24,24,0.12) !important;
-            padding-left: 0 !important; padding-top: 24px !important;
-          }
-        }
-      `}</style>
-    </section>
-  );
-}
-
-Object.assign(window, { PricingSection });
-
-</script>
-
-<script type="text/babel">
 // Portfolio
 // Portfolio.jsx — Estudio Graphica
 
@@ -1776,6 +1374,7 @@ function FooterSection() {
   const hover = e => e.currentTarget.style.color = TOKEN.yellow;
   const leave = e => e.currentTarget.style.color = 'rgba(248,248,248,0.7)';
   const handleNav = (e, href) => {
+    if (!href.startsWith('#')) return; // link externo (ej. /precios): navegación normal
     e.preventDefault();
     const el = document.querySelector(href);
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -1830,7 +1429,6 @@ function App() {
       <ProblemSection />
       <ProcesoSection onCTA={handleCTA} />
       <PromesaSection onCTA={handleCTA} />
-      <PricingSection onCTA={handleCTA} />
       <PortfolioSection onCTA={handleCTA} />
       <MarcasSection />
       <SobreSection onPortfolio={handlePortfolio} />
@@ -1841,6 +1439,44 @@ function App() {
 }
 
 ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+
+<script>
+  // ═══════════ Tracking de conversiones (Pixel + GA4) ═══════════
+  // Delegación de eventos a nivel document: cubre los 3 botones de
+  // "Agendar llamada" (nav, hero, CTA final) y los links de WhatsApp,
+  // sin duplicar lógica en cada componente React.
+  //
+  // Deduplicación con CAPI: al hacer click en "Agendar llamada" generamos
+  // un event_id ANTES de abrir el widget de Cal y lo mandamos como
+  // metadata al booking. cal-webhook.js debe leer esa metadata y reusar
+  // el mismo event_id al llamar a sendCapiEvent(), así Meta deduplica el
+  // Lead de Pixel (client-side, se dispara al click) con el Lead de CAPI
+  // (server-side, se dispara al confirmar booking) sin contarlo doble.
+  document.addEventListener('DOMContentLoaded', function () {
+    if (!window.EG) return;
+
+    document.addEventListener('click', function (e) {
+      var calBtn = e.target.closest('[data-cal-namespace="reunion"]');
+      if (calBtn) {
+        var eventId = window.EG.prepareCalBooking('reunion', 'lead');
+        window.EG.trackEvent('Lead', {
+          content_name: 'Agendar llamada',
+          origen: window.EG.getOrigen(),
+          event_id: eventId,
+        });
+        return;
+      }
+
+      var waLink = e.target.closest('a[href*="wa.me"], a[href*="api.whatsapp.com"]');
+      if (waLink) {
+        window.EG.trackEvent('Contact', {
+          content_name: 'WhatsApp',
+          origen: window.EG.getOrigen(),
+        });
+      }
+    });
+  });
 </script>
 </body>
 </html>

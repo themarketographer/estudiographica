@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Blog · Consejos de fotografía para restaurantes | Estudio Graphica</title>
+<meta name="description" content="Consejos prácticos de fotografía gastronómica, marketing visual y posicionamiento para restaurantes en Cochabamba." />
+<meta name="robots" content="index,follow" />
+<meta name="theme-color" content="#181818" />
+<link rel="canonical" href="https://estudiographica.com/blog/" />
+
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Blog · Estudio Graphica" />
+<meta property="og:description" content="Consejos prácticos de fotografía gastronómica y marketing visual para restaurantes." />
+<meta property="og:image" content="https://res.cloudinary.com/dplhu2z6j/image/upload/v1777509513/Open_Graph_ajvxef.png" />
+<meta property="og:url" content="https://estudiographica.com/blog/" />
+
+<link rel="icon" type="image/jpeg" href="https://res.cloudinary.com/dplhu2z6j/image/upload/v1777509520/logo_F_B_cx6pjx.jpg" />
+
+<!-- ═══════════ PIXEL + GA4 (reemplazar IDs) ═══════════ -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=TU_GA4_ID"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){ dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'TU_GA4_ID');
+</script>
+<script>
+  !(function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)})(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', 'TU_PIXEL_ID');
+  fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=TU_PIXEL_ID&ev=PageView&noscript=1"/></noscript>
+<script src="/assets/js/tracking.js"></script>
+<!-- ═══════════════════════════════════════════════════ -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&family=Playfair+Display:ital,wght@1,700&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+
+<style>
+  @font-face { font-family:'Izmir'; src:url('/fonts/izmir-extrabold.otf') format('opentype'); font-weight:800; font-display:swap; }
+  @font-face { font-family:'Izmir'; src:url('/fonts/izmir-bold.otf') format('opentype'); font-weight:700; font-display:swap; }
+  :root { --dark: #181818; --yellow: #FFDD5A; --off-white: #F8F8F8; --cream: #F0EDE6; --gray-text: #6B6660; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--dark); -webkit-font-smoothing: antialiased; }
+  .cursive { font-family: 'Playfair Display', serif; font-style: italic; font-weight: 700; }
+
+  nav { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.9); backdrop-filter: blur(14px); border-bottom: 1px solid rgba(24,24,24,0.06); padding: 16px 24px; }
+  nav .inner { max-width: 900px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+  nav img { height: 34px; }
+  nav a.back { font-size: 13px; color: var(--gray-text); text-decoration: none; }
+
+  .header { max-width: 900px; margin: 0 auto; padding: 56px 24px 8px; text-align: center; }
+  .tag { display: inline-block; background: var(--yellow); color: var(--dark); font-family: 'Izmir', 'Syne', sans-serif; font-weight: 700; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; padding: 6px 14px; border-radius: 9999px; margin-bottom: 20px; }
+  h1 { font-family: 'Izmir', 'Syne', sans-serif; font-weight: 800; letter-spacing: -0.025em; font-size: clamp(2rem, 4.4vw, 3rem); line-height: 1.05; margin-bottom: 14px; }
+  .sub { font-size: 16px; color: var(--gray-text); max-width: 560px; margin: 0 auto; line-height: 1.65; }
+
+  .posts { max-width: 900px; margin: 48px auto 100px; padding: 0 24px; display: grid; grid-template-columns: 1fr; gap: 22px; }
+  @media (min-width: 720px) { .posts { grid-template-columns: repeat(2, 1fr); } }
+
+  .post-card { background: #fff; border-radius: 20px; overflow: hidden; text-decoration: none; color: var(--dark); box-shadow: 0 12px 32px rgba(24,24,24,0.06); border: 1px solid rgba(24,24,24,0.06); transition: transform 0.25s, box-shadow 0.25s; display: block; }
+  .post-card:hover { transform: translateY(-4px); box-shadow: 0 20px 48px rgba(24,24,24,0.12); }
+  .post-img { width: 100%; aspect-ratio: 16/10; object-fit: cover; display: block; }
+  .post-body { padding: 22px; }
+  .post-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gray-text); margin-bottom: 10px; }
+  .post-title { font-family: 'Izmir', 'Syne', sans-serif; font-weight: 800; font-size: 1.15rem; line-height: 1.3; margin-bottom: 10px; }
+  .post-excerpt { font-size: 13.5px; color: rgba(24,24,24,0.65); line-height: 1.6; }
+
+  footer { background: #0A0A0A; color: rgba(248,248,248,0.6); text-align: center; padding: 40px 24px; font-size: 13px; }
+  footer a { color: var(--yellow); text-decoration: none; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="inner">
+    <a href="/"><img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1777509513/Logo_B_S_F_kdolev.png" alt="Estudio Graphica" /></a>
+    <a class="back" href="/">← Inicio</a>
+  </div>
+</nav>
+
+<div class="header">
+  <span class="tag">Blog</span>
+  <h1>Consejos para que tu restaurante <span class="cursive">se vea bien</span> donde te buscan.</h1>
+  <p class="sub">Fotografía, marketing visual y posicionamiento local para restaurantes en Cochabamba.</p>
+</div>
+
+<div class="posts">
+  <a class="post-card" href="/blog/mejores-estudios-fotografia-gastronomica-cochabamba/">
+    <img class="post-img" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1777509515/Portada_p9ijpa.jpg" alt="Mejores estudios de fotografía gastronómica en Cochabamba" />
+    <div class="post-body">
+      <p class="post-eyebrow">Guías · Cochabamba</p>
+      <p class="post-title">Los mejores estudios de fotografía gastronómica en Cochabamba</p>
+      <p class="post-excerpt">Guía comparativa: qué ofrece cada estudio, para qué tipo de restaurante conviene, y cómo elegir el correcto.</p>
+    </div>
+  </a>
+
+  <a class="post-card" href="/blog/fotos-menu-que-aumentan-pedidos/">
+    <img class="post-img" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745819075/2_ylgf7o.jpg" alt="Fotos de menú que aumentan pedidos" />
+    <div class="post-body">
+      <p class="post-eyebrow">Consejos · Fotografía de menú</p>
+      <p class="post-title">Fotos de menú que aumentan pedidos: 5 errores que te están costando ventas</p>
+      <p class="post-excerpt">Los errores más comunes en fotos de menú, y cómo corregirlos para que el cliente decida más rápido.</p>
+    </div>
+  </a>
+
+  <a class="post-card" href="/blog/errores-fotos-celular-restaurantes/">
+    <img class="post-img" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745819075/1_ymdvor.jpg" alt="Por qué las fotos con celular le cuestan clientes a tu restaurante" />
+    <div class="post-body">
+      <p class="post-eyebrow">Consejos · Marketing para restaurantes</p>
+      <p class="post-title">Por qué las fotos con celular le cuestan clientes a tu restaurante</p>
+      <p class="post-excerpt">No es solo la cámara. Los motivos reales por los que las fotos de celular no convierten.</p>
+    </div>
+  </a>
+</div>
+
+<footer>
+  <p>© 2026 Estudio Graphica · Cochabamba, Bolivia</p>
+  <p style="margin-top: 8px;"><a href="/">← Volver al inicio</a></p>
+</footer>
+
+<script>
+  if (window.EG) {
+    window.EG.trackEvent('ViewContent', { content_name: 'Blog - Índice' });
+  }
+</script>
+
+</body>
+</html>

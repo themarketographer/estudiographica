@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /gracias-reunion
+Disallow: /gracias-sesion
+Disallow: /gracias-plan
+
+Sitemap: https://estudiographica.com/sitemap.xml

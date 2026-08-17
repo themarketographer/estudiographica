@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://estudiographica.com/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://estudiographica.com/precios</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://estudiographica.com/blog</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://estudiographica.com/blog/mejores-estudios-fotografia-gastronomica-cochabamba/</loc>
+    <lastmod>2026-08-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://estudiographica.com/blog/fotos-menu-que-aumentan-pedidos/</loc>
+    <lastmod>2026-08-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://estudiographica.com/blog/errores-fotos-celular-restaurantes/</loc>
+    <lastmod>2026-08-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+</urlset>
+<!--
+  NOTA: /gracias-reunion, /gracias-sesion y /gracias-plan NO están en este
+  sitemap a propósito — son páginas de transacción, no contenido para
+  indexar. Ya llevan <meta name="robots" content="noindex,nofollow"> en su
+  <head>. Cuando agregues nuevos posts al blog, súmalos aquí también.
+-->

@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>¡Gracias por tu plan mensual! · Estudio Graphica</title>
+<meta name="description" content="Confirma los detalles de tu plan mensual y realiza tu adelanto." />
+<meta name="robots" content="noindex,nofollow" />
+<meta name="theme-color" content="#181818" />
+
+<!-- ═══════════ PIXEL + GA4 (reemplazar IDs) ═══════════ -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=TU_GA4_ID"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){ dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'TU_GA4_ID');
+</script>
+<script>
+  !(function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)})(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', 'TU_PIXEL_ID');
+  fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=TU_PIXEL_ID&ev=PageView&noscript=1"/></noscript>
+<script src="/assets/js/tracking.js"></script>
+<script src="/assets/js/pricing-logic.js"></script>
+<!-- ═══════════════════════════════════════════════════ -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&family=Playfair+Display:ital,wght@1,700&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+
+<style>
+  @font-face { font-family:'Izmir'; src:url('/fonts/izmir-extrabold.otf') format('opentype'); font-weight:800; font-display:swap; }
+  @font-face { font-family:'Izmir'; src:url('/fonts/izmir-bold.otf') format('opentype'); font-weight:700; font-display:swap; }
+  @font-face { font-family:'Izmir'; src:url('/fonts/izmir-regular.otf') format('opentype'); font-weight:400; font-display:swap; }
+
+  :root {
+    --dark: #181818; --yellow: #FFDD5A; --off-white: #F8F8F8;
+    --cream: #F0EDE6; --gray-text: #6B6660;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', sans-serif; background: var(--dark); color: var(--off-white);
+    -webkit-font-smoothing: antialiased; min-height: 100vh;
+  }
+  .cursive { font-family: 'Playfair Display', serif; font-style: italic; font-weight: 700; color: var(--yellow); }
+  .wrap { max-width: 640px; margin: 0 auto; padding: 64px 24px 80px; }
+  .logo { height: 40px; display: block; margin: 0 auto 40px; }
+  .badge {
+    display: inline-flex; align-items: center; gap: 8px; background: rgba(255,221,90,0.12);
+    color: var(--yellow); border: 1px solid rgba(255,221,90,0.3); border-radius: 9999px;
+    padding: 8px 18px; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+  .center { text-align: center; }
+  h1 {
+    font-family: 'Izmir', 'Syne', sans-serif; font-weight: 800; letter-spacing: -0.02em;
+    font-size: clamp(1.9rem, 5vw, 2.8rem); line-height: 1.1; margin-bottom: 18px;
+  }
+  .sub { color: rgba(248,248,248,0.72); font-size: 16px; line-height: 1.7; max-width: 480px; margin: 0 auto 40px; }
+
+  .card { background: var(--cream); color: var(--dark); border-radius: 22px; padding: 32px; margin-bottom: 20px; }
+  .card-label { font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gray-text); margin-bottom: 18px; }
+
+  .slider-block { margin-bottom: 22px; }
+  .slider-head { display: flex; justify-content: space-between; margin-bottom: 10px; }
+  .slider-label { font-family: 'Izmir', 'Syne', sans-serif; font-weight: 700; font-size: 13px; color: var(--dark); }
+  .slider-value {
+    font-family: 'Izmir', 'Syne', sans-serif; font-weight: 800; font-size: 13px; color: var(--dark);
+    background: var(--yellow); padding: 4px 12px; border-radius: 9999px;
+  }
+  input[type="range"] {
+    width: 100%; height: 8px; -webkit-appearance: none; appearance: none;
+    background: #e8e5dd; border-radius: 9999px; outline: none; cursor: pointer;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none; width: 22px; height: 22px; border-radius: 50%;
+    background: var(--dark); cursor: pointer; border: 3px solid var(--yellow);
+    box-shadow: 0 4px 12px rgba(24,24,24,0.25);
+  }
+  input[type="range"]::-moz-range-thumb {
+    width: 22px; height: 22px; border-radius: 50%; background: var(--dark); cursor: pointer; border: 3px solid var(--yellow);
+  }
+  .range-labels { display: flex; justify-content: space-between; margin-top: 6px; font-size: 11px; color: var(--gray-text); }
+
+  .dur-chips { display: flex; gap: 8px; margin-top: 8px; }
+  .dur-chip {
+    flex: 1; padding: 10px 8px; text-align: center; border-radius: 12px;
+    border: 1.5px solid rgba(24,24,24,0.10); background: #fff; color: var(--dark);
+    font-weight: 500; font-size: 13px; cursor: pointer; transition: all 0.2s;
+  }
+  .dur-chip.active { border-color: var(--dark); background: var(--yellow); font-weight: 700; }
+
+  .checkbox-row {
+    display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-radius: 12px;
+    border: 1px dashed rgba(24,24,24,0.18); cursor: pointer; margin-top: 6px; transition: all 0.2s;
+  }
+  .check-square {
+    width: 18px; height: 18px; min-width: 18px; border-radius: 5px; border: 1.5px solid rgba(24,24,24,0.3);
+    display: flex; align-items: center; justify-content: center; color: var(--yellow); font-size: 11px; font-weight: 700;
+  }
+  .check-square.active { background: var(--dark); border-color: var(--dark); }
+
+  .paquete-name { font-family: 'Izmir', 'Syne', sans-serif; font-weight: 800; font-size: 1.4rem; margin-bottom: 4px; margin-top: 20px; }
+  .price { font-family: 'Izmir', 'Syne', sans-serif; font-weight: 800; font-size: 2.4rem; line-height: 1; margin: 8px 0 4px; }
+  .price-unit { font-size: 13px; font-weight: 400; color: var(--gray-text); margin-left: 4px; }
+  .price-note { font-size: 12px; color: var(--gray-text); font-style: italic; margin-bottom: 20px; }
+
+  .benefits { list-style: none; display: flex; flex-direction: column; gap: 8px; margin-bottom: 4px; }
+  .benefits li { display: flex; align-items: flex-start; gap: 10px; font-size: 13.5px; }
+  .benefits .check {
+    width: 16px; height: 16px; min-width: 16px; border-radius: 50%; background: var(--dark); color: var(--yellow);
+    display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; margin-top: 2px;
+  }
+
+  .pay-card { background: var(--yellow); color: var(--dark); border-radius: 22px; padding: 32px; text-align: center; margin-bottom: 20px; }
+  .pay-toggle { display: inline-flex; background: rgba(24,24,24,0.08); border-radius: 9999px; padding: 5px; margin-bottom: 22px; }
+  .pay-toggle button {
+    font-family: 'Izmir', 'Syne', sans-serif; font-weight: 700; font-size: 13px; padding: 10px 20px;
+    border-radius: 9999px; border: none; cursor: pointer; background: transparent; color: var(--dark); transition: all 0.2s;
+  }
+  .pay-toggle button.active { background: var(--dark); color: var(--yellow); }
+  .pay-row { display: flex; justify-content: space-between; align-items: center; background: #fff; border-radius: 14px; padding: 14px 18px; margin-bottom: 10px; }
+  .pay-row-label { font-size: 12px; color: var(--gray-text); text-align: left; }
+  .pay-row-value { font-family: 'Izmir', 'Syne', sans-serif; font-weight: 800; font-size: 15px; }
+  .pay-row.total { background: var(--dark); color: var(--yellow); }
+  .pay-row.total .pay-row-label { color: rgba(248,248,248,0.6); }
+  .pay-row.total .pay-row-value { font-size: 22px; }
+
+  .qr-wrap { background: #fff; border-radius: 18px; padding: 20px; margin-top: 12px; }
+  .qr-wrap img { width: 100%; max-width: 240px; display: block; margin: 0 auto; border-radius: 8px; }
+  .qr-caption { font-size: 12px; color: var(--gray-text); margin-top: 12px; }
+
+  .card-dark { background: #0E0E0E; border: 1px solid rgba(255,221,90,0.18); border-radius: 22px; padding: 28px; margin-bottom: 32px; font-size: 13.5px; color: rgba(248,248,248,0.7); line-height: 1.7; }
+  .card-dark strong { color: var(--yellow); }
+
+  .btn-wa {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    background: #25D366; color: #0a0a0a; font-family: 'Izmir', 'Syne', sans-serif; font-weight: 700; font-size: 15px;
+    padding: 16px 24px; border-radius: 9999px; text-decoration: none; width: 100%;
+    transition: transform 0.2s; margin-bottom: 24px;
+  }
+  .btn-wa:hover { transform: translateY(-2px); }
+
+  .back-link { display: block; text-align: center; font-size: 13px; color: rgba(248,248,248,0.5); text-decoration: none; }
+  .back-link:hover { color: var(--yellow); }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <a href="/" style="display:block; text-align:center;">
+    <img class="logo" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1777509513/Logo_B_S_F_kdolev.png" alt="Estudio Graphica" />
+  </a>
+
+  <div class="center">
+    <span class="badge">📅 Plan mensual</span>
+    <h1>Tu plan está a un <span class="cursive">paso</span>.</h1>
+    <p class="sub">Ajusta la cantidad de fotos, duración o agrega video si quieres cambiar el paquete, y realiza tu adelanto.</p>
+  </div>
+
+  <div class="card">
+    <p class="card-label">Configura tu plan</p>
+
+    <div class="slider-block">
+      <div class="slider-head">
+        <span class="slider-label">Fotos mensuales</span>
+        <span class="slider-value" id="fotosValue">16 fotos/mes</span>
+      </div>
+      <input type="range" id="fotosSlider" min="12" max="26" step="1" value="16" />
+      <div class="range-labels"><span>12</span><span>26</span></div>
+    </div>
+
+    <div class="slider-block">
+      <div class="slider-head"><span class="slider-label">Duración del plan</span></div>
+      <div class="dur-chips" id="durChips">
+        <div class="dur-chip" data-dur="3">3 meses</div>
+        <div class="dur-chip" data-dur="6">6 meses</div>
+        <div class="dur-chip" data-dur="12">12 meses</div>
+      </div>
+    </div>
+
+    <div class="checkbox-row" id="videoCheckbox">
+      <span class="check-square" id="videoCheckSquare"></span>
+      <span style="font-size: 14px; font-weight: 500;">Añadir servicio de videos</span>
+    </div>
+
+    <div class="slider-block" id="reelsBlock" style="display: none; margin-top: 18px;">
+      <div class="slider-head">
+        <span class="slider-label">Reels mensuales</span>
+        <span class="slider-value" id="reelsValue">4 reels/mes</span>
+      </div>
+      <input type="range" id="reelsSlider" min="4" max="12" step="1" value="4" />
+      <div class="range-labels"><span>4</span><span>12</span></div>
+    </div>
+
+    <div class="paquete-name" id="paqueteName">Plan Estándar</div>
+    <div class="price" id="precioValue">Bs. 728<span class="price-unit">/mes</span></div>
+    <p class="price-note">Precio referencial. Se confirma en tu sesión.</p>
+
+    <ul class="benefits" id="benefitsList"></ul>
+  </div>
+
+  <div class="pay-card">
+    <p class="card-label" style="color: rgba(24,24,24,0.6);">¿Cuánto vas a depositar?</p>
+    <div class="pay-toggle">
+      <button id="btnAdelanto" class="active">50% adelanto</button>
+      <button id="btnCompleto">1er mes completo</button>
+    </div>
+
+    <div class="pay-row">
+      <span class="pay-row-label">Precio de tu plan (mensual)<br><strong id="payPaqueteLabel">Plan Estándar</strong></span>
+      <span class="pay-row-value" id="payPrecioTotal">Bs. 728</span>
+    </div>
+    <div class="pay-row total">
+      <span class="pay-row-label" id="payLabel">PAGAS AHORA<br>50% de adelanto</span>
+      <span class="pay-row-value" id="payMonto">Bs. 364</span>
+    </div>
+
+    <div class="qr-wrap">
+      <!-- ⚠️ REEMPLAZAR: mismo QR de referencia que /gracias-sesion. Si
+           quieres diferenciar pagos de Plan Mensual vs Sesión al mirar tu
+           app del banco, genera un QR nuevo específico para esta página. -->
+      <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1774467072/2_u07oxc.png" alt="QR de pago BCP - Pablo Villarroel Rocabado" />
+      <p class="qr-caption">BCP · Pablo Villarroel Rocabado<br>Escanea desde la app de tu banco</p>
+    </div>
+  </div>
+
+  <div class="card-dark">
+    <strong>Importante:</strong> tu plan arranca cuando confirmamos el pago del primer mes. Envíanos el comprobante por WhatsApp para coordinar tu primera visita.
+  </div>
+
+  <a class="btn-wa track-wa-comprobante"
+     href="https://api.whatsapp.com/send?phone=+59169422335&text=%C2%A1Hola%2C%20Pablo!%20Ya%20hice%20el%20dep%C3%B3sito%20de%20mi%20plan%20mensual%2C%20te%20env%C3%ADo%20el%20comprobante%20%F0%9F%93%B8"
+     target="_blank" rel="noopener">
+    Enviar comprobante por WhatsApp
+  </a>
+
+  <a class="back-link" href="/">← Volver al inicio</a>
+</div>
+
+<script>
+  (function () {
+    var slider = document.getElementById('fotosSlider');
+    var fotosValue = document.getElementById('fotosValue');
+    var durChips = document.querySelectorAll('.dur-chip');
+    var videoCheckbox = document.getElementById('videoCheckbox');
+    var videoCheckSquare = document.getElementById('videoCheckSquare');
+    var reelsBlock = document.getElementById('reelsBlock');
+    var reelsSlider = document.getElementById('reelsSlider');
+    var reelsValue = document.getElementById('reelsValue');
+    var paqueteName = document.getElementById('paqueteName');
+    var precioValue = document.getElementById('precioValue');
+    var benefitsList = document.getElementById('benefitsList');
+    var payPaqueteLabel = document.getElementById('payPaqueteLabel');
+    var payPrecioTotal = document.getElementById('payPrecioTotal');
+    var payLabel = document.getElementById('payLabel');
+    var payMonto = document.getElementById('payMonto');
+    var btnAdelanto = document.getElementById('btnAdelanto');
+    var btnCompleto = document.getElementById('btnCompleto');
+
+    var duracion = 3;
+    var addVideo = false;
+    var modoAdelanto = true;
+
+    durChips.forEach(function (chip) {
+      if (parseInt(chip.dataset.dur, 10) === duracion) chip.classList.add('active');
+      chip.addEventListener('click', function () {
+        durChips.forEach(function (c) { c.classList.remove('active'); });
+        chip.classList.add('active');
+        duracion = parseInt(chip.dataset.dur, 10);
+        render();
+      });
+    });
+
+    videoCheckbox.addEventListener('click', function () {
+      addVideo = !addVideo;
+      videoCheckSquare.classList.toggle('active', addVideo);
+      videoCheckSquare.textContent = addVideo ? '✓' : '';
+      reelsBlock.style.display = addVideo ? 'block' : 'none';
+      render();
+    });
+
+    function render() {
+      var fotos = parseInt(slider.value, 10);
+      var reels = parseInt(reelsSlider.value, 10);
+      fotosValue.textContent = fotos + ' fotos/mes';
+      reelsValue.textContent = reels + ' reels/mes';
+
+      var data = EGPricing.calcPlan(fotos, duracion, addVideo, reels);
+      var benefits = EGPricing.planBenefits(fotos, duracion, addVideo, reels);
+
+      paqueteName.textContent = 'Plan ' + data.paquete;
+      precioValue.innerHTML = 'Bs. ' + data.precio + '<span class="price-unit">/mes</span>';
+      benefitsList.innerHTML = benefits.map(function (b) {
+        return '<li><span class="check">✓</span><span>' + b + '</span></li>';
+      }).join('');
+
+      payPaqueteLabel.textContent = 'Plan ' + data.paquete;
+      payPrecioTotal.textContent = 'Bs. ' + data.precio;
+
+      var monto = modoAdelanto ? Math.round(data.precio * 0.5) : data.precio;
+      payLabel.innerHTML = modoAdelanto ? 'PAGAS AHORA<br>50% de adelanto' : 'PAGAS AHORA<br>1er mes completo';
+      payMonto.textContent = 'Bs. ' + monto;
+    }
+
+    slider.addEventListener('input', render);
+    reelsSlider.addEventListener('input', render);
+    btnAdelanto.addEventListener('click', function () {
+      modoAdelanto = true; btnAdelanto.classList.add('active'); btnCompleto.classList.remove('active'); render();
+    });
+    btnCompleto.addEventListener('click', function () {
+      modoAdelanto = false; btnCompleto.classList.add('active'); btnAdelanto.classList.remove('active'); render();
+    });
+
+    render();
+
+    if (window.EG) {
+      window.EG.trackEvent('ViewContent', { content_name: 'Gracias - Plan Mensual', content_type: 'plan-mensual', origen: window.EG.getOrigen() });
+      window.EG.trackClick('.track-wa-comprobante', 'Contact', { content_name: 'Enviar comprobante plan', origen: window.EG.getOrigen() });
+    }
+  })();
+</script>
+
+</body>
+</html>
