@@ -1,0 +1,40 @@
+<!--
+  PIXEL_SNIPPET.html — Estudio Graphica
+  Pegar este bloque en el <head> de CADA página del sitio (index.html,
+  /precios, /gracias-reunion, /gracias-sesion, /gracias-plan, /blog/*).
+
+  Reemplaza:
+  - TU_PIXEL_ID          → el ID de tu Meta Pixel (Events Manager)
+  - TU_GA4_ID             → tu ID de medición de GA4 (empieza con G-)
+
+  El PageView se manda automático en cada carga de página.
+  El ViewContent extra (líneas finales) solo debe ir en páginas donde
+  el usuario está viendo una oferta concreta: /precios, /gracias-*.
+  NO lo pongas en el index principal salvo que quieras trackear
+  "vieron el home" como ViewContent (normalmente no hace falta, el
+  PageView ya cubre eso).
+-->
+
+<!-- Google tag (GA4) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=TU_GA4_ID"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){ dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'TU_GA4_ID');
+</script>
+
+<!-- Meta Pixel -->
+<script>
+  !(function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)})(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', 'TU_PIXEL_ID');
+  fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=TU_PIXEL_ID&ev=PageView&noscript=1"/></noscript>
+
+<!-- Módulo de tracking compartido (funciones EG.trackEvent, EG.trackClick, etc.) -->
+<script src="/assets/js/tracking.js"></script>
