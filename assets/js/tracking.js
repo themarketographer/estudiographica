@@ -122,6 +122,33 @@ window.EG = window.EG || {};
   }
 
   // ─────────────────────────────────────────────
+  // Detección de origen "vino del blog"
+  // ─────────────────────────────────────────────
+  // Evento "inicio_en_blog": se dispara en landing/precios cuando el
+  // visitante llega haciendo click desde una página de /blog/* (mismo
+  // dominio). Usa document.referrer, que el navegador llena solo cuando
+  // la navegación fue un click real dentro del sitio (no llega vacío por
+  // ?origen= de ads, ni por escribir la URL directo).
+  function cameFromBlog() {
+    try {
+      var ref = document.referrer;
+      if (!ref) return false;
+      var refUrl = new URL(ref);
+      return refUrl.hostname === window.location.hostname && refUrl.pathname.indexOf('/blog') === 0;
+    } catch (e) { return false; }
+  }
+
+  function trackBlogReferrerIfApplicable() {
+    if (cameFromBlog()) {
+      trackCustomEvent('inicio_en_blog', {
+        content_name: 'Llegó desde el blog',
+        referrer_path: (function () { try { return new URL(document.referrer).pathname; } catch (e) { return null; } })(),
+        origen: getOrigen(),
+      });
+    }
+  }
+
+  // ─────────────────────────────────────────────
   // API pública
   // ─────────────────────────────────────────────
   EG.trackEvent = trackEvent;
@@ -131,5 +158,7 @@ window.EG = window.EG || {};
   EG.getTipo = getTipo;
   EG.generateEventId = generateEventId;
   EG.prepareCalBooking = prepareCalBooking;
+  EG.cameFromBlog = cameFromBlog;
+  EG.trackBlogReferrerIfApplicable = trackBlogReferrerIfApplicable;
 
 })(window.EG);
