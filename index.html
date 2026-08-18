@@ -7,7 +7,7 @@
 <title>Estudio Graphica — Fotografía gastronómica en Cochabamba</title>
 
 <!-- ═══════════ PIXEL + GA4 (reemplazar IDs) ═══════════ -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-9H6Z8N5DTP"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=TU_GA4_ID"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){ dataLayer.push(arguments); }
@@ -1444,23 +1444,37 @@ ReactDOM.createRoot(document.getElementById('root')).render(<App />);
 <script>
   // ═══════════ Tracking de conversiones (Pixel + GA4) ═══════════
   // Delegación de eventos a nivel document: cubre los 3 botones de
-  // "Agendar llamada" (nav, hero, CTA final) y los links de WhatsApp,
-  // sin duplicar lógica en cada componente React.
+  // "Agendar llamada" (nav, hero, CTA final), los 2 botones de
+  // portafolio, y los links de WhatsApp, sin duplicar lógica en cada
+  // componente React.
   //
-  // Deduplicación con CAPI: al hacer click en "Agendar llamada" generamos
-  // un event_id ANTES de abrir el widget de Cal y lo mandamos como
-  // metadata al booking. cal-webhook.js debe leer esa metadata y reusar
-  // el mismo event_id al llamar a sendCapiEvent(), así Meta deduplica el
-  // Lead de Pixel (client-side, se dispara al click) con el Lead de CAPI
-  // (server-side, se dispara al confirmar booking) sin contarlo doble.
+  // IMPORTANTE — por qué "Lead" NO se dispara aquí en el click:
+  // Marcar "Lead" (evento estándar de Meta) en el momento del click es
+  // optimista: esa persona solo abrió el widget de Cal, todavía no
+  // agendó nada. El evento "Lead" real y verificado se manda por
+  // Conversions API server-side (netlify/functions/cal-webhook.js)
+  // SOLO cuando Cal.com confirma que el booking se creó de verdad. Así
+  // "Lead" en Ads Manager significa lead real, no "alguien tocó un botón".
+  //
+  // El click en "Agendar llamada" sí manda un evento CUSTOM de
+  // intención ("interesado_reunion"), útil para medir cuánta gente
+  // abre el calendario aunque no todos terminen agendando — pero sin
+  // inflar la métrica estándar de Lead que usas para optimizar la campaña.
+  //
+  // Deduplicación con CAPI: al hacer click generamos un event_id ANTES
+  // de abrir el widget de Cal y lo mandamos como metadata al booking.
+  // cal-webhook.js reusa ese mismo event_id al mandar el Lead real por
+  // CAPI, así Meta deduplica si en algún punto decides trackear el
+  // mismo evento en ambos lados.
   document.addEventListener('DOMContentLoaded', function () {
     if (!window.EG) return;
 
     document.addEventListener('click', function (e) {
+      // Botón/link de agendar reunión (nav, hero, CTA final)
       var calBtn = e.target.closest('[data-cal-namespace="reunion"]');
       if (calBtn) {
-        var eventId = window.EG.prepareCalBooking('reunion', 'lead');
-        window.EG.trackEvent('Lead', {
+        var eventId = window.EG.prepareCalBooking('reunion', 'interesado_reunion');
+        window.EG.trackCustomEvent('interesado_reunion', {
           content_name: 'Agendar llamada',
           origen: window.EG.getOrigen(),
           event_id: eventId,
@@ -1468,6 +1482,23 @@ ReactDOM.createRoot(document.getElementById('root')).render(<App />);
         return;
       }
 
+      // Botones de portafolio: el <button> interno "Quiero chismosear
+      // tu portafolio" (scroll a la sección) y el <a> "Ver portafolio
+      // completo" (link externo a Pinterest). Ninguno tiene clase CSS
+      // propia, así que los detectamos por el texto del botón.
+      var portfolioBtn = e.target.closest('button, a');
+      if (portfolioBtn) {
+        var txt = (portfolioBtn.textContent || '').toLowerCase();
+        if (txt.includes('portafolio') || txt.includes('chismosear')) {
+          window.EG.trackCustomEvent('reviso_portafolio', {
+            content_name: portfolioBtn.textContent.trim().slice(0, 60),
+            origen: window.EG.getOrigen(),
+          });
+          return;
+        }
+      }
+
+      // WhatsApp
       var waLink = e.target.closest('a[href*="wa.me"], a[href*="api.whatsapp.com"]');
       if (waLink) {
         window.EG.trackEvent('Contact', {
