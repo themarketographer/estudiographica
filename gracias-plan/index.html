@@ -352,6 +352,21 @@
           });
         });
       }
+
+      // Ajustó fotos, reels, duración o video antes de depositar.
+      var trackCustomize = window.EG.debounce(function () {
+        window.EG.trackEvent('CustomizeProduct', {
+          content_name: 'Ajustó paquete - Gracias plan',
+          content_type: 'plan-mensual',
+          origen: window.EG.getOrigen(),
+        });
+      }, 700);
+      slider.addEventListener('input', trackCustomize);
+      reelsSlider.addEventListener('input', trackCustomize);
+      durChips.forEach(function (chip) { chip.addEventListener('click', trackCustomize); });
+      videoCheckbox.addEventListener('click', trackCustomize);
+      btnAdelanto.addEventListener('click', trackCustomize);
+      btnCompleto.addEventListener('click', trackCustomize);
     }
   })();
 </script>
