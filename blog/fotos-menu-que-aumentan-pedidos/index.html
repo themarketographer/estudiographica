@@ -35,11 +35,11 @@
   n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
   n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
   t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)})(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
-  fbq('init', 'TU_PIXEL_ID');
+  fbq('init', '1059099676340072');
   fbq('track', 'PageView');
 </script>
 <noscript><img height="1" width="1" style="display:none"
-  src="https://www.facebook.com/tr?id=TU_PIXEL_ID&ev=PageView&noscript=1"/></noscript>
+  src="https://www.facebook.com/tr?id=1059099676340072&ev=PageView&noscript=1"/></noscript>
 <script src="/assets/js/tracking.js"></script>
 <!-- ═══════════════════════════════════════════════════ -->
 
@@ -77,7 +77,7 @@
 
   nav { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.9); backdrop-filter: blur(14px); border-bottom: 1px solid rgba(24,24,24,0.06); padding: 16px 24px; }
   nav .inner { max-width: 760px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
-  nav img { height: 34px; }
+  nav img { height: 34px; width: auto; object-fit: contain; }
   nav a.back { font-size: 13px; color: var(--gray-text); text-decoration: none; }
 
   article { max-width: 760px; margin: 0 auto; padding: 56px 24px 100px; }
@@ -107,7 +107,7 @@
 
 <nav>
   <div class="inner">
-    <a href="/"><img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1777509513/Logo_B_S_F_kdolev.png" alt="Estudio Graphica" /></a>
+    <a href="/"><img src="https://estudiographica.com/assets/logo-black.png" alt="Estudio Graphica" /></a>
     <a class="back" href="/blog">← Blog</a>
   </div>
 </nav>
@@ -177,6 +177,7 @@
 <script>
   if (window.EG) {
     window.EG.trackEvent('ViewContent', { content_name: 'Blog - Fotos de menú', content_type: 'blog_post' });
+    window.EG.trackCustomEvent('visito_blog', { content_name: 'Blog', post_slug: 'fotos-menu-que-aumentan-pedidos', origen: window.EG.getOrigen() });
   }
 </script>
 
