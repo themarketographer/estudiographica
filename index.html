@@ -1474,7 +1474,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(<App />);
       var calBtn = e.target.closest('[data-cal-namespace="reunion"]');
       if (calBtn) {
         var eventId = window.EG.prepareCalBooking('reunion', 'interesado_reunion');
-        window.EG.trackCustomEvent('interesado_reunion', {
+        window.EG.trackCustomEvent('Interesado en Reunion', {
           content_name: 'Agendar llamada',
           origen: window.EG.getOrigen(),
           event_id: eventId,
@@ -1490,7 +1490,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(<App />);
       if (portfolioBtn) {
         var txt = (portfolioBtn.textContent || '').toLowerCase();
         if (txt.includes('portafolio') || txt.includes('chismosear')) {
-          window.EG.trackCustomEvent('reviso_portafolio', {
+          window.EG.trackCustomEvent('Reviso Portafolio', {
             content_name: portfolioBtn.textContent.trim().slice(0, 60),
             origen: window.EG.getOrigen(),
           });
