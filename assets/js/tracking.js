@@ -121,6 +121,29 @@ window.EG = window.EG || {};
     return eventId;
   }
 
+  // Lee el event_id guardado por prepareCalBooking() para un namespace de
+  // Cal.com dado. Se usa en el listener de "bookingSuccessfulV2" del embed
+  // (ver docs: cal.com/help/embedding/embed-events) para que el evento de
+  // conversión real, disparado client-side en el momento exacto en que
+  // Cal.com confirma la reserva, use el MISMO event_id que ya viaja en
+  // metadata[eventId] hacia el webhook → CAPI. Mismo event_name + mismo
+  // event_id = Meta lo deduplica en una sola conversión, no dos.
+  function getLastEventId(calNamespace) {
+    try { return sessionStorage.getItem('eg_last_event_id_' + calNamespace); } catch (e) { return null; }
+  }
+
+  // Debounce genérico: agrupa disparos seguidos (p. ej. arrastrar un
+  // slider) en uno solo, "wait" ms después del último cambio. Evita
+  // mandar un evento CustomizeProduct por cada pixel de arrastre.
+  function debounce(fn, wait) {
+    var t;
+    return function () {
+      var args = arguments, ctx = this;
+      clearTimeout(t);
+      t = setTimeout(function () { fn.apply(ctx, args); }, wait || 600);
+    };
+  }
+
   // ─────────────────────────────────────────────
   // Detección de origen "vino del blog"
   // ─────────────────────────────────────────────
@@ -158,6 +181,8 @@ window.EG = window.EG || {};
   EG.getTipo = getTipo;
   EG.generateEventId = generateEventId;
   EG.prepareCalBooking = prepareCalBooking;
+  EG.getLastEventId = getLastEventId;
+  EG.debounce = debounce;
   EG.cameFromBlog = cameFromBlog;
   EG.trackBlogReferrerIfApplicable = trackBlogReferrerIfApplicable;
 
