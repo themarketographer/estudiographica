@@ -285,6 +285,19 @@
           });
         });
       }
+
+      // Ajustó la cantidad de fotos o el modo de pago antes de depositar:
+      // sigue siendo "armar el paquete a medida", igual que en /precios.
+      var trackCustomize = window.EG.debounce(function () {
+        window.EG.trackEvent('CustomizeProduct', {
+          content_name: 'Ajustó paquete - Gracias sesión',
+          content_type: 'sesion',
+          origen: window.EG.getOrigen(),
+        });
+      }, 700);
+      slider.addEventListener('input', trackCustomize);
+      btnAdelanto.addEventListener('click', trackCustomize);
+      btnCompleto.addEventListener('click', trackCustomize);
     }
   })();
 </script>
