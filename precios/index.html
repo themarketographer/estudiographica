@@ -377,7 +377,7 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
     function refreshCalConfig() {
       var eventId = window.EG ? window.EG.prepareCalBooking(
         tipo === 'sesion' ? 'sesion' : 'plan-mensual',
-        'Schedule'
+        'checkout'
       ) : null;
       var origen = window.EG ? window.EG.getOrigen() : 'organico';
       var config = {
@@ -399,14 +399,65 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
       waLink.addEventListener('click', function () {
         window.EG.trackEvent('Contact', { content_name: 'WhatsApp desde precios', content_type: tipo, origen: window.EG.getOrigen() });
       });
+
+      // Click en "Reservar": esto SOLO abre el widget de Cal, todavía no
+      // hay ninguna reserva confirmada. Antes se mandaba aquí "Schedule",
+      // lo cual inflaba el conteo con gente que abría el calendario y
+      // después no completaba nada. "InitiateCheckout" es el evento
+      // estándar de Meta correcto para "empezó el proceso de reservar/
+      // pagar" — el "Schedule" real se dispara más abajo, en el listener
+      // de "bookingSuccessfulV2", que Cal.com solo emite cuando la
+      // reserva quedó de verdad confirmada.
       btnReservar.addEventListener('mousedown', function () {
         var eventId = refreshCalConfig();
-        window.EG.trackEvent('Schedule', { content_name: 'Reservar', content_type: tipo, origen: window.EG.getOrigen(), event_id: eventId });
+        window.EG.trackEvent('InitiateCheckout', { content_name: 'Reservar', content_type: tipo, origen: window.EG.getOrigen(), event_id: eventId });
       });
       // Soporte touch (mousedown no siempre dispara en móvil antes del click táctil)
       btnReservar.addEventListener('touchstart', function () {
         refreshCalConfig();
       });
+
+      // "Schedule" real: se dispara SOLO cuando Cal.com confirma la
+      // reserva (evento bookingSuccessfulV2 del embed, ver
+      // cal.com/help/embedding/embed-events). Reusa el mismo event_id que
+      // ya viaja en metadata[eventId] hacia el webhook → CAPI (ver
+      // netlify/functions/cal-webhook.js), así que Meta deduplica el
+      // Pixel (client-side, este) con el CAPI (server-side) en una sola
+      // conversión real, en vez de contarla dos veces.
+      function onBookingConfirmed(calNamespace, tipoReserva) {
+        return function (e) {
+          var eventId = window.EG.getLastEventId(calNamespace);
+          window.EG.trackEvent('Schedule', {
+            content_name: 'Reserva confirmada',
+            content_type: tipoReserva,
+            origen: window.EG.getOrigen(),
+            event_id: eventId,
+          });
+        };
+      }
+      if (window.Cal && Cal.ns && Cal.ns.sesion) {
+        Cal.ns.sesion('on', { action: 'bookingSuccessfulV2', callback: onBookingConfirmed('sesion', 'sesion') });
+      }
+      if (window.Cal && Cal.ns && Cal.ns['plan-mensual']) {
+        Cal.ns['plan-mensual']('on', { action: 'bookingSuccessfulV2', callback: onBookingConfirmed('plan-mensual', 'plan-mensual') });
+      }
+
+      // "CustomizeProduct": el visitante está armando su paquete a medida
+      // (cantidad de fotos, duración, video, reels). Debounced a 700ms
+      // para que arrastrar el slider no dispare un evento por cada pixel,
+      // solo uno cuando se queda quieto en un valor.
+      var trackCustomize = window.EG.debounce(function () {
+        window.EG.trackEvent('CustomizeProduct', {
+          content_name: tipo === 'sesion' ? 'Slider sesión' : 'Slider plan mensual',
+          content_type: tipo,
+          origen: window.EG.getOrigen(),
+        });
+      }, 700);
+      fotosSlider.addEventListener('input', trackCustomize);
+      planFotosSlider.addEventListener('input', trackCustomize);
+      reelsSlider.addEventListener('input', trackCustomize);
+      durChips.forEach(function (chip) { chip.addEventListener('click', trackCustomize); });
+      videoCheckbox.addEventListener('click', trackCustomize);
     }
   })();
 </script>
