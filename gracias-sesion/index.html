@@ -9,7 +9,7 @@
 <meta name="theme-color" content="#181818" />
 
 <!-- ═══════════ PIXEL + GA4 (reemplazar IDs) ═══════════ -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=TU_GA4_ID"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-9H6Z8N5DTP"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){ dataLayer.push(arguments); }
@@ -21,6 +21,7 @@
   n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
   n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
   t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)})(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  fbq('set', 'autoConfig', false, '1059099676340072');
   fbq('init', '1059099676340072');
   fbq('track', 'PageView');
 </script>
@@ -221,6 +222,9 @@
     var btnAdelanto = document.getElementById('btnAdelanto');
     var btnCompleto = document.getElementById('btnCompleto');
     var modoAdelanto = true;
+    var montoActual = 0;
+    var precioTotalActual = 0;
+    var paqueteActual = '';
 
     function render() {
       var fotos = parseInt(slider.value, 10);
@@ -240,6 +244,9 @@
       var monto = modoAdelanto ? Math.round(data.precio * 0.5) : data.precio;
       payLabel.innerHTML = modoAdelanto ? 'PAGAS AHORA<br>50% de adelanto' : 'PAGAS AHORA<br>100% completo';
       payMonto.textContent = 'Bs. ' + monto;
+      montoActual = monto;
+      precioTotalActual = data.precio;
+      paqueteActual = data.paquete;
     }
 
     slider.addEventListener('input', render);
@@ -254,8 +261,30 @@
 
     // Tracking
     if (window.EG) {
-      window.EG.trackEvent('ViewContent', { content_name: 'Gracias - Sesión', content_type: 'sesion', origen: window.EG.getOrigen() });
-      window.EG.trackClick('.track-wa-comprobante', 'Contact', { content_name: 'Enviar comprobante sesión', origen: window.EG.getOrigen() });
+      window.EG.trackEvent('InitiateCheckout', {
+        content_name: 'Gracias - Sesión',
+        content_type: 'sesion',
+        value: precioTotalActual,
+        currency: 'BOB',
+        origen: window.EG.getOrigen(),
+      });
+
+      var waComprobanteBtn = document.querySelector('.track-wa-comprobante');
+      if (waComprobanteBtn) {
+        waComprobanteBtn.addEventListener('click', function () {
+          window.EG.trackEvent('Purchase', {
+            content_name: 'Comprobante enviado - Sesión ' + paqueteActual,
+            content_type: 'sesion',
+            value: montoActual,
+            currency: 'BOB',
+            origen: window.EG.getOrigen(),
+          });
+          window.EG.trackEvent('Contact', {
+            content_name: 'Enviar comprobante sesión',
+            origen: window.EG.getOrigen(),
+          });
+        });
+      }
     }
   })();
 </script>

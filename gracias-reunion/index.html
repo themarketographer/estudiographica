@@ -9,7 +9,7 @@
 <meta name="theme-color" content="#181818" />
 
 <!-- ═══════════ PIXEL + GA4 (reemplazar IDs) ═══════════ -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=TU_GA4_ID"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-9H6Z8N5DTP"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){ dataLayer.push(arguments); }
@@ -21,6 +21,7 @@
   n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
   n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
   t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)})(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  fbq('set', 'autoConfig', false, '1059099676340072');
   fbq('init', '1059099676340072');
   fbq('track', 'PageView');
 </script>
@@ -150,24 +151,23 @@
 </div>
 
 <script>
-  // El evento de conversión "Lead" (booking de Reunión) ya se manda desde
-  // el servidor vía CAPI cuando Cal.com dispara el webhook BOOKING_CREATED
-  // (ver netlify/functions/cal-webhook.js). Aquí solo mandamos un evento
-  // complementario client-side para poder deduplicar con el mismo
-  // event_id si el usuario llegó desde el redirect de Cal con metadata.
+  // El evento de conversión "Lead" (Cliente potencial, booking de
+  // Reunión confirmado) SOLO se manda desde el servidor vía CAPI cuando
+  // Cal.com dispara el webhook BOOKING_CREATED (ver
+  // netlify/functions/cal-webhook.js). NO lo repetimos aquí client-side
+  // para evitar un doble conteo si el event_id no coincide exacto con
+  // el que generó el webhook.
   (function () {
-    var params = new URLSearchParams(window.location.search);
-    var eventId = params.get('eventId') || (window.EG ? window.EG.generateEventId('lead') : undefined);
     if (window.EG) {
-      window.EG.trackEvent('Lead', {
-        content_name: 'Reunión agendada',
+      window.EG.trackEvent('ViewContent', {
+        content_name: 'Gracias - Reunión',
+        content_type: 'reunion',
         origen: window.EG.getOrigen(),
-        event_id: eventId,
       });
-    }
-    // Click en confirmar por WhatsApp = evento Contact
-    if (window.EG) {
-      window.EG.trackClick('.track-wa-confirm', 'Contact', { content_name: 'Confirmar asistencia WA', origen: window.EG.getOrigen() });
+      window.EG.trackClick('.track-wa-confirm', 'Contact', {
+        content_name: 'Confirmar asistencia WA',
+        origen: window.EG.getOrigen(),
+      });
     }
   })();
 </script>
