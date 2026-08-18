@@ -50,6 +50,40 @@
 }
 </script>
 
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "¿Cuánto cuesta una sesión de fotos?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Depende de la cantidad de fotos y la duración que elijas — los paquetes van de Bs. 300 a Bs. 1300. Puedes armar tu paquete y ver el precio exacto en la calculadora de precios de estudiographica.com/precios." }
+    },
+    {
+      "@type": "Question",
+      "name": "¿En cuánto tiempo recibo las fotos?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Según el paquete: los más chicos se entregan en menos de 72 horas, los intermedios en menos de 48, y los más grandes en menos de 24 horas." }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Tengo que preparar el estilismo de la comida?",
+      "acceptedAnswer": { "@type": "Answer", "text": "No. El foodstyling, es decir armar y acomodar los platillos para que se vean bien en cámara, va incluido siempre, en todos los paquetes." }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Dónde se hacen las sesiones?",
+      "acceptedAnswer": { "@type": "Answer", "text": "El lugar se coordina en la llamada de diagnóstico gratuita, normalmente en el restaurante o local del cliente, en Cochabamba." }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Cómo empiezo a trabajar con Estudio Graphica?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Se agenda una llamada de diagnóstico gratuita, sin compromiso, donde se revisa la marca del cliente y se arma el paquete que le conviene." }
+    }
+  ]
+}
+</script>
+
 <!-- ═══════════ PIXEL + GA4 (reemplazar IDs) ═══════════ -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-9H6Z8N5DTP"></script>
 <script>
@@ -1206,7 +1240,80 @@ function CTASection() {
   );
 }
 
-Object.assign(window, { Tag, Cursive, Reveal, ProblemSection, ProcesoSection, PromesaSection, TestimonialsSection, MarcasSection, SobreSection, CTASection });
+// FAQSection — acordeón de preguntas frecuentes (una abierta a la vez)
+function FAQSection() {
+  const faqs = [
+    {
+      q: '¿Cuánto cuesta una sesión de fotos?',
+      a: 'Depende de la cantidad de fotos y la duración que elijas — los paquetes van de Bs. 300 a Bs. 1300. Arma tu paquete y mira el precio exacto en la calculadora de precios.',
+    },
+    {
+      q: '¿En cuánto tiempo recibo las fotos?',
+      a: 'Según el paquete: los más chicos se entregan en menos de 72 horas, los intermedios en menos de 48, y los más grandes en menos de 24 horas.',
+    },
+    {
+      q: '¿Tengo que preparar el estilismo de la comida?',
+      a: 'No. El foodstyling (armar y acomodar los platillos para que se vean bien en cámara) va incluido siempre, en todos los paquetes.',
+    },
+    {
+      q: '¿Dónde se hacen las sesiones?',
+      a: 'Coordinamos el lugar en la llamada de diagnóstico gratuita — normalmente en tu restaurante o local, aquí en Cochabamba.',
+    },
+    {
+      q: '¿Cómo empiezo?',
+      a: 'Agendas una llamada de diagnóstico gratuita, sin compromiso. Ahí revisamos tu marca y armamos el paquete que te conviene.',
+    },
+  ];
+  const [open, setOpen] = React.useState(0);
+
+  const s = {
+    section: { background: TOKEN.offWhite, padding: 'clamp(72px, 10vw, 120px) 0' },
+    container: { maxWidth: 760, margin: '0 auto', padding: '0 24px' },
+    header: { textAlign: 'center', marginBottom: 48 },
+    h2: { fontFamily: "'Izmir', 'Syne', sans-serif", fontWeight: 800, fontSize: 'clamp(2rem, 4vw, 3rem)', lineHeight: 1.05, letterSpacing: '-0.025em', color: TOKEN.dark },
+    accent: { color: TOKEN.dark, position: 'relative', display: 'inline-block', fontFamily: "'Playfair Display', serif", fontStyle: 'italic', fontWeight: 700 },
+    accentLine: { position: 'absolute', bottom: '0.06em', left: 0, right: 0, height: '0.20em', background: TOKEN.yellow, zIndex: -1 },
+    item: { borderBottom: `1px solid rgba(24,24,24,0.1)` },
+    q: { width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16, background: 'none', border: 'none', cursor: 'pointer', padding: '22px 4px', font: 'inherit', textAlign: 'left' },
+    qText: { fontFamily: "'Izmir', 'Syne', sans-serif", fontWeight: 700, fontSize: 16, color: TOKEN.dark },
+    plus: (isOpen) => ({ fontSize: 22, color: TOKEN.yellowHover, transition: 'transform 0.2s ease', transform: isOpen ? 'rotate(45deg)' : 'rotate(0deg)', flexShrink: 0 }),
+    aWrap: (isOpen) => ({ maxHeight: isOpen ? 240 : 0, overflow: 'hidden', transition: 'max-height 0.25s ease' }),
+    aText: { padding: '0 4px 22px', color: TOKEN.grayText, fontSize: 14.5, lineHeight: 1.65 },
+  };
+
+  return (
+    <section id="faq" style={s.section}>
+      <div style={s.container}>
+        <Reveal>
+          <div style={s.header}>
+            <Tag>Antes de que preguntes</Tag>
+            <h2 style={s.h2}>Preguntas <span style={s.accent}>frecuentes<span style={s.accentLine}></span></span>.</h2>
+          </div>
+        </Reveal>
+        <Reveal delay={0.1}>
+          <div>
+            {faqs.map((item, i) => {
+              const isOpen = open === i;
+              return (
+                <div key={i} style={s.item}>
+                  <button style={s.q} onClick={() => setOpen(isOpen ? -1 : i)} aria-expanded={isOpen}>
+                    <span style={s.qText}>{item.q}</span>
+                    <span style={s.plus(isOpen)}>+</span>
+                  </button>
+                  <div style={s.aWrap(isOpen)}>
+                    <p style={s.aText}>{item.a}</p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+Object.assign(window, { Tag, Cursive, Reveal, ProblemSection, ProcesoSection, PromesaSection, TestimonialsSection, FAQSection, MarcasSection, SobreSection, CTASection });
 
 </script>
 
@@ -1477,6 +1584,8 @@ function App() {
       <PortfolioSection onCTA={handleCTA} />
       <MarcasSection />
       <SobreSection onPortfolio={handlePortfolio} />
+      <TestimonialsSection />
+      <FAQSection />
       <CTASection />
       <FooterSection />
     </div>
