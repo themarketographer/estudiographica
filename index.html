@@ -736,8 +736,8 @@ function ProblemSection() {
             </div>
             <div style={{ ...s.cmpDivider, left: `${pos}%` }}></div>
             <div style={{ ...s.cmpHandle, left: `${pos}%` }}>⇆</div>
-            <div style={s.cmpLabel(true)}>📱 Foto tomada con celular</div>
-            <div style={s.cmpLabel(false)}>📸 Lo que hacemos en Estudio Graphica</div>
+            <div style={s.cmpLabel(true)}>📱 Celular </div>
+            <div style={s.cmpLabel(false)}>📸 Nosotros </div>
           </div>
           <p style={{ textAlign: 'center', marginTop: 12, fontSize: 12, color: 'rgba(248,248,248,0.5)', fontStyle: 'italic' }}>← Desliza de un lado a otro para ver la diferencia→</p>
         </Reveal>
@@ -753,8 +753,8 @@ function ProblemSection() {
 
 function ProcesoSection({ onCTA }) {
   const steps = [
-    { num: '01', title: 'Diagnóstico gratuito', body: 'Agendamos una llamada y hacemos una auditoría de tu marca. Sin costo, sin compromiso.' },
-    { num: '02', title: 'Sesión fotográfica', body: 'Firmamos contrato, hacemos las fotos con foodstyling incluido. Tú eliges las imágenes.' },
+    { num: '01', title: 'Diagnóstico gratuito', body: 'Agendamos una llamada gratuita por Zoom en tu local y hacemos una auditoría de tu marca.' },
+    { num: '02', title: 'Sesión de fotos', body: 'Firmamos contrato, hacemos las fotos y/o videos con foodstyling incluido. Tú eliges las imágenes.' },
     { num: '03', title: 'Entrega en 24 horas', body: 'Fotos retocadas y listas para usar en menú, redes, delivery, anuncios y catálogo.' },
   ];
   const s = {
@@ -778,9 +778,9 @@ function ProcesoSection({ onCTA }) {
       <div style={s.container}>
         <Reveal>
           <div style={s.header}>
-            <Tag>Cómo trabajamos</Tag>
-            <h2 style={s.h2}>Simple. Sin sorpresas. <br/>Con <span style={s.accent}>resultados<span style={s.accentLine}></span></span>.</h2>
-            <p style={s.sub}>Sesiones de fotos con <Cursive>foodstyling</Cursive>, o plan mensual de contenido. Tú eliges.</p>
+            <Tag>¿Cómo trabajamos?</Tag>
+            <h2 style={s.h2}>El proceso más simple. <br/>del <span style={s.accent}>mundo<span style={s.accentLine}></span></span>.</h2>
+            <p style={s.sub}>Sesiones de fotos con <Cursive>foodstyling</Cursive>, o plan mensual de contenido.</p>
           </div>
         </Reveal>
         <div style={s.grid}>
@@ -809,14 +809,14 @@ function ProcesoSection({ onCTA }) {
 // PromesaSection — sin foto, solo iconos que se iluminan al hover
 function PromesaSection({ onCTA }) {
   const items = [
-    { icon: '🍽️', label: 'Menú digital y físico', detail: 'Tu carta en pantalla y en mesa' },
-    { icon: '📱', label: 'Feed de redes sociales', detail: 'Instagram, Facebook, TikTok' },
-    { icon: '🛵', label: 'Apps de delivery', detail: 'PedidosYa, Yaigo, Rappi' },
+    { icon: '🍽️', label: 'Menú digital y físico', detail: 'La mejor forma de antonjar a quién ya entró a tu local' },
+    { icon: '📱', label: 'Feeds y posts', detail: 'Contenido coherente en todas tus redes. ' },
+    { icon: '🛵', label: 'Apps de delivery', detail: 'Resalta en PedidosYa, Yango' },
     { icon: '📣', label: 'Anuncios de pago', detail: 'Meta Ads, Google, TikTok Ads' },
-    { icon: '💬', label: 'Catálogo WhatsApp', detail: 'Tu menú en el chat' },
-    { icon: '⭕', label: 'Stories de Instagram', detail: 'Contenido diario que vende' },
-    { icon: '🌐', label: 'Página web', detail: 'Tu vitrina online' },
-    { icon: '🖼️', label: 'Banners y vallas', detail: 'Publicidad impresa' },
+    { icon: '💬', label: 'Catálogo WhatsApp', detail: 'Que tus clientes puedan ver tu menú en su chat' },
+    { icon: '🎯', label: 'Stories de Instagram', detail: 'Contenido diario para estar en la mente del cliente' },
+    { icon: '🌐', label: 'Página web', detail: 'Una forma de mostrar exactamente lo que tú quieres' },
+    { icon: '🖼️', label: 'Banners y vallas', detail: 'Publicidad impresa, gigantografías, etc.' },
   ];
 
   const [hoveredIcon, setHoveredIcon] = React.useState(null);
@@ -863,8 +863,8 @@ function PromesaSection({ onCTA }) {
         <Reveal>
           <div style={s.header}>
             <Tag dark>Nuestra promesa</Tag>
-            <h2 style={s.h2}>Presencia en <span style={s.cursive}>cada lugar</span> donde te buscan.</h2>
-            <p style={s.lead}>Fotos que funcionan en todos los formatos. El objetivo es que tu <Cursive>comida</Cursive> se vea bien donde sea que aparezca tu marca.</p>
+            <h2 style={s.h2}>Tienes que estar en <span style={s.cursive}>cada lugar</span> donde te buscan.</h2>
+            <p style={s.lead}>Nuestras fotos funcionan en todos los formatos. El objetivo es que tu <Cursive>comida</Cursive> se vea bien donde sea que aparezca tu marca.</p>
           </div>
         </Reveal>
 
@@ -889,7 +889,7 @@ function PromesaSection({ onCTA }) {
 
         <Reveal delay={0.2}>
           <div style={s.quote}>
-            <p style={s.quoteText}>"Contratar fotógrafo no es <Cursive>caro</Cursive>. No vender es caro."</p>
+            <p style={s.quoteText}>"Contratar fotógrafo no es <Cursive>caro</Cursive>. Tener mesas vacías es carísimo."</p>
             <p style={s.quoteAttr}>— Pablo Villarroel</p>
           </div>
         </Reveal>
@@ -1031,12 +1031,12 @@ function SobreSection({ onPortfolio }) {
           </div>
         </Reveal>
         <Reveal delay={0.15}>
-          <Tag>Quién está detrás</Tag>
+          <Tag>¿Quién es este loco?</Tag>
           <h2 style={s.h2}>Pablo <Cursive>Villarroel</Cursive></h2>
-          <p style={s.intro}>En todas las páginas siempre hay un bloque enorme de texto donde el fotógrafo presume de sus títulos o años de experiencia. Pero nadie lo lee. ¿Sabes por qué?</p>
-          <p style={s.bio}>Porque a nadie le importa jajaja. Tú quieres <Cursive>resultados</Cursive> para tu marca. Mi mejor carta de presentación es mi portafolio.</p>
+          <p style={s.bio}>En todas las páginas siempre hay un bloque enorme de texto donde el fotógrafo presume de sus títulos o años de experiencia. Pero nadie lo lee. ¿Sabes por qué?</p>
+          <p style={s.bio}>Porque a nadie le importa jajaja. Tú quieres <Cursive>resultados</Cursive> para tu marca. Mi mejor carta de presentación es mi portafolio y los más de 400 restaurantes que he fotografiado como fotógrafo oficial de PedidosYa.</p>
           <div style={s.creds}>
-            {['Lic. Marketing & Publicidad','TEDx Speaker','Especialista en Storytelling','+10 años fotografía gastronómica'].map((c, i) => (
+            {['Lic. Marketing & Publicidad','TEDx Speaker','Fotógrafo oficial de Pedidosya','+10 años fotografía gastronómica'].map((c, i) => (
               <span key={i} style={s.cred}>{c}</span>
             ))}
           </div>
@@ -1165,9 +1165,9 @@ function MarcasSection() {
       <div style={s.container}>
         <Reveal>
           <div style={s.header}>
-            <Tag>Confían en nosotros</Tag>
-            <h2 style={s.h2}>Marcas que ya han quedado <span style={s.accent}>felices<span style={s.accentLine}></span></span>.</h2>
-            <p style={s.sub}>Más de 300 restaurantes y marcas de alimentos han confiado su imagen a Estudio Graphica.</p>
+            <Tag>Ya confían en nosotros</Tag>
+            <h2 style={s.h2}>Marcas que ya han quedado <span style={s.accent}>chochas<span style={s.accentLine}></span></span>.</h2>
+            <p style={s.sub}>Más de 400 restaurantes y marcas nos han confiado su imagen y puedes ver sus locales llenos de gente.</p>
           </div>
         </Reveal>
       </div>
@@ -1214,9 +1214,9 @@ function CTASection() {
       <div style={s.blob2}></div>
       <Reveal>
         <div style={s.inner}>
-          <Tag dark>Próximo paso</Tag>
+          <Tag dark>¡Trabajemos juntos!</Tag>
           <h2 style={s.h2}>¿Tu restaurante merece <span style={s.accent}>mejor imagen</span>?</h2>
-          <p style={s.p}>Agenda un diagnóstico gratuito de tu marca. Analizamos tu situación actual y te decimos exactamente qué necesitas — sin compromiso.</p>
+          <p style={s.p}>Agenda un diagnóstico gratuito de tu marca. Analizamos tu situación actual y te decimos exactamente qué necesitas, sin compromiso.</p>
           <a
             href="#cta"
             {...CAL_ATTRS}
@@ -1245,19 +1245,19 @@ function FAQSection() {
   const faqs = [
     {
       q: '¿Cuánto cuesta una sesión de fotos?',
-      a: 'Depende de la cantidad de fotos y la duración que elijas — los paquetes van de Bs. 300 a Bs. 1300. Arma tu paquete y mira el precio exacto en la calculadora de precios.',
+      a: 'Depende de la cantidad de fotos y la duración que elijas, los paquetes empiezan en Bs. 680. Puedes armar tu paquete y ver el precio exacto en la calculadora de precios.',
     },
     {
       q: '¿En cuánto tiempo recibo las fotos?',
-      a: 'Según el paquete: los más chicos se entregan en menos de 72 horas, los intermedios en menos de 48, y los más grandes en menos de 24 horas.',
+      a: 'Según el paquete: los más chicos se entregan en menos de 72 horas, los intermedios en menos de 48, y los más grandes en menos de 24 horas. Le damos prioridad a los clientes que nos confían más trabajo',
     },
     {
       q: '¿Tengo que preparar el estilismo de la comida?',
-      a: 'No. El foodstyling (armar y acomodar los platillos para que se vean bien en cámara) va incluido siempre, en todos los paquetes.',
+      a: '¡Ni te preocupes por eso!. El foodstyling (armar y acomodar los platillos para que se vean bien en cámara) va incluido siempre, en todos los paquetes.',
     },
     {
       q: '¿Dónde se hacen las sesiones?',
-      a: 'Coordinamos el lugar en la llamada de diagnóstico gratuita — normalmente en tu restaurante o local, aquí en Cochabamba.',
+      a: 'Coordinamos el lugar en la llamada de diagnóstico gratuita, normalmente en tu restaurante o local, aquí en Cercado. Ir a la Zona Sud, Sacaba, Quillacollo o a otras zonas tiene un costo extra.',
     },
     {
       q: '¿Cómo empiezo?',
@@ -1287,7 +1287,7 @@ function FAQSection() {
         <Reveal>
           <div style={s.header}>
             <Tag>Antes de que preguntes</Tag>
-            <h2 style={s.h2}>Preguntas <span style={s.accent}>frecuentes<span style={s.accentLine}></span></span>.</h2>
+            <h2 style={s.h2}>¿Tienes <span style={s.accent}>dudas?<span style={s.accentLine}></span></span>.</h2>
           </div>
         </Reveal>
         <Reveal delay={0.1}>
@@ -1407,7 +1407,7 @@ function PortfolioSection({ onCTA }) {
       <div style={s.container}>
         <div style={s.header}>
           <Tag dark>Portafolio</Tag>
-          <h2 style={s.h2}>El trabajo habla solo.</h2>
+          <h2 style={s.h2}>Un cliente feliz es la mejor publicidad.</h2>
           <p style={s.sub}>Cada restaurante tiene una historia que contar. Esto es lo que pasa cuando esa historia se cuenta bien.</p>
         </div>
         <div style={s.grid}>
