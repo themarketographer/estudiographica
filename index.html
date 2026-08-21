@@ -45,7 +45,7 @@
     "name": "Pablo Villarroel"
   },
   "sameAs": [
-    "https://estudiographica.myportfolio.com"
+    "https://portafolio.estudiographica.com"
   ]
 }
 </script>
@@ -456,7 +456,7 @@ function HeroSection({ onCTA, onPortfolio }) {
         <div style={heroStyles.leftCol}>
           <div style={heroStyles.eyebrow}>
             <span style={heroStyles.eyebrowLine}></span>
-            <p style={heroStyles.eyebrowText}>Fotografía gastronómica · Cochabamba</p>
+            <p style={heroStyles.eyebrowText}>Fotografía gastronómica en Cochabamba</p>
           </div>
           <h1 style={heroStyles.h1}>
             Fotos que hacen{' '}
@@ -467,7 +467,7 @@ function HeroSection({ onCTA, onPortfolio }) {
             a tus <span style={heroStyles.cursive}>clientes</span>.
           </h1>
           <p style={heroStyles.sub}>
-            La primera mordida siempre es visual. Sesiones de fotografía gastronómica con foodstyling, entrega en 24 horas y planes mensuales para tu restaurante.
+           Sesiones de fotografía gastronómica con foodstyling, entrega en 24 horas y planes mensuales de contenido para tu restaurante.
           </p>
           <div style={heroStyles.actions}>
             <a
@@ -478,7 +478,7 @@ function HeroSection({ onCTA, onPortfolio }) {
               onMouseEnter={() => setHoverPrimary(true)}
               onMouseLeave={() => setHoverPrimary(false)}
             >
-              Agendar llamada gratis
+              Agendar tu llamada de diagnóstico gratuita
               <span style={{ fontSize: 18, lineHeight: 1 }}>→</span>
             </a>
             <a
@@ -713,11 +713,11 @@ function ProblemSection() {
     <section id="problema" style={s.section}>
       <div style={s.container}>
         <Reveal>
-          <Tag dark>El problema real</Tag>
+          <Tag dark>¿Por qué una sesión de fotos?</Tag>
           <h2 style={s.h2}>Tu comida sabe mejor de lo que <span style={s.accent}>se ve</span>.</h2>
-          <p style={s.lead}>"La gente come primero con los <Cursive>ojos</Cursive>." Y si lo que ven primero es una foto del celular o generada por IA, ya perdiste antes de que lean el menú.</p>
+          <p style={s.lead}>"La gente come primero con los <Cursive>ojos</Cursive>." Y si lo que ven primero es una foto del celular, no le haces justicia a tantas horas cocinando.</p>
           <ul style={s.bullets}>
-            {['Clientes que te buscan pero eligen la "opción segura" que ya conocen.','Fotos que no funcionan ni en menú, ni en delivery, ni en anuncios.','Inversión en redes sociales que no convierte porque el contenido no conecta.'].map((t,i) => (
+            {['¿Los clientes te buscan pero eligen la "opción segura" que ya conocen?','¿Tienes fotos diferentes en Instagram y en Pedidos Ya?.','¿Pagas anuncios o apps de delivery y aún así no mejoras en ventas?'].map((t,i) => (
               <li key={i} style={s.bullet}><span style={s.dot}></span>{t}</li>
             ))}
           </ul>
@@ -736,10 +736,10 @@ function ProblemSection() {
             </div>
             <div style={{ ...s.cmpDivider, left: `${pos}%` }}></div>
             <div style={{ ...s.cmpHandle, left: `${pos}%` }}>⇆</div>
-            <div style={s.cmpLabel(true)}>📱 Celular</div>
-            <div style={s.cmpLabel(false)}>📸 Graphica</div>
+            <div style={s.cmpLabel(true)}>📱 Foto tomada con celular</div>
+            <div style={s.cmpLabel(false)}>📸 Lo que hacemos en Estudio Graphica</div>
           </div>
-          <p style={{ textAlign: 'center', marginTop: 12, fontSize: 12, color: 'rgba(248,248,248,0.5)', fontStyle: 'italic' }}>Arrastra para comparar</p>
+          <p style={{ textAlign: 'center', marginTop: 12, fontSize: 12, color: 'rgba(248,248,248,0.5)', fontStyle: 'italic' }}>← Desliza de un lado a otro para ver la diferencia→</p>
         </Reveal>
       </div>
       <style>{`
