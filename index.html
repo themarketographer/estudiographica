@@ -911,102 +911,6 @@ function PromesaSection({ onCTA }) {
   );
 }
 
-// TestimonialsSection — logos como "selectores" + quote dinámico
-function TestimonialsSection() {
-  const testimonials = [
-    { name: 'Mama Chicken', role: 'Pollería · Cochabamba', quote: 'Subimos las ventas del delivery un 40% el primer mes después de cambiar las fotos. Pablo entiende cómo vender comida.', logo: window.IMG.imgMama },
-    { name: 'Bros', role: 'Hamburguesería', quote: 'Llevábamos años con fotos del celu. La diferencia con las de Estudio Graphica es jodida. Ahora hasta los anuncios funcionan.', logo: window.IMG.imgBros },
-    { name: 'Cookie Bar', role: 'Pastelería', quote: 'Plan mensual hace 8 meses. Dejamos de pensar qué subir y nos enfocamos en producir. Vale cada centavo.', logo: window.IMG.imgCookie },
-    { name: 'Chanchi Broaster', role: 'Pollería · Delivery', quote: 'Antes hacíamos las fotos con el celular. Cambiamos al plan mensual y ahora la marca se ve seria, premium.', logo: window.IMG.imgChanchi },
-    { name: 'Happy Tea', role: 'Bubble Tea', quote: 'Las fotos de Pablo nos abrieron las apps de delivery. Hoy estamos en PedidosYa y Yaigo gracias a su trabajo.', logo: window.IMG.imgHappyTea },
-  ];
-  const [active, setActive] = React.useState(0);
-
-  // Auto-rotate
-  React.useEffect(() => {
-    const id = setInterval(() => setActive(a => (a + 1) % testimonials.length), 6000);
-    return () => clearInterval(id);
-  }, [testimonials.length]);
-
-  const s = {
-    section: { background: TOKEN.offWhite, padding: 'clamp(72px, 10vw, 120px) 0' },
-    container: { maxWidth: 1100, margin: '0 auto', padding: '0 24px' },
-    header: { textAlign: 'center', marginBottom: 48 },
-    h2: { fontFamily: "'Izmir', 'Syne', sans-serif", fontWeight: 800, fontSize: 'clamp(2rem, 4vw, 3rem)', lineHeight: 1.05, letterSpacing: '-0.025em', color: TOKEN.dark },
-    accent: { color: TOKEN.dark, position: 'relative', display: 'inline-block', fontFamily: "'Playfair Display', serif", fontStyle: 'italic', fontWeight: 700 },
-    accentLine: { position: 'absolute', bottom: '0.06em', left: 0, right: 0, height: '0.20em', background: TOKEN.yellow, zIndex: -1 },
-
-    quoteCard: {
-      background: TOKEN.cream, borderRadius: 24, padding: 'clamp(32px, 5vw, 56px)',
-      textAlign: 'center', position: 'relative', overflow: 'hidden',
-      boxShadow: '0 12px 40px rgba(24,24,24,0.06)', maxWidth: 820, margin: '0 auto',
-    },
-    quoteMark: { fontFamily: "'Playfair Display', serif", fontSize: '5rem', color: TOKEN.yellow, lineHeight: 0.4, display: 'block', marginBottom: 8 },
-    quote: { fontFamily: "'Izmir','Syne',sans-serif", fontWeight: 700, fontSize: 'clamp(1.2rem, 2.4vw, 1.7rem)', lineHeight: 1.4, color: TOKEN.dark, marginBottom: 28, letterSpacing: '-0.01em', minHeight: 100 },
-    author: { fontFamily: "'Izmir','Syne',sans-serif", fontWeight: 700, fontSize: 16, color: TOKEN.dark },
-    role: { fontSize: 13, color: TOKEN.grayText, marginTop: 2 },
-
-    logoStrip: {
-      display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 8,
-      marginTop: 40, flexWrap: 'wrap',
-    },
-    logoBtn: (act) => ({
-      width: 110, height: 80, padding: 14,
-      background: act ? '#fff' : 'transparent',
-      border: act ? `2px solid ${TOKEN.dark}` : '2px solid transparent',
-      borderRadius: 16, cursor: 'pointer',
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-      transition: 'all 0.3s',
-      transform: act ? 'translateY(-4px)' : 'translateY(0)',
-      boxShadow: act ? '0 8px 24px rgba(24,24,24,0.10)' : 'none',
-    }),
-    logoImg: (act) => ({
-      maxWidth: '100%', maxHeight: '100%', objectFit: 'contain',
-      filter: act ? 'none' : 'grayscale(1)',
-      opacity: act ? 1 : 0.55,
-      transition: 'all 0.3s',
-    }),
-  };
-
-  const t = testimonials[active];
-
-  return (
-    <section id="testimonios" style={s.section}>
-      <div style={s.container}>
-        <Reveal>
-          <div style={s.header}>
-            <Tag>Lo que dicen los clientes</Tag>
-            <h2 style={s.h2}>El trabajo se nota en las <span style={s.accent}>ventas<span style={s.accentLine}></span></span>.</h2>
-          </div>
-        </Reveal>
-
-        <Reveal delay={0.1}>
-          <div style={s.quoteCard}>
-            <span style={s.quoteMark}>"</span>
-            <p style={s.quote} key={t.name}>{t.quote}</p>
-            <p style={s.author}>{t.name}</p>
-            <p style={s.role}>{t.role}</p>
-          </div>
-        </Reveal>
-
-        <Reveal delay={0.15}>
-          <div style={s.logoStrip}>
-            {testimonials.map((it, i) => (
-              <button key={it.name} style={s.logoBtn(i === active)} onClick={() => setActive(i)} aria-label={it.name}>
-                <img src={it.logo} alt={it.name} style={s.logoImg(i === active)} />
-              </button>
-            ))}
-          </div>
-        </Reveal>
-      </div>
-      <style>{`
-        @media (max-width: 540px) {
-          #testimonios button[style*="width: 110"] { width: 84px !important; height: 60px !important; padding: 10px !important; }
-        }
-      `}</style>
-    </section>
-  );
-}
 
 function SobreSection({ onPortfolio }) {
   const s = {
@@ -1317,7 +1221,7 @@ function FAQSection() {
   );
 }
 
-Object.assign(window, { Tag, Cursive, Reveal, ProblemSection, ProcesoSection, PromesaSection, TestimonialsSection, FAQSection, MarcasSection, SobreSection, CTASection });
+Object.assign(window, { Tag, Cursive, Reveal, ProblemSection, ProcesoSection, PromesaSection, FAQSection, MarcasSection, SobreSection, CTASection });
 
 </script>
 
@@ -1588,7 +1492,6 @@ function App() {
       <PortfolioSection onCTA={handleCTA} />
       <MarcasSection />
       <SobreSection onPortfolio={handlePortfolio} />
-      <TestimonialsSection />
       <FAQSection />
       <CTASection />
       <FooterSection />
