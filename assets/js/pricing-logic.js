@@ -97,17 +97,25 @@ window.EGPricing = (function () {
   // activo. PRECIOS DE EJEMPLO — Pablo: ajústalos a lo que realmente
   // cobras antes de publicar (son placeholders razonables, no tarifas
   // validadas).
+  //
+  // tipo 'flat'    → precio fijo, se suma una sola vez si está marcado.
+  // tipo 'stepper' → tiene selector de cantidad (min–max), precio =
+  //                  precioUnidad × cantidad. Hoy solo "reels" lo usa.
   var EXTRAS = [
-    { id: 'express', label: 'Entrega express (24h)', desc: 'Adelantamos la entrega sin importar el paquete', precio: 150 },
-    { id: 'locacion', label: 'Segunda locación / sucursal', desc: 'Cubrimos otro punto en la misma sesión', precio: 200 },
-    { id: 'flatlay', label: 'Set flatlay de ingredientes', desc: 'Fotos de producto/insumos sueltos, estilo editorial', precio: 90 },
-    { id: 'retoque', label: 'Retoque avanzado', desc: 'Composición y limpieza de fondo nivel campaña', precio: 100 },
+    { id: 'landing', tipo: 'flat', label: 'Landing page básica', desc: 'Página de una sola sección con tu menú, ubicación y contacto directo', precio: 500 },
+    { id: 'asesoria', tipo: 'flat', label: 'Asesoría de marketing', desc: 'Sesión estratégica de 1 hora para ordenar redes, delivery y anuncios', precio: 250 },
+    { id: 'reels', tipo: 'stepper', label: 'Reel sencillo', desc: 'Grabación y edición simple, sin guion ni concepto creativo', precioUnidad: 180, min: 1, max: 6 },
+    { id: 'menuDigital', tipo: 'flat', label: 'Menú animado para pantallas', desc: 'Diseño de menú con movimiento, listo para TV o tablet en el local', precio: 400 },
   ];
 
-  function calcExtras(selectedIds) {
-    selectedIds = selectedIds || [];
+  // seleccion: { [id]: cantidad }. Para los "flat" cualquier cantidad > 0
+  // cuenta como una sola vez (el precio no cambia con la cantidad).
+  function calcExtras(seleccion) {
+    seleccion = seleccion || {};
     return EXTRAS.reduce(function (sum, ex) {
-      return selectedIds.indexOf(ex.id) !== -1 ? sum + ex.precio : sum;
+      var cant = seleccion[ex.id] || 0;
+      if (cant <= 0) return sum;
+      return sum + (ex.tipo === 'stepper' ? ex.precioUnidad * cant : ex.precio);
     }, 0);
   }
 

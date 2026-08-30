@@ -156,27 +156,26 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
   .extra-row.active { border-color: var(--dark); background: rgba(255,221,90,0.18); }
   .extra-row .check-square { flex-shrink: 0; }
   .extra-copy { flex: 1; }
-  .extra-name { font-size: 13.5px; font-weight: 600; color: var(--dark); }
-  .extra-desc { font-size: 11.5px; color: var(--gray-text); margin-top: 1px; }
-  .extra-price { font-family: 'Izmir', 'Syne', sans-serif; font-weight: 700; font-size: 12.5px; color: var(--dark); white-space: nowrap; }
-  .price-extras-line { font-size: 12.5px; color: var(--gray-text); margin: -14px 0 18px; }
+  .extra-name { font-size: 13.5px; font-weight: 600; color: var(--dark); display: block; }
+  .extra-desc { font-size: 11.5px; color: var(--gray-text); margin-top: 2px; display: block; }
+  .extra-price { font-family: 'Izmir', 'Syne', sans-serif; font-weight: 700; font-size: 12.5px; color: var(--dark); white-space: nowrap; flex-shrink: 0; }
+  .extra-stepper { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+  .extra-stepper button {
+    width: 26px; height: 26px; min-width: 26px; padding: 0; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; font-size: 15px; line-height: 1;
+  }
+  .extra-stepper button:disabled { opacity: 0.35; cursor: not-allowed; }
+  .extra-stepper .qty { font-family: 'Izmir', 'Syne', sans-serif; font-weight: 700; font-size: 13.5px; min-width: 14px; text-align: center; }
+
+  /* La línea "N extras → +Bs. X" va en flujo normal, sin solaparse con el precio */
+  .price-extras-line { font-size: 12.5px; color: var(--gray-text); margin: 0 0 16px; }
   .price-extras-line b { color: var(--dark); }
   @keyframes eg-price-pop { 0% { transform: scale(1); } 35% { transform: scale(1.06); } 100% { transform: scale(1); } }
-  .price-pop { animation: eg-price-pop 0.28s ease; }
-
-  .tier-guide { margin-top: 28px; }
-  .tier-guide-label { font-family: 'Izmir', 'Syne', sans-serif; font-weight: 700; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gray-text); margin-bottom: 14px; }
-  .tier-row { display: flex; align-items: flex-start; gap: 12px; padding: 12px 14px; border-radius: 12px; border: 1.5px solid rgba(24,24,24,0.08); transition: all 0.28s; margin-bottom: 10px; }
-  .tier-row.match { background: var(--yellow); border-color: var(--dark); }
-  .tier-dot { width: 10px; height: 10px; min-width: 10px; margin-top: 6px; border-radius: 50%; background: rgba(24,24,24,0.25); }
-  .tier-row.match .tier-dot { background: var(--dark); }
-  .tier-name { font-family: 'Izmir','Syne',sans-serif; font-weight: 700; font-size: 14px; margin-bottom: 2px; }
-  .tier-range { font-weight: 400; font-size: 12px; color: var(--gray-text); }
-  .tier-desc { font-size: 12px; color: var(--gray-text); line-height: 1.4; }
+  .price-pop { animation: eg-price-pop 0.28s ease; transform-origin: left center; }
 
   .paquete-label { font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gray-text); margin-bottom: 8px; }
   .paquete-name { font-family: 'Izmir', 'Syne', sans-serif; font-weight: 800; font-size: 1.6rem; margin-bottom: 14px; }
-  .price { font-family: 'Izmir', 'Syne', sans-serif; font-weight: 800; font-size: 2.6rem; line-height: 1; margin-bottom: 4px; }
+  .price { font-family: 'Izmir', 'Syne', sans-serif; font-weight: 800; font-size: 2.6rem; line-height: 1; margin-bottom: 10px; }
   .price-unit { font-size: 14px; font-weight: 400; color: var(--gray-text); margin-left: 4px; }
   .price-note { font-size: 12px; color: var(--gray-text); margin-bottom: 22px; font-style: italic; }
 
@@ -234,10 +233,6 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
           </div>
           <input type="range" id="fotosSlider" min="8" max="24" step="1" value="15" />
           <div class="range-labels"><span>8</span><span>24</span></div>
-        </div>
-        <div class="tier-guide">
-          <p class="tier-guide-label">Paquetes disponibles</p>
-          <div id="tierList"></div>
         </div>
       </div>
 
@@ -297,7 +292,7 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
   (function () {
     var tipo = 'sesion';
     var fotos = 15, planFotos = 16, duracion = 3, addVideo = false, reels = 4;
-    var extrasSeleccionados = [];
+    var extrasSeleccionados = {}; // { [id]: cantidad } — 0/ausente = no seleccionado
 
     var tabSesion = document.getElementById('tabSesion');
     var tabPlan = document.getElementById('tabPlan');
@@ -313,7 +308,6 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
     var reelsBlock = document.getElementById('reelsBlock');
     var reelsSlider = document.getElementById('reelsSlider');
     var reelsValue = document.getElementById('reelsValue');
-    var tierList = document.getElementById('tierList');
     var paqueteLabel = document.getElementById('paqueteLabel');
     var paqueteName = document.getElementById('paqueteName');
     var precioValue = document.getElementById('precioValue');
@@ -323,24 +317,54 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
     var btnReservar = document.getElementById('btnReservar');
     var waLink = document.getElementById('waLink');
 
-    // Pinta la lista de extras una sola vez; los clicks solo hacen toggle
-    // sobre extrasSeleccionados y llaman a render().
+    // Pinta la lista de extras una sola vez; los "flat" son checkbox simple,
+    // "reels" (stepper) trae su propio selector de cantidad con − / +.
     extrasList.innerHTML = EGPricing.EXTRAS.map(function (ex) {
-      return '<div class="extra-row" data-extra="' + ex.id + '">' +
+      var priceTag = ex.tipo === 'stepper'
+        ? '+Bs. ' + ex.precioUnidad + ' c/u'
+        : '+Bs. ' + ex.precio;
+      return '<div class="extra-row" data-extra="' + ex.id + '" data-tipo="' + ex.tipo + '">' +
         '<span class="check-square"></span>' +
         '<span class="extra-copy"><span class="extra-name">' + ex.label + '</span>' +
         '<span class="extra-desc">' + ex.desc + '</span></span>' +
-        '<span class="extra-price">+Bs. ' + ex.precio + '</span></div>';
+        (ex.tipo === 'stepper'
+          ? '<span class="extra-stepper" style="display:none">' +
+            '<button type="button" class="stepper-minus" data-extra="' + ex.id + '">−</button>' +
+            '<span class="qty" data-qty="' + ex.id + '">' + ex.min + '</span>' +
+            '<button type="button" class="stepper-plus" data-extra="' + ex.id + '">+</button></span>'
+          : '') +
+        '<span class="extra-price">' + priceTag + '</span></div>';
     }).join('');
+
+    function trackExtra(id) {
+      if (window.EG) window.EG.trackEvent('CustomizeProduct', { content_name: 'Extra: ' + id, content_type: tipo, origen: window.EG.getOrigen() });
+    }
+
     extrasList.querySelectorAll('.extra-row').forEach(function (row) {
-      row.addEventListener('click', function () {
-        var id = row.dataset.extra;
-        var idx = extrasSeleccionados.indexOf(id);
-        if (idx === -1) extrasSeleccionados.push(id); else extrasSeleccionados.splice(idx, 1);
+      var id = row.dataset.extra;
+      var ex = EGPricing.EXTRAS.find(function (e) { return e.id === id; });
+      row.addEventListener('click', function (e) {
+        // Los botones del stepper manejan su propio click más abajo; acá
+        // solo procesamos el toggle general de la fila (marcar/desmarcar).
+        if (e.target.closest('.extra-stepper')) return;
+        var activo = (extrasSeleccionados[id] || 0) > 0;
+        extrasSeleccionados[id] = activo ? 0 : (ex.tipo === 'stepper' ? ex.min : 1);
         render();
-        if (window.EG) {
-          window.EG.trackEvent('CustomizeProduct', { content_name: 'Extra: ' + id, content_type: tipo, origen: window.EG.getOrigen() });
-        }
+        trackExtra(id);
+      });
+    });
+    extrasList.querySelectorAll('.stepper-minus, .stepper-plus').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var id = btn.dataset.extra;
+        var ex = EGPricing.EXTRAS.find(function (e2) { return e2.id === id; });
+        var cant = extrasSeleccionados[id] || ex.min;
+        cant += btn.classList.contains('stepper-plus') ? 1 : -1;
+        if (cant < ex.min) cant = ex.min;
+        if (cant > ex.max) cant = ex.max;
+        extrasSeleccionados[id] = cant;
+        render();
+        trackExtra(id);
       });
     });
 
@@ -384,16 +408,27 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
       planFotosValue.textContent = planFotos + ' fotos/mes';
       reelsValue.textContent = reels + ' reels/mes';
 
-      // Extras: reflejar estado activo en las filas + calcular el total.
+      // Extras: reflejar estado activo (y cantidad, si aplica) en las filas.
       extrasList.querySelectorAll('.extra-row').forEach(function (row) {
-        var active = extrasSeleccionados.indexOf(row.dataset.extra) !== -1;
+        var id = row.dataset.extra;
+        var cant = extrasSeleccionados[id] || 0;
+        var active = cant > 0;
         row.classList.toggle('active', active);
         var sq = row.querySelector('.check-square');
         sq.classList.toggle('active', active);
         sq.textContent = active ? '✓' : '';
+        if (row.dataset.tipo === 'stepper') {
+          var stepperEl = row.querySelector('.extra-stepper');
+          stepperEl.style.display = active ? 'flex' : 'none';
+          var ex = EGPricing.EXTRAS.find(function (e) { return e.id === id; });
+          row.querySelector('.qty').textContent = cant || ex.min;
+          row.querySelector('.stepper-minus').disabled = cant <= ex.min;
+          row.querySelector('.stepper-plus').disabled = cant >= ex.max;
+        }
       });
       var extrasTotal = EGPricing.calcExtras(extrasSeleccionados);
-      var extrasNombres = EGPricing.EXTRAS.filter(function (ex) { return extrasSeleccionados.indexOf(ex.id) !== -1; }).map(function (ex) { return ex.label; });
+      var extrasNombres = EGPricing.EXTRAS.filter(function (ex) { return (extrasSeleccionados[ex.id] || 0) > 0; })
+        .map(function (ex) { return ex.tipo === 'stepper' ? (ex.label + ' x' + extrasSeleccionados[ex.id]) : ex.label; });
       if (extrasTotal > 0) {
         extrasLine.style.display = 'block';
         extrasLine.innerHTML = extrasNombres.length + ' extra' + (extrasNombres.length > 1 ? 's' : '') + ' → <b>+Bs. ' + extrasTotal + '</b>';
@@ -413,17 +448,6 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
         precioValue.innerHTML = 'Bs. ' + precioFinal + '<span class="price-unit">pago único</span>';
         benefitsList.innerHTML = benefits.map(function (b) { return '<li><span class="check">✓</span><span>' + b + '</span></li>'; }).join('');
 
-        tierList.innerHTML = [
-          { name: 'Básico', range: '8–10 fotos', desc: 'Ideal para refrescar carta o redes', match: fotos <= 10 },
-          { name: 'Estándar', range: '11–18 fotos', desc: 'Ideal para cobertura completa de menú', match: fotos > 10 && fotos <= 18 },
-          { name: 'Premium', range: '19–24 fotos', desc: 'Ideal para menú + ambiente + ingredientes', match: fotos > 18 },
-        ].map(function (t) {
-          return '<div class="tier-row' + (t.match ? ' match' : '') + '">' +
-            '<div class="tier-dot"></div>' +
-            '<div><div class="tier-name">' + t.name + '<span class="tier-range"> · ' + t.range + '</span></div>' +
-            '<div class="tier-desc">' + t.desc + '</div></div></div>';
-        }).join('');
-
         btnReservar.setAttribute('data-cal-namespace', 'sesion');
         btnReservar.setAttribute('data-cal-link', 'themarketographer/sesion');
 
@@ -438,7 +462,6 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
         paqueteName.textContent = 'Plan ' + pdata.paquete;
         precioValue.innerHTML = 'Bs. ' + pPrecioFinal + '<span class="price-unit">/mes</span>';
         benefitsList.innerHTML = pbenefits.map(function (b) { return '<li><span class="check">✓</span><span>' + b + '</span></li>'; }).join('');
-        tierList.innerHTML = '';
 
         btnReservar.setAttribute('data-cal-namespace', 'plan-mensual');
         btnReservar.setAttribute('data-cal-link', 'themarketographer/plan-mensual');
