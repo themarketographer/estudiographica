@@ -178,13 +178,13 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
   </a>
 
   <div class="center">
-    <span class="badge">📅 Plan mensual</span>
-    <h1>Tu plan está a un <span class="cursive">paso</span>.</h1>
-    <p class="sub">Ajusta la cantidad de fotos, duración o agrega video si quieres cambiar el paquete, y realiza tu adelanto.</p>
+    <span class="badge" id="eg-gp-badge">📅 Plan mensual</span>
+    <h1 id="eg-gp-h1">Tu plan está a un <span class="cursive">paso</span>.</h1>
+    <p class="sub" id="eg-gp-sub">Ajusta la cantidad de fotos, duración o agrega video si quieres cambiar el paquete, y realiza tu adelanto.</p>
   </div>
 
   <div class="card">
-    <p class="card-label">Configura tu plan</p>
+    <p class="card-label" id="eg-gp-card-label">Configura tu plan</p>
 
     <div class="slider-block">
       <div class="slider-head">
@@ -220,13 +220,13 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 
     <div class="paquete-name" id="paqueteName">Plan Estándar</div>
     <div class="price" id="precioValue">Bs. 728<span class="price-unit">/mes</span></div>
-    <p class="price-note">Precio referencial. Se confirma en tu sesión.</p>
+    <p class="price-note" id="eg-gp-price-note">Precio referencial. Se confirma en tu sesión.</p>
 
     <ul class="benefits" id="benefitsList"></ul>
   </div>
 
   <div class="pay-card">
-    <p class="card-label" style="color: rgba(24,24,24,0.6);">¿Cuánto vas a depositar?</p>
+    <p class="card-label" id="eg-gp-pay-label" style="color: rgba(24,24,24,0.6);">¿Cuánto vas a depositar?</p>
     <div class="pay-toggle">
       <button id="btnAdelanto" class="active">50% adelanto</button>
       <button id="btnCompleto">1er mes completo</button>
@@ -246,24 +246,79 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
            quieres diferenciar pagos de Plan Mensual vs Sesión al mirar tu
            app del banco, genera un QR nuevo específico para esta página. -->
       <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1774467072/2_u07oxc.png" alt="QR de pago BCP - Pablo Villarroel Rocabado" />
-      <p class="qr-caption">BCP · Pablo Villarroel Rocabado<br>Escanea desde la app de tu banco</p>
+      <p class="qr-caption" id="eg-gp-qr-caption">BCP · Pablo Villarroel Rocabado<br>Escanea desde la app de tu banco</p>
     </div>
   </div>
 
-  <div class="card-dark">
+  <div class="card-dark" id="eg-gp-importante">
     <strong>Importante:</strong> tu plan arranca cuando confirmamos el pago del primer mes. Envíanos el comprobante por WhatsApp para coordinar tu primera visita.
   </div>
 
-  <a class="btn-wa track-wa-comprobante"
+  <a class="btn-wa track-wa-comprobante" id="eg-gp-wa-btn"
      href="https://api.whatsapp.com/send?phone=+59169422335&text=%C2%A1Hola%2C%20Pablo!%20Ya%20hice%20el%20dep%C3%B3sito%20de%20mi%20plan%20mensual%2C%20te%20env%C3%ADo%20el%20comprobante%20%F0%9F%93%B8"
      target="_blank" rel="noopener">
     Enviar comprobante por WhatsApp
   </a>
 
-  <a class="back-link" href="/">← Volver al inicio</a>
+  <a class="back-link" href="/" id="eg-gp-back-link">← Volver al inicio</a>
 </div>
 
 <script>
+  // Textos editables desde el panel (mismo patrón "const NOMBRE = [...]"
+  // que faqs/landingHero en index.html). No incluye nada que ya se genere
+  // dinámicamente con JS (paquete, precio, monto, etc.) — eso sigue igual.
+  const textosGraciasPlan = [
+    {
+      badge: '📅 Plan mensual',
+      titulo: 'Tu plan está a un <span class="cursive">paso</span>.',
+      subtitulo: 'Ajusta la cantidad de fotos, duración o agrega video si quieres cambiar el paquete, y realiza tu adelanto.',
+      configuraLabel: 'Configura tu plan',
+      precioNota: 'Precio referencial. Se confirma en tu sesión.',
+      depositoLabel: '¿Cuánto vas a depositar?',
+      qrCaption: 'BCP · Pablo Villarroel Rocabado<br>Escanea desde la app de tu banco',
+      importante: '<strong>Importante:</strong> tu plan arranca cuando confirmamos el pago del primer mes. Envíanos el comprobante por WhatsApp para coordinar tu primera visita.',
+      botonWhatsapp: 'Enviar comprobante por WhatsApp',
+      volverInicio: '← Volver al inicio',
+    },
+  ];
+
+  // Eventos de conversión que dispara esta página. "boton" es la clave
+  // estable con la que el código de tracking busca el nombre configurado;
+  // si no la encuentra, usa el nombre que estaba hardcodeado (ver
+  // egEventName), así nunca se deja de trackear.
+  const eventosPagina = [
+    { boton: 'Carga de la página (inicia checkout)', tipo: 'estandar', nombre: 'InitiateCheckout' },
+    { boton: 'Enviar comprobante por WhatsApp — compra', tipo: 'estandar', nombre: 'Purchase' },
+    { boton: 'Enviar comprobante por WhatsApp — contacto', tipo: 'estandar', nombre: 'Contact' },
+    { boton: 'Ajustó el paquete (slider / chips / checkbox / toggle)', tipo: 'estandar', nombre: 'CustomizeProduct' },
+  ];
+
+  function egEventName(boton, fallback) {
+    try {
+      var item = (eventosPagina || []).filter(function (e) { return e.boton === boton; })[0];
+      return (item && item.nombre) || fallback;
+    } catch (e) { return fallback; }
+  }
+
+  (function () {
+    function set(id, val, html) {
+      var el = document.getElementById(id);
+      if (!el || val == null) return;
+      if (html) el.innerHTML = val; else el.textContent = val;
+    }
+    var t = textosGraciasPlan[0] || {};
+    set('eg-gp-badge', t.badge);
+    set('eg-gp-h1', t.titulo, true);
+    set('eg-gp-sub', t.subtitulo);
+    set('eg-gp-card-label', t.configuraLabel);
+    set('eg-gp-price-note', t.precioNota);
+    set('eg-gp-pay-label', t.depositoLabel);
+    set('eg-gp-qr-caption', t.qrCaption, true);
+    set('eg-gp-importante', t.importante, true);
+    set('eg-gp-wa-btn', t.botonWhatsapp);
+    set('eg-gp-back-link', t.volverInicio);
+  })();
+
   (function () {
     var slider = document.getElementById('fotosSlider');
     var fotosValue = document.getElementById('fotosValue');
@@ -346,7 +401,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
     render();
 
     if (window.EG) {
-      window.EG.trackEvent('InitiateCheckout', {
+      window.EG.trackEvent(egEventName('Carga de la página (inicia checkout)', 'InitiateCheckout'), {
         content_name: 'Gracias - Plan Mensual',
         content_type: 'plan-mensual',
         value: precioTotalActual,
@@ -357,14 +412,14 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
       var waComprobanteBtn = document.querySelector('.track-wa-comprobante');
       if (waComprobanteBtn) {
         waComprobanteBtn.addEventListener('click', function () {
-          window.EG.trackEvent('Purchase', {
+          window.EG.trackEvent(egEventName('Enviar comprobante por WhatsApp — compra', 'Purchase'), {
             content_name: 'Comprobante enviado - Plan ' + paqueteActual,
             content_type: 'plan-mensual',
             value: montoActual,
             currency: 'BOB',
             origen: window.EG.getOrigen(),
           });
-          window.EG.trackEvent('Contact', {
+          window.EG.trackEvent(egEventName('Enviar comprobante por WhatsApp — contacto', 'Contact'), {
             content_name: 'Enviar comprobante plan',
             origen: window.EG.getOrigen(),
           });
@@ -373,7 +428,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 
       // Ajustó fotos, reels, duración o video antes de depositar.
       var trackCustomize = window.EG.debounce(function () {
-        window.EG.trackEvent('CustomizeProduct', {
+        window.EG.trackEvent(egEventName('Ajustó el paquete (slider / chips / checkbox / toggle)', 'CustomizeProduct'), {
           content_name: 'Ajustó paquete - Gracias plan',
           content_type: 'plan-mensual',
           origen: window.EG.getOrigen(),

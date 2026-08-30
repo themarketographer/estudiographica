@@ -163,13 +163,13 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
   </a>
 
   <div class="center">
-    <span class="badge">📸 Sesión de fotos</span>
-    <h1>Tu sesión está a un <span class="cursive">paso</span>.</h1>
-    <p class="sub">Ajusta la cantidad de fotos si quieres cambiar el paquete, y realiza tu adelanto para apartar la fecha.</p>
+    <span class="badge" id="eg-gs-badge">📸 Sesión de fotos</span>
+    <h1 id="eg-gs-h1">Tu sesión está a un <span class="cursive">paso</span>.</h1>
+    <p class="sub" id="eg-gs-sub">Ajusta la cantidad de fotos si quieres cambiar el paquete, y realiza tu adelanto para apartar la fecha.</p>
   </div>
 
   <div class="card">
-    <p class="card-label">Configura tu sesión</p>
+    <p class="card-label" id="eg-gs-card-label">Configura tu sesión</p>
     <div class="slider-block">
       <div class="slider-head">
         <span class="slider-label">Cantidad de fotos</span>
@@ -181,13 +181,13 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 
     <div class="paquete-name" id="paqueteName">Paquete Estándar</div>
     <div class="price" id="precioValue">Bs. 1020<span class="price-unit">pago único</span></div>
-    <p class="price-note">Precio referencial. Se confirma en tu sesión.</p>
+    <p class="price-note" id="eg-gs-price-note">Precio referencial. Se confirma en tu sesión.</p>
 
     <ul class="benefits" id="benefitsList"></ul>
   </div>
 
   <div class="pay-card">
-    <p class="card-label" style="color: rgba(24,24,24,0.6);">¿Cuánto vas a depositar?</p>
+    <p class="card-label" id="eg-gs-pay-label" style="color: rgba(24,24,24,0.6);">¿Cuánto vas a depositar?</p>
     <div class="pay-toggle">
       <button id="btnAdelanto" class="active">50% adelanto</button>
       <button id="btnCompleto">100% completo</button>
@@ -209,24 +209,79 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
            texto arriba — indícale al cliente que confirme el monto en pantalla,
            no el que traiga el QR grabado. -->
       <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1774467072/2_u07oxc.png" alt="QR de pago BCP - Pablo Villarroel Rocabado" />
-      <p class="qr-caption">BCP · Pablo Villarroel Rocabado<br>Escanea desde la app de tu banco</p>
+      <p class="qr-caption" id="eg-gs-qr-caption">BCP · Pablo Villarroel Rocabado<br>Escanea desde la app de tu banco</p>
     </div>
   </div>
 
-  <div class="card-dark">
+  <div class="card-dark" id="eg-gs-importante">
     <strong>Importante:</strong> tu fecha se aparta cuando confirmamos el pago. Envíanos el comprobante por WhatsApp para coordinar el día y la hora exacta de la sesión.
   </div>
 
-  <a class="btn-wa track-wa-comprobante"
+  <a class="btn-wa track-wa-comprobante" id="eg-gs-wa-btn"
      href="https://api.whatsapp.com/send?phone=+59169422335&text=%C2%A1Hola%2C%20Pablo!%20Ya%20hice%20el%20dep%C3%B3sito%20de%20mi%20sesi%C3%B3n%20de%20fotos%2C%20te%20env%C3%ADo%20el%20comprobante%20%F0%9F%93%B8"
      target="_blank" rel="noopener">
     Enviar comprobante por WhatsApp
   </a>
 
-  <a class="back-link" href="/">← Volver al inicio</a>
+  <a class="back-link" href="/" id="eg-gs-back-link">← Volver al inicio</a>
 </div>
 
 <script>
+  // Textos editables desde el panel (mismo patrón "const NOMBRE = [...]"
+  // que faqs/landingHero en index.html). No incluye nada que ya se genere
+  // dinámicamente con JS (paquete, precio, monto, etc.) — eso sigue igual.
+  const textosGraciasSesion = [
+    {
+      badge: '📸 Sesión de fotos',
+      titulo: 'Tu sesión está a un <span class="cursive">paso</span>.',
+      subtitulo: 'Ajusta la cantidad de fotos si quieres cambiar el paquete, y realiza tu adelanto para apartar la fecha.',
+      configuraLabel: 'Configura tu sesión',
+      precioNota: 'Precio referencial. Se confirma en tu sesión.',
+      depositoLabel: '¿Cuánto vas a depositar?',
+      qrCaption: 'BCP · Pablo Villarroel Rocabado<br>Escanea desde la app de tu banco',
+      importante: '<strong>Importante:</strong> tu fecha se aparta cuando confirmamos el pago. Envíanos el comprobante por WhatsApp para coordinar el día y la hora exacta de la sesión.',
+      botonWhatsapp: 'Enviar comprobante por WhatsApp',
+      volverInicio: '← Volver al inicio',
+    },
+  ];
+
+  // Eventos de conversión que dispara esta página. "boton" es la clave
+  // estable con la que el código de tracking busca el nombre configurado;
+  // si no la encuentra, usa el nombre que estaba hardcodeado (ver
+  // egEventName), así nunca se deja de trackear.
+  const eventosPagina = [
+    { boton: 'Carga de la página (inicia checkout)', tipo: 'estandar', nombre: 'InitiateCheckout' },
+    { boton: 'Enviar comprobante por WhatsApp — compra', tipo: 'estandar', nombre: 'Purchase' },
+    { boton: 'Enviar comprobante por WhatsApp — contacto', tipo: 'estandar', nombre: 'Contact' },
+    { boton: 'Ajustó el paquete (slider / toggle de pago)', tipo: 'estandar', nombre: 'CustomizeProduct' },
+  ];
+
+  function egEventName(boton, fallback) {
+    try {
+      var item = (eventosPagina || []).filter(function (e) { return e.boton === boton; })[0];
+      return (item && item.nombre) || fallback;
+    } catch (e) { return fallback; }
+  }
+
+  (function () {
+    function set(id, val, html) {
+      var el = document.getElementById(id);
+      if (!el || val == null) return;
+      if (html) el.innerHTML = val; else el.textContent = val;
+    }
+    var t = textosGraciasSesion[0] || {};
+    set('eg-gs-badge', t.badge);
+    set('eg-gs-h1', t.titulo, true);
+    set('eg-gs-sub', t.subtitulo);
+    set('eg-gs-card-label', t.configuraLabel);
+    set('eg-gs-price-note', t.precioNota);
+    set('eg-gs-pay-label', t.depositoLabel);
+    set('eg-gs-qr-caption', t.qrCaption, true);
+    set('eg-gs-importante', t.importante, true);
+    set('eg-gs-wa-btn', t.botonWhatsapp);
+    set('eg-gs-back-link', t.volverInicio);
+  })();
+
   (function () {
     var slider = document.getElementById('fotosSlider');
     var fotosValue = document.getElementById('fotosValue');
@@ -279,7 +334,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 
     // Tracking
     if (window.EG) {
-      window.EG.trackEvent('InitiateCheckout', {
+      window.EG.trackEvent(egEventName('Carga de la página (inicia checkout)', 'InitiateCheckout'), {
         content_name: 'Gracias - Sesión',
         content_type: 'sesion',
         value: precioTotalActual,
@@ -290,14 +345,14 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
       var waComprobanteBtn = document.querySelector('.track-wa-comprobante');
       if (waComprobanteBtn) {
         waComprobanteBtn.addEventListener('click', function () {
-          window.EG.trackEvent('Purchase', {
+          window.EG.trackEvent(egEventName('Enviar comprobante por WhatsApp — compra', 'Purchase'), {
             content_name: 'Comprobante enviado - Sesión ' + paqueteActual,
             content_type: 'sesion',
             value: montoActual,
             currency: 'BOB',
             origen: window.EG.getOrigen(),
           });
-          window.EG.trackEvent('Contact', {
+          window.EG.trackEvent(egEventName('Enviar comprobante por WhatsApp — contacto', 'Contact'), {
             content_name: 'Enviar comprobante sesión',
             origen: window.EG.getOrigen(),
           });
@@ -307,7 +362,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
       // Ajustó la cantidad de fotos o el modo de pago antes de depositar:
       // sigue siendo "armar el paquete a medida", igual que en /precios.
       var trackCustomize = window.EG.debounce(function () {
-        window.EG.trackEvent('CustomizeProduct', {
+        window.EG.trackEvent(egEventName('Ajustó el paquete (slider / toggle de pago)', 'CustomizeProduct'), {
           content_name: 'Ajustó paquete - Gracias sesión',
           content_type: 'sesion',
           origen: window.EG.getOrigen(),

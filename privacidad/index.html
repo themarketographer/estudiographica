@@ -52,11 +52,11 @@
 </head>
 <body>
   <div class="wrap">
-    <a class="back" href="/">← Volver al inicio</a>
-    <h1>Política de privacidad</h1>
-    <p class="updated">Última actualización: 18 de agosto de 2026</p>
+    <a class="back" href="/" id="eg-priv-back">← Volver al inicio</a>
+    <h1 id="eg-priv-h1">Política de privacidad</h1>
+    <p class="updated" id="eg-priv-updated">Última actualización: 18 de agosto de 2026</p>
 
-    <p>Esta página explica qué datos recoge estudiographica.com cuando la visitas, para qué se usan y cómo puedes desactivarlos. No sustituye asesoría legal; si manejas datos sensibles o vendes en la Unión Europea, consulta con un abogado.</p>
+    <p id="eg-priv-intro">Esta página explica qué datos recoge estudiographica.com cuando la visitas, para qué se usan y cómo puedes desactivarlos. No sustituye asesoría legal; si manejas datos sensibles o vendes en la Unión Europea, consulta con un abogado.</p>
 
     <h2>Qué datos se recogen</h2>
     <ul>
@@ -80,8 +80,38 @@
     <h2>Contacto</h2>
     <p>Si tienes dudas sobre esta política, escríbenos por WhatsApp desde el botón del sitio o a través de <a href="https://estudiographica.myportfolio.com" target="_blank" rel="noopener">estudiographica.myportfolio.com</a>.</p>
   </div>
-  <footer>
+  <footer id="eg-priv-footer">
     © 2026 Estudio Graphica · Cochabamba, Bolivia · <a href="/">Inicio</a>
   </footer>
+
+  <script>
+    // Textos editables desde el panel (mismo patrón "const NOMBRE = [...]"
+    // que faqs/landingHero en index.html). Alcance acotado: título, fecha
+    // de actualización, intro y footer — el cuerpo legal (qué se recoge,
+    // para qué, con quién, etc.) queda para una ronda futura si Pablo lo pide.
+    const textoPrivacidad = [
+      {
+        volverInicio: '← Volver al inicio',
+        titulo: 'Política de privacidad',
+        actualizado: 'Última actualización: 18 de agosto de 2026',
+        intro: 'Esta página explica qué datos recoge estudiographica.com cuando la visitas, para qué se usan y cómo puedes desactivarlos. No sustituye asesoría legal; si manejas datos sensibles o vendes en la Unión Europea, consulta con un abogado.',
+        footer: '© 2026 Estudio Graphica · Cochabamba, Bolivia · <a href="/">Inicio</a>',
+      },
+    ];
+
+    (function () {
+      function set(id, val, html) {
+        var el = document.getElementById(id);
+        if (!el || val == null) return;
+        if (html) el.innerHTML = val; else el.textContent = val;
+      }
+      var t = textoPrivacidad[0] || {};
+      set('eg-priv-back', t.volverInicio);
+      set('eg-priv-h1', t.titulo);
+      set('eg-priv-updated', t.actualizado);
+      set('eg-priv-intro', t.intro);
+      set('eg-priv-footer', t.footer, true);
+    })();
+  </script>
 </body>
 </html>

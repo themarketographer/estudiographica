@@ -141,20 +141,65 @@
   <div class="blob"></div>
   <div class="blob2"></div>
   <div class="wrap">
-    <span class="tag">Error 404</span>
-    <h1>¡Ups!</h1>
-    <h2>Esta página se <span class="cursive">perdió</span> en la cocina.</h2>
-    <p class="lead">La dirección que buscas no existe o cambió. Pero tus fotos gastronómicas sí están donde siempre.</p>
+    <span class="tag" id="eg-404-tag">Error 404</span>
+    <h1 id="eg-404-h1">¡Ups!</h1>
+    <h2 id="eg-404-h2">Esta página se <span class="cursive">perdió</span> en la cocina.</h2>
+    <p class="lead" id="eg-404-lead">La dirección que buscas no existe o cambió. Pero tus fotos gastronómicas sí están donde siempre.</p>
     <div class="actions">
-      <a class="btn btn-primary" href="/">Volver al inicio →</a>
-      <a class="btn btn-ghost" href="/precios">Ver planes y precios</a>
+      <a class="btn btn-primary" href="/" id="eg-404-btn1">Volver al inicio →</a>
+      <a class="btn btn-ghost" href="/precios" id="eg-404-btn2">Ver planes y precios</a>
     </div>
-    <p class="micro">Estudio Graphica · Fotografía gastronómica en Cochabamba</p>
+    <p class="micro" id="eg-404-micro">Estudio Graphica · Fotografía gastronómica en Cochabamba</p>
   </div>
 
   <script>
+    // Textos editables desde el panel (mismo patrón que "faqs"/"landingHero"
+    // en index.html: un array const, y este script chico lo vuelca al DOM).
+    const texto404 = [
+      {
+        tag: 'Error 404',
+        titulo: '¡Ups!',
+        subtitulo: 'Esta página se <span class="cursive">perdió</span> en la cocina.',
+        texto: 'La dirección que buscas no existe o cambió. Pero tus fotos gastronómicas sí están donde siempre.',
+        btnPrimario: 'Volver al inicio →',
+        btnSecundario: 'Ver planes y precios',
+        micro: 'Estudio Graphica · Fotografía gastronómica en Cochabamba',
+      },
+    ];
+
+    // Eventos de conversión que dispara esta página. "boton" es la clave
+    // estable que usa el código de tracking de abajo para buscar el nombre
+    // configurado; si no lo encuentra, usa el nombre que estaba hardcodeado
+    // (ver egEventName), así nunca se deja de trackear.
+    const eventosPagina = [
+      { boton: 'Carga de la página (404)', tipo: 'personalizado', nombre: 'Error404' },
+    ];
+
+    (function () {
+      function set(id, val, html) {
+        var el = document.getElementById(id);
+        if (!el || val == null) return;
+        if (html) el.innerHTML = val; else el.textContent = val;
+      }
+      var t = texto404[0] || {};
+      set('eg-404-tag', t.tag);
+      set('eg-404-h1', t.titulo);
+      set('eg-404-h2', t.subtitulo, true);
+      set('eg-404-lead', t.texto);
+      set('eg-404-btn1', t.btnPrimario);
+      set('eg-404-btn2', t.btnSecundario);
+      set('eg-404-micro', t.micro);
+    })();
+
+    function egEventName(boton, fallback) {
+      try {
+        var item = (eventosPagina || []).filter(function (e) { return e.boton === boton; })[0];
+        return (item && item.nombre) || fallback;
+      } catch (e) { return fallback; }
+    }
+
     if (window.EG) {
-      window.EG.trackCustomEvent('Error404', {
+      window.EG.trackCustomEvent(egEventName('Carga de la página (404)', 'Error404'), {
         content_name: 'Página no encontrada',
         path: window.location.pathname,
         referrer: document.referrer || null,
