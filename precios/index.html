@@ -147,6 +147,23 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
   .check-square { width: 18px; height: 18px; min-width: 18px; border-radius: 5px; border: 1.5px solid rgba(24,24,24,0.3); display: flex; align-items: center; justify-content: center; color: var(--yellow); font-size: 11px; font-weight: 700; }
   .check-square.active { background: var(--dark); border-color: var(--dark); }
 
+  .extras-block { margin-top: 28px; padding-top: 24px; border-top: 1px dashed rgba(24,24,24,0.14); }
+  .extras-title { font-family: 'Izmir', 'Syne', sans-serif; font-weight: 700; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gray-text); margin-bottom: 12px; }
+  .extra-row {
+    display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 12px;
+    border: 1.5px solid rgba(24,24,24,0.08); cursor: pointer; margin-bottom: 8px; transition: all 0.2s;
+  }
+  .extra-row.active { border-color: var(--dark); background: rgba(255,221,90,0.18); }
+  .extra-row .check-square { flex-shrink: 0; }
+  .extra-copy { flex: 1; }
+  .extra-name { font-size: 13.5px; font-weight: 600; color: var(--dark); }
+  .extra-desc { font-size: 11.5px; color: var(--gray-text); margin-top: 1px; }
+  .extra-price { font-family: 'Izmir', 'Syne', sans-serif; font-weight: 700; font-size: 12.5px; color: var(--dark); white-space: nowrap; }
+  .price-extras-line { font-size: 12.5px; color: var(--gray-text); margin: -14px 0 18px; }
+  .price-extras-line b { color: var(--dark); }
+  @keyframes eg-price-pop { 0% { transform: scale(1); } 35% { transform: scale(1.06); } 100% { transform: scale(1); } }
+  .price-pop { animation: eg-price-pop 0.28s ease; }
+
   .tier-guide { margin-top: 28px; }
   .tier-guide-label { font-family: 'Izmir', 'Syne', sans-serif; font-weight: 700; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gray-text); margin-bottom: 14px; }
   .tier-row { display: flex; align-items: flex-start; gap: 12px; padding: 12px 14px; border-radius: 12px; border: 1.5px solid rgba(24,24,24,0.08); transition: all 0.28s; margin-bottom: 10px; }
@@ -255,12 +272,19 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
           <div class="range-labels"><span>4</span><span>12</span></div>
         </div>
       </div>
+
+      <!-- EXTRAS — a la carta, se suman al precio en tiempo real, aplica a ambos tabs -->
+      <div class="extras-block">
+        <p class="extras-title">Extras (opcional)</p>
+        <div id="extrasList"></div>
+      </div>
     </div>
 
     <div class="right-col">
       <div class="paquete-label" id="paqueteLabel">Sesión Estándar</div>
       <div class="paquete-name" id="paqueteName">Paquete Estándar</div>
       <div class="price" id="precioValue">Bs. 1020<span class="price-unit">pago único</span></div>
+      <div class="price-extras-line" id="extrasLine" style="display:none;"></div>
       <div class="price-note">Precio referencial. Lo ajustamos en tu llamada.</div>
       <ul class="benefits" id="benefitsList"></ul>
       <button class="btn-primary" id="btnReservar">Reservar →</button>
@@ -273,6 +297,7 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
   (function () {
     var tipo = 'sesion';
     var fotos = 15, planFotos = 16, duracion = 3, addVideo = false, reels = 4;
+    var extrasSeleccionados = [];
 
     var tabSesion = document.getElementById('tabSesion');
     var tabPlan = document.getElementById('tabPlan');
@@ -292,9 +317,32 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
     var paqueteLabel = document.getElementById('paqueteLabel');
     var paqueteName = document.getElementById('paqueteName');
     var precioValue = document.getElementById('precioValue');
+    var extrasLine = document.getElementById('extrasLine');
+    var extrasList = document.getElementById('extrasList');
     var benefitsList = document.getElementById('benefitsList');
     var btnReservar = document.getElementById('btnReservar');
     var waLink = document.getElementById('waLink');
+
+    // Pinta la lista de extras una sola vez; los clicks solo hacen toggle
+    // sobre extrasSeleccionados y llaman a render().
+    extrasList.innerHTML = EGPricing.EXTRAS.map(function (ex) {
+      return '<div class="extra-row" data-extra="' + ex.id + '">' +
+        '<span class="check-square"></span>' +
+        '<span class="extra-copy"><span class="extra-name">' + ex.label + '</span>' +
+        '<span class="extra-desc">' + ex.desc + '</span></span>' +
+        '<span class="extra-price">+Bs. ' + ex.precio + '</span></div>';
+    }).join('');
+    extrasList.querySelectorAll('.extra-row').forEach(function (row) {
+      row.addEventListener('click', function () {
+        var id = row.dataset.extra;
+        var idx = extrasSeleccionados.indexOf(id);
+        if (idx === -1) extrasSeleccionados.push(id); else extrasSeleccionados.splice(idx, 1);
+        render();
+        if (window.EG) {
+          window.EG.trackEvent('CustomizeProduct', { content_name: 'Extra: ' + id, content_type: tipo, origen: window.EG.getOrigen() });
+        }
+      });
+    });
 
     function switchTab(t) {
       tipo = t;
@@ -336,12 +384,33 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
       planFotosValue.textContent = planFotos + ' fotos/mes';
       reelsValue.textContent = reels + ' reels/mes';
 
+      // Extras: reflejar estado activo en las filas + calcular el total.
+      extrasList.querySelectorAll('.extra-row').forEach(function (row) {
+        var active = extrasSeleccionados.indexOf(row.dataset.extra) !== -1;
+        row.classList.toggle('active', active);
+        var sq = row.querySelector('.check-square');
+        sq.classList.toggle('active', active);
+        sq.textContent = active ? '✓' : '';
+      });
+      var extrasTotal = EGPricing.calcExtras(extrasSeleccionados);
+      var extrasNombres = EGPricing.EXTRAS.filter(function (ex) { return extrasSeleccionados.indexOf(ex.id) !== -1; }).map(function (ex) { return ex.label; });
+      if (extrasTotal > 0) {
+        extrasLine.style.display = 'block';
+        extrasLine.innerHTML = extrasNombres.length + ' extra' + (extrasNombres.length > 1 ? 's' : '') + ' → <b>+Bs. ' + extrasTotal + '</b>';
+      } else {
+        extrasLine.style.display = 'none';
+      }
+      precioValue.classList.remove('price-pop');
+      void precioValue.offsetWidth; // reinicia la animación en cada cambio
+      precioValue.classList.add('price-pop');
+
       if (tipo === 'sesion') {
         var data = EGPricing.calcSesion(fotos);
-        var benefits = EGPricing.sesionBenefits(fotos);
+        var precioFinal = data.precio + extrasTotal;
+        var benefits = EGPricing.sesionBenefits(fotos).concat(extrasNombres);
         paqueteLabel.textContent = 'Sesión ' + data.paquete;
         paqueteName.textContent = 'Paquete ' + data.paquete;
-        precioValue.innerHTML = 'Bs. ' + data.precio + '<span class="price-unit">pago único</span>';
+        precioValue.innerHTML = 'Bs. ' + precioFinal + '<span class="price-unit">pago único</span>';
         benefitsList.innerHTML = benefits.map(function (b) { return '<li><span class="check">✓</span><span>' + b + '</span></li>'; }).join('');
 
         tierList.innerHTML = [
@@ -358,21 +427,24 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
         btnReservar.setAttribute('data-cal-namespace', 'sesion');
         btnReservar.setAttribute('data-cal-link', 'themarketographer/sesion');
 
-        var textoWA = '¡Hola, Estudio Graphica! Quiero una *Sesión de Fotos*:\n- Paquete ' + data.paquete + '\n- ' + fotos + ' fotos\n- Bs. ' + data.precio + '\n\n¿Cuándo agendamos? 📸';
+        var extrasWA = extrasNombres.length ? ('\n- Extras: ' + extrasNombres.join(', ')) : '';
+        var textoWA = '¡Hola, Estudio Graphica! Quiero una *Sesión de Fotos*:\n- Paquete ' + data.paquete + '\n- ' + fotos + ' fotos' + extrasWA + '\n- Bs. ' + precioFinal + '\n\n¿Cuándo agendamos? 📸';
         waLink.href = 'https://api.whatsapp.com/send?phone=+59169422335&text=' + encodeURIComponent(textoWA);
       } else {
         var pdata = EGPricing.calcPlan(planFotos, duracion, addVideo, reels);
-        var pbenefits = EGPricing.planBenefits(planFotos, duracion, addVideo, reels);
+        var pPrecioFinal = pdata.precio + extrasTotal;
+        var pbenefits = EGPricing.planBenefits(planFotos, duracion, addVideo, reels).concat(extrasNombres);
         paqueteLabel.textContent = 'Plan ' + pdata.paquete;
         paqueteName.textContent = 'Plan ' + pdata.paquete;
-        precioValue.innerHTML = 'Bs. ' + pdata.precio + '<span class="price-unit">/mes</span>';
+        precioValue.innerHTML = 'Bs. ' + pPrecioFinal + '<span class="price-unit">/mes</span>';
         benefitsList.innerHTML = pbenefits.map(function (b) { return '<li><span class="check">✓</span><span>' + b + '</span></li>'; }).join('');
         tierList.innerHTML = '';
 
         btnReservar.setAttribute('data-cal-namespace', 'plan-mensual');
         btnReservar.setAttribute('data-cal-link', 'themarketographer/plan-mensual');
 
-        var textoWA2 = '¡Hola, Estudio Graphica! Quiero un *Plan Mensual*:\n- Paquete ' + pdata.paquete + '\n- ' + planFotos + ' fotos/mes' + (addVideo ? (' + ' + reels + ' reels/mes') : '') + '\n- Duración: ' + duracion + ' mes' + (duracion > 1 ? 'es' : '') + '\n- Bs. ' + pdata.precio + '/mes\n\n¿Cuándo agendamos? 📸';
+        var extrasWA2 = extrasNombres.length ? ('\n- Extras: ' + extrasNombres.join(', ')) : '';
+        var textoWA2 = '¡Hola, Estudio Graphica! Quiero un *Plan Mensual*:\n- Paquete ' + pdata.paquete + '\n- ' + planFotos + ' fotos/mes' + (addVideo ? (' + ' + reels + ' reels/mes') : '') + extrasWA2 + '\n- Duración: ' + duracion + ' mes' + (duracion > 1 ? 'es' : '') + '\n- Bs. ' + pPrecioFinal + '/mes\n\n¿Cuándo agendamos? 📸';
         waLink.href = 'https://api.whatsapp.com/send?phone=+59169422335&text=' + encodeURIComponent(textoWA2);
       }
     }

@@ -92,11 +92,32 @@ window.EGPricing = (function () {
     return b;
   }
 
+  // ── Extras a la carta ──
+  // Se suman al precio base (sesión o plan) sin importar cuál tab esté
+  // activo. PRECIOS DE EJEMPLO — Pablo: ajústalos a lo que realmente
+  // cobras antes de publicar (son placeholders razonables, no tarifas
+  // validadas).
+  var EXTRAS = [
+    { id: 'express', label: 'Entrega express (24h)', desc: 'Adelantamos la entrega sin importar el paquete', precio: 150 },
+    { id: 'locacion', label: 'Segunda locación / sucursal', desc: 'Cubrimos otro punto en la misma sesión', precio: 200 },
+    { id: 'flatlay', label: 'Set flatlay de ingredientes', desc: 'Fotos de producto/insumos sueltos, estilo editorial', precio: 90 },
+    { id: 'retoque', label: 'Retoque avanzado', desc: 'Composición y limpieza de fondo nivel campaña', precio: 100 },
+  ];
+
+  function calcExtras(selectedIds) {
+    selectedIds = selectedIds || [];
+    return EXTRAS.reduce(function (sum, ex) {
+      return selectedIds.indexOf(ex.id) !== -1 ? sum + ex.precio : sum;
+    }, 0);
+  }
+
   return {
     calcSesion: calcSesion,
     calcPlan: calcPlan,
     calcVideo: calcVideo,
     sesionBenefits: sesionBenefits,
     planBenefits: planBenefits,
+    EXTRAS: EXTRAS,
+    calcExtras: calcExtras,
   };
 })();

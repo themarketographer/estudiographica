@@ -639,20 +639,74 @@ function Reveal({ children, delay = 0, style = {} }) {
   );
 }
 
-// ProblemSection — with Antes/Después comparison slider
+// ProblemSection — Antes/Después que se anima con el scroll.
+// Al bajar, el wipe avanza hacia "Después"; al subir, retrocede hacia
+// "Antes" — el scroll ES el control. El arrastre manual sigue disponible
+// como método alterno (accesibilidad / gente que prefiere tocar).
 function ProblemSection() {
-  const [pos, setPos] = React.useState(50);
+  const [pos, setPos] = React.useState(100);          // 100 = todo "antes", 0 = todo "después"
+  const posRef = React.useRef(100);
   const boxRef = React.useRef(null);
   const draggingRef = React.useRef(false);          // mouse drag active
   const touchRef = React.useRef(null);              // { x, y, mode: null|'h'|'v' }
+  const rafRef = React.useRef(null);
+  const [scrollDriven, setScrollDriven] = React.useState(true);
 
   const setFromX = React.useCallback((clientX) => {
     if (!boxRef.current) return;
     const r = boxRef.current.getBoundingClientRect();
     let p = ((clientX - r.left) / r.width) * 100;
     if (p < 0) p = 0; if (p > 100) p = 100;
+    posRef.current = p;
     setPos(p);
   }, []);
+
+  // --- Scroll-scrub: la posición del wipe se deriva de dónde está la
+  // caja de comparación dentro del viewport, no de un valor fijo. ---
+  React.useEffect(() => {
+    const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const computeTarget = () => {
+      if (!boxRef.current) return posRef.current;
+      const r = boxRef.current.getBoundingClientRect();
+      const vh = window.innerHeight;
+      // La transición completa (0→100) ocurre mientras la caja recorre
+      // la franja cómoda de lectura del viewport (85% → 15% de su alto).
+      const start = vh * 0.85;
+      const end = vh * 0.15;
+      let progress = (start - r.top) / (start - end);
+      if (progress < 0) progress = 0; if (progress > 1) progress = 1;
+      // progress 0 (la caja recién entra) → "antes" (pos 100).
+      // progress 1 (avanzaste leyendo) → "después" (pos 0). Bajar = revelar la mejora.
+      return (1 - progress) * 100;
+    };
+
+    const onScroll = () => {
+      if (draggingRef.current || !scrollDriven) return;
+      if (rafRef.current) return;
+      rafRef.current = requestAnimationFrame(() => {
+        rafRef.current = null;
+        const target = computeTarget();
+        posRef.current = target;
+        setPos(target);
+      });
+    };
+
+    if (prefersReduced) {
+      // Sin animación forzada por scroll: mostramos el punto medio y
+      // dejamos que la interacción sea manual (arrastre / tap).
+      posRef.current = 50; setPos(50);
+    } else {
+      onScroll(); // posición inicial al montar
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', onScroll);
+    }
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    };
+  }, [scrollDriven]);
 
   React.useEffect(() => {
     // --- Mouse (desktop): drag while button held ---
@@ -748,15 +802,15 @@ function ProblemSection() {
             onTouchStart={(e) => { touchRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY, mode: null }; }}
           >
             <img src={window.IMG.cmpDespues} alt="Después — Estudio Graphica" style={s.cmpImg} />
-            <div style={{ ...s.cmpBefore, clipPath: `polygon(0 0, ${pos}% 0, ${pos}% 100%, 0 100%)` }}>
+            <div style={{ ...s.cmpBefore, clipPath: `polygon(0 0, ${pos}% 0, ${pos}% 100%, 0 100%)`, transition: draggingRef.current ? 'none' : 'clip-path 0.15s linear' }}>
               <img src={window.IMG.cmpAntes} alt="Antes — celular" style={s.cmpImg} />
             </div>
-            <div style={{ ...s.cmpDivider, left: `${pos}%` }}></div>
-            <div style={{ ...s.cmpHandle, left: `${pos}%` }}>⇆</div>
+            <div style={{ ...s.cmpDivider, left: `${pos}%`, transition: draggingRef.current ? 'none' : 'left 0.15s linear' }}></div>
+            <div style={{ ...s.cmpHandle, left: `${pos}%`, transition: draggingRef.current ? 'none' : 'left 0.15s linear' }}>⇆</div>
             <div style={s.cmpLabel(true)}>📱 Celular </div>
             <div style={s.cmpLabel(false)}>📸 Nosotros </div>
           </div>
-          <p style={{ textAlign: 'center', marginTop: 12, fontSize: 12, color: 'rgba(248,248,248,0.5)', fontStyle: 'italic' }}>← Desliza de un lado a otro para ver la diferencia→</p>
+          <p style={{ textAlign: 'center', marginTop: 12, fontSize: 12, color: 'rgba(248,248,248,0.5)', fontStyle: 'italic' }}>↕ Sigue bajando para ver la transformación — o desliza con el dedo →</p>
         </Reveal>
       </div>
       <style>{`
