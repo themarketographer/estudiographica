@@ -662,10 +662,29 @@ function ProblemSection() {
   }, []);
 
   // --- Scroll-scrub: la posición del wipe se deriva de dónde está la
-  // caja de comparación dentro del viewport, no de un valor fijo. ---
+  // caja de comparación dentro del viewport, no de un valor fijo.
+  //
+  // Antes esto saltaba directo al valor calculado en cada evento de
+  // scroll (con una transición CSS de 0.15s "corriendo atrás"), lo que
+  // se sentía a los saltos con un mouse wheel o un scroll táctil rápido:
+  // cada evento reiniciaba la transición desde donde iba, así que el
+  // movimiento se cortaba. Ahora un loop de rAF corre todo el tiempo y
+  // el valor mostrado (pos) persigue al valor objetivo (target) con
+  // interpolación (lerp) cuadro a cuadro — igual de responsivo, pero
+  // como el "acercamiento" es continuo en vez de discreto por evento,
+  // no hay tirones aunque el scroll sea brusco. targetRef.current es la
+  // fuente de verdad; boxRef.getBoundingClientRect() es barato de leer
+  // 60 veces por segundo para un solo elemento.
   React.useEffect(() => {
     const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReduced) {
+      // Sin animación forzada por scroll: mostramos el punto medio y
+      // dejamos que la interacción sea manual (arrastre / tap).
+      posRef.current = 50; setPos(50);
+      return;
+    }
 
+    const targetRef = { current: posRef.current };
     const computeTarget = () => {
       if (!boxRef.current) return posRef.current;
       const r = boxRef.current.getBoundingClientRect();
@@ -681,29 +700,28 @@ function ProblemSection() {
       return (1 - progress) * 100;
     };
 
-    const onScroll = () => {
-      if (draggingRef.current || !scrollDriven) return;
-      if (rafRef.current) return;
-      rafRef.current = requestAnimationFrame(() => {
-        rafRef.current = null;
-        const target = computeTarget();
-        posRef.current = target;
-        setPos(target);
-      });
+    let running = true;
+    const SMOOTH = 0.10; // más chico = más "flotante"; más grande = más directo
+    const tick = () => {
+      if (!running) return;
+      if (!draggingRef.current && scrollDriven) {
+        targetRef.current = computeTarget();
+        const current = posRef.current;
+        const delta = targetRef.current - current;
+        // Bajo este umbral directamente igualamos: evita que el número
+        // quede oscilando en decimales invisibles para siempre.
+        const next = Math.abs(delta) < 0.05 ? targetRef.current : current + delta * SMOOTH;
+        if (Math.abs(next - current) > 0.01) {
+          posRef.current = next;
+          setPos(next);
+        }
+      }
+      rafRef.current = requestAnimationFrame(tick);
     };
+    rafRef.current = requestAnimationFrame(tick);
 
-    if (prefersReduced) {
-      // Sin animación forzada por scroll: mostramos el punto medio y
-      // dejamos que la interacción sea manual (arrastre / tap).
-      posRef.current = 50; setPos(50);
-    } else {
-      onScroll(); // posición inicial al montar
-      window.addEventListener('scroll', onScroll, { passive: true });
-      window.addEventListener('resize', onScroll);
-    }
     return () => {
-      window.removeEventListener('scroll', onScroll);
-      window.removeEventListener('resize', onScroll);
+      running = false;
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
   }, [scrollDriven]);
@@ -802,11 +820,11 @@ function ProblemSection() {
             onTouchStart={(e) => { touchRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY, mode: null }; }}
           >
             <img src={window.IMG.cmpDespues} alt="Después — Estudio Graphica" style={s.cmpImg} />
-            <div style={{ ...s.cmpBefore, clipPath: `polygon(0 0, ${pos}% 0, ${pos}% 100%, 0 100%)`, transition: draggingRef.current ? 'none' : 'clip-path 0.15s linear' }}>
+            <div style={{ ...s.cmpBefore, clipPath: `polygon(0 0, ${pos}% 0, ${pos}% 100%, 0 100%)` }}>
               <img src={window.IMG.cmpAntes} alt="Antes — celular" style={s.cmpImg} />
             </div>
-            <div style={{ ...s.cmpDivider, left: `${pos}%`, transition: draggingRef.current ? 'none' : 'left 0.15s linear' }}></div>
-            <div style={{ ...s.cmpHandle, left: `${pos}%`, transition: draggingRef.current ? 'none' : 'left 0.15s linear' }}>⇆</div>
+            <div style={{ ...s.cmpDivider, left: `${pos}%` }}></div>
+            <div style={{ ...s.cmpHandle, left: `${pos}%` }}>⇆</div>
             <div style={s.cmpLabel(true)}>📱 Celular </div>
             <div style={s.cmpLabel(false)}>📸 Nosotros </div>
           </div>
