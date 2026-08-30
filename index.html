@@ -450,24 +450,24 @@ footer { background: #0A0A0A; padding: clamp(36px, 6vw, 56px) 0 24px; }
     <div class="eg-hero__left">
       <div class="eg-hero__eyebrow">
         <span class="eg-hero__eyebrow-line"></span>
-        <p class="eg-hero__eyebrow-text">Fotografía gastronómica en Cochabamba</p>
+        <p class="eg-hero__eyebrow-text" id="eg-hero-eyebrow"></p>
       </div>
-      <h1 class="eg-hero__h1">Fotos que hacen <span class="eg-accent eg-accent--hero">salivar<span class="eg-accent__line"></span></span> a tus <span class="eg-cursive">clientes</span>.</h1>
-      <p class="eg-hero__sub">Sesiones de fotografía gastronómica con foodstyling, entrega en 24 horas y planes mensuales de contenido para tu restaurante.</p>
+      <h1 class="eg-hero__h1" id="eg-hero-h1"></h1>
+      <p class="eg-hero__sub" id="eg-hero-sub"></p>
       <div class="eg-hero__actions">
         <a href="#cta" class="eg-btn-primary" data-cal-link="themarketographer/reunion" data-cal-namespace="reunion" data-cal-config='{"layout":"month_view","useSlotsViewOnSmallScreen":"true","theme":"light"}'>Agendar tu llamada de diagnóstico gratuita <span style="font-size:18px;line-height:1;">→</span></a>
         <a href="https://api.whatsapp.com/send?phone=+59169422335&text=%C2%A1Hola%2C%20Estudio%20Graphica!%20Vengo%20de%20su%20p%C3%A1gina%20web%2C%20quiero%20trabajar%20con%20ustedes%20%F0%9F%93%B8" target="_blank" rel="noopener" class="eg-wa-link">o escríbenos por WhatsApp →</a>
       </div>
-      <div class="eg-hero__stats">
-        <div><div class="eg-hero__stat-num">+400</div><div class="eg-hero__stat-label">restaurantes<br>fotografiados</div></div>
-        <div><div class="eg-hero__stat-num">+10</div><div class="eg-hero__stat-label">años en<br>Cochabamba</div></div>
-        <div><div class="eg-hero__stat-num">24h</div><div class="eg-hero__stat-label">tiempo de<br>entrega</div></div>
+      <div class="eg-hero__stats" id="eg-hero-stats">
+        <div><div class="eg-hero__stat-num" id="eg-hero-stat-num-1"></div><div class="eg-hero__stat-label" id="eg-hero-stat-label-1"></div></div>
+        <div><div class="eg-hero__stat-num" id="eg-hero-stat-num-2"></div><div class="eg-hero__stat-label" id="eg-hero-stat-label-2"></div></div>
+        <div><div class="eg-hero__stat-num" id="eg-hero-stat-num-3"></div><div class="eg-hero__stat-label" id="eg-hero-stat-label-3"></div></div>
       </div>
     </div>
     <div class="eg-hero__right">
       <div class="eg-no-select eg-hero__photo-frame">
         <div class="eg-hero__photo-inner">
-          <img class="eg-hero__photo-img" src="https://res.cloudinary.com/dplhu2z6j/image/upload/w_1100,q_auto,f_auto/v1777509515/Portada_p9ijpa.jpg" alt="Fotografía gastronómica profesional" />
+          <img class="eg-hero__photo-img" id="eg-hero-img" src="https://res.cloudinary.com/dplhu2z6j/image/upload/w_1100,q_auto,f_auto/v1777509515/Portada_p9ijpa.jpg" alt="Fotografía gastronómica profesional" />
         </div>
         <div class="eg-hero__bubble eg-hero__bubble--1"><img class="eg-hero__bubble-img" src="https://res.cloudinary.com/dplhu2z6j/image/upload/w_1100,q_auto,f_auto/v1777509530/Mama_Chicken_ljrocy.png" alt="Mama Chicken" /></div>
         <div class="eg-hero__bubble eg-hero__bubble--2"><img class="eg-hero__bubble-img" src="https://res.cloudinary.com/dplhu2z6j/image/upload/w_1100,q_auto,f_auto/v1777509530/Happy_Tea_tz44zb.png" alt="Happy Tea" /></div>
@@ -497,10 +497,10 @@ footer { background: #0A0A0A; padding: clamp(36px, 6vw, 56px) 0 24px; }
         </div>
         <div id="eg-cmp-divider" class="eg-cmp__divider"></div>
         <div id="eg-cmp-handle" class="eg-cmp__handle">⇆</div>
-        <div class="eg-cmp__label eg-cmp__label--before">📱 Celular </div>
-        <div class="eg-cmp__label eg-cmp__label--after">📸 Nosotros </div>
+        <div class="eg-cmp__label eg-cmp__label--before" id="eg-cmp-label-before"></div>
+        <div class="eg-cmp__label eg-cmp__label--after" id="eg-cmp-label-after"></div>
       </div>
-      <p class="eg-problema__hint">↕ Sigue bajando para ver la transformación — o desliza con el dedo →</p>
+      <p class="eg-problema__hint" id="eg-problema-hint"></p>
     </div>
   </div>
 </section>
@@ -512,11 +512,7 @@ footer { background: #0A0A0A; padding: clamp(36px, 6vw, 56px) 0 24px; }
       <h2>El proceso más simple. <br>del <span class="eg-accent">mundo<span class="eg-accent__line"></span></span>.</h2>
       <p>Sesiones de fotos con <span class="eg-cursive">foodstyling</span>, o plan mensual de contenido.</p>
     </div>
-    <div class="eg-proceso__grid">
-      <div class="eg-reveal"><div class="eg-proceso__card"><div class="eg-proceso__num">01</div><div><div class="eg-proceso__title">Diagnóstico gratuito</div><p class="eg-proceso__body">Agendamos una llamada gratuita por Zoom en tu local y hacemos una auditoría de tu marca.</p></div></div></div>
-      <div class="eg-reveal" data-delay="0.1"><div class="eg-proceso__card"><div class="eg-proceso__num">02</div><div><div class="eg-proceso__title">Sesión de fotos</div><p class="eg-proceso__body">Firmamos contrato, hacemos las fotos y/o videos con foodstyling incluido. Tú eliges las imágenes.</p></div></div></div>
-      <div class="eg-reveal" data-delay="0.2"><div class="eg-proceso__card"><div class="eg-proceso__num">03</div><div><div class="eg-proceso__title">Entrega en 24 horas</div><p class="eg-proceso__body">Fotos retocadas y listas para usar en menú, redes, delivery, anuncios y catálogo.</p></div></div></div>
-    </div>
+    <div class="eg-proceso__grid" id="eg-proceso-grid"></div>
   </div>
 </section>
 
@@ -527,16 +523,7 @@ footer { background: #0A0A0A; padding: clamp(36px, 6vw, 56px) 0 24px; }
       <h2>Tienes que estar en <span class="eg-cursive">cada lugar</span> donde te buscan.</h2>
       <p>Nuestras fotos funcionan en todos los formatos. El objetivo es que tu <span class="eg-cursive">comida</span> se vea bien donde sea que aparezca tu marca.</p>
     </div>
-    <div class="eg-promesa__grid">
-      <div class="eg-reveal"><div class="eg-promesa__item"><span class="eg-promesa__icon">🍽️</span><div class="eg-promesa__label">Menú digital y físico</div><div class="eg-promesa__detail">La mejor forma de antonjar a quién ya entró a tu local</div></div></div>
-      <div class="eg-reveal" data-delay="0.05"><div class="eg-promesa__item"><span class="eg-promesa__icon">📱</span><div class="eg-promesa__label">Feeds y posts</div><div class="eg-promesa__detail">Contenido coherente en todas tus redes. </div></div></div>
-      <div class="eg-reveal" data-delay="0.1"><div class="eg-promesa__item"><span class="eg-promesa__icon">🛵</span><div class="eg-promesa__label">Apps de delivery</div><div class="eg-promesa__detail">Resalta en PedidosYa, Yango</div></div></div>
-      <div class="eg-reveal" data-delay="0.15"><div class="eg-promesa__item"><span class="eg-promesa__icon">📣</span><div class="eg-promesa__label">Anuncios de pago</div><div class="eg-promesa__detail">Meta Ads, Google, TikTok Ads</div></div></div>
-      <div class="eg-reveal" data-delay="0.2"><div class="eg-promesa__item"><span class="eg-promesa__icon">💬</span><div class="eg-promesa__label">Catálogo WhatsApp</div><div class="eg-promesa__detail">Que tus clientes puedan ver tu menú en su chat</div></div></div>
-      <div class="eg-reveal" data-delay="0.25"><div class="eg-promesa__item"><span class="eg-promesa__icon">🎯</span><div class="eg-promesa__label">Stories de Instagram</div><div class="eg-promesa__detail">Contenido diario para estar en la mente del cliente</div></div></div>
-      <div class="eg-reveal" data-delay="0.3"><div class="eg-promesa__item"><span class="eg-promesa__icon">🌐</span><div class="eg-promesa__label">Página web</div><div class="eg-promesa__detail">Una forma de mostrar exactamente lo que tú quieres</div></div></div>
-      <div class="eg-reveal" data-delay="0.3"><div class="eg-promesa__item"><span class="eg-promesa__icon">🖼️</span><div class="eg-promesa__label">Banners y vallas</div><div class="eg-promesa__detail">Publicidad impresa, gigantografías, etc.</div></div></div>
-    </div>
+    <div class="eg-promesa__grid" id="eg-promesa-grid"></div>
     <div class="eg-reveal" data-delay="0.2">
       <div class="eg-promesa__quote">
         <p class="eg-promesa__quote-text">"Contratar fotógrafo no es <span class="eg-cursive">caro</span>. Tener mesas vacías es carísimo."</p>
@@ -553,20 +540,7 @@ footer { background: #0A0A0A; padding: clamp(36px, 6vw, 56px) 0 24px; }
       <h2>Un cliente feliz es la mejor publicidad.</h2>
       <p>Cada restaurante tiene una historia que contar. Esto es lo que pasa cuando esa historia se cuenta bien.</p>
     </div>
-    <div class="eg-portafolio__grid" id="eg-portafolio-grid">
-      <button type="button" class="eg-portafolio__item" data-idx="0"><img class="eg-portafolio__img" loading="lazy" src="https://res.cloudinary.com/dplhu2z6j/image/upload/w_1100,q_auto,f_auto/v1777509533/Chanchi_Broaster_yjkv9z.png" alt="Chanchi Broaster" /><div class="eg-portafolio__overlay"><span class="eg-portafolio__overlay-label">Chanchi Broaster</span></div><div class="eg-portafolio__expand">⤢</div></button>
-      <button type="button" class="eg-portafolio__item" data-idx="1"><img class="eg-portafolio__img" loading="lazy" src="https://res.cloudinary.com/dplhu2z6j/image/upload/w_1100,q_auto,f_auto/v1777509532/Bros_zehqtz.png" alt="Bros" /><div class="eg-portafolio__overlay"><span class="eg-portafolio__overlay-label">Bros</span></div><div class="eg-portafolio__expand">⤢</div></button>
-      <button type="button" class="eg-portafolio__item" data-idx="2"><img class="eg-portafolio__img" loading="lazy" src="https://res.cloudinary.com/dplhu2z6j/image/upload/w_1100,q_auto,f_auto/v1777509531/Cookie_Bar_u4dvow.png" alt="Cookie Bar" /><div class="eg-portafolio__overlay"><span class="eg-portafolio__overlay-label">Cookie Bar</span></div><div class="eg-portafolio__expand">⤢</div></button>
-      <button type="button" class="eg-portafolio__item" data-idx="3"><img class="eg-portafolio__img" loading="lazy" src="https://res.cloudinary.com/dplhu2z6j/image/upload/w_1100,q_auto,f_auto/v1777509530/Vitz_mowogx.png" alt="Vitz" /><div class="eg-portafolio__overlay"><span class="eg-portafolio__overlay-label">Vitz</span></div><div class="eg-portafolio__expand">⤢</div></button>
-      <button type="button" class="eg-portafolio__item" data-idx="4"><img class="eg-portafolio__img" loading="lazy" src="https://res.cloudinary.com/dplhu2z6j/image/upload/w_1100,q_auto,f_auto/v1777509530/Mama_Chicken_ljrocy.png" alt="Mama Chicken" /><div class="eg-portafolio__overlay"><span class="eg-portafolio__overlay-label">Mama Chicken</span></div><div class="eg-portafolio__expand">⤢</div></button>
-      <button type="button" class="eg-portafolio__item" data-idx="5"><img class="eg-portafolio__img" loading="lazy" src="https://res.cloudinary.com/dplhu2z6j/image/upload/w_1100,q_auto,f_auto/v1777509530/Happy_Tea_tz44zb.png" alt="Happy Tea" /><div class="eg-portafolio__overlay"><span class="eg-portafolio__overlay-label">Happy Tea</span></div><div class="eg-portafolio__expand">⤢</div></button>
-      <button type="button" class="eg-portafolio__item" data-idx="6"><img class="eg-portafolio__img" loading="lazy" src="https://res.cloudinary.com/dplhu2z6j/image/upload/w_1100,q_auto,f_auto/v1777509529/Happy_Fry_pvyr8x.png" alt="Happy Fry" /><div class="eg-portafolio__overlay"><span class="eg-portafolio__overlay-label">Happy Fry</span></div><div class="eg-portafolio__expand">⤢</div></button>
-      <button type="button" class="eg-portafolio__item" data-idx="7"><img class="eg-portafolio__img" loading="lazy" src="https://res.cloudinary.com/dplhu2z6j/image/upload/w_1100,q_auto,f_auto/v1777509526/Sansei_nycyio.png" alt="Sansei" /><div class="eg-portafolio__overlay"><span class="eg-portafolio__overlay-label">Sansei</span></div><div class="eg-portafolio__expand">⤢</div></button>
-      <button type="button" class="eg-portafolio__item" data-idx="8"><img class="eg-portafolio__img" loading="lazy" src="https://res.cloudinary.com/dplhu2z6j/image/upload/w_1100,q_auto,f_auto/v1777509521/El_Ed%C3%A9n_m5murs.png" alt="El Edén" /><div class="eg-portafolio__overlay"><span class="eg-portafolio__overlay-label">El Edén</span></div><div class="eg-portafolio__expand">⤢</div></button>
-      <button type="button" class="eg-portafolio__item" data-idx="9"><img class="eg-portafolio__img" loading="lazy" src="https://res.cloudinary.com/dplhu2z6j/image/upload/w_1100,q_auto,f_auto/v1777509523/Globos_z3tzcj.png" alt="Globos" /><div class="eg-portafolio__overlay"><span class="eg-portafolio__overlay-label">Globos</span></div><div class="eg-portafolio__expand">⤢</div></button>
-      <button type="button" class="eg-portafolio__item" data-idx="10"><img class="eg-portafolio__img" loading="lazy" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745619058/_MG_2260_de_tama%C3%B1o_grande_jvlymh.png" alt="Patata Brava" /><div class="eg-portafolio__overlay"><span class="eg-portafolio__overlay-label">Patata Brava</span></div><div class="eg-portafolio__expand">⤢</div></button>
-      <button type="button" class="eg-portafolio__item" data-idx="11"><img class="eg-portafolio__img" loading="lazy" src="https://res.cloudinary.com/dplhu2z6j/image/upload/w_1100,q_auto,f_auto/v1745619066/IMG_2073_de_tama%C3%B1o_grande_dsdllu.png" alt="Burger 91" /><div class="eg-portafolio__overlay"><span class="eg-portafolio__overlay-label">Burger 91</span></div><div class="eg-portafolio__expand">⤢</div></button>
-    </div>
+    <div class="eg-portafolio__grid" id="eg-portafolio-grid"></div>
     <div style="text-align:center;margin-top:40px;">
       <a href="https://www.pinterest.com/estudiographicaph/_saved/" target="_blank" rel="noopener" class="eg-btn-outline">Ver portafolio completo →</a>
     </div>
@@ -596,18 +570,7 @@ footer { background: #0A0A0A; padding: clamp(36px, 6vw, 56px) 0 24px; }
   </div>
   <div class="eg-marcas__outer">
     <div id="eg-marcas-wrap" class="eg-no-select eg-marcas-scroll">
-      <div id="eg-marcas-track" class="eg-marcas__track">
-        <div class="eg-marcas__card"><img class="eg-marcas__logo" draggable="false" alt="Patata Brava" src="https://res.cloudinary.com/dplhu2z6j/image/upload/w_1100,q_auto,f_auto/v1749166368/1_vegdk8.png" /></div>
-        <div class="eg-marcas__card"><img class="eg-marcas__logo" draggable="false" alt="Happy Fry" src="https://res.cloudinary.com/dplhu2z6j/image/upload/w_1100,q_auto,f_auto/v1749166368/2_pdiecr.png" /></div>
-        <div class="eg-marcas__card"><img class="eg-marcas__logo" draggable="false" alt="Globos" src="https://res.cloudinary.com/dplhu2z6j/image/upload/w_1100,q_auto,f_auto/v1749166369/3_dt1nfk.png" /></div>
-        <div class="eg-marcas__card"><img class="eg-marcas__logo" draggable="false" alt="Burger 91" src="https://res.cloudinary.com/dplhu2z6j/image/upload/w_1100,q_auto,f_auto/v1749166369/4_ssugqk.png" /></div>
-        <div class="eg-marcas__card"><img class="eg-marcas__logo" draggable="false" alt="Pedidos Ya" src="https://res.cloudinary.com/dplhu2z6j/image/upload/w_1100,q_auto,f_auto/v1749166370/5_exwkbr.png" /></div>
-        <div class="eg-marcas__card"><img class="eg-marcas__logo" draggable="false" alt="Terra Brasa" src="https://res.cloudinary.com/dplhu2z6j/image/upload/w_1100,q_auto,f_auto/v1749166371/6_gfjolm.png" /></div>
-        <div class="eg-marcas__card"><img class="eg-marcas__logo" draggable="false" alt="Vitz" src="https://res.cloudinary.com/dplhu2z6j/image/upload/w_1100,q_auto,f_auto/v1749166373/7_wi271i.png" /></div>
-        <div class="eg-marcas__card"><img class="eg-marcas__logo" draggable="false" alt="Kansas" src="https://res.cloudinary.com/dplhu2z6j/image/upload/w_1100,q_auto,f_auto/v1749166374/8_pzfcfe.png" /></div>
-        <div class="eg-marcas__card"><img class="eg-marcas__logo" draggable="false" alt="Para Ti" src="https://res.cloudinary.com/dplhu2z6j/image/upload/w_1100,q_auto,f_auto/v1749166375/9_vuxq3e.png" /></div>
-        <div class="eg-marcas__card"><img class="eg-marcas__logo" draggable="false" alt="Cookie Bar" src="https://res.cloudinary.com/dplhu2z6j/image/upload/w_1100,q_auto,f_auto/v1749166376/10_p2jdke.png" /></div>
-      </div>
+      <div id="eg-marcas-track" class="eg-marcas__track"></div>
     </div>
   </div>
 </section>
@@ -617,20 +580,15 @@ footer { background: #0A0A0A; padding: clamp(36px, 6vw, 56px) 0 24px; }
     <div class="eg-reveal">
       <div class="eg-sobre__img-wrap">
         <img class="eg-sobre__img" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1785908020/Pablo_Villarroel_elpzzq.png" alt="Pablo Villarroel" />
-        <div class="eg-sobre__badge"><div class="eg-sobre__badge-num">TEDx</div><div class="eg-sobre__badge-text">Speaker</div></div>
+        <div class="eg-sobre__badge"><div class="eg-sobre__badge-num" id="eg-sobre-badge-num"></div><div class="eg-sobre__badge-text" id="eg-sobre-badge-text"></div></div>
       </div>
     </div>
     <div class="eg-reveal" data-delay="0.15">
       <span class="eg-tag">¿Quién es este loco?</span>
       <h2 class="eg-sobre__h2">Pablo <span class="eg-cursive">Villarroel</span></h2>
-      <p class="eg-sobre__bio">En todas las páginas siempre hay un bloque enorme de texto donde el fotógrafo presume de sus títulos o años de experiencia. Pero nadie lo lee. ¿Sabes por qué?</p>
-      <p class="eg-sobre__bio">Porque a nadie le importa jajaja. Tú quieres <span class="eg-cursive">resultados</span> para tu marca. Mi mejor carta de presentación es mi portafolio y los más de 400 restaurantes que he fotografiado como <span class="eg-cursive">fotógrafo oficial de PedidosYa.</span> </p>
-      <div class="eg-sobre__creds">
-        <span class="eg-sobre__cred">Lic. Marketing &amp; Publicidad</span>
-        <span class="eg-sobre__cred">TEDx Speaker</span>
-        <span class="eg-sobre__cred">Fotógrafo oficial de Pedidosya</span>
-        <span class="eg-sobre__cred">+10 años fotografía gastronómica</span>
-      </div>
+      <p class="eg-sobre__bio" id="eg-sobre-bio-1"></p>
+      <p class="eg-sobre__bio" id="eg-sobre-bio-2"></p>
+      <div class="eg-sobre__creds" id="eg-sobre-creds"></div>
       <button type="button" class="eg-btn-dark" id="eg-sobre-portfolio-btn">Quiero chismosear tu portafolio →</button>
     </div>
   </div>
@@ -643,43 +601,7 @@ footer { background: #0A0A0A; padding: clamp(36px, 6vw, 56px) 0 24px; }
       <h2>¿Tienes <span class="eg-accent">dudas?<span class="eg-accent__line"></span></span>.</h2>
     </div>
     <div class="eg-reveal" data-delay="0.1">
-      <div id="eg-faq-list">
-        <div class="eg-faq__item is-open">
-          <button class="eg-faq__q" aria-expanded="true">
-            <span class="eg-faq__q-text">¿Cuánto cuesta una sesión de fotos?</span>
-            <span class="eg-faq__plus">+</span>
-          </button>
-          <div class="eg-faq__a-wrap"><p class="eg-faq__a-text">Depende de la cantidad de fotos y la duración que elijas, los paquetes empiezan en Bs. 680. Puedes armar tu paquete y ver el precio exacto en la calculadora de precios.</p></div>
-        </div>
-        <div class="eg-faq__item">
-          <button class="eg-faq__q" aria-expanded="false">
-            <span class="eg-faq__q-text">¿En cuánto tiempo recibo las fotos?</span>
-            <span class="eg-faq__plus">+</span>
-          </button>
-          <div class="eg-faq__a-wrap"><p class="eg-faq__a-text">Según el paquete: los más chicos se entregan en menos de 72 horas, los intermedios en menos de 48, y los más grandes en menos de 24 horas. Le damos prioridad a los clientes que nos confían más trabajo</p></div>
-        </div>
-        <div class="eg-faq__item">
-          <button class="eg-faq__q" aria-expanded="false">
-            <span class="eg-faq__q-text">¿Tengo que preparar el estilismo de la comida?</span>
-            <span class="eg-faq__plus">+</span>
-          </button>
-          <div class="eg-faq__a-wrap"><p class="eg-faq__a-text">¡Ni te preocupes por eso!. El foodstyling (armar y acomodar los platillos para que se vean bien en cámara) va incluido siempre, en todos los paquetes.</p></div>
-        </div>
-        <div class="eg-faq__item">
-          <button class="eg-faq__q" aria-expanded="false">
-            <span class="eg-faq__q-text">¿Dónde se hacen las sesiones?</span>
-            <span class="eg-faq__plus">+</span>
-          </button>
-          <div class="eg-faq__a-wrap"><p class="eg-faq__a-text">Coordinamos el lugar en la llamada de diagnóstico gratuita, normalmente en tu restaurante o local, aquí en Cercado. Ir a la Zona Sud, Sacaba, Quillacollo o a otras zonas tiene un costo extra.</p></div>
-        </div>
-        <div class="eg-faq__item">
-          <button class="eg-faq__q" aria-expanded="false">
-            <span class="eg-faq__q-text">¿Cómo empiezo?</span>
-            <span class="eg-faq__plus">+</span>
-          </button>
-          <div class="eg-faq__a-wrap"><p class="eg-faq__a-text">Agendas una llamada de diagnóstico gratuita, sin compromiso. Ahí revisamos tu marca y armamos el paquete que te conviene.</p></div>
-        </div>
-      </div>
+      <div id="eg-faq-list"></div>
     </div>
   </div>
 </section>
@@ -690,11 +612,11 @@ footer { background: #0A0A0A; padding: clamp(36px, 6vw, 56px) 0 24px; }
   <div class="eg-reveal">
     <div class="eg-cta__inner">
       <span class="eg-tag eg-tag--dark">¡Trabajemos juntos!</span>
-      <h2 class="eg-cta__h2">¿Tu restaurante merece <span class="eg-accent">mejor imagen</span>?</h2>
-      <p class="eg-cta__p">Agenda un diagnóstico gratuito de tu marca. Analizamos tu situación actual y te decimos exactamente qué necesitas, sin compromiso.</p>
+      <h2 class="eg-cta__h2" id="eg-cta-h2"></h2>
+      <p class="eg-cta__p" id="eg-cta-p"></p>
       <a href="#cta" class="eg-btn-yellow" data-cal-link="themarketographer/reunion" data-cal-namespace="reunion" data-cal-config='{"layout":"month_view","useSlotsViewOnSmallScreen":"true","theme":"light"}'>Agendar llamada gratis →</a>
       <a href="https://api.whatsapp.com/send?phone=+59169422335&text=%C2%A1Hola%2C%20Estudio%20Graphica!%20Vengo%20de%20su%20p%C3%A1gina%20web%2C%20quiero%20trabajar%20con%20ustedes%20%F0%9F%93%B8" target="_blank" rel="noopener" class="eg-cta__wa">o escríbenos directo por WhatsApp →</a>
-      <p class="eg-cta__micro">Respondemos en menos de 24h.</p>
+      <p class="eg-cta__micro" id="eg-cta-micro"></p>
     </div>
   </div>
 </section>
@@ -712,7 +634,7 @@ footer { background: #0A0A0A; padding: clamp(36px, 6vw, 56px) 0 24px; }
       </nav>
     </div>
     <div class="eg-footer__bottom">
-      <p class="eg-footer__copy">© 2026 Estudio Graphica · Cochabamba, Bolivia · <a href="/privacidad">Privacidad</a></p>
+      <p class="eg-footer__copy" id="eg-footer-copy"></p>
       <a href="https://api.whatsapp.com/send?phone=+59169422335&text=%C2%A1Hola%2C%20Estudio%20Graphica!%20Vengo%20de%20su%20p%C3%A1gina%20web%2C%20quiero%20trabajar%20con%20ustedes%20%F0%9F%93%B8" target="_blank" rel="noopener" class="eg-footer__wa">Escríbenos por WhatsApp →</a>
     </div>
   </div>
@@ -728,6 +650,172 @@ footer { background: #0A0A0A; padding: clamp(36px, 6vw, 56px) 0 24px; }
   var WHATSAPP_URL = 'https://api.whatsapp.com/send?phone=+59169422335&text=%C2%A1Hola%2C%20Estudio%20Graphica!%20Vengo%20de%20su%20p%C3%A1gina%20web%2C%20quiero%20trabajar%20con%20ustedes%20%F0%9F%93%B8';
 
   document.addEventListener('DOMContentLoaded', function () {
+
+    /* ═══════════ Datos editables desde el CMS ═══════════
+       Mismo patrón que "faqs" más abajo: const NOMBRE = [ ... ];
+       (ver netlify/functions/lib/datablocks.js en el repo del panel).
+       landingHero y landingCopy son "singletons": el array siempre
+       tiene un único objeto adentro — es lo que edita el panel cuando
+       el dataBlock está marcado singleton:true en su config. */
+    const landingHero = [
+      {
+        eyebrow: 'Fotografía gastronómica en Cochabamba',
+        titulo: 'Fotos que hacen <span class="eg-accent eg-accent--hero">salivar<span class="eg-accent__line"></span></span> a tus <span class="eg-cursive">clientes</span>.',
+        subtitulo: 'Sesiones de fotografía gastronómica con foodstyling, entrega en 24 horas y planes mensuales de contenido para tu restaurante.',
+        imagen: 'https://res.cloudinary.com/dplhu2z6j/image/upload/w_1100,q_auto,f_auto/v1777509515/Portada_p9ijpa.jpg',
+        statValor1: '+400',
+        statLabel1: 'restaurantes<br>fotografiados',
+        statValor2: '+10',
+        statLabel2: 'años en<br>Cochabamba',
+        statValor3: '24h',
+        statLabel3: 'tiempo de<br>entrega',
+      },
+    ];
+
+    const landingCopy = [
+      {
+        sobreBio1: 'En todas las páginas siempre hay un bloque enorme de texto donde el fotógrafo presume de sus títulos o años de experiencia. Pero nadie lo lee. ¿Sabes por qué?',
+        sobreBio2: 'Porque a nadie le importa jajaja. Tú quieres <span class="eg-cursive">resultados</span> para tu marca. Mi mejor carta de presentación es mi portafolio y los más de 400 restaurantes que he fotografiado como <span class="eg-cursive">fotógrafo oficial de PedidosYa.</span> ',
+        sobreBadgeNumero: 'TEDx',
+        sobreBadgeTexto: 'Speaker',
+        sobreCredenciales: 'Lic. Marketing & Publicidad\nTEDx Speaker\nFotógrafo oficial de Pedidosya\n+10 años fotografía gastronómica',
+        cmpLabelAntes: '📱 Celular ',
+        cmpLabelDespues: '📸 Nosotros ',
+        cmpHint: '↕ Sigue bajando para ver la transformación — o desliza con el dedo →',
+        ctaTitulo: '¿Tu restaurante merece <span class="eg-accent">mejor imagen</span>?',
+        ctaTexto: 'Agenda un diagnóstico gratuito de tu marca. Analizamos tu situación actual y te decimos exactamente qué necesitas, sin compromiso.',
+        ctaMicro: 'Respondemos en menos de 24h.',
+        footerCopyright: '© 2026 Estudio Graphica · Cochabamba, Bolivia · <a href="/privacidad">Privacidad</a>',
+      },
+    ];
+
+    const marcas = [
+      { nombre: 'Patata Brava', logo: 'https://res.cloudinary.com/dplhu2z6j/image/upload/w_1100,q_auto,f_auto/v1749166368/1_vegdk8.png' },
+      { nombre: 'Happy Fry', logo: 'https://res.cloudinary.com/dplhu2z6j/image/upload/w_1100,q_auto,f_auto/v1749166368/2_pdiecr.png' },
+      { nombre: 'Globos', logo: 'https://res.cloudinary.com/dplhu2z6j/image/upload/w_1100,q_auto,f_auto/v1749166369/3_dt1nfk.png' },
+      { nombre: 'Burger 91', logo: 'https://res.cloudinary.com/dplhu2z6j/image/upload/w_1100,q_auto,f_auto/v1749166369/4_ssugqk.png' },
+      { nombre: 'Pedidos Ya', logo: 'https://res.cloudinary.com/dplhu2z6j/image/upload/w_1100,q_auto,f_auto/v1749166370/5_exwkbr.png' },
+      { nombre: 'Terra Brasa', logo: 'https://res.cloudinary.com/dplhu2z6j/image/upload/w_1100,q_auto,f_auto/v1749166371/6_gfjolm.png' },
+      { nombre: 'Vitz', logo: 'https://res.cloudinary.com/dplhu2z6j/image/upload/w_1100,q_auto,f_auto/v1749166373/7_wi271i.png' },
+      { nombre: 'Kansas', logo: 'https://res.cloudinary.com/dplhu2z6j/image/upload/w_1100,q_auto,f_auto/v1749166374/8_pzfcfe.png' },
+      { nombre: 'Para Ti', logo: 'https://res.cloudinary.com/dplhu2z6j/image/upload/w_1100,q_auto,f_auto/v1749166375/9_vuxq3e.png' },
+      { nombre: 'Cookie Bar', logo: 'https://res.cloudinary.com/dplhu2z6j/image/upload/w_1100,q_auto,f_auto/v1749166376/10_p2jdke.png' },
+    ];
+
+    const proceso = [
+      { numero: '01', titulo: 'Diagnóstico gratuito', texto: 'Agendamos una llamada gratuita por Zoom en tu local y hacemos una auditoría de tu marca.' },
+      { numero: '02', titulo: 'Sesión de fotos', texto: 'Firmamos contrato, hacemos las fotos y/o videos con foodstyling incluido. Tú eliges las imágenes.' },
+      { numero: '03', titulo: 'Entrega en 24 horas', texto: 'Fotos retocadas y listas para usar en menú, redes, delivery, anuncios y catálogo.' },
+    ];
+
+    const promesa = [
+      { icono: '🍽️', titulo: 'Menú digital y físico', detalle: 'La mejor forma de antonjar a quién ya entró a tu local' },
+      { icono: '📱', titulo: 'Feeds y posts', detalle: 'Contenido coherente en todas tus redes. ' },
+      { icono: '🛵', titulo: 'Apps de delivery', detalle: 'Resalta en PedidosYa, Yango' },
+      { icono: '📣', titulo: 'Anuncios de pago', detalle: 'Meta Ads, Google, TikTok Ads' },
+      { icono: '💬', titulo: 'Catálogo WhatsApp', detalle: 'Que tus clientes puedan ver tu menú en su chat' },
+      { icono: '🎯', titulo: 'Stories de Instagram', detalle: 'Contenido diario para estar en la mente del cliente' },
+      { icono: '🌐', titulo: 'Página web', detalle: 'Una forma de mostrar exactamente lo que tú quieres' },
+      { icono: '🖼️', titulo: 'Banners y vallas', detalle: 'Publicidad impresa, gigantografías, etc.' },
+    ];
+
+    const portafolio = [
+      { imagen: 'https://res.cloudinary.com/dplhu2z6j/image/upload/w_1100,q_auto,f_auto/v1777509533/Chanchi_Broaster_yjkv9z.png', alt: 'Chanchi Broaster' },
+      { imagen: 'https://res.cloudinary.com/dplhu2z6j/image/upload/w_1100,q_auto,f_auto/v1777509532/Bros_zehqtz.png', alt: 'Bros' },
+      { imagen: 'https://res.cloudinary.com/dplhu2z6j/image/upload/w_1100,q_auto,f_auto/v1777509531/Cookie_Bar_u4dvow.png', alt: 'Cookie Bar' },
+      { imagen: 'https://res.cloudinary.com/dplhu2z6j/image/upload/w_1100,q_auto,f_auto/v1777509530/Vitz_mowogx.png', alt: 'Vitz' },
+      { imagen: 'https://res.cloudinary.com/dplhu2z6j/image/upload/w_1100,q_auto,f_auto/v1777509530/Mama_Chicken_ljrocy.png', alt: 'Mama Chicken' },
+      { imagen: 'https://res.cloudinary.com/dplhu2z6j/image/upload/w_1100,q_auto,f_auto/v1777509530/Happy_Tea_tz44zb.png', alt: 'Happy Tea' },
+      { imagen: 'https://res.cloudinary.com/dplhu2z6j/image/upload/w_1100,q_auto,f_auto/v1777509529/Happy_Fry_pvyr8x.png', alt: 'Happy Fry' },
+      { imagen: 'https://res.cloudinary.com/dplhu2z6j/image/upload/w_1100,q_auto,f_auto/v1777509526/Sansei_nycyio.png', alt: 'Sansei' },
+      { imagen: 'https://res.cloudinary.com/dplhu2z6j/image/upload/w_1100,q_auto,f_auto/v1777509521/El_Ed%C3%A9n_m5murs.png', alt: 'El Edén' },
+      { imagen: 'https://res.cloudinary.com/dplhu2z6j/image/upload/w_1100,q_auto,f_auto/v1777509523/Globos_z3tzcj.png', alt: 'Globos' },
+      { imagen: 'https://res.cloudinary.com/dplhu2z6j/image/upload/v1745619058/_MG_2260_de_tama%C3%B1o_grande_jvlymh.png', alt: 'Patata Brava' },
+      { imagen: 'https://res.cloudinary.com/dplhu2z6j/image/upload/w_1100,q_auto,f_auto/v1745619066/IMG_2073_de_tama%C3%B1o_grande_dsdllu.png', alt: 'Burger 91' },
+    ];
+
+    /* ═══════════ Aplica landingHero + landingCopy al DOM ═══════════ */
+    (function () {
+      function set(id, val, html) {
+        var el = document.getElementById(id);
+        if (!el || val == null) return;
+        if (html) el.innerHTML = val; else el.textContent = val;
+      }
+
+      var hero = landingHero[0] || {};
+      set('eg-hero-eyebrow', hero.eyebrow);
+      set('eg-hero-h1', hero.titulo, true);
+      set('eg-hero-sub', hero.subtitulo);
+      var heroImg = document.getElementById('eg-hero-img');
+      if (heroImg && hero.imagen) heroImg.src = hero.imagen;
+      set('eg-hero-stat-num-1', hero.statValor1);
+      set('eg-hero-stat-label-1', hero.statLabel1, true);
+      set('eg-hero-stat-num-2', hero.statValor2);
+      set('eg-hero-stat-label-2', hero.statLabel2, true);
+      set('eg-hero-stat-num-3', hero.statValor3);
+      set('eg-hero-stat-label-3', hero.statLabel3, true);
+
+      var copy = landingCopy[0] || {};
+      set('eg-sobre-bio-1', copy.sobreBio1, true);
+      set('eg-sobre-bio-2', copy.sobreBio2, true);
+      set('eg-sobre-badge-num', copy.sobreBadgeNumero);
+      set('eg-sobre-badge-text', copy.sobreBadgeTexto);
+      var credsEl = document.getElementById('eg-sobre-creds');
+      if (credsEl && copy.sobreCredenciales != null) {
+        credsEl.innerHTML = '';
+        copy.sobreCredenciales.split('\n').filter(function (l) { return l.trim(); }).forEach(function (line) {
+          var span = document.createElement('span');
+          span.className = 'eg-sobre__cred';
+          span.textContent = line;
+          credsEl.appendChild(span);
+        });
+      }
+      set('eg-cmp-label-before', copy.cmpLabelAntes);
+      set('eg-cmp-label-after', copy.cmpLabelDespues);
+      set('eg-problema-hint', copy.cmpHint);
+      set('eg-cta-h2', copy.ctaTitulo, true);
+      set('eg-cta-p', copy.ctaTexto);
+      set('eg-cta-micro', copy.ctaMicro);
+      set('eg-footer-copy', copy.footerCopyright, true);
+    })();
+
+    /* ═══════════ Proceso — genera las 3 tarjetas desde "proceso" ═══════════ */
+    (function () {
+      var grid = document.getElementById('eg-proceso-grid');
+      if (!grid) return;
+      var delays = [null, '0.1', '0.2'];
+      grid.innerHTML = proceso.map(function (item, i) {
+        var delayAttr = delays[i] ? ' data-delay="' + delays[i] + '"' : '';
+        return '<div class="eg-reveal"' + delayAttr + '><div class="eg-proceso__card"><div class="eg-proceso__num"></div><div><div class="eg-proceso__title"></div><p class="eg-proceso__body"></p></div></div></div>';
+      }).join('');
+      var cards = grid.querySelectorAll('.eg-proceso__card');
+      cards.forEach(function (card, i) {
+        card.querySelector('.eg-proceso__num').textContent = proceso[i].numero;
+        card.querySelector('.eg-proceso__title').textContent = proceso[i].titulo;
+        card.querySelector('.eg-proceso__body').textContent = proceso[i].texto;
+      });
+    })();
+
+    /* ═══════════ Promesa — genera los items del grid desde "promesa" ═══════════
+       Los delays reproducen exactamente los que tenía el markup original
+       (incluye el "0.25" que no tiene regla CSS propia, o sea revela sin
+       transition-delay — se preserva tal cual para no cambiar el timing). */
+    (function () {
+      var grid = document.getElementById('eg-promesa-grid');
+      if (!grid) return;
+      var delays = [null, '0.05', '0.1', '0.15', '0.2', '0.25', '0.3', '0.3'];
+      grid.innerHTML = promesa.map(function (item, i) {
+        var d = delays[i] != null ? delays[i] : delays[delays.length - 1];
+        var delayAttr = d ? ' data-delay="' + d + '"' : '';
+        return '<div class="eg-reveal"' + delayAttr + '><div class="eg-promesa__item"><span class="eg-promesa__icon"></span><div class="eg-promesa__label"></div><div class="eg-promesa__detail"></div></div></div>';
+      }).join('');
+      var items = grid.querySelectorAll('.eg-promesa__item');
+      items.forEach(function (el, i) {
+        el.querySelector('.eg-promesa__icon').textContent = promesa[i].icono;
+        el.querySelector('.eg-promesa__label').textContent = promesa[i].titulo;
+        el.querySelector('.eg-promesa__detail').textContent = promesa[i].detalle;
+      });
+    })();
 
     /* ═══════════ NAV — sombra al hacer scroll ═══════════ */
     var nav = document.getElementById('eg-nav');
@@ -872,10 +960,39 @@ footer { background: #0A0A0A; padding: clamp(36px, 6vw, 56px) 0 24px; }
       render();
     })();
 
-    /* ═══════════ FAQ — acordeón (una abierta a la vez) ═══════════ */
+    /* ═══════════ FAQ — datos + acordeón (una abierta a la vez) ═══════════
+       El array "faqs" es lo que edita el CMS (misma convención que el
+       resto del sitio: const NOMBRE = [ ... ]; ver netlify/functions/lib/
+       datablocks.js en el repo del panel). No cambiar la forma de este
+       bloque sin avisar — el panel lo busca por ese patrón exacto. */
+    const faqs = [
+      { q: '¿Cuánto cuesta una sesión de fotos?', a: 'Depende de la cantidad de fotos y la duración que elijas, los paquetes empiezan en Bs. 680. Puedes armar tu paquete y ver el precio exacto en la calculadora de precios.' },
+      { q: '¿En cuánto tiempo recibo las fotos?', a: 'Según el paquete: los más chicos se entregan en menos de 72 horas, los intermedios en menos de 48, y los más grandes en menos de 24 horas. Le damos prioridad a los clientes que nos confían más trabajo' },
+      { q: '¿Tengo que preparar el estilismo de la comida?', a: '¡Ni te preocupes por eso!. El foodstyling (armar y acomodar los platillos para que se vean bien en cámara) va incluido siempre, en todos los paquetes.' },
+      { q: '¿Dónde se hacen las sesiones?', a: 'Coordinamos el lugar en la llamada de diagnóstico gratuita, normalmente en tu restaurante o local, aquí en Cercado. Ir a la Zona Sud, Sacaba, Quillacollo o a otras zonas tiene un costo extra.' },
+      { q: '¿Cómo empiezo?', a: 'Agendas una llamada de diagnóstico gratuita, sin compromiso. Ahí revisamos tu marca y armamos el paquete que te conviene.' },
+    ];
+
     (function () {
       var list = document.getElementById('eg-faq-list');
       if (!list) return;
+
+      function esc(str) {
+        return String(str).replace(/[&<>"']/g, function (c) {
+          return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+        });
+      }
+
+      list.innerHTML = faqs.map(function (item, i) {
+        return '<div class="eg-faq__item' + (i === 0 ? ' is-open' : '') + '">' +
+          '<button class="eg-faq__q" aria-expanded="' + (i === 0 ? 'true' : 'false') + '">' +
+            '<span class="eg-faq__q-text">' + esc(item.q) + '</span>' +
+            '<span class="eg-faq__plus">+</span>' +
+          '</button>' +
+          '<div class="eg-faq__a-wrap"><p class="eg-faq__a-text">' + esc(item.a) + '</p></div>' +
+        '</div>';
+      }).join('');
+
       var items = Array.prototype.slice.call(list.querySelectorAll('.eg-faq__item'));
       items.forEach(function (item) {
         var btn = item.querySelector('.eg-faq__q');
@@ -897,6 +1014,20 @@ footer { background: #0A0A0A; padding: clamp(36px, 6vw, 56px) 0 24px; }
     (function () {
       var grid = document.getElementById('eg-portafolio-grid');
       if (!grid) return;
+
+      grid.innerHTML = portafolio.map(function (item, i) {
+        return '<button type="button" class="eg-portafolio__item" data-idx="' + i + '">' +
+          '<img class="eg-portafolio__img" loading="lazy" src="" alt="" />' +
+          '<div class="eg-portafolio__overlay"><span class="eg-portafolio__overlay-label"></span></div>' +
+          '<div class="eg-portafolio__expand">⤢</div></button>';
+      }).join('');
+      Array.prototype.slice.call(grid.querySelectorAll('.eg-portafolio__item')).forEach(function (el, i) {
+        var img = el.querySelector('img');
+        img.src = portafolio[i].imagen;
+        img.alt = portafolio[i].alt;
+        el.querySelector('.eg-portafolio__overlay-label').textContent = portafolio[i].alt;
+      });
+
       var items = Array.prototype.slice.call(grid.querySelectorAll('.eg-portafolio__item'));
       var images = items.map(function (el) {
         var img = el.querySelector('img');
@@ -977,6 +1108,14 @@ footer { background: #0A0A0A; padding: clamp(36px, 6vw, 56px) 0 24px; }
       var wrap = document.getElementById('eg-marcas-wrap');
       var track = document.getElementById('eg-marcas-track');
       if (!wrap || !track) return;
+
+      track.innerHTML = marcas.map(function (m) {
+        return '<div class="eg-marcas__card"><img class="eg-marcas__logo" draggable="false" alt="" src="" /></div>';
+      }).join('');
+      Array.prototype.slice.call(track.querySelectorAll('.eg-marcas__logo')).forEach(function (img, i) {
+        img.src = marcas[i].logo;
+        img.alt = marcas[i].nombre;
+      });
 
       var originals = Array.prototype.slice.call(track.children);
       originals.forEach(function (n) { track.appendChild(n.cloneNode(true)); });
