@@ -1179,6 +1179,25 @@ footer { background: #0A0A0A; padding: clamp(36px, 6vw, 56px) 0 24px; }
 </script>
 
 <script>
+  // Eventos de conversión que dispara esta página. "boton" es la clave
+  // estable que usa el código de tracking de abajo (ver egEventName) para
+  // buscar el nombre configurado; si no lo encuentra, usa el nombre que
+  // estaba hardcodeado, así nunca se deja de trackear. Mismo patrón que
+  // 404.html / gracias-*/index.html — editable desde el panel en
+  // "Página de inicio → Eventos".
+  const eventosPagina = [
+    { boton: 'Agendar llamada (nav / hero / CTA)', tipo: 'personalizado', nombre: 'interesado_reunion' },
+    { boton: 'Ver portafolio', tipo: 'personalizado', nombre: 'vio_portafolio' },
+    { boton: 'Click en WhatsApp', tipo: 'estandar', nombre: 'Contact' },
+    { boton: 'Llegó desde el blog', tipo: 'personalizado', nombre: 'inicio_en_blog' },
+  ];
+  function egEventName(boton, fallback) {
+    try {
+      var item = (eventosPagina || []).filter(function (e) { return e.boton === boton; })[0];
+      return (item && item.nombre) || fallback;
+    } catch (e) { return fallback; }
+  }
+
   // ═══════════ Tracking de conversiones (Pixel + GA4) ═══════════
   // Delegación de eventos a nivel document: cubre los 3 botones de
   // "Agendar llamada" (nav, hero, CTA final), los 2 botones de
@@ -1207,14 +1226,25 @@ footer { background: #0A0A0A; padding: clamp(36px, 6vw, 56px) 0 24px; }
     if (!window.EG) return;
 
     // Evento de llegada desde el blog (una sola vez, al cargar)
-    window.EG.trackBlogReferrerIfApplicable();
+    // Evento de llegada desde el blog (una sola vez, al cargar). El nombre
+    // por default ("inicio_en_blog") es el mismo que ya manda tracking.js —
+    // se reimplementa acá en vez de llamar a EG.trackBlogReferrerIfApplicable()
+    // solo para poder pasarle el nombre configurado en eventosPagina.
+    if (window.EG.cameFromBlog()) {
+      window.EG.trackCustomEvent(egEventName('Llegó desde el blog', 'inicio_en_blog'), {
+        content_name: 'Llegó desde el blog',
+        referrer_path: (function () { try { return new URL(document.referrer).pathname; } catch (e) { return null; } })(),
+        origen: window.EG.getOrigen(),
+      });
+    }
 
     document.addEventListener('click', function (e) {
       // Botón/link de agendar reunión (nav, hero, CTA final)
       var calBtn = e.target.closest('[data-cal-namespace="reunion"]');
       if (calBtn) {
-        var eventId = window.EG.prepareCalBooking('reunion', 'interesado_reunion');
-        window.EG.trackCustomEvent('interesado_reunion', {
+        var reunionEvent = egEventName('Agendar llamada (nav / hero / CTA)', 'interesado_reunion');
+        var eventId = window.EG.prepareCalBooking('reunion', reunionEvent);
+        window.EG.trackCustomEvent(reunionEvent, {
           content_name: 'Agendar llamada',
           origen: window.EG.getOrigen(),
           event_id: eventId,
@@ -1230,7 +1260,7 @@ footer { background: #0A0A0A; padding: clamp(36px, 6vw, 56px) 0 24px; }
       if (portfolioBtn) {
         var txt = (portfolioBtn.textContent || '').toLowerCase();
         if (txt.includes('portafolio') || txt.includes('chismosear')) {
-          window.EG.trackCustomEvent('vio_portafolio', {
+          window.EG.trackCustomEvent(egEventName('Ver portafolio', 'vio_portafolio'), {
             content_name: portfolioBtn.textContent.trim().slice(0, 60),
             origen: window.EG.getOrigen(),
           });
@@ -1241,7 +1271,7 @@ footer { background: #0A0A0A; padding: clamp(36px, 6vw, 56px) 0 24px; }
       // WhatsApp
       var waLink = e.target.closest('a[href*="wa.me"], a[href*="api.whatsapp.com"]');
       if (waLink) {
-        window.EG.trackEvent('Contact', {
+        window.EG.trackEvent(egEventName('Click en WhatsApp', 'Contact'), {
           content_name: 'WhatsApp',
           origen: window.EG.getOrigen(),
         });
