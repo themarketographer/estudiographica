@@ -276,6 +276,8 @@ a:hover { color: #F5D000; }
 .eg-section-header { text-align: center; margin-bottom: 56px; }
 .eg-section-header h2 { font-family: 'Izmir', 'Syne', sans-serif; font-weight: 800; font-size: clamp(2rem, 4vw, 3rem); line-height: 1.05; letter-spacing: -0.025em; color: var(--eg-dark); }
 .eg-section-header p { font-size: 16px; color: var(--eg-gray); max-width: 540px; margin: 14px auto 0; line-height: 1.65; }
+.eg-proceso__progress { height: 6px; border-radius: 999px; background: rgba(24,24,24,0.08); margin-top: 32px; overflow: hidden; }
+.eg-proceso__progress-fill { height: 100%; width: 0%; border-radius: 999px; background: var(--eg-yellow); }
 .eg-proceso__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 48px; }
 .eg-proceso__card { background: var(--eg-cream); border-radius: 22px; padding: 32px; display: flex; gap: 22px; align-items: flex-start; border: 1.5px solid transparent; transition: all 0.3s; cursor: default; }
 .eg-proceso__card:hover { border-color: var(--eg-dark); box-shadow: 0 16px 60px rgba(24,24,24,0.12); transform: translateY(-6px); }
@@ -512,6 +514,7 @@ footer { background: #0A0A0A; padding: clamp(36px, 6vw, 56px) 0 24px; }
       <h2>El proceso más simple. <br>del <span class="eg-accent">mundo<span class="eg-accent__line"></span></span>.</h2>
       <p>Sesiones de fotos con <span class="eg-cursive">foodstyling</span>, o plan mensual de contenido.</p>
     </div>
+    <div class="eg-proceso__progress" aria-hidden="true"><div class="eg-proceso__progress-fill" id="eg-proceso-progress-fill"></div></div>
     <div class="eg-proceso__grid" id="eg-proceso-grid"></div>
   </div>
 </section>
@@ -748,11 +751,15 @@ footer { background: #0A0A0A; padding: clamp(36px, 6vw, 56px) 0 24px; }
       set('eg-hero-sub', hero.subtitulo);
       var heroImg = document.getElementById('eg-hero-img');
       if (heroImg && hero.imagen) heroImg.src = hero.imagen;
-      set('eg-hero-stat-num-1', hero.statValor1);
+      // Los stats NO se escriben directo: quedan guardados en data-target y
+      // los cuenta desde 0 el contador animado (ver "Hero — stats contados").
+      [['eg-hero-stat-num-1', hero.statValor1], ['eg-hero-stat-num-2', hero.statValor2], ['eg-hero-stat-num-3', hero.statValor3]]
+        .forEach(function (pair) {
+          var el = document.getElementById(pair[0]);
+          if (el && pair[1] != null) el.setAttribute('data-target', pair[1]);
+        });
       set('eg-hero-stat-label-1', hero.statLabel1, true);
-      set('eg-hero-stat-num-2', hero.statValor2);
       set('eg-hero-stat-label-2', hero.statLabel2, true);
-      set('eg-hero-stat-num-3', hero.statValor3);
       set('eg-hero-stat-label-3', hero.statLabel3, true);
 
       var copy = landingCopy[0] || {};
@@ -866,6 +873,87 @@ footer { background: #0A0A0A; padding: clamp(36px, 6vw, 56px) 0 24px; }
     } else {
       revealEls.forEach(function (el) { el.classList.add('is-visible'); });
     }
+
+    /* ═══════════ Hero — stats contados (0 → valor real) ═══════════
+       Cada stat tiene su valor real guardado en data-target (ej. "+400",
+       "24h"). Al entrar en pantalla, se anima el número desde 0 hasta ese
+       valor una sola vez, conservando el prefijo/sufijo no numérico
+       (+, h, etc). Respeta prefers-reduced-motion: si el usuario pidió
+       menos movimiento, se escribe el valor final directo, sin contar. */
+    (function () {
+      var els = document.querySelectorAll('.eg-hero__stat-num[data-target]');
+      if (!els.length) return;
+      var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      function animateCount(el) {
+        var raw = el.getAttribute('data-target') || '';
+        var m = raw.match(/^([^\d]*)(\d+)([^\d]*)$/);
+        if (!m) { el.textContent = raw; return; } // sin número reconocible (no debería pasar): se muestra tal cual
+        var prefix = m[1], target = parseInt(m[2], 10), suffix = m[3];
+        if (reduceMotion) { el.textContent = raw; return; }
+        var duration = 1100, start = null;
+        function frame(ts) {
+          if (start === null) start = ts;
+          var p = Math.min((ts - start) / duration, 1);
+          var eased = 1 - Math.pow(1 - p, 3); // ease-out cúbico
+          el.textContent = prefix + Math.round(target * eased) + suffix;
+          if (p < 1) requestAnimationFrame(frame);
+        }
+        requestAnimationFrame(frame);
+      }
+
+      if ('IntersectionObserver' in window) {
+        var statObserver = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              animateCount(entry.target);
+              statObserver.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.4 });
+        els.forEach(function (el) { statObserver.observe(el); });
+      } else {
+        els.forEach(function (el) { el.textContent = el.getAttribute('data-target') || ''; });
+      }
+    })();
+
+    /* ═══════════ Proceso — barra de progreso ligada al scroll ═══════════
+       Se llena de 0% a 100% a medida que la sección "proceso" pasa por la
+       ventana (mismo patrón de rAF + lerp que el comparador antes/después,
+       para que sea suave y no salte en cada evento de scroll). */
+    (function () {
+      var fill = document.getElementById('eg-proceso-progress-fill');
+      var section = document.getElementById('proceso');
+      if (!fill || !section) return;
+      var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var pos = 0; // 0 a 100
+
+      // progreso = cuánto entró el TOP de la sección respecto a un recorrido total,
+      // usando top y bottom reales del elemento.
+      function target() {
+        var rect = section.getBoundingClientRect();
+        var vh = window.innerHeight;
+        var total = rect.height + vh * 0.6; // recorrido total del "viaje" de la sección por la pantalla
+        var traveled = vh * 0.8 - rect.top; // cuánto ya recorrió desde que empezó a entrar
+        var p = traveled / total;
+        return Math.max(0, Math.min(100, p * 100));
+      }
+
+      if (reduceMotion) {
+        window.addEventListener('scroll', function () { fill.style.width = target() + '%'; }, { passive: true });
+        fill.style.width = target() + '%';
+        return;
+      }
+
+      function loop() {
+        var t = target();
+        pos += (t - pos) * 0.12;
+        if (Math.abs(t - pos) < 0.05) pos = t;
+        fill.style.width = pos + '%';
+        requestAnimationFrame(loop);
+      }
+      requestAnimationFrame(loop);
+    })();
 
     /* ═══════════ ProblemSection — wipe antes/después ═══════════ */
     (function () {
@@ -1016,11 +1104,32 @@ footer { background: #0A0A0A; padding: clamp(36px, 6vw, 56px) 0 24px; }
       if (!grid) return;
 
       grid.innerHTML = portafolio.map(function (item, i) {
-        return '<button type="button" class="eg-portafolio__item" data-idx="' + i + '">' +
+        var delay = Math.min(i * 0.05, 0.4).toFixed(2);
+        return '<button type="button" class="eg-portafolio__item eg-reveal" data-idx="' + i + '" style="transition-delay:' + delay + 's">' +
           '<img class="eg-portafolio__img" loading="lazy" src="" alt="" />' +
           '<div class="eg-portafolio__overlay"><span class="eg-portafolio__overlay-label"></span></div>' +
           '<div class="eg-portafolio__expand">⤢</div></button>';
       }).join('');
+
+      /* Reveal en cascada: el grid se marca "visible" una sola vez al entrar
+         en pantalla; el escalonado lo da el transition-delay de cada item
+         (arriba). Va aparte del observer compartido de arriba, porque este
+         grid recién se llena ahora (después de que ese observer ya corrió). */
+      if ('IntersectionObserver' in window) {
+        var portReveal = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              Array.prototype.forEach.call(grid.querySelectorAll('.eg-reveal'), function (el) {
+                el.classList.add('is-visible');
+              });
+              portReveal.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.1 });
+        portReveal.observe(grid);
+      } else {
+        Array.prototype.forEach.call(grid.querySelectorAll('.eg-reveal'), function (el) { el.classList.add('is-visible'); });
+      }
       Array.prototype.slice.call(grid.querySelectorAll('.eg-portafolio__item')).forEach(function (el, i) {
         var img = el.querySelector('img');
         img.src = portafolio[i].imagen;

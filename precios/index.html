@@ -278,7 +278,7 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
     <div class="right-col">
       <div class="paquete-label" id="paqueteLabel">Sesión Estándar</div>
       <div class="paquete-name" id="paqueteName">Paquete Estándar</div>
-      <div class="price" id="precioValue">Bs. 1020<span class="price-unit">pago único</span></div>
+      <div class="price" id="precioValue">Bs. <span id="precioNum">1020</span><span class="price-unit">pago único</span></div>
       <div class="price-extras-line" id="extrasLine" style="display:none;"></div>
       <div class="price-note">Precio referencial. Lo ajustamos en tu llamada.</div>
       <ul class="benefits" id="benefitsList"></ul>
@@ -311,6 +311,42 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
     var paqueteLabel = document.getElementById('paqueteLabel');
     var paqueteName = document.getElementById('paqueteName');
     var precioValue = document.getElementById('precioValue');
+    var precioNum = document.getElementById('precioNum');
+    var precioUnit = precioValue.querySelector('.price-unit');
+    var precioActual = null; // último valor numérico mostrado (null = aún no animó)
+    var precioRAF = null;
+    var precioReduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Anima el número del precio tipo odómetro (de precioActual al nuevo valor).
+    // Respeta prefers-reduced-motion mostrando el valor final directo.
+    function animarPrecio(valorFinal, unitLabel) {
+      precioUnit.textContent = unitLabel;
+      if (precioActual === null || precioReduceMotion) {
+        precioActual = valorFinal;
+        precioNum.textContent = valorFinal;
+        return;
+      }
+      if (precioActual === valorFinal) return;
+      var start = precioActual;
+      var delta = valorFinal - start;
+      var startTime = null;
+      var duration = 420;
+      if (precioRAF) cancelAnimationFrame(precioRAF);
+      function frame(ts) {
+        if (startTime === null) startTime = ts;
+        var p = Math.min((ts - startTime) / duration, 1);
+        var eased = 1 - Math.pow(1 - p, 3); // ease-out cúbico
+        precioNum.textContent = Math.round(start + delta * eased);
+        if (p < 1) {
+          precioRAF = requestAnimationFrame(frame);
+        } else {
+          precioActual = valorFinal;
+          precioNum.textContent = valorFinal;
+        }
+      }
+      precioRAF = requestAnimationFrame(frame);
+    }
+
     var extrasLine = document.getElementById('extrasLine');
     var extrasList = document.getElementById('extrasList');
     var benefitsList = document.getElementById('benefitsList');
@@ -445,7 +481,7 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
         var benefits = EGPricing.sesionBenefits(fotos).concat(extrasNombres);
         paqueteLabel.textContent = 'Sesión ' + data.paquete;
         paqueteName.textContent = 'Paquete ' + data.paquete;
-        precioValue.innerHTML = 'Bs. ' + precioFinal + '<span class="price-unit">pago único</span>';
+        animarPrecio(precioFinal, 'pago único');
         benefitsList.innerHTML = benefits.map(function (b) { return '<li><span class="check">✓</span><span>' + b + '</span></li>'; }).join('');
 
         btnReservar.setAttribute('data-cal-namespace', 'sesion');
@@ -460,7 +496,7 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
         var pbenefits = EGPricing.planBenefits(planFotos, duracion, addVideo, reels).concat(extrasNombres);
         paqueteLabel.textContent = 'Plan ' + pdata.paquete;
         paqueteName.textContent = 'Plan ' + pdata.paquete;
-        precioValue.innerHTML = 'Bs. ' + pPrecioFinal + '<span class="price-unit">/mes</span>';
+        animarPrecio(pPrecioFinal, '/mes');
         benefitsList.innerHTML = pbenefits.map(function (b) { return '<li><span class="check">✓</span><span>' + b + '</span></li>'; }).join('');
 
         btnReservar.setAttribute('data-cal-namespace', 'plan-mensual');
