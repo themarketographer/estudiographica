@@ -493,9 +493,9 @@ footer { background: #0A0A0A; padding: clamp(36px, 6vw, 56px) 0 24px; }
     </div>
     <div class="eg-reveal" data-delay="0.15">
       <div id="eg-cmp" class="eg-no-select eg-cmp">
-        <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/w_1100,q_auto,f_auto/v1745819075/2_ylgf7o.jpg" alt="Después — Estudio Graphica" class="eg-cmp__img" />
+        <img id="eg-cmp-img-despues" src="https://res.cloudinary.com/dplhu2z6j/image/upload/w_1100,q_auto,f_auto/v1745819075/2_ylgf7o.jpg" alt="Después — Estudio Graphica" class="eg-cmp__img" />
         <div id="eg-cmp-before" class="eg-cmp__before">
-          <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/w_1100,q_auto,f_auto/v1745819075/1_ymdvor.jpg" alt="Antes — celular" class="eg-cmp__img" />
+          <img id="eg-cmp-img-antes" src="https://res.cloudinary.com/dplhu2z6j/image/upload/w_1100,q_auto,f_auto/v1745819075/1_ymdvor.jpg" alt="Antes — celular" class="eg-cmp__img" />
         </div>
         <div id="eg-cmp-divider" class="eg-cmp__divider"></div>
         <div id="eg-cmp-handle" class="eg-cmp__handle">⇆</div>
@@ -685,6 +685,10 @@ footer { background: #0A0A0A; padding: clamp(36px, 6vw, 56px) 0 24px; }
         cmpLabelAntes: '📱 Celular ',
         cmpLabelDespues: '📸 Nosotros ',
         cmpHint: '↕ Sigue bajando para ver la transformación — o desliza con el dedo →',
+        cmpImgAntes: 'https://res.cloudinary.com/dplhu2z6j/image/upload/w_1100,q_auto,f_auto/v1745819075/1_ymdvor.jpg',
+        cmpImgAntesAlt: 'Antes — celular',
+        cmpImgDespues: 'https://res.cloudinary.com/dplhu2z6j/image/upload/w_1100,q_auto,f_auto/v1745819075/2_ylgf7o.jpg',
+        cmpImgDespuesAlt: 'Después — Estudio Graphica',
         ctaTitulo: '¿Tu restaurante merece <span class="eg-accent">mejor imagen</span>?',
         ctaTexto: 'Agenda un diagnóstico gratuito de tu marca. Analizamos tu situación actual y te decimos exactamente qué necesitas, sin compromiso.',
         ctaMicro: 'Respondemos en menos de 24h.',
@@ -780,6 +784,16 @@ footer { background: #0A0A0A; padding: clamp(36px, 6vw, 56px) 0 24px; }
       set('eg-cmp-label-before', copy.cmpLabelAntes);
       set('eg-cmp-label-after', copy.cmpLabelDespues);
       set('eg-problema-hint', copy.cmpHint);
+      var cmpImgAntes = document.getElementById('eg-cmp-img-antes');
+      if (cmpImgAntes) {
+        if (copy.cmpImgAntes) cmpImgAntes.src = copy.cmpImgAntes;
+        if (copy.cmpImgAntesAlt != null) cmpImgAntes.alt = copy.cmpImgAntesAlt;
+      }
+      var cmpImgDespues = document.getElementById('eg-cmp-img-despues');
+      if (cmpImgDespues) {
+        if (copy.cmpImgDespues) cmpImgDespues.src = copy.cmpImgDespues;
+        if (copy.cmpImgDespuesAlt != null) cmpImgDespues.alt = copy.cmpImgDespuesAlt;
+      }
       set('eg-cta-h2', copy.ctaTitulo, true);
       set('eg-cta-p', copy.ctaTexto);
       set('eg-cta-micro', copy.ctaMicro);
