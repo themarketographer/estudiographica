@@ -55,17 +55,17 @@ window.EGPricing = (function () {
   // siguen en código más abajo porque están atados a los mismos umbrales
   // que definen los tramos de precio). ──
   const preciosTextos = [
-    {
-      beneficioSesion1: 'Planificación estratégica',
-      beneficioSesion2: 'Foodstyling profesional',
-      beneficioPlan1: '1 visita al mes',
-      beneficioPlan2: 'Foodstyling de alimentos',
-      beneficioAsesoria: 'Asesoría estratégica de marketing',
-      beneficioPaginaWeb: 'Página web sencilla o tienda Take App',
-      beneficioGuion: 'Guion + concepto creativo',
-      beneficioMusica: 'Música con licencia',
-    },
-  ];
+  {
+    "beneficioSesion1": "Planificación estratégica",
+    "beneficioSesion2": "Foodstyling profesional",
+    "beneficioPlan1": "1 visita al mes",
+    "beneficioPlan2": "Foodstyling de alimentos",
+    "beneficioAsesoria": "Asesoría estratégica de marketing",
+    "beneficioPaginaWeb": "Estrategia de anuncios para Instagram",
+    "beneficioGuion": "Guion + concepto creativo",
+    "beneficioMusica": "Música con licencia comercial"
+  }
+];
 
   // ── Extras a la carta ──
   // Se suman al precio base (sesión o plan) sin importar cuál tab esté
