@@ -1311,11 +1311,28 @@ footer { background: #0A0A0A; padding: clamp(36px, 6vw, 56px) 0 24px; }
       var track = document.getElementById('eg-marcas-track');
       if (!wrap || !track) return;
 
+      // Los logos que suben desde el CMS suelen venir en un lienzo cuadrado
+      // con mucho espacio transparente alrededor (así los exporta Photoshop/Canva),
+      // así que sin recortar ese espacio el logo se ve diminuto dentro de la
+      // tarjeta. Le pedimos a Cloudinary que recorte ese margen (e_trim) al
+      // vuelo, sin depender de que la URL guardada en el CMS ya lo incluya —
+      // así el arreglo no se pierde cada vez que se edita "Marcas" desde el panel.
+      function egTrimLogo(url) {
+        if (!url) return url;
+        var marker = '/image/upload/';
+        var idx = url.indexOf(marker);
+        if (idx === -1) return url; // no es una URL de Cloudinary, se deja tal cual
+        var before = url.slice(0, idx + marker.length);
+        var after = url.slice(idx + marker.length);
+        if (after.indexOf('e_trim') !== -1) return url; // ya viene recortada
+        return before + 'e_trim/' + after;
+      }
+
       track.innerHTML = marcas.map(function (m) {
         return '<div class="eg-marcas__card"><img class="eg-marcas__logo" draggable="false" alt="" src="" /></div>';
       }).join('');
       Array.prototype.slice.call(track.querySelectorAll('.eg-marcas__logo')).forEach(function (img, i) {
-        img.src = marcas[i].logo;
+        img.src = egTrimLogo(marcas[i].logo);
         img.alt = marcas[i].nombre;
       });
 
