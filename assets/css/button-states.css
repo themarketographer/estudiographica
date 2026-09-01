@@ -1,0 +1,72 @@
+/* ==========================================================================
+   Estados de botones — feedback visual + accesibilidad
+   Se aplica automáticamente a cualquier link o botón cuya clase contenga
+   "btn" (eg-btn-dark, eg-btn-primary, eg-btn-outline, eg-btn-yellow, etc.)
+   No requiere tocar el HTML existente.
+   ========================================================================== */
+
+:root {
+  --btn-motion: 180ms cubic-bezier(.4, 0, .2, 1);
+}
+
+[class*="btn" i] {
+  transition: transform var(--btn-motion), box-shadow var(--btn-motion),
+    filter var(--btn-motion), opacity var(--btn-motion);
+}
+
+/* Foco visible al navegar con teclado (Tab). No aparece con el mouse. */
+[class*="btn" i]:focus-visible {
+  outline: 2.5px solid currentColor;
+  outline-offset: 3px;
+  border-radius: 9999px;
+}
+
+/* Feedback táctil al presionar (mouse, touch o Enter/Espacio) */
+[class*="btn" i]:active {
+  transform: scale(0.95);
+  filter: brightness(0.94);
+  transition-duration: 90ms;
+}
+
+/* Botón deshabilitado */
+[class*="btn" i][disabled],
+[class*="btn" i].is-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+  transform: none !important;
+}
+
+/* Estado de carga — lo activa/desactiva button-states.js cuando el botón
+   dispara algo que tarda (por ejemplo, abrir el widget de Cal.com). */
+[class*="btn" i].is-loading {
+  position: relative;
+  pointer-events: none;
+  cursor: default;
+  opacity: 0.85;
+  padding-right: 2.6em;
+}
+[class*="btn" i].is-loading::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 1em;
+  width: 16px;
+  height: 16px;
+  margin-top: -8px;
+  border-radius: 50%;
+  border: 2.5px solid currentColor;
+  border-top-color: transparent;
+  animation: btn-spin 0.7s linear infinite;
+}
+
+@keyframes btn-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Respeta a quien prefiere menos animación en el sistema operativo */
+@media (prefers-reduced-motion: reduce) {
+  [class*="btn" i] { transition: none; }
+  [class*="btn" i]:active { transform: none; filter: brightness(0.9); }
+  [class*="btn" i].is-loading::after { animation-duration: 1.4s; }
+}
