@@ -155,6 +155,27 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
   .qr-wrap img { width: 100%; max-width: 240px; display: block; margin: 0 auto; border-radius: 8px; }
   .qr-caption { font-size: 12px; color: var(--gray-text); margin-top: 12px; }
 
+  /* ── Paso 3: tarjeta del contrato (va antes del pago) ── */
+  .eg-contrato-card { text-align: center; }
+  .eg-contrato-badge {
+    display: inline-block; background: var(--dark); color: var(--yellow);
+    font-family: 'Izmir','Syne',sans-serif; font-weight: 700; font-size: 10.5px;
+    letter-spacing: 0.14em; text-transform: uppercase; padding: 6px 13px;
+    border-radius: 9999px; margin-bottom: 14px;
+  }
+  .eg-contrato-card.firmado .eg-contrato-badge { background: #1F9D55; color: #fff; }
+  .eg-contrato-title { font-family: 'Izmir','Syne',sans-serif; font-weight: 800; font-size: 1.4rem; margin-bottom: 10px; }
+  .eg-contrato-desc { font-size: 14px; color: var(--gray-text); line-height: 1.6; max-width: 440px; margin: 0 auto 22px; }
+  .eg-contrato-btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 9px;
+    font-family: 'Izmir','Syne',sans-serif; font-weight: 700; font-size: 15px;
+    padding: 16px 30px; border-radius: 9999px; background: var(--dark); color: var(--off-white);
+    text-decoration: none; transition: all 0.28s;
+  }
+  .eg-contrato-btn:hover { background: #000; transform: translateY(-2px); }
+  .eg-contrato-card.firmado .eg-contrato-btn { background: transparent; color: var(--gray-text); border: 1.5px solid rgba(24,24,24,0.14); font-size: 13px; padding: 12px 24px; }
+  .eg-contrato-card.firmado .eg-contrato-btn:hover { color: var(--dark); border-color: var(--dark); background: transparent; }
+
   .card-dark { background: #0E0E0E; border: 1px solid rgba(255,221,90,0.18); border-radius: 22px; padding: 28px; margin-bottom: 32px; font-size: 13.5px; color: rgba(248,248,248,0.7); line-height: 1.7; }
   .card-dark strong { color: var(--yellow); }
 
@@ -224,6 +245,16 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
     <p class="price-note" id="eg-gp-price-note">Precio referencial. Se confirma en tu sesión.</p>
 
     <ul class="benefits" id="benefitsList"></ul>
+  </div>
+
+  <!-- ══════ PASO 3: CONTRATO (antes del pago) ══════ -->
+  <div class="card eg-contrato-card" id="egContratoCard" data-tipo="plan">
+    <span class="eg-contrato-badge" id="egContratoBadge">Paso 3 de 4</span>
+    <div class="eg-contrato-title" id="egContratoTitle">Firma tu contrato</div>
+    <p class="eg-contrato-desc" id="egContratoDesc">
+      Antes del adelanto, firma el contrato con el dedo desde tu celular. Te llega en PDF a tu correo y ahí queda claro qué recibes cada mes, cuándo y por cuánto.
+    </p>
+    <a class="eg-contrato-btn" id="egContratoBtn" href="/contrato/?tipo=plan">Leer y firmar mi contrato →</a>
   </div>
 
   <div class="pay-card">
@@ -446,5 +477,28 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 </script>
 
   <script src="/assets/js/button-states.js" defer></script>
+
+<!-- ══════ Estado del contrato (Paso 3) ══════
+     Si el visitante ya firmó en este navegador, la tarjeta cambia a
+     "contrato firmado" en vez de seguir invitándolo a firmar. -->
+<script>
+  (function () {
+    var card = document.getElementById('egContratoCard');
+    if (!card) return;
+    var TIPO = card.dataset.tipo || 'sesion';
+    document.getElementById('egContratoBtn').href = '/contrato/?tipo=' + TIPO;
+    var firmado = null;
+    try { firmado = JSON.parse(localStorage.getItem('eg_contrato_firmado') || 'null'); } catch (e) {}
+    if (!firmado) return;
+
+    card.classList.add('firmado');
+    document.getElementById('egContratoBadge').textContent = '✓ Paso 3 completado';
+    document.getElementById('egContratoTitle').textContent = 'Contrato firmado';
+    document.getElementById('egContratoDesc').textContent =
+      'Ya firmaste, ' + (firmado.nombre || '') + '. Te enviamos la copia en PDF por correo. Lo único que falta es el adelanto de aquí abajo.';
+    document.getElementById('egContratoBtn').textContent = 'Ver o descargar mi contrato';
+  })();
+</script>
+
 </body>
 </html>

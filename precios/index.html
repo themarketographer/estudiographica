@@ -354,6 +354,13 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
     var btnReservar = document.getElementById('btnReservar');
     var waLink = document.getElementById('waLink');
 
+    // Guarda el paquete configurado para que /contrato lo lea y lo escriba
+    // solo dentro del contrato. Se actualiza en cada render, así que
+    // siempre refleja lo último que el visitante dejó en pantalla.
+    function guardarPaquete(datos) {
+      try { localStorage.setItem('eg_paquete_v1', JSON.stringify(datos)); } catch (e) {}
+    }
+
     // Pinta la lista de extras una sola vez; los "flat" son checkbox simple,
     // "reels" (stepper) trae su propio selector de cantidad con − / +.
     extrasList.innerHTML = EGPricing.EXTRAS.map(function (ex) {
@@ -491,6 +498,8 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
         var extrasWA = extrasNombres.length ? ('\n- Extras: ' + extrasNombres.join(', ')) : '';
         var textoWA = '¡Hola, Estudio Graphica! Quiero una *Sesión de Fotos*:\n- Paquete ' + data.paquete + '\n- ' + fotos + ' fotos' + extrasWA + '\n- Bs. ' + precioFinal + '\n\n¿Cuándo agendamos? 📸';
         waLink.href = 'https://api.whatsapp.com/send?phone=+59169422335&text=' + encodeURIComponent(textoWA);
+
+        guardarPaquete({ tipo: 'sesion', paquete: data.paquete, precio: precioFinal, fotos: fotos, extras: extrasNombres.join(', ') });
       } else {
         var pdata = EGPricing.calcPlan(planFotos, duracion, addVideo, reels);
         var pPrecioFinal = pdata.precio + extrasTotal;
@@ -506,6 +515,8 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
         var extrasWA2 = extrasNombres.length ? ('\n- Extras: ' + extrasNombres.join(', ')) : '';
         var textoWA2 = '¡Hola, Estudio Graphica! Quiero un *Plan Mensual*:\n- Paquete ' + pdata.paquete + '\n- ' + planFotos + ' fotos/mes' + (addVideo ? (' + ' + reels + ' reels/mes') : '') + extrasWA2 + '\n- Duración: ' + duracion + ' mes' + (duracion > 1 ? 'es' : '') + '\n- Bs. ' + pPrecioFinal + '/mes\n\n¿Cuándo agendamos? 📸';
         waLink.href = 'https://api.whatsapp.com/send?phone=+59169422335&text=' + encodeURIComponent(textoWA2);
+
+        guardarPaquete({ tipo: 'plan', paquete: pdata.paquete, precio: pPrecioFinal, fotos: planFotos, duracion: duracion, reels: addVideo ? reels : 0, extras: extrasNombres.join(', ') });
       }
     }
 

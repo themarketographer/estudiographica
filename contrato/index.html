@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Firma tu contrato · Estudio Graphica</title>
+<meta name="description" content="Lee y firma tu contrato de servicios fotográficos. Recibes tu copia en PDF al instante." />
+<meta name="robots" content="noindex,nofollow" />
+<meta name="theme-color" content="#181818" />
+<link rel="icon" href="/favicon.ico" sizes="any" />
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+<link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+
+<!-- ═══════════ PIXEL + GA4 ═══════════ -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-9H6Z8N5DTP"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){ dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-9H6Z8N5DTP');
+</script>
+<script>
+  !(function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)})(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  fbq('set', 'autoConfig', false, '1059099676340072');
+  fbq('init', '1059099676340072');
+  fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=1059099676340072&ev=PageView&noscript=1"/></noscript>
+<script src="/assets/js/tracking.js"></script>
+<script src="/assets/js/pricing-logic.js"></script>
+<!-- jsPDF alojado en el propio sitio: la firma del contrato no puede depender
+     de que un CDN externo esté disponible. Si el archivo local fallara, se
+     intenta el CDN como respaldo. -->
+<script src="/assets/js/jspdf.umd.min.js"></script>
+<script>
+  if (!window.jspdf) {
+    document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"><\/script>');
+  }
+</script>
+<!-- ═══════════════════════════════════════════════════ -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&family=Playfair+Display:ital,wght@1,700&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+
+<style>
+  @font-face { font-family:'Izmir'; src:url('/fonts/izmir-extrabold.otf') format('opentype'); font-weight:800; font-display:swap; }
+  @font-face { font-family:'Izmir'; src:url('/fonts/izmir-bold.otf') format('opentype'); font-weight:700; font-display:swap; }
+  @font-face { font-family:'Izmir'; src:url('/fonts/izmir-regular.otf') format('opentype'); font-weight:400; font-display:swap; }
+
+  :root {
+    --dark: #181818; --yellow: #FFDD5A; --off-white: #F8F8F8;
+    --cream: #F0EDE6; --gray-text: #6B6660; --ok: #1F9D55; --err: #C0392B;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--dark);
+    -webkit-font-smoothing: antialiased;
+  }
+  .cursive { font-family: 'Playfair Display', serif; font-style: italic; font-weight: 700; }
+
+  nav {
+    position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.85); backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(24,24,24,0.06); padding: 16px 24px;
+  }
+  nav .inner { max-width: 900px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+  nav img { height: 36px; width: auto; object-fit: contain; }
+  nav a.back { font-size: 13px; color: var(--gray-text); text-decoration: none; }
+  nav a.back:hover { color: var(--dark); }
+
+  .wrap { max-width: 900px; margin: 0 auto; padding: 0 24px 100px; }
+
+  .header { text-align: center; max-width: 720px; margin: 0 auto; padding: 48px 0 8px; }
+  .tag {
+    display: inline-block; background: var(--yellow); color: var(--dark);
+    font-family: 'Izmir', 'Syne', sans-serif; font-weight: 700; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 6px 14px; border-radius: 9999px; margin-bottom: 18px;
+  }
+  h1 {
+    font-family: 'Izmir', 'Syne', sans-serif; font-weight: 800; letter-spacing: -0.025em;
+    font-size: clamp(1.9rem, 4vw, 2.9rem); line-height: 1.05; margin-bottom: 14px;
+  }
+  .h1-accent { position: relative; display: inline-block; z-index: 0; }
+  .h1-accent::after { content: ''; position: absolute; bottom: 0.06em; left: 0; right: 0; height: 0.2em; background: var(--yellow); z-index: -1; }
+  .sub { font-size: 15.5px; color: var(--gray-text); max-width: 560px; margin: 0 auto; line-height: 1.65; }
+
+  /* ── Stepper ── */
+  .steps { display: flex; align-items: flex-start; justify-content: center; gap: 0; margin: 36px auto 32px; max-width: 620px; }
+  .step { flex: 1; text-align: center; position: relative; }
+  .step::before {
+    content: ''; position: absolute; top: 15px; left: -50%; width: 100%; height: 2px;
+    background: rgba(24,24,24,0.12); z-index: 0;
+  }
+  .step:first-child::before { display: none; }
+  .step.done::before, .step.current::before { background: var(--dark); }
+  .step-num {
+    position: relative; z-index: 1; width: 32px; height: 32px; margin: 0 auto 8px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Izmir','Syne',sans-serif; font-weight: 800; font-size: 13px;
+    background: #fff; border: 2px solid rgba(24,24,24,0.15); color: var(--gray-text);
+  }
+  .step.done .step-num { background: var(--dark); border-color: var(--dark); color: var(--yellow); }
+  .step.current .step-num { background: var(--yellow); border-color: var(--dark); color: var(--dark); }
+  .step-label { font-size: 11.5px; color: var(--gray-text); line-height: 1.3; }
+  .step.current .step-label { color: var(--dark); font-weight: 600; }
+
+  /* ── Cards ── */
+  .card {
+    background: #fff; border-radius: 24px; padding: 32px; box-shadow: 0 20px 60px rgba(24,24,24,0.10);
+    border: 1px solid rgba(24,24,24,0.06); margin-bottom: 20px;
+  }
+  .card-label {
+    font-family: 'Izmir','Syne',sans-serif; font-weight: 700; font-size: 11px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--gray-text); margin-bottom: 18px;
+  }
+
+  /* ── Resumen del paquete ── */
+  .resumen { display: flex; align-items: center; justify-content: space-between; gap: 18px; flex-wrap: wrap; }
+  .resumen-left .resumen-name { font-family: 'Izmir','Syne',sans-serif; font-weight: 800; font-size: 1.35rem; margin-bottom: 4px; }
+  .resumen-left .resumen-desc { font-size: 13px; color: var(--gray-text); }
+  .resumen-price { font-family: 'Izmir','Syne',sans-serif; font-weight: 800; font-size: 1.9rem; white-space: nowrap; }
+  .resumen-price span { font-size: 13px; font-weight: 400; color: var(--gray-text); margin-left: 4px; }
+  .resumen-edit { font-size: 12.5px; color: var(--gray-text); text-decoration: underline; margin-top: 10px; display: inline-block; }
+  .resumen-edit:hover { color: var(--dark); }
+
+  /* ── Formulario ── */
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .field { display: flex; flex-direction: column; }
+  .field label { font-size: 12.5px; font-weight: 600; margin-bottom: 6px; color: var(--dark); }
+  .field .hint { font-size: 11px; color: var(--gray-text); font-weight: 400; }
+  .field input {
+    font-family: 'DM Sans', sans-serif; font-size: 14.5px; padding: 13px 15px; border-radius: 14px;
+    border: 1.5px solid rgba(24,24,24,0.12); background: #fff; color: var(--dark); transition: border-color 0.2s;
+  }
+  .field input:focus { outline: none; border-color: var(--dark); }
+  .field input.invalid { border-color: var(--err); }
+  .field-error { font-size: 11.5px; color: var(--err); margin-top: 5px; display: none; }
+  .field.show-error .field-error { display: block; }
+
+  /* ── Contrato ── */
+  .contrato-box {
+    background: var(--off-white); border: 1px solid rgba(24,24,24,0.10); border-radius: 18px;
+    padding: 24px; max-height: 380px; overflow-y: auto; font-size: 13.5px; line-height: 1.75;
+    color: #2b2b2b; scroll-behavior: smooth;
+  }
+  .contrato-box h3 {
+    font-family: 'Izmir','Syne',sans-serif; font-weight: 800; font-size: 14px; letter-spacing: 0.02em;
+    margin: 22px 0 8px; color: var(--dark);
+  }
+  .contrato-box h3:first-child { margin-top: 0; }
+  .contrato-box p { margin-bottom: 10px; }
+  .contrato-box .dato { background: var(--yellow); padding: 1px 6px; border-radius: 6px; font-weight: 600; }
+  .contrato-box .pendiente { background: rgba(192,57,43,0.12); color: var(--err); padding: 1px 6px; border-radius: 6px; font-weight: 600; }
+  .scroll-hint {
+    text-align: center; font-size: 11.5px; color: var(--gray-text); margin-top: 10px; font-style: italic;
+    transition: opacity 0.3s;
+  }
+  .scroll-hint.hidden { opacity: 0; }
+
+  /* ── Checkbox ── */
+  .accept-row {
+    display: flex; align-items: flex-start; gap: 12px; padding: 16px 18px; border-radius: 16px;
+    border: 1.5px dashed rgba(24,24,24,0.20); cursor: pointer; margin-top: 20px; transition: all 0.2s;
+  }
+  .accept-row.active { border-style: solid; border-color: var(--dark); background: rgba(255,221,90,0.18); }
+  .check-square {
+    width: 20px; height: 20px; min-width: 20px; border-radius: 6px; border: 1.5px solid rgba(24,24,24,0.30);
+    display: flex; align-items: center; justify-content: center; color: var(--yellow); font-size: 12px; font-weight: 700;
+    margin-top: 1px; transition: all 0.2s;
+  }
+  .check-square.active { background: var(--dark); border-color: var(--dark); }
+  .accept-row span.txt { font-size: 13.5px; line-height: 1.55; }
+
+  /* ── Firma ── */
+  .sig-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; flex-wrap: wrap; gap: 8px; }
+  .sig-title { font-size: 13px; font-weight: 600; }
+  .sig-clear {
+    font-family: 'DM Sans', sans-serif; font-size: 12px; color: var(--gray-text); background: none; border: none;
+    cursor: pointer; text-decoration: underline; padding: 4px;
+  }
+  .sig-clear:hover { color: var(--dark); }
+  .sig-pad {
+    position: relative; border: 2px dashed rgba(24,24,24,0.22); border-radius: 18px; background: #fff;
+    overflow: hidden; transition: border-color 0.2s;
+  }
+  .sig-pad.has-sig { border-style: solid; border-color: var(--dark); }
+  #sigCanvas { display: block; width: 100%; height: 180px; touch-action: none; cursor: crosshair; }
+  .sig-placeholder {
+    position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 6px; pointer-events: none; color: rgba(24,24,24,0.30); transition: opacity 0.2s;
+  }
+  .sig-placeholder.hidden { opacity: 0; }
+  .sig-placeholder .big { font-size: 26px; }
+  .sig-placeholder .txt { font-size: 12.5px; }
+  .sig-baseline { position: absolute; left: 10%; right: 10%; bottom: 38px; height: 1px; background: rgba(24,24,24,0.14); pointer-events: none; }
+
+  /* ── Botones ── */
+  .btn-primary {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    font-family: 'Izmir', 'Syne', sans-serif; font-weight: 700; font-size: 15px; padding: 17px 24px;
+    border-radius: 9999px; background: var(--dark); color: var(--off-white); border: none; cursor: pointer;
+    width: 100%; transition: all 0.28s; margin-top: 22px;
+  }
+  .btn-primary:hover:not(:disabled) { background: #000; transform: translateY(-2px); }
+  .btn-primary:disabled { opacity: 0.45; cursor: not-allowed; }
+  .btn-yellow {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    font-family: 'Izmir','Syne',sans-serif; font-weight: 700; font-size: 15px; padding: 17px 24px;
+    border-radius: 9999px; background: var(--yellow); color: var(--dark); border: none; cursor: pointer;
+    width: 100%; text-decoration: none; transition: all 0.28s;
+  }
+  .btn-yellow:hover { filter: brightness(0.96); transform: translateY(-2px); }
+  .btn-ghost {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    font-family: 'DM Sans', sans-serif; font-weight: 500; font-size: 13.5px; padding: 13px 20px;
+    border-radius: 9999px; background: transparent; color: var(--gray-text); border: 1.5px solid rgba(24,24,24,0.14);
+    cursor: pointer; width: 100%; text-decoration: none; transition: all 0.24s;
+  }
+  .btn-ghost:hover { border-color: var(--dark); color: var(--dark); }
+  .btn-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
+
+  /* ── Estado post-firma ── */
+  #firmado { display: none; }
+  .ok-card { text-align: center; }
+  .ok-icon {
+    width: 64px; height: 64px; margin: 0 auto 18px; border-radius: 50%; background: var(--dark); color: var(--yellow);
+    display: flex; align-items: center; justify-content: center; font-size: 28px;
+  }
+  .ok-title { font-family: 'Izmir','Syne',sans-serif; font-weight: 800; font-size: 1.6rem; margin-bottom: 10px; }
+  .ok-sub { font-size: 14.5px; color: var(--gray-text); line-height: 1.6; max-width: 460px; margin: 0 auto 24px; }
+  .mail-status { font-size: 12.5px; margin-top: 14px; color: var(--gray-text); min-height: 18px; }
+  .mail-status.ok { color: var(--ok); }
+  .mail-status.warn { color: var(--err); }
+
+  .alert {
+    display: flex; gap: 12px; align-items: flex-start; background: rgba(255,221,90,0.30);
+    border: 1px solid rgba(24,24,24,0.10); border-radius: 16px; padding: 15px 18px; font-size: 13px;
+    line-height: 1.55; margin-bottom: 20px;
+  }
+  .alert b { font-weight: 700; }
+
+  .back-link { display: block; text-align: center; margin-top: 26px; font-size: 13px; color: var(--gray-text); text-decoration: none; }
+  .back-link:hover { color: var(--dark); }
+
+  @media (max-width: 720px) {
+    .card { padding: 22px; border-radius: 20px; }
+    .grid2 { grid-template-columns: 1fr; }
+    .btn-row { grid-template-columns: 1fr; }
+    .step-label { font-size: 10px; }
+    .resumen-price { font-size: 1.6rem; }
+  }
+</style>
+<link rel="stylesheet" href="/assets/css/button-states.css">
+</head>
+<body>
+
+<nav>
+  <div class="inner">
+    <a href="/"><img src="/assets/logo-black.png" alt="Estudio Graphica" /></a>
+    <a class="back" href="/precios">← Cambiar mi paquete</a>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <div class="header">
+    <span class="tag">Paso 3 de 4</span>
+    <h1>Lee y <span class="h1-accent cursive">firma</span> tu contrato.</h1>
+    <p class="sub">Completa tus datos, revisa el contrato con tu paquete ya cargado y fírmalo con el dedo o el mouse. Recibes tu copia en PDF al instante.</p>
+  </div>
+
+  <div class="steps">
+    <div class="step done"><div class="step-num">✓</div><div class="step-label">Diagnóstico</div></div>
+    <div class="step done"><div class="step-num">✓</div><div class="step-label">Reserva</div></div>
+    <div class="step current"><div class="step-num">3</div><div class="step-label">Contrato</div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-label">Pago</div></div>
+  </div>
+
+  <!-- ══════ FORMULARIO + CONTRATO ══════ -->
+  <div id="firmando">
+
+    <!-- Resumen del paquete -->
+    <div class="card">
+      <p class="card-label">Tu paquete</p>
+      <div class="resumen">
+        <div class="resumen-left">
+          <div class="resumen-name" id="resumenName">Sesión de fotos</div>
+          <div class="resumen-desc" id="resumenDesc">Configura tu paquete en la calculadora de precios</div>
+        </div>
+        <div class="resumen-price" id="resumenPrice">Bs. 0<span id="resumenUnit"></span></div>
+      </div>
+      <a class="resumen-edit" href="/precios">Cambiar cantidad de fotos o extras →</a>
+    </div>
+
+    <!-- Datos del cliente -->
+    <div class="card">
+      <p class="card-label">Tus datos</p>
+      <div class="grid2">
+        <div class="field" id="f-nombre">
+          <label for="nombre">Nombre y apellido</label>
+          <input type="text" id="nombre" autocomplete="name" placeholder="Ej. María Fernández" />
+          <span class="field-error">Necesitamos tu nombre completo.</span>
+        </div>
+        <div class="field" id="f-ci">
+          <label for="ci">Cédula de identidad o NIT</label>
+          <input type="text" id="ci" inputmode="numeric" placeholder="Ej. 7654321 CB" />
+          <span class="field-error">Necesitamos tu CI o NIT para el contrato.</span>
+        </div>
+        <div class="field" id="f-negocio">
+          <label for="negocio">Nombre del negocio</label>
+          <input type="text" id="negocio" placeholder="Ej. Restaurante La Cocina" />
+          <span class="field-error">Necesitamos el nombre de tu negocio.</span>
+        </div>
+        <div class="field" id="f-direccion">
+          <label for="direccion">Dirección de la sesión</label>
+          <input type="text" id="direccion" placeholder="Ej. Av. América #123, Cochabamba" />
+          <span class="field-error">Necesitamos saber dónde haremos la sesión.</span>
+        </div>
+        <div class="field" id="f-email">
+          <label for="email">Correo <span class="hint">— ahí te llega el PDF</span></label>
+          <input type="email" id="email" autocomplete="email" placeholder="tu@correo.com" />
+          <span class="field-error">Escribe un correo válido para enviarte tu copia.</span>
+        </div>
+        <div class="field" id="f-whatsapp">
+          <label for="whatsapp">WhatsApp</label>
+          <input type="tel" id="whatsapp" autocomplete="tel" placeholder="+591 70000000" />
+          <span class="field-error">Necesitamos tu WhatsApp para coordinar.</span>
+        </div>
+        <div class="field" id="f-fecha">
+          <label for="fecha">Fecha acordada de la sesión <span class="hint">— la que reservaste</span></label>
+          <input type="date" id="fecha" />
+          <span class="field-error">Elige la fecha que reservaste.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contrato -->
+    <div class="card">
+      <p class="card-label">Contrato de prestación de servicios</p>
+      <div class="alert">
+        <span>✍️</span>
+        <span>Tus datos se van escribiendo <b>en vivo</b> dentro del contrato mientras completas el formulario de arriba. Léelo completo antes de firmar.</span>
+      </div>
+      <div class="contrato-box" id="contratoBox"></div>
+      <p class="scroll-hint" id="scrollHint">Desplázate hasta el final para habilitar la firma ↓</p>
+
+      <div class="accept-row" id="acceptRow">
+        <span class="check-square" id="acceptCheck"></span>
+        <span class="txt">He leído y acepto los términos de este contrato. Entiendo que mi firma digital tiene la misma validez que una firma manuscrita.</span>
+      </div>
+    </div>
+
+    <!-- Firma -->
+    <div class="card">
+      <div class="sig-head">
+        <span class="sig-title">Tu firma</span>
+        <button class="sig-clear" id="sigClear" type="button">Borrar y volver a firmar</button>
+      </div>
+      <div class="sig-pad" id="sigPad">
+        <canvas id="sigCanvas"></canvas>
+        <div class="sig-baseline"></div>
+        <div class="sig-placeholder" id="sigPlaceholder">
+          <span class="big">✍️</span>
+          <span class="txt">Firma aquí con el dedo o el mouse</span>
+        </div>
+      </div>
+
+      <button class="btn-primary" id="btnFirmar" disabled>Firmar contrato y recibir mi PDF</button>
+      <p class="mail-status" id="preStatus"></p>
+    </div>
+
+  </div>
+
+  <!-- ══════ ESTADO FIRMADO ══════ -->
+  <div id="firmado">
+    <div class="card ok-card">
+      <div class="ok-icon">✓</div>
+      <div class="ok-title">Contrato firmado</div>
+      <p class="ok-sub" id="okSub">Tu PDF se descargó a este dispositivo y te lo enviamos por correo. Ya solo falta apartar tu fecha con el adelanto.</p>
+
+      <a class="btn-yellow" id="btnPagar" href="/gracias-sesion/">Continuar al pago →</a>
+
+      <div class="btn-row">
+        <button class="btn-ghost" id="btnDescargar" type="button">↓ Descargar PDF otra vez</button>
+        <a class="btn-ghost" id="btnWa" target="_blank" rel="noopener" href="#">Avisar por WhatsApp</a>
+      </div>
+      <p class="mail-status" id="mailStatus"></p>
+    </div>
+  </div>
+
+  <a class="back-link" href="/">← Volver al inicio</a>
+</div>
+
+<script>
+/* ══════════════════════════════════════════════════════════════════════
+   TEXTO DEL CONTRATO — el modelo real de Estudio Graphica, tal cual lo usa
+   Pablo, cláusula por cláusula. Editable desde el panel con el mismo
+   patrón "const NOMBRE = [...]" que usa el resto del sitio.
+   Cada cláusula es un objeto { titulo, cuerpo }. Dentro del cuerpo puedes
+   usar estas variables, que se reemplazan solas:
+
+   Del cliente / la reserva (vienen del formulario o de /precios):
+     {{nombre}} {{ci}} {{negocio}} {{direccion}} {{email}} {{whatsapp}}
+     {{fecha}} {{servicio}} {{paquete}} {{detalle}} {{precio}} {{adelanto}}
+     {{saldo}} {{hoy}}
+
+   Fijas del estudio (se editan una sola vez, en contratoConfig más abajo):
+     {{banco}} {{cuentaNumero}} {{cuentaTitular}} {{cuentaTipo}} {{carnetTitular}}
+     {{horarioAtencion}} {{zonaNorte}} {{zonaSur}} {{zonaEste}} {{zonaOeste}}
+   ══════════════════════════════════════════════════════════════════════ */
+const contratoClausulas = [
+  {
+    titulo: 'Partes',
+    cuerpo: 'Consta por el presente contrato de servicios firmado en fecha {{hoy}} entre <b>EL FOTÓGRAFO</b> (Pablo Villarroel Rocabado, Estudio Graphica) y <b>EL/LA CLIENTE</b> ({{nombre}}, con documento de identidad {{ci}}, en representación de {{negocio}}). En adelante conjuntamente serán reconocidos como LAS PARTES, y se obligan mutuamente a cumplir el presente contrato conforme a los términos y condiciones siguientes.',
+  },
+  {
+    titulo: 'Objeto',
+    cuerpo: 'El objeto del presente contrato es establecer los términos y condiciones bajo los cuales EL FOTÓGRAFO prestará sus servicios de fotografía a EL/LA CLIENTE, correspondientes a <b>{{servicio}} — {{paquete}}</b> ({{detalle}}), conforme a lo establecido en el presente documento. EL FOTÓGRAFO no presta ningún servicio que incluya diseño gráfico, community management, gestión de redes sociales, etc. ya que esto escapa de sus habilidades. En caso de ser necesarios alguno de estos servicios, se puede solicitar la subcontratación de personas especializadas en la ejecución de estas tareas.',
+  },
+  {
+    titulo: 'Definiciones',
+    cuerpo: 'Producción fotográfica: se entiende por el día en el cual se lleva a cabo la creación de las imágenes fotográficas por EL FOTÓGRAFO a los asistentes. Este es un proceso organizado y creativo que involucra la planificación, coordinación y ejecución de las imágenes fotográficas deseadas. Imágenes fotográficas: son representaciones visuales capturadas por el fotógrafo a través de la técnica de la fotografía, que permiten documentar, expresar, comunicar ideas y conceptos a través de la imagen. Material: son las imágenes fotográficas tomadas en la Producción Fotográfica. Material final: se entiende por material final a las imágenes fotográficas tomadas en la Producción Fotográfica que ya pasaron por un proceso de edición, corrección, retoques y se encuentran listas para ser entregadas a EL/LA CLIENTE.',
+  },
+  {
+    titulo: 'Ejecución',
+    cuerpo: 'EL/LA CLIENTE autoriza a EL FOTÓGRAFO a tomarle imágenes fotográficas a todos los asistentes a la producción invitados por EL/LA CLIENTE. Las imágenes fotográficas incluirán tomas directas y tomas a las que se aplicarán los retoques necesarios a consideración y criterio de EL FOTÓGRAFO. La fecha y hora serán acordadas previamente por ambas partes; para este servicio, la fecha acordada es {{fecha}}. En caso de que la sesión sufra retrasos significativos o deba reprogramarse por falta de organización, incumplimientos, tardanza o negligencia de EL/LA CLIENTE, EL FOTÓGRAFO podrá cobrar un recargo por cada hora de espera adicional no pactada o reprogramar la sesión, aplicando costos de desplazamiento o logística. Si no se llega a un nuevo acuerdo para continuar, EL FOTÓGRAFO podrá considerar la sesión por terminada y retener los montos abonados como compensación por el tiempo invertido. El precio estipulado en la presente cotización cubre únicamente los costos de desplazamiento dentro del radio urbano comprendido en el área delimitada entre Norte: {{zonaNorte}}, Sur: {{zonaSur}}, Este: {{zonaEste}}, Oeste: {{zonaOeste}}. Toda locación ubicada fuera de dicha zona será considerada como desplazamiento adicional, y se le aplicará un recargo logístico, cuyo monto será calculado en función de la distancia total de ida y vuelta, el tiempo estimado de traslado, el tipo de vía o accesibilidad de la zona, el horario de producción y el uso de combustible o precio de traslado. En ningún caso se iniciará la producción sin la cancelación previa del monto correspondiente al recargo logístico, si éste aplica. La sesión se realizará en {{direccion}}, salvo acuerdo distinto entre las partes.',
+  },
+  {
+    titulo: 'Sobrepaso de alcance (scope creep)',
+    cuerpo: 'Se entiende por "sobrepaso de alcance" cualquier requerimiento de EL/LA CLIENTE que exceda la cantidad de tomas, tiempo de producción, número de participantes o locaciones originalmente pactadas. En caso de que, durante o antes de la Producción Fotográfica, EL/LA CLIENTE solicite servicios adicionales no previstos, EL FOTÓGRAFO podrá cobrar un recargo adicional, cuyo importe se acordará por escrito, o negarse a efectuar tales servicios si afectan el desempeño profesional u operativo del proyecto inicial. De no alcanzarse un acuerdo, EL FOTÓGRAFO continuará con la prestación de los servicios originales sin que ello implique incumplimiento de su parte.',
+  },
+  {
+    titulo: 'Entregables físicos',
+    cuerpo: 'El precio estipulado en este contrato contempla exclusivamente la prestación de servicios digitales de producción fotográfica y la entrega del material final en formato digital, según lo descrito anteriormente. En caso de que EL/LA CLIENTE requiera entregables físicos (tales como álbumes, impresiones, fotolibros u otros productos tangibles), estos no están incluidos en el precio señalado y deberán ser cotizados de manera independiente, en función de la cantidad total de imágenes a incluir, el tamaño y dimensiones del formato solicitado, el tipo de papel o material de impresión, el tipo de encuadernación y calidad de la tapa, y demás especificaciones requeridas por EL/LA CLIENTE. Estos productos se considerarán como servicios complementarios y estarán sujetos a tiempos de producción, condiciones de entrega y formas de pago distintos a los establecidos para la entrega digital. Ningún producto físico será elaborado ni entregado sin la aprobación expresa del presupuesto y el pago total por adelantado correspondiente a dicho servicio.',
+  },
+  {
+    titulo: 'Obstáculos',
+    cuerpo: 'EL/LA CLIENTE reconoce y acepta que el único responsable de tomar las fotografías será EL FOTÓGRAFO. En consecuencia, EL/LA CLIENTE se compromete a garantizar que terceras personas externas a la producción fotográfica no interfieran en la labor de EL FOTÓGRAFO impidiendo la captura de imágenes mediante el uso de cualquier dispositivo u objeto. EL FOTÓGRAFO no asumirá ninguna responsabilidad en caso de que, debido a la imprudencia de otras personas, no sea posible capturar alguna fotografía única e irrepetible.',
+  },
+  {
+    titulo: 'Formatos y medios',
+    cuerpo: 'El material final será entregado en un catálogo digital para que EL/LA CLIENTE pueda utilizarlas para el fin convenido en el presente contrato. Este catálogo estará protegido por marca de agua y la descarga de fotografías estará restringida hasta que se complete el pago de los honorarios. Ejecutado el pago, el catálogo se habilitará para su descarga en dos formatos: Alta Calidad (JPEG, con espacio de color sRGB en la máxima resolución posible) y Optimizado (JPEG, con espacio de color sRGB y con redimensionamiento a 1080px x 1350px). El material final podrá ser seleccionado por EL/LA CLIENTE si así lo desea, en un plazo de 7 días. Caso contrario, el material final será elegido a consideración de EL FOTÓGRAFO.',
+  },
+  {
+    titulo: 'Honorarios',
+    cuerpo: 'Por la prestación de los servicios de fotografía, EL/LA CLIENTE efectuará la cancelación a EL FOTÓGRAFO por el monto señalado en la cotización, es decir <b>Bs. {{precio}}</b>. La cancelación podrá efectuarse por transferencia bancaria, depósito o por QR a la siguiente cuenta: Banco {{banco}}, número de cuenta {{cuentaNumero}}, a nombre de {{cuentaTitular}}, {{cuentaTipo}}, número de carnet {{carnetTitular}}.',
+  },
+  {
+    titulo: 'Métodos de pago',
+    cuerpo: 'La cancelación del monto se realizará de la siguiente manera: EL/LA CLIENTE realizará el abono del 50% del precio total (<b>Bs. {{adelanto}}</b>) para reservar la fecha de la producción fotográfica, y el 50% del saldo restante (<b>Bs. {{saldo}}</b>) se cancelará en el momento en el que EL/LA CLIENTE reciba el material final. La solicitud de una cotización o paquete, con un tiempo menor a 48 horas a la producción, implica un aumento del precio final de la sesión. Cualquier transacción efectuada por un tercero deberá ser notificada previamente; EL FOTÓGRAFO no se responsabiliza por demoras o errores en la identificación del pago si este se realizó desde una cuenta ajena, sin previa coordinación. El comprobante de pago deberá enviarse de forma inmediata para su validación.',
+  },
+  {
+    titulo: 'Facturación',
+    cuerpo: 'En caso de necesitar facturación por el servicio prestado, EL/LA CLIENTE acepta que al proceder de esta forma se harán los ajustes necesarios al precio facturado. Esto podrá implicar el aumento del precio final de la cotización.',
+  },
+  {
+    titulo: 'Mora',
+    cuerpo: 'En el caso de que EL/LA CLIENTE no pague el monto acordado en el plazo estipulado, se generará un interés del 10% por mora sobre el monto no cancelado.',
+  },
+  {
+    titulo: 'Finalidad',
+    cuerpo: 'La finalidad de las imágenes fotográficas será para uso comercial. Esto implica el uso personal y la publicación en sitios webs y redes sociales actuales y futuras relacionadas directamente con EL/LA CLIENTE. En el caso que se desee utilizar alguna imagen para un fin no acordado y requiera alguna modificación, se deberá solicitar a EL FOTÓGRAFO la autorización por escrito. EL FOTÓGRAFO realizará los arreglos de la imagen respectivos para el fin deseado y enviará una cotización nueva si fuese necesario.',
+  },
+  {
+    titulo: 'Propiedad',
+    cuerpo: 'La propiedad del material final corresponde a EL/LA CLIENTE. Sin embargo, LAS PARTES reconocen que los derechos patrimoniales sobre el material, así como documentos, bocetos, esquemas, negativos y brutos (RAWs), corresponden a EL FOTÓGRAFO. Bajo ningún motivo se entregarán las fotografías en formato RAW a EL/LA CLIENTE. EL/LA CLIENTE autoriza a EL FOTÓGRAFO exhibir las imágenes que haya efectuado por encargo como muestra de su trabajo, otorgando el crédito respectivo. Asimismo, EL/LA CLIENTE otorga el derecho a EL FOTÓGRAFO de hacer uso del material para fines de promoción de su propia marca y trabajo: publicarlos en sus redes sociales, presentar a otros clientes o posibles clientes, presentarlo a un concurso de fotografía, publicar un libro o una revista y para decoración del estudio fotográfico, siempre y cuando no dañe la imagen e identidad de EL/LA CLIENTE.',
+  },
+  {
+    titulo: 'Uso de las imágenes',
+    cuerpo: 'EL/LA CLIENTE tendrá el derecho de uso, de reproducción y comunicación pública del material final, como exhibir las imágenes fotográficas, plasmarla en catálogos, así como en otros medios impresos o electrónicos, o en videos. Esto será posible siempre y cuando el material final no sea utilizado para fines no acordados, salvo que el objetivo y la finalidad hayan sido expresados y acordados por escrito antes de realizarse la producción fotográfica. EL FOTÓGRAFO se reserva el derecho de oponerse al uso del material final, cuando la exhibición, presentación o plasmación se realice en condiciones que perjudiquen su honor o su reputación profesional, o cuando se haga uso con fines no permitidos.',
+  },
+  {
+    titulo: 'Transmisión a terceros',
+    cuerpo: 'EL/LA CLIENTE reconoce y acepta que no podrá transmitir a terceros la propiedad de las imágenes fotográficas objeto de este contrato, salvo que medie autorización expresa por EL FOTÓGRAFO.',
+  },
+  {
+    titulo: 'Revocación automática de licencia por incumplimiento de pago',
+    cuerpo: 'La licencia de uso de las imágenes finales está condicionada al pago completo de los honorarios acordados. Si EL/LA CLIENTE incumple con los plazos de pago o incurre en mora, se entenderá revocada cualquier licencia o autorización de uso que se haya otorgado sobre las imágenes. EL FOTÓGRAFO podrá exigir a EL/LA CLIENTE la inmediata retirada de cualquier imagen publicada en medios físicos o digitales hasta que se efectúe el pago correspondiente.',
+  },
+  {
+    titulo: 'No desprestigio',
+    cuerpo: 'EL/LA CLIENTE se obliga a no difundir, por ningún medio (incluyendo redes sociales y foros públicos), afirmaciones falsas, descalificatorias o engañosas que perjudiquen la reputación profesional de EL FOTÓGRAFO. Si EL/LA CLIENTE tiene algún desacuerdo o inconveniente con el servicio, se compromete a buscar una solución directa y amistosa con EL FOTÓGRAFO antes de emitir comentarios públicos. En caso de incumplimiento, EL FOTÓGRAFO se reserva las acciones legales pertinentes, además de considerarse causal de resolución de este contrato.',
+  },
+  {
+    titulo: 'Obligaciones de EL/LA CLIENTE',
+    cuerpo: 'EL/LA CLIENTE reconoce que EL FOTÓGRAFO cuenta con la capacidad técnica y el material necesarios para el desempeño y cumplimiento de los fines del presente contrato, y que examinó previamente el trabajo realizado por EL FOTÓGRAFO, manifestando que reconoce la competencia y la habilidad técnica que posee para cumplir con los objetivos y fines estipulados en el presente documento. EL/LA CLIENTE se compromete a: notificar a EL FOTÓGRAFO su ausencia o demora a la producción fotográfica si fuese el caso; aceptar el porcentaje del monto a ser retenido por EL FOTÓGRAFO por efecto de la cancelación de la producción fotográfica; cancelar el monto total al momento de recibir el material final; facilitar a EL FOTÓGRAFO de manera oportuna el acceso a toda la información y elementos necesarios para la prestación del servicio; en producciones de más de 4 horas, facilitar un espacio adecuado para descanso, almacenamiento de equipo técnico así como alimentación de EL FOTÓGRAFO y su equipo humano, y garantizar acceso razonable a las áreas principales del evento; cumplir de manera íntegra, sin excepción, todos los términos y condiciones estipulados en el presente documento; evitar alterar o modificar, de cualquier manera o por cualquier medio (filtros, edición, recortes, eliminación de fondo, etc.), el contenido o tamaño del material final entregado, de modo que perjudique al honor y/o reputación profesional de EL FOTÓGRAFO; cumplir con la cláusula de confidencialidad; e informar a los participantes sobre las características y propósitos de la Producción Fotográfica, recabando autorizaciones adicionales si correspondiesen.',
+  },
+  {
+    titulo: 'Obligaciones de EL FOTÓGRAFO',
+    cuerpo: 'EL FOTÓGRAFO se compromete a: contar con la capacidad técnica y el material necesario para el desempeño y cumplimiento de los fines del presente contrato; presentarse el día de la producción fotográfica a tiempo y con todo el equipo necesario; entregar puntualmente el material y el material final a EL/LA CLIENTE; devolver el 100% del abono cancelado por EL/LA CLIENTE en el caso que, por fuerza mayor o caso fortuito, EL FOTÓGRAFO no pueda cumplir con el contrato; no hacer mal uso de las imágenes y nunca utilizarlas en un contexto distinto a la fotografía, el arte o la publicidad, dejando siempre claro que no tenía con EL/LA CLIENTE otra relación que profesional en el momento de la producción fotográfica; comunicar a EL/LA CLIENTE por escrito cualquier cambio de fecha, hora, lugar o costo referente a la producción fotográfica; cumplir con la cláusula de confidencialidad; y atender consultas y solicitudes exclusivamente por los canales acordados (correo electrónico y/o número de WhatsApp proporcionado), dentro del horario de atención de {{horarioAtencion}}.',
+  },
+  {
+    titulo: 'Derechos de EL/LA CLIENTE',
+    cuerpo: 'EL FOTÓGRAFO declara que no puede garantizar que el trabajo final estará completamente libre de errores, por lo que EL/LA CLIENTE tiene derecho a solicitar cambios o modificaciones en 1 ocasión en los 7 días siguientes a la entrega del material final; los cambios posteriores al plazo indicado implicarán una compensación extra. EL/LA CLIENTE puede hacer los ajustes que sean necesarios de las imágenes fotográficas para su impresión o exhibición, sin que afecte el contenido intrínseco de los materiales. EL/LA CLIENTE otorga consentimiento expreso, sin que medie vicio, de que EL FOTÓGRAFO le tome fotografías para el fin convenido, y cede el uso de su imagen a EL FOTÓGRAFO con el fin de publicarlos en sus redes sociales, presentar a otros clientes o posibles clientes, presentarlo a un concurso de fotografía, para publicar un libro o una revista y para decoración del estudio fotográfico, siempre y cuando no dañe la imagen e identidad de EL/LA CLIENTE.',
+  },
+  {
+    titulo: 'Derechos de EL FOTÓGRAFO',
+    cuerpo: 'EL FOTÓGRAFO puede oponerse a la exhibición, plasmación o presentación de imágenes que hayan sufrido alguna modificación, edición o alteración por parte de EL/LA CLIENTE, de modo que perjudique su honor y/o su reputación profesional, y se reserva el derecho de rechazar solicitudes de revisiones que tengan fines no acordados, contravengan la dirección artística acordada, sean técnicamente inviables o excesivamente onerosas en relación con el alcance original, menoscaben su reputación o vayan en contra de su ética profesional. EL FOTÓGRAFO tiene la libertad artística sobre las imágenes fotográficas que vayan a ser tomadas el día de la producción fotográfica, y no se responsabiliza por la falta de permisos o licencias del lugar donde se realice la sesión, por accidentes o percances que ocurran durante la producción por motivos ajenos a su labor (condiciones de seguridad, clima, imprudencia de terceros, etc.), ni por diferencias en color o calidad al momento de la impresión en servicios de terceros no supervisados por EL FOTÓGRAFO.',
+  },
+  {
+    titulo: 'Confidencialidad',
+    cuerpo: 'Ambas partes se comprometen a tomar todas las medidas necesarias para mantener de carácter confidencial toda la información que se les haya sido comunicada por la otra parte, o información que hayan adquirido, durante la ejecución del presente contrato. La obligación de esta cláusula no se aplicará a toda aquella información que sea del dominio público. Ambas partes se comprometen a utilizar la información compartida únicamente para la ejecución del presente contrato, y a no explotar, por cuenta propia o por un tercero, directa o indirectamente, toda o parte de dicha información.',
+  },
+  {
+    titulo: 'Protección de datos personales',
+    cuerpo: 'En caso de que la legislación local exija un manejo específico de datos personales (tales como imágenes que identifiquen a las personas), EL FOTÓGRAFO se compromete a dar tratamiento confidencial a dichos datos y no usarlos con fines distintos a los establecidos en este contrato. EL/LA CLIENTE garantiza que cuenta con la autorización de los participantes para ser fotografiados o filmados, de ser legalmente necesario.',
+  },
+  {
+    titulo: 'Almacenamiento de las imágenes',
+    cuerpo: 'Las imágenes fotográficas serán almacenadas en un servidor privado de EL FOTÓGRAFO por un plazo de 60 días calendario, computables desde la entrega del material final. Posterior a este tiempo, la re-entrega de dichas fotografías implicará una nueva cotización o un recargo adicional a consideración de EL FOTÓGRAFO. Vencido este plazo de 60 días, EL FOTÓGRAFO no garantiza la disponibilidad del material. En caso de requerirse una reentrega posterior, esta estará sujeta a la existencia de un respaldo disponible y al pago de un cargo adicional por el servicio de recuperación y reenvío, cuyo valor será determinado según el volumen de archivos y el método de entrega requerido.',
+  },
+  {
+    titulo: 'Entrega del material final',
+    cuerpo: 'EL FOTÓGRAFO tendrá un plazo improrrogable de 3 a 7 días hábiles para entregar el material final, computables desde la selección de fotos por parte de EL/LA CLIENTE, salvo previo acuerdo expreso entre las partes. EL/LA CLIENTE deberá abonar un recargo por cualquier servicio que requiera trabajar fuera del plazo establecido, por fechas de entrega no programadas, o como consecuencia de que EL/LA CLIENTE no haya cumplido con la entrega de la información, materiales o aprobaciones. En el caso en que EL/LA CLIENTE no se manifieste para escoger, recoger o recibir el material final en los siguientes 30 días a su entrega, aplicará automáticamente la cláusula de resolución, sin perjuicio a los daños y perjuicios incurridos por EL FOTÓGRAFO.',
+  },
+  {
+    titulo: 'Fuerza mayor',
+    cuerpo: 'EL FOTÓGRAFO, en el caso de no poder asistir al día de la producción fotográfica por caso fortuito o fuerza mayor, podrá ser reemplazado por otro fotógrafo y su equipo sin coste adicional para EL/LA CLIENTE. El fotógrafo y su equipo de reemplazo cumplirán con iguales requisitos técnicos, artísticos y profesionales, con trayectorias y formas de trabajo similares a la de EL FOTÓGRAFO. Queda a exclusiva decisión y criterio de EL FOTÓGRAFO la elección de los reemplazantes.',
+  },
+  {
+    titulo: 'Incumplimiento del contrato',
+    cuerpo: 'Por EL FOTÓGRAFO: se compromete a cubrir la producción fotográfica o hacer lo posible por cumplir con su ejecución. Sin embargo, si por caso fortuito, fuerza mayor o emergencias EL FOTÓGRAFO incumple el presente contrato, se compromete a devolver el 100% del dinero cancelado, sin derecho a reclamación adicional; por la resolución del contrato, las fotografías no serán entregadas en ningún formato y perderá el derecho sobre el resultado final. Por EL/LA CLIENTE: en el caso de que se haya reservado la fecha para la prestación del servicio y, debido a circunstancias de fuerza mayor o caso fortuito, EL/LA CLIENTE manifieste que ya no requiere el servicio, EL FOTÓGRAFO tendrá el derecho de retener un porcentaje del abono previamente cancelado en calidad de indemnización por los daños y perjuicios emergentes.',
+  },
+  {
+    titulo: 'Daños y perjuicios',
+    cuerpo: 'El porcentaje de la indemnización estará sujeto a variación según la antelación con la cual EL/LA CLIENTE notifique por escrito a EL FOTÓGRAFO su ausencia: mayor a 2 semanas, se retendrá a consideración de EL FOTÓGRAFO hasta un 50% de lo acordado; menor a 2 semanas hasta un día antes, se podrá retener hasta el 100% de lo abonado; después de haberse realizado la producción, se retendrá el 100% de lo abonado sin derecho al reclamo del material final.',
+  },
+  {
+    titulo: 'Resolución del contrato',
+    cuerpo: 'Cualquiera de las partes podrá resolver el contrato cuando la otra incumpla sus obligaciones establecidas en el presente contrato por un tiempo mayor a 10 días hábiles.',
+  },
+  {
+    titulo: 'Controversias',
+    cuerpo: 'LAS PARTES acuerdan sin objeción alguna que toda controversia, litigio, discrepancia, cuestión o reclamación de la ejecución o interpretación del presente contrato o relacionada con él, directa o indirectamente, o de sus documentos complementarios o modificatorios, será resuelta en primera instancia en común acuerdo, y en caso contrario mediante conciliación.',
+  },
+  {
+    titulo: 'Ley aplicable y jurisdicción competente',
+    cuerpo: 'El presente contrato está sujeto y se interpretará de conformidad con la legislación vigente, que comprende la integridad de los pactos celebrados entre LAS PARTES en relación con el objeto del presente contrato y, por tanto, anula y prevalece sobre cualesquiera otros pactos escritos o verbales que pudieran existir entre ellas con anterioridad a la fecha de la firma del presente contrato. En caso de cualquier desacuerdo o controversia entre LAS PARTES en relación con la ejecución, eficacia o interpretación del presente contrato, LAS PARTES se someten expresamente a la jurisdicción y competencia de los Juzgados y Tribunales de Cochabamba, Bolivia.',
+  },
+  {
+    titulo: 'Vigencia',
+    cuerpo: 'El presente contrato será aplicable desde el momento en que EL/LA CLIENTE reciba y acepte el mismo. El presente documento anula y reemplaza cualquier contrato o acuerdo previo entre LAS PARTES con el mismo objeto y solo podrá ser modificado por un nuevo acuerdo.',
+  },
+  {
+    titulo: 'Aceptación',
+    cuerpo: 'LAS PARTES, de su libre y espontánea voluntad, declaran su conformidad y aceptación con todas y cada una de las cláusulas del presente contrato. En señal de aceptación se obligan a su fiel y estricto cumplimiento del mismo, firmando al pie en constancia. Documento firmado el {{hoy}}, en la ciudad de Cochabamba, Bolivia.',
+  },
+  {
+    titulo: 'Firma digital',
+    cuerpo: 'LAS PARTES acuerdan que la aceptación escrita y/o firma digital de este contrato (por correo electrónico, plataforma de firma digital u otro medio aprobado por las partes) es válida y produce los mismos efectos legales que la firma manuscrita tradicional.',
+  },
+];
+
+/* ══════════════════════════════════════════════════════════════════════
+   Datos fijos del estudio — se editan una sola vez acá y se reflejan en
+   todo el contrato (cuenta bancaria, zona de cobertura, horario, contacto)
+   ══════════════════════════════════════════════════════════════════════ */
+const contratoConfig = [
+  {
+    whatsapp: '+59169422335',
+    correoEstudio: 'hola@estudiographica.com',
+    // Endpoint de la Netlify Function que manda el PDF por correo.
+    // Si aún no configuraste RESEND_API_KEY en Netlify, la página sigue
+    // funcionando: descarga el PDF y ofrece mandarlo por WhatsApp.
+    endpointCorreo: '/.netlify/functions/contrato',
+
+    // Cuenta para el pago de honorarios (cláusula "Honorarios")
+    banco: 'Banco Mercantil Santa Cruz',
+    cuentaNumero: '4067224232',
+    cuentaTitular: 'Pablo Villarroel Rocabado',
+    cuentaTipo: 'Cuenta de Ahorro (Bolivianos)',
+    carnetTitular: '6424028 CB',
+
+    // Horario de atención (cláusula "Obligaciones de EL FOTÓGRAFO")
+    horarioAtencion: 'lunes a sábado de 11:00 a 19:00',
+
+    // Radio urbano sin recargo logístico (cláusula "Ejecución")
+    zonaNorte: 'Av. Segunda Circunvalación',
+    zonaSur: 'Av. Heroínas',
+    zonaEste: 'Av. Rubén Darío',
+    zonaOeste: 'Av. Beijing',
+  },
+];
+
+(function () {
+  'use strict';
+
+  var CFG = contratoConfig[0];
+  var LS_PAQUETE = 'eg_paquete_v1';     // lo escribe /precios al reservar
+  var LS_CONTRATO = 'eg_contrato_v1';   // borrador de datos del cliente
+  var LS_FIRMADOS = 'eg_contratos_firmados_v1';
+
+  // ── 1. De dónde salen el paquete y el precio ───────────────────────
+  // Prioridad: parámetros en la URL → lo que guardó /precios → default.
+  function leerPaquete() {
+    var p = new URLSearchParams(location.search);
+    var guardado = {};
+    try { guardado = JSON.parse(localStorage.getItem(LS_PAQUETE) || '{}'); } catch (e) {}
+
+    var tipo = p.get('tipo') || guardado.tipo || 'sesion';
+    var precio = parseInt(p.get('precio') || guardado.precio || 0, 10);
+    var fotos = parseInt(p.get('fotos') || guardado.fotos || (tipo === 'plan' ? 16 : 15), 10);
+    var duracion = parseInt(p.get('duracion') || guardado.duracion || 3, 10);
+    var reels = parseInt(p.get('reels') || guardado.reels || 0, 10);
+    var extras = p.get('extras') || guardado.extras || '';
+
+    // Si no llegó precio por ningún lado, lo calculamos con la misma
+    // lógica de /precios (fuente única de verdad: pricing-logic.js).
+    var paquete = p.get('paquete') || guardado.paquete || '';
+    if ((!precio || !paquete) && window.EGPricing) {
+      if (tipo === 'plan') {
+        var dp = EGPricing.calcPlan(fotos, duracion, reels > 0, reels || 4);
+        precio = precio || dp.precio;
+        paquete = paquete || dp.paquete;
+      } else {
+        var ds = EGPricing.calcSesion(fotos);
+        precio = precio || ds.precio;
+        paquete = paquete || ds.paquete;
+      }
+    }
+    return { tipo: tipo, precio: precio, fotos: fotos, duracion: duracion, reels: reels, extras: extras, paquete: paquete };
+  }
+
+  var PKG = leerPaquete();
+
+  function esPlan() { return PKG.tipo === 'plan'; }
+
+  function servicioNombre() { return esPlan() ? 'Plan Mensual de contenido' : 'Sesión de fotos'; }
+
+  function paqueteNombre() { return (esPlan() ? 'Plan ' : 'Paquete ') + (PKG.paquete || 'a medida'); }
+
+  function detalleTexto() {
+    var partes = [];
+    if (esPlan()) {
+      partes.push(PKG.fotos + ' fotos por mes');
+      partes.push('durante ' + PKG.duracion + ' ' + (PKG.duracion > 1 ? 'meses' : 'mes'));
+      if (PKG.reels > 0) partes.push(PKG.reels + ' reels por mes');
+    } else {
+      partes.push(PKG.fotos + ' fotos editadas');
+    }
+    if (PKG.extras) partes.push('extras: ' + PKG.extras);
+    return partes.join(', ');
+  }
+
+  function entregaTexto() {
+    var f = PKG.fotos;
+    if (esPlan()) return f <= 14 ? 'un máximo de 72 horas' : f <= 20 ? 'un máximo de 48 horas' : 'un máximo de 24 horas';
+    return f <= 10 ? 'un máximo de 72 horas' : f <= 18 ? 'un máximo de 48 horas' : 'un máximo de 24 horas';
+  }
+
+  var adelanto = Math.round(PKG.precio * 0.5);
+  var saldo = PKG.precio - adelanto;
+
+  // Pinta el resumen
+  document.getElementById('resumenName').textContent = servicioNombre();
+  document.getElementById('resumenDesc').textContent = paqueteNombre() + ' · ' + detalleTexto();
+  document.getElementById('resumenPrice').innerHTML = 'Bs. ' + PKG.precio + '<span>' + (esPlan() ? '/mes' : ' pago único') + '</span>';
+
+  // ── 2. Campos del formulario ───────────────────────────────────────
+  var campos = ['nombre', 'ci', 'negocio', 'direccion', 'email', 'whatsapp', 'fecha'];
+  var inputs = {};
+  campos.forEach(function (id) { inputs[id] = document.getElementById(id); });
+
+  // Restaura el borrador si el cliente ya había empezado a llenar
+  try {
+    var borrador = JSON.parse(localStorage.getItem(LS_CONTRATO) || '{}');
+    campos.forEach(function (id) { if (borrador[id]) inputs[id].value = borrador[id]; });
+  } catch (e) {}
+
+  // Prefill de fecha desde la URL (por si Cal.com la manda) o mínimo hoy
+  var hoyISO = new Date().toISOString().split('T')[0];
+  var fechaParam = new URLSearchParams(location.search).get('fecha');
+  if (fechaParam) inputs.fecha.value = fechaParam;
+  inputs.fecha.min = hoyISO;
+
+  function guardarBorrador() {
+    var data = {};
+    campos.forEach(function (id) { data[id] = inputs[id].value.trim(); });
+    try { localStorage.setItem(LS_CONTRATO, JSON.stringify(data)); } catch (e) {}
+  }
+
+  function fechaLarga(iso) {
+    if (!iso) return '';
+    var partes = iso.split('-');
+    var meses = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+    return parseInt(partes[2], 10) + ' de ' + meses[parseInt(partes[1], 10) - 1] + ' de ' + partes[0];
+  }
+
+  // ── 3. Render del contrato con los datos en vivo ────────────────────
+  function valorOPendiente(v, etiqueta) {
+    if (v && v.trim()) return '<span class="dato">' + escapeHtml(v.trim()) + '</span>';
+    return '<span class="pendiente">' + etiqueta + '</span>';
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  function variables(paraPdf) {
+    function v(valor, etiqueta) {
+      if (paraPdf) return (valor && valor.trim()) ? valor.trim() : ('[' + etiqueta + ']');
+      return valorOPendiente(valor, etiqueta);
+    }
+    var fechaVal = inputs.fecha.value ? fechaLarga(inputs.fecha.value) : '';
+    return {
+      nombre: v(inputs.nombre.value, 'tu nombre'),
+      ci: v(inputs.ci.value, 'tu CI o NIT'),
+      negocio: v(inputs.negocio.value, 'tu negocio'),
+      direccion: v(inputs.direccion.value, 'la dirección'),
+      email: v(inputs.email.value, 'tu correo'),
+      whatsapp: v(inputs.whatsapp.value, 'tu WhatsApp'),
+      fecha: v(fechaVal, 'la fecha'),
+      servicio: servicioNombre(),
+      paquete: paqueteNombre(),
+      detalle: detalleTexto(),
+      precio: String(PKG.precio),
+      adelanto: String(adelanto),
+      saldo: String(saldo),
+      entrega: entregaTexto(),
+      hoy: fechaLarga(hoyISO),
+      banco: CFG.banco,
+      cuentaNumero: CFG.cuentaNumero,
+      cuentaTitular: CFG.cuentaTitular,
+      cuentaTipo: CFG.cuentaTipo,
+      carnetTitular: CFG.carnetTitular,
+      horarioAtencion: CFG.horarioAtencion,
+      zonaNorte: CFG.zonaNorte,
+      zonaSur: CFG.zonaSur,
+      zonaEste: CFG.zonaEste,
+      zonaOeste: CFG.zonaOeste,
+    };
+  }
+
+  function aplicarVariables(texto, vars) {
+    return texto.replace(/\{\{(\w+)\}\}/g, function (m, clave) {
+      return vars[clave] !== undefined ? vars[clave] : m;
+    });
+  }
+
+  var contratoBox = document.getElementById('contratoBox');
+
+  function renderContrato() {
+    var vars = variables(false);
+    contratoBox.innerHTML = contratoClausulas.map(function (c) {
+      return '<h3>' + escapeHtml(c.titulo) + '</h3><p>' + aplicarVariables(c.cuerpo, vars) + '</p>';
+    }).join('');
+  }
+
+  // Versión en texto plano, para el PDF
+  function contratoPlano() {
+    var vars = variables(true);
+    return contratoClausulas.map(function (c) {
+      var cuerpo = aplicarVariables(c.cuerpo, vars).replace(/<[^>]+>/g, '');
+      return c.titulo.toUpperCase() + '\n' + cuerpo;
+    }).join('\n\n');
+  }
+
+  campos.forEach(function (id) {
+    inputs[id].addEventListener('input', function () {
+      renderContrato();
+      guardarBorrador();
+      actualizarBoton();
+      document.getElementById('f-' + id).classList.remove('show-error');
+      inputs[id].classList.remove('invalid');
+    });
+  });
+  renderContrato();
+
+  // ── 4. Scroll del contrato: habilita el checkbox al llegar al final ──
+  var leyoTodo = false;
+  var scrollHint = document.getElementById('scrollHint');
+  function chequearScroll() {
+    if (leyoTodo) return;
+    var alcanzable = contratoBox.scrollHeight - contratoBox.clientHeight;
+    // Si el contrato entra completo en pantalla no hay nada que desplazar:
+    // ya está leído. Si sí hay scroll, damos por leído al 88% para no
+    // pelear con el rebote del scroll táctil en celulares.
+    var listo = alcanzable <= 8 || contratoBox.scrollTop >= alcanzable * 0.88;
+    if (listo) {
+      leyoTodo = true;
+      scrollHint.classList.add('hidden');
+      actualizarBoton();
+    }
+  }
+  contratoBox.addEventListener('scroll', chequearScroll, { passive: true });
+  window.addEventListener('resize', chequearScroll);
+  setTimeout(chequearScroll, 300);
+
+  // ── 5. Checkbox de aceptación ───────────────────────────────────────
+  var acepta = false;
+  var acceptRow = document.getElementById('acceptRow');
+  var acceptCheck = document.getElementById('acceptCheck');
+  acceptRow.addEventListener('click', function () {
+    if (!leyoTodo) {
+      contratoBox.scrollTo({ top: contratoBox.scrollHeight, behavior: 'smooth' });
+      document.getElementById('preStatus').textContent = 'Desplaza el contrato hasta el final para poder aceptarlo.';
+      return;
+    }
+    acepta = !acepta;
+    acceptRow.classList.toggle('active', acepta);
+    acceptCheck.classList.toggle('active', acepta);
+    acceptCheck.textContent = acepta ? '✓' : '';
+    document.getElementById('preStatus').textContent = '';
+    actualizarBoton();
+  });
+
+  // ── 6. Firma: un solo manejador para dedo y mouse (Pointer Events) ──
+  var canvas = document.getElementById('sigCanvas');
+  var sigPad = document.getElementById('sigPad');
+  var sigPlaceholder = document.getElementById('sigPlaceholder');
+  var ctx = canvas.getContext('2d');
+  var hayFirma = false;
+  var dibujando = false;
+  var trazos = [];        // se guardan en coordenadas relativas (0-1)
+  var trazoActual = null;
+
+  function ajustarCanvas() {
+    var ratio = window.devicePixelRatio || 1;
+    var rect = canvas.getBoundingClientRect();
+    canvas.width = Math.round(rect.width * ratio);
+    canvas.height = Math.round(rect.height * ratio);
+    ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+    ctx.lineWidth = 2.4;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.strokeStyle = '#181818';
+    redibujar();
+  }
+
+  function redibujar() {
+    var rect = canvas.getBoundingClientRect();
+    ctx.clearRect(0, 0, rect.width, rect.height);
+    trazos.forEach(function (trazo) {
+      if (trazo.length < 2) return;
+      ctx.beginPath();
+      ctx.moveTo(trazo[0].x * rect.width, trazo[0].y * rect.height);
+      for (var i = 1; i < trazo.length; i++) {
+        ctx.lineTo(trazo[i].x * rect.width, trazo[i].y * rect.height);
+      }
+      ctx.stroke();
+    });
+  }
+
+  function posicion(e) {
+    var rect = canvas.getBoundingClientRect();
+    return { x: (e.clientX - rect.left) / rect.width, y: (e.clientY - rect.top) / rect.height };
+  }
+
+  canvas.addEventListener('pointerdown', function (e) {
+    e.preventDefault();
+    canvas.setPointerCapture(e.pointerId);
+    dibujando = true;
+    trazoActual = [posicion(e)];
+    trazos.push(trazoActual);
+  });
+
+  canvas.addEventListener('pointermove', function (e) {
+    if (!dibujando) return;
+    e.preventDefault();
+    trazoActual.push(posicion(e));
+    hayFirma = true;
+    sigPlaceholder.classList.add('hidden');
+    sigPad.classList.add('has-sig');
+    redibujar();
+    actualizarBoton();
+  });
+
+  function terminarTrazo(e) {
+    if (!dibujando) return;
+    dibujando = false;
+    try { canvas.releasePointerCapture(e.pointerId); } catch (err) {}
+  }
+  canvas.addEventListener('pointerup', terminarTrazo);
+  canvas.addEventListener('pointercancel', terminarTrazo);
+  canvas.addEventListener('pointerleave', terminarTrazo);
+
+  document.getElementById('sigClear').addEventListener('click', function () {
+    trazos = [];
+    hayFirma = false;
+    redibujar();
+    sigPlaceholder.classList.remove('hidden');
+    sigPad.classList.remove('has-sig');
+    actualizarBoton();
+  });
+
+  window.addEventListener('resize', ajustarCanvas);
+  ajustarCanvas();
+
+  // ── 7. Validación y habilitado del botón ────────────────────────────
+  var btnFirmar = document.getElementById('btnFirmar');
+
+  function camposCompletos() {
+    return campos.every(function (id) {
+      var v = inputs[id].value.trim();
+      if (!v) return false;
+      if (id === 'email') return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+      return true;
+    });
+  }
+
+  function actualizarBoton() {
+    btnFirmar.disabled = !(camposCompletos() && leyoTodo && acepta && hayFirma);
+  }
+
+  function marcarFaltantes() {
+    var primerFalta = null;
+    campos.forEach(function (id) {
+      var v = inputs[id].value.trim();
+      var malo = !v || (id === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v));
+      document.getElementById('f-' + id).classList.toggle('show-error', malo);
+      inputs[id].classList.toggle('invalid', malo);
+      if (malo && !primerFalta) primerFalta = inputs[id];
+    });
+    if (primerFalta) primerFalta.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  actualizarBoton();
+
+  // ── 8. Generar el PDF ───────────────────────────────────────────────
+  var pdfDataUri = null;
+  var nombreArchivo = 'Contrato.pdf';
+
+  function generarPdf() {
+    var jsPDFCtor = (window.jspdf && window.jspdf.jsPDF) || window.jsPDF;
+    if (!jsPDFCtor) throw new Error('jsPDF no cargó');
+
+    var doc = new jsPDFCtor({ unit: 'pt', format: 'a4' });
+    var MX = 56, ANCHO = 483, LH = 14;
+    var y = 62;
+
+    function saltoSiHaceFalta(alto) {
+      if (y + alto > 780) { doc.addPage(); y = 62; }
+    }
+
+    // Encabezado
+    doc.setFillColor(24, 24, 24);
+    doc.rect(0, 0, 595, 34, 'F');
+    doc.setTextColor(255, 221, 90);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(11);
+    doc.text('ESTUDIO GRAPHICA', MX, 22);
+    doc.setTextColor(248, 248, 248);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(8.5);
+    doc.text('Fotografia gastronomica · Cochabamba, Bolivia', 595 - MX, 22, { align: 'right' });
+
+    doc.setTextColor(24, 24, 24);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(15);
+    doc.text('Contrato de prestacion de servicios fotograficos', MX, y);
+    y += 20;
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(9);
+    doc.setTextColor(107, 102, 96);
+    doc.text('Documento generado y firmado digitalmente el ' + new Date().toLocaleString('es-BO'), MX, y);
+    y += 24;
+
+    // Cuadro resumen
+    doc.setDrawColor(230, 228, 222);
+    doc.setFillColor(248, 248, 248);
+    doc.roundedRect(MX, y - 12, ANCHO, 74, 8, 8, 'FD');
+    doc.setTextColor(24, 24, 24);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(9.5);
+    doc.text(servicioNombre() + ' — ' + paqueteNombre(), MX + 14, y + 6);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(9);
+    doc.setTextColor(107, 102, 96);
+    var resumenLineas = doc.splitTextToSize(detalleTexto(), ANCHO - 28);
+    doc.text(resumenLineas, MX + 14, y + 22);
+    doc.setTextColor(24, 24, 24);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Total: Bs. ' + PKG.precio + '    Adelanto 50%: Bs. ' + adelanto + '    Saldo: Bs. ' + saldo, MX + 14, y + 50);
+    y += 86;
+
+    // Cuerpo del contrato
+    var vars = variables(true);
+    contratoClausulas.forEach(function (c) {
+      var cuerpo = aplicarVariables(c.cuerpo, vars).replace(/<[^>]+>/g, '');
+      var lineas = doc.splitTextToSize(cuerpo, ANCHO);
+      saltoSiHaceFalta(24 + lineas.length * LH);
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(10);
+      doc.setTextColor(24, 24, 24);
+      doc.text(c.titulo, MX, y);
+      y += 15;
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(9.5);
+      doc.setTextColor(43, 43, 43);
+      doc.text(lineas, MX, y);
+      y += lineas.length * LH + 12;
+    });
+
+    // Firmas
+    saltoSiHaceFalta(150);
+    y += 16;
+    doc.setDrawColor(200, 197, 190);
+    doc.line(MX, y, MX + 200, y);
+    doc.line(MX + 263, y, MX + 463, y);
+
+    // Firma del cliente (imagen), justo encima de su línea
+    var firmaImg = canvas.toDataURL('image/png');
+    try { doc.addImage(firmaImg, 'PNG', MX, y - 62, 190, 58); } catch (e) {}
+
+    y += 14;
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(9);
+    doc.setTextColor(24, 24, 24);
+    doc.text(inputs.nombre.value.trim() || 'EL CLIENTE', MX, y);
+    doc.text('Pablo Villarroel Rocabado', MX + 263, y);
+    y += 12;
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(8);
+    doc.setTextColor(107, 102, 96);
+    doc.text('CI/NIT ' + (inputs.ci.value.trim() || '—') + ' · ' + (inputs.negocio.value.trim() || ''), MX, y);
+    doc.text('Estudio Graphica', MX + 263, y);
+    y += 11;
+    doc.text(inputs.email.value.trim() + ' · ' + inputs.whatsapp.value.trim(), MX, y);
+
+    // Pie
+    doc.setFontSize(7.5);
+    doc.setTextColor(150, 147, 142);
+    doc.text('Firmado digitalmente en estudiographica.com/contrato — la firma digital tiene la misma validez que la manuscrita.', MX, 812);
+
+    nombreArchivo = 'Contrato_EstudioGraphica_' +
+      (inputs.negocio.value.trim() || inputs.nombre.value.trim() || 'cliente').replace(/[^\wáéíóúÁÉÍÓÚñÑ]+/g, '_') + '.pdf';
+    pdfDataUri = doc.output('datauristring');
+    doc.save(nombreArchivo);
+    return pdfDataUri;
+  }
+
+  // ── 9. Guardar copia local ──────────────────────────────────────────
+  function guardarLocal() {
+    try {
+      var lista = JSON.parse(localStorage.getItem(LS_FIRMADOS) || '[]');
+      lista.push({
+        archivo: nombreArchivo,
+        nombre: inputs.nombre.value.trim(),
+        ci: inputs.ci.value.trim(),
+        negocio: inputs.negocio.value.trim(),
+        direccion: inputs.direccion.value.trim(),
+        email: inputs.email.value.trim(),
+        whatsapp: inputs.whatsapp.value.trim(),
+        fecha: inputs.fecha.value,
+        servicio: servicioNombre(),
+        paquete: paqueteNombre(),
+        detalle: detalleTexto(),
+        precio: PKG.precio,
+        adelanto: adelanto,
+        firmadoEl: new Date().toISOString(),
+        pdf: pdfDataUri,
+      });
+      // Solo los últimos 20, para no llenar el almacenamiento del navegador
+      localStorage.setItem(LS_FIRMADOS, JSON.stringify(lista.slice(-20)));
+    } catch (e) { /* si no hay espacio, el PDF ya se descargó igual */ }
+  }
+
+  // ── 10. Enviar por correo (Netlify Function) ────────────────────────
+  function enviarPorCorreo() {
+    var statusEl = document.getElementById('mailStatus');
+    statusEl.className = 'mail-status';
+    statusEl.textContent = 'Enviando tu copia por correo…';
+
+    return fetch(CFG.endpointCorreo, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        nombre: inputs.nombre.value.trim(),
+        ci: inputs.ci.value.trim(),
+        negocio: inputs.negocio.value.trim(),
+        direccion: inputs.direccion.value.trim(),
+        email: inputs.email.value.trim(),
+        whatsapp: inputs.whatsapp.value.trim(),
+        fecha: inputs.fecha.value,
+        servicio: servicioNombre(),
+        paquete: paqueteNombre(),
+        detalle: detalleTexto(),
+        precio: PKG.precio,
+        adelanto: adelanto,
+        saldo: saldo,
+        contratoTexto: contratoPlano(),
+        archivo: nombreArchivo,
+        pdfBase64: (pdfDataUri || '').split(',')[1] || '',
+      }),
+    })
+      .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, body: j }; }); })
+      .then(function (res) {
+        if (res.ok && res.body && res.body.enviado) {
+          statusEl.className = 'mail-status ok';
+          statusEl.textContent = '✓ Copia enviada a ' + inputs.email.value.trim() + ' y a Estudio Graphica.';
+        } else {
+          statusEl.className = 'mail-status warn';
+          statusEl.textContent = 'El PDF quedó descargado en tu dispositivo. El envío automático por correo todavía no está activo, mándanos el archivo por WhatsApp.';
+        }
+      })
+      .catch(function () {
+        statusEl.className = 'mail-status warn';
+        statusEl.textContent = 'El PDF quedó descargado en tu dispositivo. No pudimos enviarlo por correo, mándanoslo por WhatsApp.';
+      });
+  }
+
+  // ── 11. Firmar ──────────────────────────────────────────────────────
+  btnFirmar.addEventListener('click', function () {
+    if (!camposCompletos()) { marcarFaltantes(); return; }
+    if (!leyoTodo || !acepta || !hayFirma) return;
+
+    btnFirmar.disabled = true;
+    document.getElementById('preStatus').textContent = 'Generando tu PDF…';
+
+    try {
+      generarPdf();
+    } catch (e) {
+      document.getElementById('preStatus').textContent = 'No pudimos generar el PDF en este navegador. Escríbenos por WhatsApp y te lo mandamos nosotros.';
+      btnFirmar.disabled = false;
+      return;
+    }
+
+    guardarLocal();
+    guardarBorrador();
+
+    // Marca para las páginas de pago: este cliente ya firmó
+    try {
+      localStorage.setItem('eg_contrato_firmado', JSON.stringify({
+        firmadoEl: new Date().toISOString(),
+        nombre: inputs.nombre.value.trim(),
+        negocio: inputs.negocio.value.trim(),
+        tipo: PKG.tipo,
+      }));
+    } catch (e) {}
+
+    // Tracking
+    if (window.EG) {
+      window.EG.trackEvent('SubmitApplication', {
+        content_name: 'Contrato firmado',
+        content_type: PKG.tipo,
+        value: PKG.precio,
+        currency: 'BOB',
+        origen: window.EG.getOrigen(),
+      });
+    }
+
+    // Botón de pago según el tipo de servicio
+    var destinoPago = esPlan() ? '/gracias-plan/' : '/gracias-sesion/';
+    document.getElementById('btnPagar').href = destinoPago;
+
+    // WhatsApp de aviso
+    var textoWA = '¡Hola, Pablo! Soy ' + inputs.nombre.value.trim() + ' de ' + inputs.negocio.value.trim() +
+      '. Ya firmé mi contrato de ' + servicioNombre() + ' (' + paqueteNombre() + ') para el ' +
+      fechaLarga(inputs.fecha.value) + '. Te adjunto el PDF 📄';
+    document.getElementById('btnWa').href = 'https://api.whatsapp.com/send?phone=' + CFG.whatsapp + '&text=' + encodeURIComponent(textoWA);
+
+    // El stepper avanza: contrato completado, ahora toca el pago
+    var pasos = document.querySelectorAll('.steps .step');
+    if (pasos.length === 4) {
+      pasos[2].classList.remove('current');
+      pasos[2].classList.add('done');
+      pasos[2].querySelector('.step-num').textContent = '✓';
+      pasos[3].classList.add('current');
+    }
+    document.querySelector('.header .tag').textContent = 'Paso 4 de 4';
+
+    document.getElementById('firmando').style.display = 'none';
+    document.getElementById('firmado').style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    enviarPorCorreo();
+  });
+
+  document.getElementById('btnDescargar').addEventListener('click', function () {
+    if (!pdfDataUri) return;
+    var a = document.createElement('a');
+    a.href = pdfDataUri;
+    a.download = nombreArchivo;
+    a.click();
+  });
+
+  // Tracking de entrada
+  if (window.EG) {
+    window.EG.trackEvent('ViewContent', { content_name: 'Contrato', content_type: PKG.tipo, origen: window.EG.getOrigen() });
+  }
+})();
+</script>
+<script src="/assets/js/button-states.js" defer></script>
+</body>
+</html>
