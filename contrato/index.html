@@ -136,7 +136,7 @@
   .field label { font-size: 12.5px; font-weight: 600; margin-bottom: 6px; color: var(--dark); }
   .field .hint { font-size: 11px; color: var(--gray-text); font-weight: 400; }
   .field input {
-    font-family: 'DM Sans', sans-serif; font-size: 14.5px; padding: 13px 15px; border-radius: 14px;
+    font-family: 'DM Sans', sans-serif; font-size: 16px; padding: 13px 15px; border-radius: 14px;
     border: 1.5px solid rgba(24,24,24,0.12); background: #fff; color: var(--dark); transition: border-color 0.2s;
   }
   .field input:focus { outline: none; border-color: var(--dark); }
@@ -383,7 +383,7 @@
     <div class="card ok-card">
       <div class="ok-icon">✓</div>
       <div class="ok-title">Contrato firmado</div>
-      <p class="ok-sub" id="okSub">Tu PDF se descargó a este dispositivo y te lo enviamos por correo. Ya solo falta apartar tu fecha con el adelanto.</p>
+      <p class="ok-sub" id="okSub">Te enviamos tu PDF por correo. Ya solo falta apartar tu fecha con el adelanto.</p>
 
       <a class="btn-yellow" id="btnPagar" href="/gracias-sesion/">Continuar al pago →</a>
 
@@ -1035,7 +1035,10 @@ const contratoConfig = [
     nombreArchivo = 'Contrato_EstudioGraphica_' +
       (inputs.negocio.value.trim() || inputs.nombre.value.trim() || 'cliente').replace(/[^\wáéíóúÁÉÍÓÚñÑ]+/g, '_') + '.pdf';
     pdfDataUri = doc.output('datauristring');
-    doc.save(nombreArchivo);
+    // No usamos doc.save() aquí: en iPhone/Safari eso abre el PDF a pantalla completa
+    // y el usuario se queda atascado sin poder volver a la página para seguir el
+    // proceso. El PDF ya se manda por correo (enviarPorCorreo) y además queda
+    // disponible con el botón "Descargar PDF" (que abre en pestaña nueva).
     return pdfDataUri;
   }
 
@@ -1178,10 +1181,17 @@ const contratoConfig = [
 
   document.getElementById('btnDescargar').addEventListener('click', function () {
     if (!pdfDataUri) return;
-    var a = document.createElement('a');
-    a.href = pdfDataUri;
-    a.download = nombreArchivo;
-    a.click();
+    // Abrimos en una pestaña/ventana nueva a propósito: en iPhone, Safari abre
+    // el PDF en vez de descargarlo, y si lo hiciéramos en la misma pestaña el
+    // usuario se quedaría sin forma de volver a continuar con el pago.
+    var nueva = window.open('', '_blank');
+    if (nueva) {
+      nueva.location.href = pdfDataUri;
+    } else {
+      // Si el navegador bloqueó la ventana nueva, como último recurso
+      // navegamos la pestaña actual (mejor eso que no ofrecer nada).
+      window.location.href = pdfDataUri;
+    }
   });
 
   // Tracking de entrada
