@@ -343,6 +343,10 @@ const configEmpezar = [
       var config = { layout: 'month_view', useSlotsViewOnSmallScreen: 'true', theme: 'light' };
       if (eventId) config['metadata[eventId]'] = eventId;
       config['metadata[origen]'] = window.EG.getOrigen();
+      var fbp = window.EG.getFbp();
+      var fbc = window.EG.getFbc();
+      if (fbp) config['metadata[fbp]'] = fbp;
+      if (fbc) config['metadata[fbc]'] = fbc;
       btnDiag.setAttribute('data-cal-config', JSON.stringify(config));
       return eventId;
     }

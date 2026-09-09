@@ -178,6 +178,7 @@ a:hover { color: #F5D000; }
 .eg-cursive { font-family: 'Playfair Display', serif; font-style: italic; font-weight: 700; }
 .eg-tag { display: inline-block; background: var(--eg-yellow); color: var(--eg-dark); font-family: 'Izmir', 'Syne', sans-serif; font-weight: 700; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; padding: 6px 14px; border-radius: 9999px; margin-bottom: 20px; }
 .eg-tag--dark { background: rgba(255,221,90,0.15); color: var(--eg-yellow); }
+#promesa .eg-tag--dark { background: rgba(24,24,24,0.1); color: var(--eg-dark); }
 .eg-accent { color: var(--eg-dark); position: relative; display: inline-block; font-family: 'Playfair Display', serif; font-style: italic; font-weight: 700; white-space: nowrap; }
 .eg-accent__line { position: absolute; bottom: 0.06em; left: 0; right: 0; height: 0.20em; background: var(--eg-yellow); z-index: -1; }
 .eg-accent--hero { white-space: nowrap; }
@@ -238,6 +239,14 @@ a:hover { color: #F5D000; }
 @keyframes eg-fade-in-up { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes eg-fade-in-right { from { opacity: 0; transform: translateX(40px); } to { opacity: 1; transform: translateX(0); } }
 
+@media (prefers-reduced-motion: reduce) {
+  .eg-hero__shape, .eg-hero__photo-frame, .eg-hero__bubble--1, .eg-hero__bubble--2,
+  .eg-hero__bubble--3, .eg-sobre__badge, .eg-hero__left, .eg-hero__right {
+    animation: none !important;
+  }
+  .eg-reveal { transition-duration: 0.01ms !important; }
+}
+
 @media (max-width: 880px) {
   #hero { padding-top: 76px !important; }
   .eg-hero-grid { grid-template-columns: 1fr !important; min-height: auto !important; padding: 16px 20px 56px !important; gap: 28px !important; }
@@ -297,7 +306,7 @@ a:hover { color: #F5D000; }
 .eg-promesa__icon { font-size: 38px; line-height: 1; filter: grayscale(0.15); transition: all 0.3s; transform: scale(1); }
 .eg-promesa__item:hover .eg-promesa__icon { filter: none; transform: scale(1.15); }
 .eg-promesa__label { font-family: 'Izmir','Syne',sans-serif; font-weight: 700; font-size: 14px; line-height: 1.2; }
-.eg-promesa__detail { font-size: 11px; line-height: 1.4; opacity: 0.65; }
+.eg-promesa__detail { font-size: 12px; line-height: 1.4; opacity: 0.82; }
 .eg-promesa__item:hover .eg-promesa__detail { opacity: 0.85; }
 .eg-promesa__quote { margin-top: 56px; padding: 28px 32px; background: rgba(24,24,24,0.92); backdrop-filter: blur(12px); border-radius: 18px; color: var(--eg-offwhite); max-width: 720px; margin: 56px auto 0; text-align: center; }
 .eg-promesa__quote-text { font-family: 'Izmir','Syne',sans-serif; font-weight: 700; font-size: clamp(1.1rem, 2vw, 1.4rem); line-height: 1.4; margin-bottom: 6px; }
@@ -323,6 +332,11 @@ a:hover { color: #F5D000; }
 .eg-btn-outline { display: inline-flex; align-items: center; gap: 8px; font-family: 'Izmir','Syne',sans-serif; font-weight: 700; font-size: 15px; padding: 15px 28px; border-radius: 9999px; background: transparent; color: #f8f8f8; border: 2px solid rgba(248,248,248,0.5); cursor: pointer; transition: all 0.28s; text-decoration: none; }
 .eg-btn-outline:hover { background: var(--eg-yellow); color: var(--eg-dark); border-color: var(--eg-yellow); }
 @media (max-width: 720px) { .eg-portafolio__grid { grid-template-columns: repeat(2, 1fr) !important; } }
+/* En touch no hay :hover, así que sin esto nadie ve la lupa que indica
+   "toca para agrandar" — la pista queda siempre visible a baja opacidad. */
+@media (hover: none) {
+  .eg-portafolio__expand { opacity: 0.85; }
+}
 
 /* Lightbox */
 .eg-lb { position: fixed; inset: 0; z-index: 1000; background: rgba(10,10,10,0.94); display: flex; align-items: center; justify-content: center; animation: eg-lb-fade 0.25s ease both; }
@@ -379,7 +393,7 @@ a:hover { color: #F5D000; }
 .eg-faq__item { border-bottom: 1px solid rgba(24,24,24,0.1); }
 .eg-faq__q { width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 16px; background: none; border: none; cursor: pointer; padding: 22px 4px; font: inherit; text-align: left; }
 .eg-faq__q-text { font-family: 'Izmir', 'Syne', sans-serif; font-weight: 700; font-size: 16px; color: var(--eg-dark); }
-.eg-faq__plus { font-size: 22px; color: var(--eg-yellow-hover); transition: transform 0.2s ease; flex-shrink: 0; transform: rotate(0deg); }
+.eg-faq__plus { font-size: 22px; color: #8C6D00; transition: transform 0.2s ease; flex-shrink: 0; transform: rotate(0deg); }
 .eg-faq__item.is-open .eg-faq__plus { transform: rotate(45deg); }
 .eg-faq__a-wrap { max-height: 0; overflow: hidden; transition: max-height 0.25s ease; }
 .eg-faq__item.is-open .eg-faq__a-wrap { max-height: 240px; }
@@ -397,9 +411,34 @@ a:hover { color: #F5D000; }
 .eg-btn-yellow:hover { background: var(--eg-yellow-hover); transform: translateY(-2px); box-shadow: 0 12px 32px rgba(255,221,90,0.45); color: var(--eg-dark); }
 .eg-cta__wa { display: block; margin-top: 14px; font-size: 13px; color: rgba(248,248,248,0.55); text-decoration: none; transition: color 0.2s; }
 .eg-cta__wa:hover { color: var(--eg-yellow); }
-.eg-cta__micro { font-size: 12px; color: rgba(248,248,248,0.35); margin-top: 14px; }
+.eg-cta__micro { font-size: 12px; color: rgba(248,248,248,0.48); margin-top: 14px; }
 
 /* ═══════════ FOOTER ═══════════ */
+/* ═══════════ FOCO VISIBLE (teclado) — elementos que no son .btn ═══════════ */
+.eg-nav__link:focus-visible,
+.eg-footer__link:focus-visible,
+.eg-footer__wa:focus-visible,
+.eg-wa-link:focus-visible,
+.eg-cta__wa:focus-visible {
+  outline: 2.5px solid currentColor;
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+.eg-faq__q:focus-visible {
+  outline: 2.5px solid var(--eg-dark);
+  outline-offset: -2px;
+  border-radius: 8px;
+}
+.eg-portafolio__item:focus-visible {
+  outline: 2.5px solid var(--eg-yellow);
+  outline-offset: 2px;
+}
+.eg-lb__close:focus-visible,
+.eg-lb__nav:focus-visible {
+  outline: 2.5px solid var(--eg-yellow);
+  outline-offset: 2px;
+}
+
 footer { background: #0A0A0A; padding: clamp(36px, 6vw, 56px) 0 24px; }
 .eg-footer__inner { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
 .eg-footer__top { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding-bottom: 28px; border-bottom: 1px solid rgba(248,248,248,0.08); flex-wrap: wrap; }
@@ -409,7 +448,7 @@ footer { background: #0A0A0A; padding: clamp(36px, 6vw, 56px) 0 24px; }
 .eg-footer__link { font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; color: rgba(248,248,248,0.7); text-decoration: none; transition: color 0.2s; }
 .eg-footer__link:hover { color: var(--eg-yellow); }
 .eg-footer__bottom { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 20px; flex-wrap: wrap; }
-.eg-footer__copy { font-size: 12px; color: rgba(248,248,248,0.4); }
+.eg-footer__copy { font-size: 12px; color: rgba(248,248,248,0.48); }
 .eg-footer__copy a { color: inherit; text-decoration: underline; }
 .eg-footer__wa { font-size: 12px; color: rgba(248,248,248,0.5); text-decoration: none; transition: color 0.2s; }
 .eg-footer__wa:hover { color: var(--eg-yellow); }
@@ -441,10 +480,9 @@ footer { background: #0A0A0A; padding: clamp(36px, 6vw, 56px) 0 24px; }
       <a href="#proceso" class="eg-nav__link">Proceso</a>
       <a href="#portafolio" class="eg-nav__link">Portafolio</a>
       <a href="/precios" class="eg-nav__link">Planes</a>
-      <a href="/empezar/" class="eg-nav__link">Empezar</a>
       <a href="#sobre" class="eg-nav__link">Pablo</a>
     </div>
-    <a href="/empezar/" class="eg-btn-dark">Iniciar</a>
+    <a href="/empezar/" class="eg-btn-dark">Quiero una sesión <span style="font-size:15px;line-height:1;">&rarr;</span></a>
   </div>
 </nav>
 
