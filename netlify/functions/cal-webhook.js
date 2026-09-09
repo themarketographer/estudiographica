@@ -80,6 +80,20 @@ function extraerOrigen(payload) {
   return metadata.origen || 'organico';
 }
 
+// fbp/fbc viajan igual que eventId/origen: metadata[fbp] / metadata[fbc]
+// puestos client-side (ver tracking.js -> getFbp/getFbc) justo antes de
+// abrir el widget de Cal. Son las señales de coincidencia mas fuertes
+// para el CAPI, mucho mejores que solo correo/telefono.
+function extraerFbp(payload) {
+  const metadata = payload?.payload?.metadata || {};
+  return metadata.fbp || null;
+}
+
+function extraerFbc(payload) {
+  const metadata = payload?.payload?.metadata || {};
+  return metadata.fbc || null;
+}
+
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: 'Method Not Allowed' };
@@ -123,6 +137,12 @@ exports.handler = async (event) => {
   const eventId = extraerEventId(payload, bookingUid);
   const origen = extraerOrigen(payload);
   const audiencia = audienceForSlug(slug);
+  const fbp = extraerFbp(payload);
+  const fbc = extraerFbc(payload);
+  // El webhook lo manda Cal.com, no el navegador del cliente, asi que la
+  // IP/user-agent del request no son los del visitante real — no se
+  // pueden sacar de aca. Quedan fuera del CAPI a proposito en vez de
+  // mandar datos que no sirven para el match.
 
   console.log(`Booking recibido: slug="${slug}" evento="${eventName}" origen="${origen}" eventId="${eventId}"`);
 
@@ -133,6 +153,8 @@ exports.handler = async (event) => {
       email,
       phone,
       sourceUrl,
+      fbp,
+      fbc,
     });
   } catch (err) {
     console.error('Error enviando evento CAPI a Meta:', err.message);

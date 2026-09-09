@@ -3,5 +3,6 @@ Allow: /
 Disallow: /gracias-reunion
 Disallow: /gracias-sesion
 Disallow: /gracias-plan
+Disallow: /contrato
 
 Sitemap: https://estudiographica.com/sitemap.xml

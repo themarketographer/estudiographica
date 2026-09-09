@@ -15,7 +15,7 @@ function normalizePhone(phone) {
   return phone.replace(/[^\d]/g, '');
 }
 
-async function sendCapiEvent({ eventName, eventId, email, phone, sourceUrl, eventTime }) {
+async function sendCapiEvent({ eventName, eventId, email, phone, sourceUrl, eventTime, fbp, fbc }) {
   if (!PIXEL_ID || !ACCESS_TOKEN) {
     throw new Error('Faltan META_PIXEL_ID o META_ACCESS_TOKEN en las variables de entorno.');
   }
@@ -25,6 +25,11 @@ async function sendCapiEvent({ eventName, eventId, email, phone, sourceUrl, even
   const hashedPhone = sha256(normalizePhone(phone));
   if (hashedEmail) userData.em = [hashedEmail];
   if (hashedPhone) userData.ph = [hashedPhone];
+  // fbp/fbc SIN hashear (asi los espera Meta) — son las señales de
+  // coincidencia mas fuertes para el evento server-side, mejoran mucho
+  // el Event Match Quality frente a solo correo/telefono.
+  if (fbp) userData.fbp = fbp;
+  if (fbc) userData.fbc = fbc;
   
   const payload = {
     data: [

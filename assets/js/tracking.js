@@ -50,6 +50,39 @@ window.EG = window.EG || {};
   }
 
   // ─────────────────────────────────────────────
+  // fbp / fbc — para mejorar el Event Match Quality del CAPI
+  // ─────────────────────────────────────────────
+  // "_fbp" es la cookie que pone el propio Pixel de Meta en el navegador.
+  // "_fbc" es la cookie que pone Meta cuando el visitante llega desde un
+  // anuncio (o la reconstruimos desde ?fbclid= si la cookie aun no existe,
+  // por ejemplo en el primer evento de la sesion). Estos dos valores son
+  // las señales de coincidencia MAS fuertes para el evento server-side
+  // (CAPI) — mucho mas confiables que solo correo/telefono — y hoy
+  // cal-webhook.js -> capi.js NO las esta mandando. Se inyectan como
+  // metadata[fbp] / metadata[fbc] al reservar, igual que eventId/origen.
+  function getCookie(name) {
+    try {
+      var match = document.cookie.match(new RegExp('(?:^|; )' + name + '=([^;]*)'));
+      return match ? decodeURIComponent(match[1]) : null;
+    } catch (e) { return null; }
+  }
+
+  function getFbp() {
+    return getCookie('_fbp');
+  }
+
+  function getFbc() {
+    var fbc = getCookie('_fbc');
+    if (fbc) return fbc;
+    try {
+      var params = new URLSearchParams(window.location.search);
+      var fbclid = params.get('fbclid');
+      if (fbclid) return 'fb.1.' + Date.now() + '.' + fbclid;
+    } catch (e) { /* silencioso */ }
+    return null;
+  }
+
+  // ─────────────────────────────────────────────
   // Envío de eventos (Pixel + GA4 en paralelo)
   // ─────────────────────────────────────────────
 
@@ -71,6 +104,13 @@ window.EG = window.EG || {};
       }
     } catch (e) { /* silencioso */ }
 
+    // TikTok Pixel
+    try {
+      if (typeof ttq !== 'undefined' && ttq && typeof ttq.track === 'function') {
+        ttq.track(eventName, Object.assign({}, params, { event_id: eventId }));
+      }
+    } catch (e) { /* silencioso */ }
+
     return eventId;
   }
 
@@ -86,6 +126,11 @@ window.EG = window.EG || {};
     try {
       if (typeof gtag === 'function') {
         gtag('event', eventName, Object.assign({}, params, { event_id: eventId }));
+      }
+    } catch (e) { /* silencioso */ }
+    try {
+      if (typeof ttq !== 'undefined' && ttq && typeof ttq.track === 'function') {
+        ttq.track(eventName, Object.assign({}, params, { event_id: eventId }));
       }
     } catch (e) { /* silencioso */ }
     return eventId;
@@ -179,6 +224,8 @@ window.EG = window.EG || {};
   EG.trackClick = trackClick;
   EG.getOrigen = getOrigen;
   EG.getTipo = getTipo;
+  EG.getFbp = getFbp;
+  EG.getFbc = getFbc;
   EG.generateEventId = generateEventId;
   EG.prepareCalBooking = prepareCalBooking;
   EG.getLastEventId = getLastEventId;

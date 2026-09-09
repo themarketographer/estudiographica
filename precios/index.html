@@ -547,6 +547,12 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
       };
       if (eventId) config['metadata[eventId]'] = eventId;
       config['metadata[origen]'] = origen;
+      if (window.EG) {
+        var fbp = window.EG.getFbp();
+        var fbc = window.EG.getFbc();
+        if (fbp) config['metadata[fbp]'] = fbp;
+        if (fbc) config['metadata[fbc]'] = fbc;
+      }
       btnReservar.setAttribute('data-cal-config', JSON.stringify(config));
       return eventId;
     }
