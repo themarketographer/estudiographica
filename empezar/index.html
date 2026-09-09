@@ -107,6 +107,25 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
   .vsl-fallback .txt { font-size:13.5px; max-width:340px; line-height:1.5; }
   .vsl-caption { font-size:12.5px; color: var(--gray-text); text-align:center; margin-top:14px; font-style: italic; }
 
+  /* ── VSL: estado "sin video todavía" (texto animado, mismo lenguaje visual que la landing) ── */
+  .vsl-frame--text { padding-top: 0; background: linear-gradient(160deg, var(--dark) 0%, #262626 100%); }
+  .vsl-shape { position:absolute; top:-35%; right:-12%; width:62%; height:170%; background: rgba(255,221,90,0.12); border-radius: 52% 48% 46% 54% / 55% 45% 55% 45%; z-index:1; pointer-events:none; animation: eg-pulse-shape 8s ease-in-out infinite; }
+  .vsl-bubble { position:absolute; border-radius:50%; background: rgba(255,221,90,0.16); z-index:1; pointer-events:none; }
+  .vsl-bubble--1 { width:64px; height:64px; top:12%; right:9%; animation: eg-float 5s ease-in-out infinite; }
+  .vsl-bubble--2 { width:42px; height:42px; bottom:16%; right:24%; animation: eg-float 6s ease-in-out 1.1s infinite; }
+  .vsl-fallback { position:relative; z-index:2; display:flex; flex-direction:column; gap:16px; padding:34px 30px; color: var(--off-white); }
+  .vsl-tag { align-self:flex-start; background: var(--yellow); color: var(--dark); font-family:'Izmir','Syne',sans-serif; font-weight:700; font-size:11px; letter-spacing:.1em; text-transform:uppercase; padding:6px 14px; border-radius:9999px; }
+  .vsl-fallback__title { font-family:'Izmir','Syne',sans-serif; font-weight:800; font-size:1.3rem; line-height:1.28; max-width:480px; }
+  .vsl-fallback__title .cursive { color: var(--yellow); }
+  .vsl-puntos { display:flex; flex-direction:column; gap:10px; }
+  .vsl-punto { display:flex; gap:10px; align-items:flex-start; font-size:13.5px; line-height:1.5; color: rgba(248,248,248,0.82); }
+  .vsl-punto__num { min-width:20px; height:20px; border-radius:50%; background: var(--yellow); color: var(--dark); font-size:11px; font-weight:800; display:flex; align-items:center; justify-content:center; margin-top:1px; }
+
+  /* ── Ayuda a elegir + microdatos en las opciones (más intuitivo) ── */
+  .split-hint { text-align:center; font-size:12.5px; color: var(--gray-text); margin: -6px 0 14px; }
+  .opcion-meta { display:flex; gap:14px; flex-wrap:wrap; font-size:11.5px; font-weight:600; color: var(--gray-text); margin-bottom:14px; }
+  .opcion.destacada .opcion-meta { color: rgba(248,248,248,0.6); }
+
   /* ── Bifurcación ── */
   .split { display:grid; grid-template-columns: 1fr 1fr; gap:14px; }
   .opcion { background:#fff; border-radius:22px; padding:22px 22px; border:2px solid rgba(24,24,24,0.07); box-shadow: 0 12px 40px rgba(24,24,24,0.07); display:flex; flex-direction:column; transition: all 0.28s; }
@@ -155,8 +174,11 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
   /* ── Reveal al hacer scroll (mismo patrón que la landing principal) ── */
   .eg-reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.6s ease, transform 0.6s ease; }
   .eg-reveal.eg-reveal--in { opacity: 1; transform: translateY(0); }
+  @keyframes eg-float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
+  @keyframes eg-pulse-shape { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
   @media (prefers-reduced-motion: reduce) {
     .eg-reveal { opacity: 1; transform: none; transition: none; }
+    .vsl-shape, .vsl-bubble { animation: none; }
   }
 </style>
 <link rel="stylesheet" href="/assets/css/button-states.css">
@@ -209,35 +231,46 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
   </div>
 
   <div class="vsl-card eg-reveal">
-    <div class="vsl-frame" id="vslFrame">
-      <!-- ⚠️ REEMPLAZAR: pega el ID de tu video de YouTube en videoId (abajo,
-           en el bloque configEmpezar). Mientras esté vacío se muestra este
-           mensaje en lugar de un reproductor roto. -->
+    <!-- ⚠️ Cuando grabes el video: pega el ID de YouTube en configEmpezar.videoId
+         (abajo, al final de la página) y este bloque se reemplaza solo por el reproductor. -->
+    <div class="vsl-frame vsl-frame--text" id="vslFrame">
+      <div class="vsl-shape"></div>
+      <div class="vsl-bubble vsl-bubble--1"></div>
+      <div class="vsl-bubble vsl-bubble--2"></div>
       <div class="vsl-fallback" id="vslFallback">
-        <span class="big">🎬</span>
-        <span class="txt">Aquí va tu video. Pega el ID de YouTube en <b>configEmpezar.videoId</b> dentro de esta página.</span>
+        <span class="vsl-tag">🎥 Video en camino</span>
+        <h3 class="vsl-fallback__title">Mientras lo grabo, te lo cuento <span class="cursive">rapidito</span>.</h3>
+        <div class="vsl-puntos">
+          <div class="vsl-punto"><span class="vsl-punto__num">✓</span><span>Hablamos 30 min gratis y armamos el plan que tu marca necesita.</span></div>
+          <div class="vsl-punto"><span class="vsl-punto__num">✓</span><span>Firmas el contrato con el dedo, sin imprimir nada.</span></div>
+          <div class="vsl-punto"><span class="vsl-punto__num">✓</span><span>Apartas tu fecha con el 50% de adelanto y listo, ya estás en agenda.</span></div>
+        </div>
       </div>
     </div>
-    <p class="vsl-caption" id="vslCaption">2 minutos. Te explico cómo trabajamos y qué recibes.</p>
+    <p class="vsl-caption" id="vslCaption">Ni bien grabe el video de 2 minutos, lo pongo justo acá.</p>
   </div>
+
+  <p class="split-hint">¿No sabes cuál elegir? Si es tu primera vez, empieza por el diagnóstico gratuito — no te compromete a nada.</p>
 
   <div class="split">
     <div class="opcion destacada eg-reveal">
       <div class="opcion-eyebrow">Opción rápida</div>
       <div class="opcion-title">Ya sé lo que quiero</div>
       <p class="opcion-desc">Precio al instante y reserva tu fecha ahora mismo.</p>
-      <a class="btn-yellow" href="/precios" id="btnDirecto">Armar mi paquete →</a>
+      <div class="opcion-meta"><span>⏱ 2 min</span><span>💸 precio al instante</span></div>
+      <a class="btn-yellow" href="/precios" id="btnDirecto">📦 Armar mi paquete →</a>
     </div>
 
     <div class="opcion eg-reveal" style="transition-delay:0.08s">
       <div class="opcion-eyebrow">Opción con acompañamiento</div>
       <div class="opcion-title">Quiero mi diagnóstico gratuito</div>
       <p class="opcion-desc">30 min conmigo, sin costo, para definir qué necesitas.</p>
+      <div class="opcion-meta"><span>⏱ 30 min</span><span>🎁 sin costo</span></div>
       <button class="btn-dark" id="btnDiagnostico"
         data-cal-link="themarketographer/reunion"
         data-cal-namespace="reunion"
         data-cal-config='{"layout":"month_view","useSlotsViewOnSmallScreen":"true","theme":"light"}'>
-        Agendar mi llamada gratis →
+        📅 Agendar mi llamada gratis →
       </button>
       <a class="wa-link" id="waLink" target="_blank" rel="noopener"
          href="https://api.whatsapp.com/send?phone=+59169422335&text=%C2%A1Hola%2C%20Estudio%20Graphica!%20Vengo%20de%20su%20p%C3%A1gina%20web%2C%20quiero%20trabajar%20con%20ustedes%20%F0%9F%93%B8">
@@ -272,12 +305,13 @@ const configEmpezar = [
   // ── Video ──
   if (cfg.videoId) {
     var frame = document.getElementById('vslFrame');
+    frame.classList.remove('vsl-frame--text');
     frame.innerHTML = '<iframe src="https://www.youtube.com/embed/' + cfg.videoId +
       '?rel=0&modestbranding=1" title="Cómo trabajamos" ' +
       'allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" ' +
       'allowfullscreen loading="lazy"></iframe>';
+    if (cfg.videoCaption) document.getElementById('vslCaption').textContent = cfg.videoCaption;
   }
-  if (cfg.videoCaption) document.getElementById('vslCaption').textContent = cfg.videoCaption;
 
   // ── Retomar proceso empezado ──
   // Si el visitante ya configuró un paquete o empezó el contrato en este
