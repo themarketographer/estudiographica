@@ -109,3 +109,17 @@ strong { color: var(--dark); }
 
 footer { background: #0A0A0A; color: rgba(248,248,248,0.6); text-align: center; padding: 40px 24px; font-size: 13px; }
 footer a { color: var(--yellow); text-decoration: none; }
+
+/* ---------- Foco visible (teclado) — elementos que no son .btn ---------- */
+nav a.back:focus-visible,
+.breadcrumb a:focus-visible,
+footer a:focus-visible {
+  outline: 2.5px solid currentColor;
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+.post-card:focus-visible {
+  outline: 2.5px solid var(--dark);
+  outline-offset: 3px;
+  border-radius: 20px;
+}

@@ -155,11 +155,16 @@ a{ color:inherit; }
 .eg-contact__link{ font-size:13.5px; color:rgba(248,248,248,.7); text-decoration:none; font-weight:600; }
 .eg-contact__link:hover{ color:var(--eg-yellow); }
 
-footer{ padding:38px 0; text-align:center; color:var(--ink-soft); font-size:12.5px; background:var(--eg-dark); }
+footer{ padding:38px 0; text-align:center; color:rgba(248,248,248,.6); font-size:12.5px; background:var(--eg-dark); }
 footer .eg-footer__links{ display:flex; gap:20px; justify-content:center; margin-bottom:14px; flex-wrap:wrap; }
 footer .eg-footer__links a{ color:rgba(248,248,248,.75); text-decoration:none; font-weight:600; font-size:12.5px; }
 footer .eg-footer__links a:hover{ color:var(--eg-yellow); }
 footer span{ color:rgba(248,248,248,.5); }
+
+/* foco visible (teclado) — elementos que no son .btn/.eg-btn-* */
+.eg-nav__link:focus-visible,
+.eg-contact__link:focus-visible,
+footer .eg-footer__links a:focus-visible{ outline:2.5px solid currentColor; outline-offset:3px; border-radius:4px; }
 </style>
 </head>
 <body>

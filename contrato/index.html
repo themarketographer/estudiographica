@@ -276,6 +276,17 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
     .step-label { font-size: 10px; }
     .resumen-price { font-size: 1.6rem; }
   }
+
+  /* ── Foco visible (teclado) — elementos que no son .btn/.btn-* ── */
+  nav a.back:focus-visible,
+  .resumen-edit:focus-visible,
+  .back-link:focus-visible,
+  .sig-clear:focus-visible {
+    outline: 2.5px solid var(--dark); outline-offset: 3px; border-radius: 4px;
+  }
+  .accept-row:focus-visible {
+    outline: 2.5px solid var(--dark); outline-offset: 2px;
+  }
 </style>
 <link rel="stylesheet" href="/assets/css/button-states.css">
 </head>
@@ -388,7 +399,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
       <div class="contrato-box" id="contratoBox"></div>
       <p class="scroll-hint" id="scrollHint">Desplázate hasta el final para habilitar la firma ↓</p>
 
-      <div class="accept-row" id="acceptRow">
+      <div class="accept-row" id="acceptRow" role="checkbox" aria-checked="false" tabindex="0">
         <span class="check-square" id="acceptCheck"></span>
         <span class="txt">He leído y acepto los términos de este contrato. Entiendo que mi firma digital tiene la misma validez que una firma manuscrita.</span>
       </div>
@@ -853,7 +864,7 @@ const contratoConfig = [
   var acepta = false;
   var acceptRow = document.getElementById('acceptRow');
   var acceptCheck = document.getElementById('acceptCheck');
-  acceptRow.addEventListener('click', function () {
+  function toggleAceptar() {
     if (!leyoTodo) {
       contratoBox.scrollTo({ top: contratoBox.scrollHeight, behavior: 'smooth' });
       document.getElementById('preStatus').textContent = 'Desplaza el contrato hasta el final para poder aceptarlo.';
@@ -861,10 +872,21 @@ const contratoConfig = [
     }
     acepta = !acepta;
     acceptRow.classList.toggle('active', acepta);
+    acceptRow.setAttribute('aria-checked', acepta ? 'true' : 'false');
     acceptCheck.classList.toggle('active', acepta);
     acceptCheck.textContent = acepta ? '✓' : '';
     document.getElementById('preStatus').textContent = '';
     actualizarBoton();
+  }
+  acceptRow.addEventListener('click', toggleAceptar);
+  // Foco de teclado: el checkbox de aceptación es un <div role="checkbox">,
+  // así que necesita su propio manejador de Enter/Espacio para poder
+  // activarse sin mouse ni pantalla táctil.
+  acceptRow.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+      e.preventDefault();
+      toggleAceptar();
+    }
   });
 
   // ── 6. Firma: un solo manejador para dedo y mouse (Pointer Events) ──

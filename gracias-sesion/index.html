@@ -191,6 +191,20 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 
   .back-link { display: block; text-align: center; font-size: 13px; color: rgba(248,248,248,0.5); text-decoration: none; }
   .back-link:hover { color: var(--yellow); }
+
+  /* ── Foco visible (teclado) — elementos que no son .btn/.btn-* ── */
+  .back-link:focus-visible {
+    outline: 2.5px solid var(--yellow); outline-offset: 3px; border-radius: 4px;
+  }
+  .pay-toggle button:focus-visible {
+    outline: 2.5px solid var(--dark); outline-offset: 2px;
+  }
+  .qr-actions button:focus-visible, .qr-actions a:focus-visible {
+    outline: 2.5px solid var(--dark); outline-offset: 2px;
+  }
+  .qr-lb-close:focus-visible {
+    outline: 2.5px solid var(--yellow); outline-offset: 2px;
+  }
 </style>
   <link rel="stylesheet" href="/assets/css/button-states.css">
 </head>
@@ -236,7 +250,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
   </div>
 
   <div class="pay-card">
-    <p class="card-label" id="eg-gs-pay-label" style="color: rgba(24,24,24,0.6);">¿Cuánto vas a depositar?</p>
+    <p class="card-label" id="eg-gs-pay-label" style="color: rgba(24,24,24,0.75);">¿Cuánto vas a depositar?</p>
     <div class="pay-toggle">
       <button id="btnAdelanto" class="active">50% adelanto</button>
       <button id="btnCompleto">100% completo</button>

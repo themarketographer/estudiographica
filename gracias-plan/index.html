@@ -206,6 +206,23 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 
   .back-link { display: block; text-align: center; font-size: 13px; color: rgba(248,248,248,0.5); text-decoration: none; }
   .back-link:hover { color: var(--yellow); }
+
+  /* ── Foco visible (teclado) — elementos que no son .btn/.btn-* ── */
+  .back-link:focus-visible {
+    outline: 2.5px solid var(--yellow); outline-offset: 3px; border-radius: 4px;
+  }
+  .pay-toggle button:focus-visible {
+    outline: 2.5px solid var(--dark); outline-offset: 2px;
+  }
+  .qr-actions button:focus-visible, .qr-actions a:focus-visible {
+    outline: 2.5px solid var(--dark); outline-offset: 2px;
+  }
+  .qr-lb-close:focus-visible {
+    outline: 2.5px solid var(--yellow); outline-offset: 2px;
+  }
+  .dur-chip:focus-visible, .checkbox-row:focus-visible {
+    outline: 2.5px solid var(--dark); outline-offset: 2px;
+  }
 </style>
   <link rel="stylesheet" href="/assets/css/button-states.css">
 </head>
@@ -236,14 +253,14 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 
     <div class="slider-block">
       <div class="slider-head"><span class="slider-label">Duración del plan</span></div>
-      <div class="dur-chips" id="durChips">
-        <div class="dur-chip" data-dur="3">3 meses</div>
-        <div class="dur-chip" data-dur="6">6 meses</div>
-        <div class="dur-chip" data-dur="12">12 meses</div>
+      <div class="dur-chips" id="durChips" role="radiogroup" aria-label="Duración del plan">
+        <div class="dur-chip" data-dur="3" role="radio" aria-checked="false" tabindex="0">3 meses</div>
+        <div class="dur-chip" data-dur="6" role="radio" aria-checked="false" tabindex="0">6 meses</div>
+        <div class="dur-chip" data-dur="12" role="radio" aria-checked="false" tabindex="0">12 meses</div>
       </div>
     </div>
 
-    <div class="checkbox-row" id="videoCheckbox">
+    <div class="checkbox-row" id="videoCheckbox" role="checkbox" aria-checked="false" tabindex="0">
       <span class="check-square" id="videoCheckSquare"></span>
       <span style="font-size: 14px; font-weight: 500;">Añadir servicio de videos</span>
     </div>
@@ -275,7 +292,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
   </div>
 
   <div class="pay-card">
-    <p class="card-label" id="eg-gp-pay-label" style="color: rgba(24,24,24,0.6);">¿Cuánto vas a depositar?</p>
+    <p class="card-label" id="eg-gp-pay-label" style="color: rgba(24,24,24,0.75);">¿Cuánto vas a depositar?</p>
     <div class="pay-toggle">
       <button id="btnAdelanto" class="active">50% adelanto</button>
       <button id="btnCompleto">1er mes completo</button>
@@ -421,6 +438,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
           videoCheckSquare.classList.add('active');
           videoCheckSquare.textContent = '✓';
           reelsBlock.style.display = 'block';
+          videoCheckbox.setAttribute('aria-checked', 'true');
         }
       }
     } catch (e) {}
@@ -439,22 +457,42 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
       } catch (e) {}
     }
 
+    function seleccionarDuracion(chip) {
+      durChips.forEach(function (c) { c.classList.remove('active'); c.setAttribute('aria-checked', 'false'); });
+      chip.classList.add('active');
+      chip.setAttribute('aria-checked', 'true');
+      duracion = parseInt(chip.dataset.dur, 10);
+      render();
+    }
     durChips.forEach(function (chip) {
-      if (parseInt(chip.dataset.dur, 10) === duracion) chip.classList.add('active');
-      chip.addEventListener('click', function () {
-        durChips.forEach(function (c) { c.classList.remove('active'); });
-        chip.classList.add('active');
-        duracion = parseInt(chip.dataset.dur, 10);
-        render();
+      var esActivo = parseInt(chip.dataset.dur, 10) === duracion;
+      chip.classList.toggle('active', esActivo);
+      chip.setAttribute('aria-checked', esActivo ? 'true' : 'false');
+      chip.addEventListener('click', function () { seleccionarDuracion(chip); });
+      // Foco de teclado: son <div role="radio">, no <input>, así que
+      // necesitan su propio manejador de Enter/Espacio.
+      chip.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+          e.preventDefault();
+          seleccionarDuracion(chip);
+        }
       });
     });
 
-    videoCheckbox.addEventListener('click', function () {
+    function alternarVideo() {
       addVideo = !addVideo;
+      videoCheckbox.setAttribute('aria-checked', addVideo ? 'true' : 'false');
       videoCheckSquare.classList.toggle('active', addVideo);
       videoCheckSquare.textContent = addVideo ? '✓' : '';
       reelsBlock.style.display = addVideo ? 'block' : 'none';
       render();
+    }
+    videoCheckbox.addEventListener('click', alternarVideo);
+    videoCheckbox.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+        e.preventDefault();
+        alternarVideo();
+      }
     });
 
     function render() {
