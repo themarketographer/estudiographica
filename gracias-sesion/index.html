@@ -137,8 +137,25 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
   .pay-row.total .pay-row-value { font-size: 22px; }
 
   .qr-wrap { background: #fff; border-radius: 18px; padding: 20px; margin-top: 12px; }
-  .qr-wrap img { width: 100%; max-width: 240px; display: block; margin: 0 auto; border-radius: 8px; }
+  .qr-wrap img { width: 100%; max-width: 240px; display: block; margin: 0 auto; border-radius: 8px; cursor: zoom-in; }
   .qr-caption { font-size: 12px; color: var(--gray-text); margin-top: 12px; }
+  .qr-actions { display: flex; gap: 8px; margin-top: 14px; }
+  .qr-actions button, .qr-actions a {
+    flex: 1; font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 12.5px; color: var(--dark);
+    background: var(--cream); border: 1.5px solid rgba(24,24,24,0.12); border-radius: 10px; padding: 10px 8px;
+    cursor: pointer; text-decoration: none; text-align: center; transition: all 0.2s;
+  }
+  .qr-actions button:hover, .qr-actions a:hover { border-color: var(--dark); }
+  .qr-lb {
+    display: none; position: fixed; inset: 0; z-index: 999; background: rgba(10,10,10,0.92);
+    align-items: center; justify-content: center; padding: 32px; cursor: zoom-out;
+  }
+  .qr-lb.show { display: flex; }
+  .qr-lb img { width: 100%; max-width: 420px; border-radius: 12px; background: #fff; padding: 16px; }
+  .qr-lb-close {
+    position: absolute; top: 20px; right: 20px; width: 40px; height: 40px; border-radius: 50%;
+    background: rgba(255,255,255,0.12); border: none; color: #fff; font-size: 20px; cursor: pointer;
+  }
 
   /* ── Paso 3: tarjeta del contrato (va antes del pago) ── */
   .eg-contrato-card { text-align: center; }
@@ -240,7 +257,11 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
            este src. Mientras tanto, el monto a pagar SIEMPRE se muestra en
            texto arriba — indícale al cliente que confirme el monto en pantalla,
            no el que traiga el QR grabado. -->
-      <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1774467072/2_u07oxc.png" alt="QR de pago BCP - Pablo Villarroel Rocabado" />
+      <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1774467072/2_u07oxc.png" alt="QR de pago BCP - Pablo Villarroel Rocabado" id="qrImg" />
+      <div class="qr-actions">
+        <button type="button" id="qrFullscreenBtn">⤢ Pantalla completa</button>
+        <a id="qrDownloadBtn" href="https://res.cloudinary.com/dplhu2z6j/image/upload/v1774467072/2_u07oxc.png" download="QR-pago-EstudioGraphica.png" target="_blank" rel="noopener">↓ Descargar</a>
+      </div>
       <p class="qr-caption" id="eg-gs-qr-caption">BCP · Pablo Villarroel Rocabado<br>Escanea desde la app de tu banco</p>
     </div>
   </div>
@@ -331,10 +352,36 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
     var precioTotalActual = 0;
     var paqueteActual = '';
 
+    // Recupera el paquete que el cliente realmente armó y reservó en
+    // /precios (localStorage eg_paquete_v1) para que esta página arranque
+    // mostrando SU paquete, no siempre "15 fotos" por defecto — así el
+    // cliente no tiene que volver a elegir algo que ya había elegido.
+    try {
+      var guardado = JSON.parse(localStorage.getItem('eg_paquete_v1') || '{}');
+      if (guardado && guardado.tipo === 'sesion' && guardado.fotos) {
+        var fotosGuardadas = parseInt(guardado.fotos, 10);
+        if (fotosGuardadas >= parseInt(slider.min, 10) && fotosGuardadas <= parseInt(slider.max, 10)) {
+          slider.value = fotosGuardadas;
+        }
+      }
+    } catch (e) {}
+
+    // Si el cliente ajusta el slider acá, actualizamos el mismo
+    // localStorage que lee /contrato — así el contrato y el pago siempre
+    // muestran el mismo paquete, sin importar en qué página lo tocó.
+    function guardarPaquete(fotos, precio, paquete) {
+      try {
+        var actual = JSON.parse(localStorage.getItem('eg_paquete_v1') || '{}');
+        var nuevo = Object.assign({}, actual, { tipo: 'sesion', fotos: fotos, precio: precio, paquete: paquete });
+        localStorage.setItem('eg_paquete_v1', JSON.stringify(nuevo));
+      } catch (e) {}
+    }
+
     function render() {
       var fotos = parseInt(slider.value, 10);
       var data = EGPricing.calcSesion(fotos);
       var benefits = EGPricing.sesionBenefits(fotos);
+      guardarPaquete(fotos, data.precio, data.paquete);
 
       fotosValue.textContent = fotos + ' fotos';
       paqueteName.textContent = 'Paquete ' + data.paquete;
@@ -431,5 +478,24 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
   })();
 </script>
 
+
+<div class="qr-lb" id="qrLb">
+  <button type="button" class="qr-lb-close" id="qrLbClose" aria-label="Cerrar">✕</button>
+  <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1774467072/2_u07oxc.png" alt="QR de pago BCP - Pablo Villarroel Rocabado" />
+</div>
+<script>
+  (function () {
+    var lb = document.getElementById("qrLb");
+    var img = document.getElementById("qrImg");
+    var openBtn = document.getElementById("qrFullscreenBtn");
+    var closeBtn = document.getElementById("qrLbClose");
+    function abrir() { lb.classList.add("show"); }
+    function cerrar() { lb.classList.remove("show"); }
+    if (img) img.addEventListener("click", abrir);
+    if (openBtn) openBtn.addEventListener("click", abrir);
+    if (closeBtn) closeBtn.addEventListener("click", cerrar);
+    if (lb) lb.addEventListener("click", function (e) { if (e.target === lb) cerrar(); });
+  })();
+</script>
 </body>
 </html>

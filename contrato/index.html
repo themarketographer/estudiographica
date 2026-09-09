@@ -141,6 +141,13 @@
   }
   .field input:focus { outline: none; border-color: var(--dark); }
   .field input.invalid { border-color: var(--err); }
+  .whatsapp-row { display: flex; gap: 8px; }
+  .whatsapp-row select {
+    font-family: 'DM Sans', sans-serif; font-size: 16px; padding: 13px 8px; border-radius: 14px;
+    border: 1.5px solid rgba(24,24,24,0.12); background: #fff; color: var(--dark); width: 96px; flex-shrink: 0;
+  }
+  .whatsapp-row select:focus { outline: none; border-color: var(--dark); }
+  .whatsapp-row input { flex: 1; min-width: 0; }
   .field-error { font-size: 11.5px; color: var(--err); margin-top: 5px; display: none; }
   .field.show-error .field-error { display: block; }
 
@@ -330,7 +337,24 @@
         </div>
         <div class="field" id="f-whatsapp">
           <label for="whatsapp">WhatsApp</label>
-          <input type="tel" id="whatsapp" autocomplete="tel" placeholder="+591 70000000" />
+          <div class="whatsapp-row">
+            <select id="whatsappPais" aria-label="País">
+              <option value="+591" selected>🇧🇴 +591</option>
+              <option value="+54">🇦🇷 +54</option>
+              <option value="+55">🇧🇷 +55</option>
+              <option value="+56">🇨🇱 +56</option>
+              <option value="+57">🇨🇴 +57</option>
+              <option value="+593">🇪🇨 +593</option>
+              <option value="+51">🇵🇪 +51</option>
+              <option value="+595">🇵🇾 +595</option>
+              <option value="+598">🇺🇾 +598</option>
+              <option value="+58">🇻🇪 +58</option>
+              <option value="+52">🇲🇽 +52</option>
+              <option value="+1">🇺🇸 +1</option>
+              <option value="+34">🇪🇸 +34</option>
+            </select>
+            <input type="tel" id="whatsapp" autocomplete="tel" placeholder="70000000" inputmode="numeric" />
+          </div>
           <span class="field-error">Necesitamos tu WhatsApp para coordinar.</span>
         </div>
         <div class="field" id="f-fecha">
@@ -667,11 +691,22 @@ const contratoConfig = [
   var campos = ['nombre', 'ci', 'negocio', 'direccion', 'email', 'whatsapp', 'fecha'];
   var inputs = {};
   campos.forEach(function (id) { inputs[id] = document.getElementById(id); });
+  var whatsappPais = document.getElementById('whatsappPais');
+
+  // Número de WhatsApp completo (código de país + número local). El
+  // selector evita que el cliente tenga que escribir el "591" a mano y
+  // que se equivoque de país si no es de Bolivia.
+  function whatsappCompleto() {
+    var numero = inputs.whatsapp.value.trim();
+    if (!numero) return '';
+    return (whatsappPais.value + ' ' + numero).trim();
+  }
 
   // Restaura el borrador si el cliente ya había empezado a llenar
   try {
     var borrador = JSON.parse(localStorage.getItem(LS_CONTRATO) || '{}');
     campos.forEach(function (id) { if (borrador[id]) inputs[id].value = borrador[id]; });
+    if (borrador.whatsappPais) whatsappPais.value = borrador.whatsappPais;
   } catch (e) {}
 
   // Prefill de fecha desde la URL (por si Cal.com la manda) o mínimo hoy
@@ -683,6 +718,7 @@ const contratoConfig = [
   function guardarBorrador() {
     var data = {};
     campos.forEach(function (id) { data[id] = inputs[id].value.trim(); });
+    data.whatsappPais = whatsappPais.value;
     try { localStorage.setItem(LS_CONTRATO, JSON.stringify(data)); } catch (e) {}
   }
 
@@ -717,7 +753,7 @@ const contratoConfig = [
       negocio: v(inputs.negocio.value, 'tu negocio'),
       direccion: v(inputs.direccion.value, 'la dirección'),
       email: v(inputs.email.value, 'tu correo'),
-      whatsapp: v(inputs.whatsapp.value, 'tu WhatsApp'),
+      whatsapp: v(whatsappCompleto(), 'tu WhatsApp'),
       fecha: v(fechaVal, 'la fecha'),
       servicio: servicioNombre(),
       paquete: paqueteNombre(),
@@ -772,6 +808,11 @@ const contratoConfig = [
       document.getElementById('f-' + id).classList.remove('show-error');
       inputs[id].classList.remove('invalid');
     });
+  });
+  whatsappPais.addEventListener('change', function () {
+    renderContrato();
+    guardarBorrador();
+    actualizarBoton();
   });
   renderContrato();
 
@@ -840,7 +881,18 @@ const contratoConfig = [
     var rect = canvas.getBoundingClientRect();
     ctx.clearRect(0, 0, rect.width, rect.height);
     trazos.forEach(function (trazo) {
-      if (trazo.length < 2) return;
+      if (trazo.length < 2) {
+        // Un toque sin arrastre (p. ej. el punto de una "i" en la firma)
+        // no forma una línea, pero sí debe verse como un punto — si no,
+        // el toque desaparece sin dejar marca y sin contar como firma.
+        if (trazo.length === 1) {
+          ctx.beginPath();
+          ctx.arc(trazo[0].x * rect.width, trazo[0].y * rect.height, ctx.lineWidth / 2, 0, Math.PI * 2);
+          ctx.fillStyle = ctx.strokeStyle;
+          ctx.fill();
+        }
+        return;
+      }
       ctx.beginPath();
       ctx.moveTo(trazo[0].x * rect.width, trazo[0].y * rect.height);
       for (var i = 1; i < trazo.length; i++) {
@@ -878,6 +930,16 @@ const contratoConfig = [
     if (!dibujando) return;
     dibujando = false;
     try { canvas.releasePointerCapture(e.pointerId); } catch (err) {}
+    // Si todo el trazo fue un solo toque (sin pointermove), pointermove
+    // nunca marcó hayFirma ni dibujó nada — lo resolvemos acá para que un
+    // punto suelto también cuente como parte de la firma.
+    if (trazoActual && trazoActual.length >= 1) {
+      hayFirma = true;
+      sigPlaceholder.classList.add('hidden');
+      sigPad.classList.add('has-sig');
+      redibujar();
+      actualizarBoton();
+    }
   }
   canvas.addEventListener('pointerup', terminarTrazo);
   canvas.addEventListener('pointercancel', terminarTrazo);
@@ -1025,7 +1087,7 @@ const contratoConfig = [
     doc.text('CI/NIT ' + (inputs.ci.value.trim() || '—') + ' · ' + (inputs.negocio.value.trim() || ''), MX, y);
     doc.text('Estudio Graphica', MX + 263, y);
     y += 11;
-    doc.text(inputs.email.value.trim() + ' · ' + inputs.whatsapp.value.trim(), MX, y);
+    doc.text(inputs.email.value.trim() + ' · ' + whatsappCompleto(), MX, y);
 
     // Pie
     doc.setFontSize(7.5);
@@ -1053,7 +1115,7 @@ const contratoConfig = [
         negocio: inputs.negocio.value.trim(),
         direccion: inputs.direccion.value.trim(),
         email: inputs.email.value.trim(),
-        whatsapp: inputs.whatsapp.value.trim(),
+        whatsapp: whatsappCompleto(),
         fecha: inputs.fecha.value,
         servicio: servicioNombre(),
         paquete: paqueteNombre(),
@@ -1083,7 +1145,7 @@ const contratoConfig = [
         negocio: inputs.negocio.value.trim(),
         direccion: inputs.direccion.value.trim(),
         email: inputs.email.value.trim(),
-        whatsapp: inputs.whatsapp.value.trim(),
+        whatsapp: whatsappCompleto(),
         fecha: inputs.fecha.value,
         servicio: servicioNombre(),
         paquete: paqueteNombre(),

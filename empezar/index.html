@@ -151,6 +151,13 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
     .opcion { padding:20px; }
     .vsl-card { padding:18px; border-radius:20px; }
   }
+
+  /* ── Reveal al hacer scroll (mismo patrón que la landing principal) ── */
+  .eg-reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .eg-reveal.eg-reveal--in { opacity: 1; transform: translateY(0); }
+  @media (prefers-reduced-motion: reduce) {
+    .eg-reveal { opacity: 1; transform: none; transition: none; }
+  }
 </style>
 <link rel="stylesheet" href="/assets/css/button-states.css">
 </head>
@@ -179,29 +186,29 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
   </div>
 
   <div class="mapa">
-    <div class="mapa-item">
+    <div class="mapa-item eg-reveal">
       <div class="mapa-num">01</div>
       <div class="mapa-title">Diagnóstico</div>
       <div class="mapa-desc">Llamada gratuita de 30 min para revisar tu marca. Puedes saltarla si ya sabes qué necesitas.</div>
     </div>
-    <div class="mapa-item">
+    <div class="mapa-item eg-reveal" style="transition-delay:0.06s">
       <div class="mapa-num">02</div>
       <div class="mapa-title">Reserva</div>
       <div class="mapa-desc">Armas tu paquete con la calculadora y eliges día y hora en el calendario.</div>
     </div>
-    <div class="mapa-item">
+    <div class="mapa-item eg-reveal" style="transition-delay:0.12s">
       <div class="mapa-num">03</div>
       <div class="mapa-title">Contrato</div>
       <div class="mapa-desc">Lees el contrato con tus datos ya cargados y lo firmas con el dedo. Te llega en PDF.</div>
     </div>
-    <div class="mapa-item">
+    <div class="mapa-item eg-reveal" style="transition-delay:0.18s">
       <div class="mapa-num">04</div>
       <div class="mapa-title">Pago</div>
       <div class="mapa-desc">Escaneas el QR, pagas el 50% de adelanto y tu fecha queda apartada.</div>
     </div>
   </div>
 
-  <div class="vsl-card">
+  <div class="vsl-card eg-reveal">
     <div class="vsl-frame" id="vslFrame">
       <!-- ⚠️ REEMPLAZAR: pega el ID de tu video de YouTube en videoId (abajo,
            en el bloque configEmpezar). Mientras esté vacío se muestra este
@@ -215,27 +222,17 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
   </div>
 
   <div class="split">
-    <div class="opcion destacada">
+    <div class="opcion destacada eg-reveal">
       <div class="opcion-eyebrow">Opción rápida</div>
       <div class="opcion-title">Ya sé lo que quiero</div>
-      <p class="opcion-desc">Vas directo a armar tu paquete, ver el precio exacto y reservar tu fecha en el calendario.</p>
-      <ul class="opcion-lista">
-        <li><span class="dot"></span><span>Eliges cantidad de fotos y extras</span></li>
-        <li><span class="dot"></span><span>Ves el precio en tiempo real</span></li>
-        <li><span class="dot"></span><span>Reservas día y hora al instante</span></li>
-      </ul>
+      <p class="opcion-desc">Precio al instante y reserva tu fecha ahora mismo.</p>
       <a class="btn-yellow" href="/precios" id="btnDirecto">Armar mi paquete →</a>
     </div>
 
-    <div class="opcion">
+    <div class="opcion eg-reveal" style="transition-delay:0.08s">
       <div class="opcion-eyebrow">Opción con acompañamiento</div>
       <div class="opcion-title">Quiero mi diagnóstico gratuito</div>
-      <p class="opcion-desc">Media hora conmigo para revisar cómo se ve tu marca hoy y definir juntos qué te conviene.</p>
-      <ul class="opcion-lista">
-        <li><span class="dot"></span><span>Revisamos tus fotos y tus redes actuales</span></li>
-        <li><span class="dot"></span><span>Definimos qué formatos necesitas primero</span></li>
-        <li><span class="dot"></span><span>Sin costo y sin compromiso</span></li>
-      </ul>
+      <p class="opcion-desc">30 min conmigo, sin costo, para definir qué necesitas.</p>
       <button class="btn-dark" id="btnDiagnostico"
         data-cal-link="themarketographer/reunion"
         data-cal-namespace="reunion"
@@ -311,6 +308,22 @@ const configEmpezar = [
       caja.classList.add('show');
     }
   } catch (e) {}
+
+  // Reveal al hacer scroll — mismo mecanismo (IntersectionObserver) que
+  // usa la landing principal para las animaciones de entrada.
+  if ('IntersectionObserver' in window) {
+    var revealObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('eg-reveal--in');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.eg-reveal').forEach(function (el) { revealObserver.observe(el); });
+  } else {
+    document.querySelectorAll('.eg-reveal').forEach(function (el) { el.classList.add('eg-reveal--in'); });
+  }
 
   // ── Tracking ──
   if (window.EG) {
