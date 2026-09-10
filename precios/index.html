@@ -698,6 +698,14 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
             origen: window.EG.getOrigen(),
             event_id: eventId,
           });
+          // Cada reserva nueva empieza su propio contrato. Si el cliente
+          // ya había firmado un contrato antes (una sesión anterior, o
+          // una prueba en este mismo navegador), esa marca queda vieja en
+          // localStorage — sin esto, /gracias-sesion o /gracias-plan la
+          // ven al llegar y saltan directo al paso de pago, mostrando el
+          // contrato como firmado y "Contrato" como completado en la
+          // barra de progreso, aunque nadie firmó nada para ESTA reserva.
+          try { localStorage.removeItem('eg_contrato_firmado'); } catch (err) {}
         };
       }
       if (window.Cal && Cal.ns && Cal.ns.sesion) {

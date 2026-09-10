@@ -6,7 +6,7 @@
 <title>¡Gracias por tu sesión! · Estudio Graphica</title>
 <meta name="description" content="Confirma los detalles de tu sesión de fotos y realiza tu adelanto." />
 <meta name="robots" content="noindex,nofollow" />
-<meta name="theme-color" content="#181818" />
+<meta name="theme-color" content="#FFDD5A" />
   <link rel="icon" href="/favicon.ico" sizes="any" />
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
@@ -65,26 +65,27 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
-    font-family: 'DM Sans', sans-serif; background: var(--dark); color: var(--off-white);
+    font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--dark);
     -webkit-font-smoothing: antialiased; min-height: 100vh;
   }
-  .cursive { font-family: 'Playfair Display', serif; font-style: italic; font-weight: 700; color: var(--yellow); }
+  .cursive { font-family: 'Playfair Display', serif; font-style: italic; font-weight: 700; }
+  .h1-accent { position: relative; display: inline-block; z-index: 0; }
+  .h1-accent::after { content: ''; position: absolute; bottom: 0.06em; left: 0; right: 0; height: 0.2em; background: var(--yellow); z-index: -1; }
   .wrap { max-width: 640px; margin: 0 auto; padding: 64px 24px 80px; }
   .logo { height: 40px; display: block; margin: 0 auto 40px; }
   .badge {
-    display: inline-flex; align-items: center; gap: 8px; background: rgba(255,221,90,0.12);
-    color: var(--yellow); border: 1px solid rgba(255,221,90,0.3); border-radius: 9999px;
-    padding: 8px 18px; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
-    margin-bottom: 24px;
+    display: inline-block; background: var(--yellow); color: var(--dark);
+    border-radius: 9999px; padding: 8px 18px; font-size: 12px; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 24px;
   }
   .center { text-align: center; }
   h1 {
     font-family: 'Izmir', 'Syne', sans-serif; font-weight: 800; letter-spacing: -0.02em;
     font-size: clamp(1.9rem, 5vw, 2.8rem); line-height: 1.1; margin-bottom: 18px;
   }
-  .sub { color: rgba(248,248,248,0.72); font-size: 16px; line-height: 1.7; max-width: 480px; margin: 0 auto 40px; }
+  .sub { color: var(--gray-text); font-size: 16px; line-height: 1.7; max-width: 480px; margin: 0 auto 40px; }
 
-  .card { background: var(--cream); color: var(--dark); border-radius: 22px; padding: 32px; margin-bottom: 20px; }
+  .card { background: #fff; color: var(--dark); border-radius: 22px; padding: 32px; margin-bottom: 20px; box-shadow: 0 20px 60px rgba(24,24,24,0.08); border: 1px solid rgba(24,24,24,0.06); }
   .card-label {
     font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
     color: var(--gray-text); margin-bottom: 18px;
@@ -190,19 +191,13 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
   }
   .btn-wa:hover { transform: translateY(-2px); }
 
-  .back-link { display: block; text-align: center; font-size: 13px; color: rgba(248,248,248,0.5); text-decoration: none; }
-  .back-link:hover { color: var(--yellow); }
+  .back-link { display: block; text-align: center; font-size: 13px; color: var(--gray-text); text-decoration: none; }
+  .back-link:hover { color: var(--dark); }
 
   /* ── Foco visible (teclado) — elementos que no son .btn/.btn-* ── */
   .back-link:focus-visible {
     outline: 2.5px solid var(--yellow); outline-offset: 3px; border-radius: 4px;
   }
-  /* La barra de progreso de funnel-ux.css asume texto oscuro sobre claro
-     (igual que en /precios y /contrato) — acá el fondo de la página es
-     oscuro, así que la mostramos dentro de una tarjeta clara, igual que
-     el resto de las tarjetas de esta misma página. */
-  .eg-steps-card { padding: 20px 20px 4px; margin-bottom: 24px; }
-  .eg-steps-card .steps { margin: 0 auto; }
   .resumen-edit { font-size: 12.5px; color: var(--gray-text); text-decoration: underline; margin-top: 10px; display: inline-block; }
   .resumen-edit:hover { color: var(--dark); }
   .pay-toggle button:focus-visible {
@@ -225,13 +220,11 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
     <img class="logo" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1777509513/Logo_B_S_F_kdolev.png" alt="Estudio Graphica" />
   </a>
 
-  <div class="card eg-steps-card">
-    <div class="steps" id="egSteps"></div>
-  </div>
+  <div class="steps" id="egSteps"></div>
 
   <div class="center">
     <span class="badge" id="eg-gs-badge">📸 Sesión de fotos</span>
-    <h1 id="eg-gs-h1">Tu sesión está a un <span class="cursive">paso</span>.</h1>
+    <h1 id="eg-gs-h1">Tu sesión está a un <span class="h1-accent cursive">paso</span>.</h1>
     <p class="sub" id="eg-gs-sub">Ahora firma tu contrato. El adelanto para apartar la fecha se hace justo después, en esta misma página.</p>
   </div>
 
@@ -319,7 +312,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
   const textosGraciasSesion = [
     {
       badge: '📸 Sesión de fotos',
-      titulo: 'Tu sesión está a un <span class="cursive">paso</span>.',
+      titulo: 'Tu sesión está a un <span class="h1-accent cursive">paso</span>.',
       subtitulo: 'Ahora firma tu contrato. El adelanto para apartar la fecha se hace justo después, en esta misma página.',
       configuraLabel: 'Configura tu sesión',
       precioNota: 'Precio referencial. Se confirma en tu sesión.',
@@ -497,6 +490,15 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
     // mientras tanto, lo único que hay que decidir es firmar, no pagar.
     var payCard = document.getElementById('egPayCard');
     if (payCard) payCard.style.display = firmado ? 'block' : 'none';
+
+    // El subtítulo de arriba tiene que coincidir siempre con lo que dice
+    // la barra de progreso — si no, el cliente ve "firma tu contrato"
+    // arriba y "Pago" resaltado en la barra al mismo tiempo, que es
+    // justo la confusión que queremos evitar.
+    var sub = document.getElementById('eg-gs-sub');
+    if (sub && firmado) {
+      sub.textContent = 'Ya firmaste tu contrato. Ahora solo falta el adelanto para apartar tu fecha, aquí abajo.';
+    }
 
     var card = document.getElementById('egContratoCard');
     if (!card) return;
