@@ -54,39 +54,6 @@
 }
 </script>
 
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    {
-      "@type": "Question",
-      "name": "¿Cuánto cuesta una sesión de fotos?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Depende de la cantidad de fotos y la duración que elijas — los paquetes van de Bs. 300 a Bs. 1300. Puedes armar tu paquete y ver el precio exacto en la calculadora de precios de estudiographica.com/precios." }
-    },
-    {
-      "@type": "Question",
-      "name": "¿En cuánto tiempo recibo las fotos?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Según el paquete: los más chicos se entregan en menos de 72 horas, los intermedios en menos de 48, y los más grandes en menos de 24 horas." }
-    },
-    {
-      "@type": "Question",
-      "name": "¿Tengo que preparar el estilismo de la comida?",
-      "acceptedAnswer": { "@type": "Answer", "text": "No. El foodstyling, es decir armar y acomodar los platillos para que se vean bien en cámara, va incluido siempre, en todos los paquetes." }
-    },
-    {
-      "@type": "Question",
-      "name": "¿Dónde se hacen las sesiones?",
-      "acceptedAnswer": { "@type": "Answer", "text": "El lugar se coordina en la llamada de diagnóstico gratuita, normalmente en el restaurante o local del cliente, en Cochabamba." }
-    },
-    {
-      "@type": "Question",
-      "name": "¿Cómo empiezo a trabajar con Estudio Graphica?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Se agenda una llamada de diagnóstico gratuita, sin compromiso, donde se revisa la marca del cliente y se arma el paquete que le conviene." }
-    }
-  ]
-}
-</script>
 
 <!-- ═══════════ PIXEL + GA4 (reemplazar IDs) ═══════════ -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-9H6Z8N5DTP"></script>
@@ -1222,6 +1189,26 @@ footer { background: #0A0A0A; padding: clamp(36px, 6vw, 56px) 0 24px; }
           }
         });
       });
+
+      // JSON-LD dinamico: se arma desde el mismo array "faqs" de arriba,
+      // asi el schema para Google/IA nunca queda desincronizado del texto
+      // visible (antes habia un bloque de JSON-LD escrito a mano en el
+      // <head> que se fue quedando desactualizado con precios y textos viejos).
+      var faqSchema = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": faqs.map(function (item) {
+          return {
+            "@type": "Question",
+            "name": item.q,
+            "acceptedAnswer": { "@type": "Answer", "text": item.a }
+          };
+        })
+      };
+      var schemaTag = document.createElement('script');
+      schemaTag.type = 'application/ld+json';
+      schemaTag.textContent = JSON.stringify(faqSchema);
+      document.head.appendChild(schemaTag);
     })();
 
     /* ═══════════ Portfolio — lightbox ═══════════ */

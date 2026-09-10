@@ -52,6 +52,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 }(window, document, 'ttq');
 </script>
 <script src="/assets/js/tracking.js"></script>
+<script src="/assets/js/funnel-ux.js"></script>
 <!-- ═══════════════════════════════════════════════════ -->
 
 <!-- Cal.com — namespace "reunion" para el diagnóstico gratuito -->
@@ -366,6 +367,10 @@ const configEmpezar = [
 
     document.getElementById('btnDirecto').addEventListener('click', function () {
       window.EG.trackCustomEvent('eligio_camino_directo', { content_name: 'Ya sé lo que quiero', origen: window.EG.getOrigen() });
+      // Guarda el camino elegido para que la barra de progreso de /precios,
+      // /contrato y /gracias-sesion muestre los pasos correctos (sin el
+      // paso de "Diagnóstico", que este visitante no va a hacer).
+      if (window.EGFlowSteps) window.EGFlowSteps.setPath('directo');
     });
 
     // El diagnóstico abre el widget de Cal: mismo patrón que /precios —
@@ -388,6 +393,7 @@ const configEmpezar = [
     btnDiag.addEventListener('mousedown', function () {
       var eventId = refreshCalConfig();
       window.EG.trackEvent('InitiateCheckout', { content_name: 'Diagnóstico gratuito', content_type: 'reunion', origen: window.EG.getOrigen(), event_id: eventId });
+      if (window.EGFlowSteps) window.EGFlowSteps.setPath('diagnostico');
     });
     btnDiag.addEventListener('touchstart', function () { refreshCalConfig(); });
 

@@ -64,7 +64,11 @@
   <p class="sub">Fotografía, marketing visual y posicionamiento local para restaurantes en Cochabamba.</p>
 </div>
 
-<div class="posts">
+<div class="blog-search">
+  <input type="search" id="blog-search-input" placeholder="Buscar artículos… (ej. \"delivery\", \"precio\", \"celular\")" aria-label="Buscar artículos del blog" />
+</div>
+
+<div class="posts" id="blog-posts">
   <a class="post-card" href="/blog/como-tomar-fotos-de-comida-con-celular-mientras-consigues-fotografo/">
     <img class="post-img" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745819075/1_ymdvor.jpg" alt="Cómo tomar mejores fotos de comida con el celular" />
     <div class="post-body">
@@ -195,6 +199,7 @@
     </div>
   </a>
 </div>
+<p class="blog-search__empty" id="blog-search-empty">No hay artículos que coincidan con esa búsqueda.</p>
 
 <footer>
   <p>© 2026 Estudio Graphica · Cochabamba, Bolivia</p>
@@ -206,6 +211,28 @@
     window.EG.trackEvent('ViewContent', { content_name: 'Blog - Índice' });
     window.EG.trackCustomEvent('ver_blog', { content_name: 'Blog', post_slug: 'indice', origen: window.EG.getOrigen() });
   }
+</script>
+
+<script>
+(function () {
+  var input = document.getElementById('blog-search-input');
+  var grid = document.getElementById('blog-posts');
+  var empty = document.getElementById('blog-search-empty');
+  if (!input || !grid) return;
+  var cards = Array.prototype.slice.call(grid.querySelectorAll('.post-card'));
+
+  input.addEventListener('input', function () {
+    var q = input.value.trim().toLowerCase();
+    var visible = 0;
+    cards.forEach(function (card) {
+      var text = card.textContent.toLowerCase();
+      var match = !q || text.indexOf(q) !== -1;
+      card.style.display = match ? '' : 'none';
+      if (match) visible++;
+    });
+    empty.classList.toggle('show', visible === 0);
+  });
+})();
 </script>
 
   <script src="/assets/js/button-states.js" defer></script>

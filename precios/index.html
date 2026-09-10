@@ -57,6 +57,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 <!-- TikTok Pixel Code End -->
 <script src="/assets/js/tracking.js"></script>
 <script src="/assets/js/pricing-logic.js"></script>
+<script src="/assets/js/funnel-ux.js"></script>
 <!-- ═══════════════════════════════════════════════════ -->
 
 <!-- Cal.com element-click embed -->
@@ -198,6 +199,7 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
     .right-col { border-left: none; border-top: 1px dashed rgba(24,24,24,0.12); padding-left: 0; padding-top: 24px; }
   }
 </style>
+  <link rel="stylesheet" href="/assets/css/funnel-ux.css">
   <link rel="stylesheet" href="/assets/css/button-states.css">
 </head>
 <body>
@@ -214,6 +216,9 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
   <h1>Configura tu paquete y <span class="h1-accent cursive">reserva</span> tu fecha.</h1>
   <p class="sub">Elige entre una <span class="cursive">sesión puntual</span> o un <span class="cursive">plan mensual</span>, ajusta la cantidad que necesitás y reservá directo en el calendario.</p>
 </div>
+
+<div class="steps" id="egSteps"></div>
+<div class="eg-retomar" id="egRetomar"></div>
 
 <div class="toggle-wrap">
   <div class="toggle">
@@ -289,6 +294,20 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
   </div>
 </div>
 
+<!-- ══════ Barra de precio fija (solo celular) ══════
+     En pantallas angostas la tarjeta de precio queda debajo de los
+     sliders y los extras — esta barra repite el precio y el botón de
+     reservar siempre visible abajo, para no tener que deslizar hasta el
+     final cada vez que se ajusta algo. En desktop se oculta sola (ver
+     funnel-ux.css): ahí el precio ya está siempre visible al costado. -->
+<div class="eg-sticky-bar" id="egStickyBar">
+  <div class="eg-sticky-info">
+    <span class="eg-sticky-name" id="egStickyName">Paquete Estándar</span>
+    <span class="eg-sticky-price" id="egStickyPrice">Bs. 1020</span>
+  </div>
+  <button class="eg-sticky-btn" id="egStickyBtn" type="button">Reservar →</button>
+</div>
+
 <script>
   (function () {
     var tipo = 'sesion';
@@ -353,6 +372,9 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
     var benefitsList = document.getElementById('benefitsList');
     var btnReservar = document.getElementById('btnReservar');
     var waLink = document.getElementById('waLink');
+    var egStickyName = document.getElementById('egStickyName');
+    var egStickyPrice = document.getElementById('egStickyPrice');
+    var egStickyBtn = document.getElementById('egStickyBtn');
 
     // Guarda el paquete configurado para que /contrato lo lea y lo escriba
     // solo dentro del contrato. Se actualiza en cada render, así que
@@ -494,6 +516,8 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
 
         btnReservar.setAttribute('data-cal-namespace', 'sesion');
         btnReservar.setAttribute('data-cal-link', 'themarketographer/sesion');
+        egStickyName.textContent = 'Sesión ' + data.paquete;
+        egStickyPrice.textContent = 'Bs. ' + precioFinal;
 
         var extrasWA = extrasNombres.length ? ('\n- Extras: ' + extrasNombres.join(', ')) : '';
         var textoWA = '¡Hola, Estudio Graphica! Quiero una *Sesión de Fotos*:\n- Paquete ' + data.paquete + '\n- ' + fotos + ' fotos' + extrasWA + '\n- Bs. ' + precioFinal + '\n\n¿Cuándo agendamos? 📸';
@@ -511,6 +535,8 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
 
         btnReservar.setAttribute('data-cal-namespace', 'plan-mensual');
         btnReservar.setAttribute('data-cal-link', 'themarketographer/plan-mensual');
+        egStickyName.textContent = 'Plan ' + pdata.paquete;
+        egStickyPrice.textContent = 'Bs. ' + pPrecioFinal + '/mes';
 
         var extrasWA2 = extrasNombres.length ? ('\n- Extras: ' + extrasNombres.join(', ')) : '';
         var textoWA2 = '¡Hola, Estudio Graphica! Quiero un *Plan Mensual*:\n- Paquete ' + pdata.paquete + '\n- ' + planFotos + ' fotos/mes' + (addVideo ? (' + ' + reels + ' reels/mes') : '') + extrasWA2 + '\n- Duración: ' + duracion + ' mes' + (duracion > 1 ? 'es' : '') + '\n- Bs. ' + pPrecioFinal + '/mes\n\n¿Cuándo agendamos? 📸';
@@ -521,6 +547,16 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
     }
 
     render();
+
+    // ── Barra de progreso + aviso de retomar ──
+    // /precios es siempre el paso "Paquete y reserva" — con o sin
+    // diagnóstico previo, según lo que haya quedado guardado en
+    // localStorage cuando el visitante eligió su camino en /empezar.
+    if (window.EGFlowSteps) {
+      window.EGFlowSteps.render('egSteps', 'reserva');
+      window.EGFlowSteps.renderRetomar('egRetomar');
+    }
+    document.body.classList.add('eg-has-sticky-bar');
 
     // ── Tracking + metadata para Cal.com ──
     // IMPORTANTE: la sintaxis real del embed de Cal.com para metadata
@@ -554,6 +590,12 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
         if (fbc) config['metadata[fbc]'] = fbc;
       }
       btnReservar.setAttribute('data-cal-config', JSON.stringify(config));
+      // La barra de precio fija (celular) reserva exactamente igual: mismos
+      // atributos data-cal-*, así el embed de Cal.com la reconoce como
+      // cualquier otro botón de reserva sin JS extra para abrir el modal.
+      egStickyBtn.setAttribute('data-cal-namespace', btnReservar.getAttribute('data-cal-namespace'));
+      egStickyBtn.setAttribute('data-cal-link', btnReservar.getAttribute('data-cal-link'));
+      egStickyBtn.setAttribute('data-cal-config', JSON.stringify(config));
       return eventId;
     }
     refreshCalConfig(); // valor inicial, por si el usuario hace click sin mover sliders
@@ -574,14 +616,15 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
       // pagar" — el "Schedule" real se dispara más abajo, en el listener
       // de "bookingSuccessfulV2", que Cal.com solo emite cuando la
       // reserva quedó de verdad confirmada.
-      btnReservar.addEventListener('mousedown', function () {
+      function onReservarPress() {
         var eventId = refreshCalConfig();
         window.EG.trackEvent('InitiateCheckout', { content_name: 'Reservar', content_type: tipo, origen: window.EG.getOrigen(), event_id: eventId });
-      });
+      }
+      btnReservar.addEventListener('mousedown', onReservarPress);
+      egStickyBtn.addEventListener('mousedown', onReservarPress);
       // Soporte touch (mousedown no siempre dispara en móvil antes del click táctil)
-      btnReservar.addEventListener('touchstart', function () {
-        refreshCalConfig();
-      });
+      btnReservar.addEventListener('touchstart', function () { refreshCalConfig(); });
+      egStickyBtn.addEventListener('touchstart', function () { refreshCalConfig(); });
 
       // "Schedule" real: se dispara SOLO cuando Cal.com confirma la
       // reserva (evento bookingSuccessfulV2 del embed, ver

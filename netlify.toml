@@ -3,3 +3,9 @@ functions = "netlify/functions"
 
 [functions]
 node_bundler = "esbuild"
+
+# Monitoreo de caidas: corre netlify/functions/uptime-check.js sola cada 15
+# minutos y avisa por ntfy.sh si el sitio no responde. Ver el comentario
+# dentro de ese archivo para saber como recibir el aviso en el celular.
+[functions."uptime-check"]
+  schedule = "*/15 * * * *"

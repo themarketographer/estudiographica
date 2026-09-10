@@ -47,6 +47,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 <!-- TikTok Pixel Code End -->
 <script src="/assets/js/tracking.js"></script>
 <script src="/assets/js/pricing-logic.js"></script>
+<script src="/assets/js/funnel-ux.js"></script>
 <!-- ═══════════════════════════════════════════════════ -->
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -223,7 +224,12 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
   .dur-chip:focus-visible, .checkbox-row:focus-visible {
     outline: 2.5px solid var(--dark); outline-offset: 2px;
   }
+  /* Ver /gracias-sesion: la barra de progreso asume texto oscuro sobre
+     claro, así que va dentro de una tarjeta clara como el resto. */
+  .eg-steps-card { padding: 20px 20px 4px; margin-bottom: 24px; }
+  .eg-steps-card .steps { margin: 0 auto; }
 </style>
+  <link rel="stylesheet" href="/assets/css/funnel-ux.css">
   <link rel="stylesheet" href="/assets/css/button-states.css">
 </head>
 <body>
@@ -232,6 +238,10 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
   <a href="/" style="display:block; text-align:center;">
     <img class="logo" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1777509513/Logo_B_S_F_kdolev.png" alt="Estudio Graphica" />
   </a>
+
+  <div class="card eg-steps-card">
+    <div class="steps" id="egSteps"></div>
+  </div>
 
   <div class="center">
     <span class="badge" id="eg-gp-badge">📅 Plan mensual</span>
@@ -584,12 +594,17 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
      "contrato firmado" en vez de seguir invitándolo a firmar. -->
 <script>
   (function () {
+    var firmado = null;
+    try { firmado = JSON.parse(localStorage.getItem('eg_contrato_firmado') || 'null'); } catch (e) {}
+
+    if (window.EGFlowSteps) {
+      window.EGFlowSteps.render('egSteps', firmado ? 'pago' : 'contrato');
+    }
+
     var card = document.getElementById('egContratoCard');
     if (!card) return;
     var TIPO = card.dataset.tipo || 'sesion';
     document.getElementById('egContratoBtn').href = '/contrato/?tipo=' + TIPO;
-    var firmado = null;
-    try { firmado = JSON.parse(localStorage.getItem('eg_contrato_firmado') || 'null'); } catch (e) {}
     if (!firmado) return;
 
     card.classList.add('firmado');

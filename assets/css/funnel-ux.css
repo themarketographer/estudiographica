@@ -1,0 +1,80 @@
+/**
+ * funnel-ux.css — Estudio Graphica
+ * Estilos compartidos para las páginas del flujo de reserva (armar paquete
+ * → contrato → pago): la barra de progreso, el aviso de "retomar donde
+ * quedaste" y la barra de precio fija de /precios en celular.
+ *
+ * Un solo archivo para no duplicar CSS en cada página — cualquier cambio de
+ * diseño del flujo se hace AQUÍ UNA SOLA VEZ. Ver /assets/js/funnel-ux.js
+ * para la lógica que pinta estos elementos.
+ *
+ * Requiere las variables de color ya definidas en cada página
+ * (--dark, --yellow, --off-white, --gray-text) — no las redefine.
+ */
+
+/* ── Barra de progreso (stepper) ──
+   Misma estructura de clases que ya usaba /contrato (.steps/.step/
+   .step-num/.step-label); ahora la pinta funnel-ux.js dinámicamente según
+   el camino del visitante (con o sin diagnóstico gratuito), así el paso
+   marcado como "hecho" siempre es verdad y no un checkmark decorativo. */
+.steps { display: flex; align-items: flex-start; justify-content: center; gap: 0; margin: 26px auto; max-width: 620px; padding: 0; list-style: none; }
+.step { flex: 1; text-align: center; position: relative; list-style: none; }
+.step::before {
+  content: ''; position: absolute; top: 15px; left: -50%; width: 100%; height: 2px;
+  background: rgba(24,24,24,0.12); z-index: 0;
+}
+.step:first-child::before { display: none; }
+.step.done::before, .step.current::before { background: var(--dark); }
+.step-num {
+  position: relative; z-index: 1; width: 32px; height: 32px; margin: 0 auto 8px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Izmir','Syne',sans-serif; font-weight: 800; font-size: 13px;
+  background: #fff; border: 2px solid rgba(24,24,24,0.15); color: var(--gray-text);
+}
+.step.done .step-num { background: var(--dark); border-color: var(--dark); color: var(--yellow); }
+.step.current .step-num { background: var(--yellow); border-color: var(--dark); color: var(--dark); }
+.step-label { font-size: 11.5px; color: var(--gray-text); line-height: 1.3; }
+.step.current .step-label { color: var(--dark); font-weight: 600; }
+@media (max-width: 480px) { .step-label { font-size: 9.5px; } }
+
+/* ── Aviso "retomar donde quedaste" ──
+   Mismo patrón visual que usaba /empezar, ahora disponible en cualquier
+   página del flujo — así no importa por dónde vuelva el cliente, si tiene
+   algo a medias se lo decimos ahí mismo. */
+.eg-retomar {
+  display: none; align-items: center; gap: 14px; background: var(--yellow); border-radius: 18px;
+  padding: 16px 20px; margin: 0 auto 26px; max-width: 620px;
+}
+.eg-retomar.show { display: flex; }
+.eg-retomar-icon { font-size: 22px; flex-shrink: 0; }
+.eg-retomar-txt { flex: 1; font-size: 13.5px; line-height: 1.5; color: var(--dark); }
+.eg-retomar-link {
+  font-family: 'Izmir','Syne',sans-serif; font-weight: 700; font-size: 13px; background: var(--dark);
+  color: var(--yellow); padding: 11px 18px; border-radius: 9999px; text-decoration: none; white-space: nowrap;
+}
+@media (max-width: 480px) { .eg-retomar { flex-wrap: wrap; } }
+
+/* ── Barra de precio fija (solo /precios, solo celular) ──
+   En desktop el precio ya está siempre visible en la columna derecha, al
+   lado de los sliders — esta barra solo hace falta cuando el layout pasa a
+   una sola columna y la tarjeta de precio queda MÁS ABAJO que los sliders
+   y los extras, obligando a deslizar para verla. */
+.eg-sticky-bar {
+  display: none; position: fixed; left: 0; right: 0; bottom: 0; z-index: 60;
+  background: #fff; border-top: 1px solid rgba(24,24,24,0.10); box-shadow: 0 -8px 30px rgba(24,24,24,0.12);
+  padding: 12px 16px; padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+  align-items: center; justify-content: space-between; gap: 12px;
+}
+.eg-sticky-info { display: flex; flex-direction: column; min-width: 0; }
+.eg-sticky-name { font-size: 10.5px; color: var(--gray-text); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.eg-sticky-price { font-family: 'Izmir','Syne',sans-serif; font-weight: 800; font-size: 18px; color: var(--dark); white-space: nowrap; }
+.eg-sticky-btn {
+  font-family: 'Izmir','Syne',sans-serif; font-weight: 700; font-size: 13.5px; padding: 13px 20px;
+  border-radius: 9999px; border: none; background: var(--dark); color: var(--off-white); cursor: pointer;
+  white-space: nowrap; flex-shrink: 0; transition: background 0.2s;
+}
+.eg-sticky-btn:hover { background: #000; }
+@media (max-width: 880px) {
+  .eg-sticky-bar { display: flex; }
+  body.eg-has-sticky-bar { padding-bottom: 76px; }
+}

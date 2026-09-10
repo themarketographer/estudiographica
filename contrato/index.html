@@ -47,6 +47,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 <!-- TikTok Pixel Code End -->
 <script src="/assets/js/tracking.js"></script>
 <script src="/assets/js/pricing-logic.js"></script>
+<script src="/assets/js/funnel-ux.js"></script>
 <!-- jsPDF alojado en el propio sitio: la firma del contrato no puede depender
      de que un CDN externo esté disponible. Si el archivo local fallara, se
      intenta el CDN como respaldo. -->
@@ -302,17 +303,27 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 <div class="wrap">
 
   <div class="header">
-    <span class="tag">Paso 3 de 4</span>
+    <span class="tag" id="egStepTag">Paso 2 de 3</span>
     <h1>Lee y <span class="h1-accent cursive">firma</span> tu contrato.</h1>
     <p class="sub">Completa tus datos, revisa el contrato con tu paquete ya cargado y fírmalo con el dedo o el mouse. Recibes tu copia en PDF al instante.</p>
   </div>
 
-  <div class="steps">
-    <div class="step done"><div class="step-num">✓</div><div class="step-label">Diagnóstico</div></div>
-    <div class="step done"><div class="step-num">✓</div><div class="step-label">Reserva</div></div>
-    <div class="step current"><div class="step-num">3</div><div class="step-label">Contrato</div></div>
-    <div class="step"><div class="step-num">4</div><div class="step-label">Pago</div></div>
+  <!-- Pintado por funnel-ux.js según el camino real del visitante (con o
+       sin diagnóstico gratuito) — ver script justo abajo. El contenido de
+       acá arriba es solo el fallback si por algo no cargara el JS. -->
+  <div class="steps" id="egSteps">
+    <div class="step"><div class="step-num">1</div><div class="step-label">Paquete y reserva</div></div>
+    <div class="step current"><div class="step-num">2</div><div class="step-label">Contrato</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-label">Pago</div></div>
   </div>
+  <script>
+    (function () {
+      if (!window.EGFlowSteps) return;
+      var path = EGFlowSteps.getPath();
+      var info = EGFlowSteps.render('egSteps', 'contrato', { path: path });
+      if (info) document.getElementById('egStepTag').textContent = 'Paso ' + info.index + ' de ' + info.total;
+    })();
+  </script>
 
   <!-- ══════ FORMULARIO + CONTRATO ══════ -->
   <div id="firmando">
@@ -1259,15 +1270,20 @@ const contratoConfig = [
       fechaLarga(inputs.fecha.value) + '. Te adjunto el PDF 📄';
     document.getElementById('btnWa').href = 'https://api.whatsapp.com/send?phone=' + CFG.whatsapp + '&text=' + encodeURIComponent(textoWA);
 
-    // El stepper avanza: contrato completado, ahora toca el pago
+    // El stepper avanza: contrato completado, ahora toca el pago.
+    // "Contrato" es siempre el penúltimo paso y "Pago" el último, haya o
+    // no pasado el visitante por el diagnóstico gratuito (3 o 4 pasos en
+    // total) — por eso se calcula desde el final, en vez de asumir una
+    // posición fija como antes.
     var pasos = document.querySelectorAll('.steps .step');
-    if (pasos.length === 4) {
-      pasos[2].classList.remove('current');
-      pasos[2].classList.add('done');
-      pasos[2].querySelector('.step-num').textContent = '✓';
-      pasos[3].classList.add('current');
+    var contratoIdx = pasos.length - 2;
+    if (contratoIdx >= 0 && pasos[contratoIdx]) {
+      pasos[contratoIdx].classList.remove('current');
+      pasos[contratoIdx].classList.add('done');
+      pasos[contratoIdx].querySelector('.step-num').textContent = '✓';
+      if (pasos[contratoIdx + 1]) pasos[contratoIdx + 1].classList.add('current');
     }
-    document.querySelector('.header .tag').textContent = 'Paso 4 de 4';
+    document.querySelector('.header .tag').textContent = 'Paso ' + pasos.length + ' de ' + pasos.length;
 
     document.getElementById('firmando').style.display = 'none';
     document.getElementById('firmado').style.display = 'block';

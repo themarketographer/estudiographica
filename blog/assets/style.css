@@ -123,3 +123,20 @@ footer a:focus-visible {
   outline-offset: 3px;
   border-radius: 20px;
 }
+
+
+/* ── Buscador del blog (index) ── */
+.blog-search { max-width: 1040px; margin: 0 auto; padding: 0 24px; }
+.blog-search input {
+  width: 100%; font-family: 'DM Sans', sans-serif; font-size: 15px; padding: 14px 20px;
+  border-radius: 9999px; border: 1.5px solid rgba(24,24,24,0.12); background: #fff;
+  outline: none; transition: border-color 0.2s ease;
+}
+.blog-search input:focus { border-color: var(--dark); }
+.blog-search__empty { display: none; text-align: center; color: var(--gray-text); font-size: 14px; padding: 32px 0 0; }
+.blog-search__empty.show { display: block; }
+
+/* ── "Quizas te interese" (relacionados, al pie del articulo) ── */
+.related-wrap { max-width: 1040px; margin: 56px auto 0; padding: 0 24px; }
+.related-heading { font-family: 'Izmir', 'Syne', sans-serif; font-weight: 800; font-size: 1.3rem; margin-bottom: 20px; }
+.posts--related { margin: 0 0 12px; }

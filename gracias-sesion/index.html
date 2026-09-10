@@ -47,6 +47,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 <!-- TikTok Pixel Code End -->
 <script src="/assets/js/tracking.js"></script>
 <script src="/assets/js/pricing-logic.js"></script>
+<script src="/assets/js/funnel-ux.js"></script>
 <!-- ═══════════════════════════════════════════════════ -->
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -196,6 +197,12 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
   .back-link:focus-visible {
     outline: 2.5px solid var(--yellow); outline-offset: 3px; border-radius: 4px;
   }
+  /* La barra de progreso de funnel-ux.css asume texto oscuro sobre claro
+     (igual que en /precios y /contrato) — acá el fondo de la página es
+     oscuro, así que la mostramos dentro de una tarjeta clara, igual que
+     el resto de las tarjetas de esta misma página. */
+  .eg-steps-card { padding: 20px 20px 4px; margin-bottom: 24px; }
+  .eg-steps-card .steps { margin: 0 auto; }
   .pay-toggle button:focus-visible {
     outline: 2.5px solid var(--dark); outline-offset: 2px;
   }
@@ -206,6 +213,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
     outline: 2.5px solid var(--yellow); outline-offset: 2px;
   }
 </style>
+  <link rel="stylesheet" href="/assets/css/funnel-ux.css">
   <link rel="stylesheet" href="/assets/css/button-states.css">
 </head>
 <body>
@@ -214,6 +222,10 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
   <a href="/" style="display:block; text-align:center;">
     <img class="logo" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1777509513/Logo_B_S_F_kdolev.png" alt="Estudio Graphica" />
   </a>
+
+  <div class="card eg-steps-card">
+    <div class="steps" id="egSteps"></div>
+  </div>
 
   <div class="center">
     <span class="badge" id="eg-gs-badge">📸 Sesión de fotos</span>
@@ -475,12 +487,20 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
      "contrato firmado" en vez de seguir invitándolo a firmar. -->
 <script>
   (function () {
+    var firmado = null;
+    try { firmado = JSON.parse(localStorage.getItem('eg_contrato_firmado') || 'null'); } catch (e) {}
+
+    // Barra de progreso: esta página cubre los pasos "Contrato" y "Pago"
+    // (el contrato se firma en /contrato, pero el paso empieza acá), así
+    // que el paso actual depende de si ya se firmó o no.
+    if (window.EGFlowSteps) {
+      window.EGFlowSteps.render('egSteps', firmado ? 'pago' : 'contrato');
+    }
+
     var card = document.getElementById('egContratoCard');
     if (!card) return;
     var TIPO = card.dataset.tipo || 'sesion';
     document.getElementById('egContratoBtn').href = '/contrato/?tipo=' + TIPO;
-    var firmado = null;
-    try { firmado = JSON.parse(localStorage.getItem('eg_contrato_firmado') || 'null'); } catch (e) {}
     if (!firmado) return;
 
     card.classList.add('firmado');
