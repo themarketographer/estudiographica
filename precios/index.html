@@ -383,6 +383,23 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
       try { localStorage.setItem('eg_paquete_v1', JSON.stringify(datos)); } catch (e) {}
     }
 
+    // El paquete guardado solo trae los NOMBRES de los extras activos (ej.
+    // "Landing page básica, Reel sencillo x2"), no un objeto {id: cantidad}
+    // — por eso, para restaurarlo, hay que volver a mapear cada nombre a su
+    // "id" interno buscándolo en EGPricing.EXTRAS.
+    function parseExtrasString(str) {
+      var sel = {};
+      if (!str) return sel;
+      str.split(',').map(function (s) { return s.trim(); }).filter(Boolean).forEach(function (part) {
+        var m = part.match(/^(.*?)\s+x(\d+)$/);
+        var label = m ? m[1] : part;
+        var qty = m ? parseInt(m[2], 10) : 1;
+        var ex = EGPricing.EXTRAS.find(function (e) { return e.label === label; });
+        if (ex) sel[ex.id] = qty;
+      });
+      return sel;
+    }
+
     // Pinta la lista de extras una sola vez; los "flat" son checkbox simple,
     // "reels" (stepper) trae su propio selector de cantidad con − / +.
     extrasList.innerHTML = EGPricing.EXTRAS.map(function (ex) {
@@ -545,6 +562,45 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
         guardarPaquete({ tipo: 'plan', paquete: pdata.paquete, precio: pPrecioFinal, fotos: planFotos, duracion: duracion, reels: addVideo ? reels : 0, extras: extrasNombres.join(', ') });
       }
     }
+
+    // ── Restaurar paquete guardado ──
+    // Si el visitante ya había armado un paquete acá antes (o vuelve desde
+    // /contrato con "← Cambiar mi paquete"), esta página tiene que mostrar
+    // EXACTAMENTE lo que había dejado — no resetear a los valores por
+    // defecto. Antes esto no pasaba: "cambiar mi paquete" te mandaba a
+    // /precios siempre desde cero, como si fuera la primera vez.
+    try {
+      var pkgGuardado = JSON.parse(localStorage.getItem('eg_paquete_v1') || 'null');
+      if (pkgGuardado && pkgGuardado.tipo) {
+        tipo = pkgGuardado.tipo;
+        if (tipo === 'plan') {
+          if (pkgGuardado.fotos >= parseInt(planFotosSlider.min, 10) && pkgGuardado.fotos <= parseInt(planFotosSlider.max, 10)) {
+            planFotosSlider.value = pkgGuardado.fotos;
+          }
+          if ([3, 6, 12].indexOf(pkgGuardado.duracion) !== -1) duracion = pkgGuardado.duracion;
+          if (pkgGuardado.reels > 0) {
+            addVideo = true;
+            if (pkgGuardado.reels >= parseInt(reelsSlider.min, 10) && pkgGuardado.reels <= parseInt(reelsSlider.max, 10)) {
+              reelsSlider.value = pkgGuardado.reels;
+            }
+          }
+        } else if (pkgGuardado.fotos >= parseInt(fotosSlider.min, 10) && pkgGuardado.fotos <= parseInt(fotosSlider.max, 10)) {
+          fotosSlider.value = pkgGuardado.fotos;
+        }
+        extrasSeleccionados = parseExtrasString(pkgGuardado.extras);
+
+        // Refleja en el DOM el tab y los chips/checkbox restaurados antes
+        // del primer render (render() en sí no toca estas clases visuales).
+        tabSesion.classList.toggle('active', tipo === 'sesion');
+        tabPlan.classList.toggle('active', tipo === 'plan');
+        panelSesion.style.display = tipo === 'sesion' ? 'block' : 'none';
+        panelPlan.style.display = tipo === 'plan' ? 'block' : 'none';
+        durChips.forEach(function (c) { c.classList.toggle('active', parseInt(c.dataset.dur, 10) === duracion); });
+        videoCheckSquare.classList.toggle('active', addVideo);
+        videoCheckSquare.textContent = addVideo ? '✓' : '';
+        reelsBlock.style.display = addVideo ? 'block' : 'none';
+      }
+    } catch (e) {}
 
     render();
 

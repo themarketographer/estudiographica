@@ -246,49 +246,20 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
   <div class="center">
     <span class="badge" id="eg-gp-badge">📅 Plan mensual</span>
     <h1 id="eg-gp-h1">Tu plan está a un <span class="cursive">paso</span>.</h1>
-    <p class="sub" id="eg-gp-sub">Ajusta la cantidad de fotos, duración o agrega video si quieres cambiar el paquete, y realiza tu adelanto.</p>
+    <p class="sub" id="eg-gp-sub">Ahora firma tu contrato. El adelanto se hace justo después, en esta misma página.</p>
   </div>
 
+  <!-- El plan ya se armó y se reservó en /precios — acá solo lo
+       confirmamos, no se vuelve a editar. Ver el mismo cambio y su
+       explicación en /gracias-sesion. -->
   <div class="card">
-    <p class="card-label" id="eg-gp-card-label">Configura tu plan</p>
-
-    <div class="slider-block">
-      <div class="slider-head">
-        <span class="slider-label">Fotos mensuales</span>
-        <span class="slider-value" id="fotosValue">16 fotos/mes</span>
-      </div>
-      <input type="range" id="fotosSlider" min="12" max="26" step="1" value="16" />
-      <div class="range-labels"><span>12</span><span>26</span></div>
-    </div>
-
-    <div class="slider-block">
-      <div class="slider-head"><span class="slider-label">Duración del plan</span></div>
-      <div class="dur-chips" id="durChips" role="radiogroup" aria-label="Duración del plan">
-        <div class="dur-chip" data-dur="3" role="radio" aria-checked="false" tabindex="0">3 meses</div>
-        <div class="dur-chip" data-dur="6" role="radio" aria-checked="false" tabindex="0">6 meses</div>
-        <div class="dur-chip" data-dur="12" role="radio" aria-checked="false" tabindex="0">12 meses</div>
-      </div>
-    </div>
-
-    <div class="checkbox-row" id="videoCheckbox" role="checkbox" aria-checked="false" tabindex="0">
-      <span class="check-square" id="videoCheckSquare"></span>
-      <span style="font-size: 14px; font-weight: 500;">Añadir servicio de videos</span>
-    </div>
-
-    <div class="slider-block" id="reelsBlock" style="display: none; margin-top: 18px;">
-      <div class="slider-head">
-        <span class="slider-label">Reels mensuales</span>
-        <span class="slider-value" id="reelsValue">4 reels/mes</span>
-      </div>
-      <input type="range" id="reelsSlider" min="4" max="12" step="1" value="4" />
-      <div class="range-labels"><span>4</span><span>12</span></div>
-    </div>
-
+    <p class="card-label" id="eg-gp-card-label">Tu plan reservado</p>
     <div class="paquete-name" id="paqueteName">Plan Estándar</div>
     <div class="price" id="precioValue">Bs. 728<span class="price-unit">/mes</span></div>
     <p class="price-note" id="eg-gp-price-note">Precio referencial. Se confirma en tu sesión.</p>
 
     <ul class="benefits" id="benefitsList"></ul>
+    <a class="resumen-edit" id="egCambiarPaquete" href="/precios">← Cambiar mi plan</a>
   </div>
 
   <!-- ══════ PASO 3: CONTRATO (antes del pago) ══════ -->
@@ -301,7 +272,8 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
     <a class="eg-contrato-btn" id="egContratoBtn" href="/contrato/?tipo=plan">Leer y firmar mi contrato →</a>
   </div>
 
-  <div class="pay-card">
+  <!-- Ver /gracias-sesion: el pago queda oculto hasta firmar el contrato. -->
+  <div class="pay-card" id="egPayCard" style="display:none;">
     <p class="card-label" id="eg-gp-pay-label" style="color: rgba(24,24,24,0.75);">¿Cuánto vas a depositar?</p>
     <div class="pay-toggle">
       <button id="btnAdelanto" class="active">50% adelanto</button>
@@ -351,7 +323,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
     {
       badge: '📅 Plan mensual',
       titulo: 'Tu plan está a un <span class="cursive">paso</span>.',
-      subtitulo: 'Ajusta la cantidad de fotos, duración o agrega video si quieres cambiar el paquete, y realiza tu adelanto.',
+      subtitulo: 'Ahora firma tu contrato. El adelanto se hace justo después, en esta misma página.',
       configuraLabel: 'Configura tu plan',
       precioNota: 'Precio referencial. Se confirma en tu sesión.',
       depositoLabel: '¿Cuánto vas a depositar?',
@@ -400,14 +372,6 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
   })();
 
   (function () {
-    var slider = document.getElementById('fotosSlider');
-    var fotosValue = document.getElementById('fotosValue');
-    var durChips = document.querySelectorAll('.dur-chip');
-    var videoCheckbox = document.getElementById('videoCheckbox');
-    var videoCheckSquare = document.getElementById('videoCheckSquare');
-    var reelsBlock = document.getElementById('reelsBlock');
-    var reelsSlider = document.getElementById('reelsSlider');
-    var reelsValue = document.getElementById('reelsValue');
     var paqueteName = document.getElementById('paqueteName');
     var precioValue = document.getElementById('precioValue');
     var benefitsList = document.getElementById('benefitsList');
@@ -418,99 +382,27 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
     var btnAdelanto = document.getElementById('btnAdelanto');
     var btnCompleto = document.getElementById('btnCompleto');
 
-    var duracion = 3;
-    var addVideo = false;
     var modoAdelanto = true;
     var montoActual = 0;
     var precioTotalActual = 0;
     var paqueteActual = '';
 
-    // Recupera el plan que el cliente realmente armó y reservó en
-    // /precios (localStorage eg_paquete_v1) para que esta página arranque
-    // mostrando SU plan, no siempre los valores por defecto — así el
-    // cliente no tiene que volver a elegir algo que ya había elegido.
+    // El plan ya se armó y se reservó en /precios (localStorage
+    // eg_paquete_v1) — acá solo lo mostramos de vuelta, de forma
+    // read-only. Editarlo de nuevo pasa siempre por /precios (link
+    // "← Cambiar mi plan"), nunca acá, para que no exista un segundo
+    // lugar donde armar el paquete. Ver el mismo cambio en /gracias-sesion.
+    var fotos = 15, duracion = 3, addVideo = false, reels = 0;
     try {
       var guardado = JSON.parse(localStorage.getItem('eg_paquete_v1') || '{}');
       if (guardado && guardado.tipo === 'plan') {
-        if (guardado.fotos) {
-          var fotosGuardadas = parseInt(guardado.fotos, 10);
-          if (fotosGuardadas >= parseInt(slider.min, 10) && fotosGuardadas <= parseInt(slider.max, 10)) {
-            slider.value = fotosGuardadas;
-          }
-        }
+        if (guardado.fotos) fotos = parseInt(guardado.fotos, 10);
         if (guardado.duracion) duracion = parseInt(guardado.duracion, 10);
-        if (guardado.reels) {
-          addVideo = true;
-          var reelsGuardados = parseInt(guardado.reels, 10);
-          if (reelsGuardados >= parseInt(reelsSlider.min, 10) && reelsGuardados <= parseInt(reelsSlider.max, 10)) {
-            reelsSlider.value = reelsGuardados;
-          }
-          videoCheckSquare.classList.add('active');
-          videoCheckSquare.textContent = '✓';
-          reelsBlock.style.display = 'block';
-          videoCheckbox.setAttribute('aria-checked', 'true');
-        }
+        if (guardado.reels) { addVideo = true; reels = parseInt(guardado.reels, 10); }
       }
     } catch (e) {}
 
-    // Si el cliente ajusta el plan acá, actualizamos el mismo
-    // localStorage que lee /contrato — así el contrato y el pago siempre
-    // muestran el mismo plan, sin importar en qué página lo tocó.
-    function guardarPaquete(fotos, precio, paquete) {
-      try {
-        var actual = JSON.parse(localStorage.getItem('eg_paquete_v1') || '{}');
-        var nuevo = Object.assign({}, actual, {
-          tipo: 'plan', fotos: fotos, precio: precio, paquete: paquete,
-          duracion: duracion, reels: addVideo ? parseInt(reelsSlider.value, 10) : 0,
-        });
-        localStorage.setItem('eg_paquete_v1', JSON.stringify(nuevo));
-      } catch (e) {}
-    }
-
-    function seleccionarDuracion(chip) {
-      durChips.forEach(function (c) { c.classList.remove('active'); c.setAttribute('aria-checked', 'false'); });
-      chip.classList.add('active');
-      chip.setAttribute('aria-checked', 'true');
-      duracion = parseInt(chip.dataset.dur, 10);
-      render();
-    }
-    durChips.forEach(function (chip) {
-      var esActivo = parseInt(chip.dataset.dur, 10) === duracion;
-      chip.classList.toggle('active', esActivo);
-      chip.setAttribute('aria-checked', esActivo ? 'true' : 'false');
-      chip.addEventListener('click', function () { seleccionarDuracion(chip); });
-      // Foco de teclado: son <div role="radio">, no <input>, así que
-      // necesitan su propio manejador de Enter/Espacio.
-      chip.addEventListener('keydown', function (e) {
-        if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
-          e.preventDefault();
-          seleccionarDuracion(chip);
-        }
-      });
-    });
-
-    function alternarVideo() {
-      addVideo = !addVideo;
-      videoCheckbox.setAttribute('aria-checked', addVideo ? 'true' : 'false');
-      videoCheckSquare.classList.toggle('active', addVideo);
-      videoCheckSquare.textContent = addVideo ? '✓' : '';
-      reelsBlock.style.display = addVideo ? 'block' : 'none';
-      render();
-    }
-    videoCheckbox.addEventListener('click', alternarVideo);
-    videoCheckbox.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
-        e.preventDefault();
-        alternarVideo();
-      }
-    });
-
     function render() {
-      var fotos = parseInt(slider.value, 10);
-      var reels = parseInt(reelsSlider.value, 10);
-      fotosValue.textContent = fotos + ' fotos/mes';
-      reelsValue.textContent = reels + ' reels/mes';
-
       var data = EGPricing.calcPlan(fotos, duracion, addVideo, reels);
       var benefits = EGPricing.planBenefits(fotos, duracion, addVideo, reels);
 
@@ -529,11 +421,8 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
       montoActual = monto;
       precioTotalActual = data.precio;
       paqueteActual = data.paquete;
-      guardarPaquete(fotos, data.precio, data.paquete);
     }
 
-    slider.addEventListener('input', render);
-    reelsSlider.addEventListener('input', render);
     btnAdelanto.addEventListener('click', function () {
       modoAdelanto = true; btnAdelanto.classList.add('active'); btnCompleto.classList.remove('active'); render();
     });
@@ -569,20 +458,20 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
         });
       }
 
-      // Ajustó fotos, reels, duración o video antes de depositar.
-      var trackCustomize = window.EG.debounce(function () {
+      btnAdelanto.addEventListener('click', function () {
         window.EG.trackEvent(egEventName('Ajustó el paquete (slider / chips / checkbox / toggle)', 'CustomizeProduct'), {
-          content_name: 'Ajustó paquete - Gracias plan',
+          content_name: 'Ajustó modo de pago - Gracias plan',
           content_type: 'plan-mensual',
           origen: window.EG.getOrigen(),
         });
-      }, 700);
-      slider.addEventListener('input', trackCustomize);
-      reelsSlider.addEventListener('input', trackCustomize);
-      durChips.forEach(function (chip) { chip.addEventListener('click', trackCustomize); });
-      videoCheckbox.addEventListener('click', trackCustomize);
-      btnAdelanto.addEventListener('click', trackCustomize);
-      btnCompleto.addEventListener('click', trackCustomize);
+      });
+      btnCompleto.addEventListener('click', function () {
+        window.EG.trackEvent(egEventName('Ajustó el paquete (slider / chips / checkbox / toggle)', 'CustomizeProduct'), {
+          content_name: 'Ajustó modo de pago - Gracias plan',
+          content_type: 'plan-mensual',
+          origen: window.EG.getOrigen(),
+        });
+      });
     }
   })();
 </script>
@@ -600,6 +489,11 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
     if (window.EGFlowSteps) {
       window.EGFlowSteps.render('egSteps', firmado ? 'pago' : 'contrato');
     }
+
+    // El pago queda oculto hasta que el contrato está firmado — así no
+    // hay forma de llegar al QR sin haber leído y firmado antes.
+    var payCard = document.getElementById('egPayCard');
+    if (payCard) payCard.style.display = firmado ? 'block' : 'none';
 
     var card = document.getElementById('egContratoCard');
     if (!card) return;

@@ -203,6 +203,8 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
      el resto de las tarjetas de esta misma página. */
   .eg-steps-card { padding: 20px 20px 4px; margin-bottom: 24px; }
   .eg-steps-card .steps { margin: 0 auto; }
+  .resumen-edit { font-size: 12.5px; color: var(--gray-text); text-decoration: underline; margin-top: 10px; display: inline-block; }
+  .resumen-edit:hover { color: var(--dark); }
   .pay-toggle button:focus-visible {
     outline: 2.5px solid var(--dark); outline-offset: 2px;
   }
@@ -230,25 +232,25 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
   <div class="center">
     <span class="badge" id="eg-gs-badge">📸 Sesión de fotos</span>
     <h1 id="eg-gs-h1">Tu sesión está a un <span class="cursive">paso</span>.</h1>
-    <p class="sub" id="eg-gs-sub">Ajusta la cantidad de fotos si quieres cambiar el paquete, y realiza tu adelanto para apartar la fecha.</p>
+    <p class="sub" id="eg-gs-sub">Ahora firma tu contrato. El adelanto para apartar la fecha se hace justo después, en esta misma página.</p>
   </div>
 
+  <!-- El paquete ya se armó y se reservó en /precios — acá solo lo
+       confirmamos, no se vuelve a editar con un slider. Antes esta tarjeta
+       traía el mismo slider que /precios, como si el cliente tuviera que
+       armar el paquete dos veces: confuso, y encima el slider de acá no
+       tenía forma de deshacerse sin volver a /precios y perder lo que
+       había reservado. Si de verdad quiere otra cantidad, el link de abajo
+       lo manda a /precios YA con su paquete cargado (ver restauración
+       agregada ahí), no desde cero. -->
   <div class="card">
-    <p class="card-label" id="eg-gs-card-label">Configura tu sesión</p>
-    <div class="slider-block">
-      <div class="slider-head">
-        <span class="slider-label">Cantidad de fotos</span>
-        <span class="slider-value" id="fotosValue">15 fotos</span>
-      </div>
-      <input type="range" id="fotosSlider" min="8" max="24" step="1" value="15" />
-      <div class="range-labels"><span>8</span><span>24</span></div>
-    </div>
-
+    <p class="card-label" id="eg-gs-card-label">Tu paquete reservado</p>
     <div class="paquete-name" id="paqueteName">Paquete Estándar</div>
     <div class="price" id="precioValue">Bs. 1020<span class="price-unit">pago único</span></div>
     <p class="price-note" id="eg-gs-price-note">Precio referencial. Se confirma en tu sesión.</p>
 
     <ul class="benefits" id="benefitsList"></ul>
+    <a class="resumen-edit" id="egCambiarPaquete" href="/precios">← Cambiar mi paquete</a>
   </div>
 
   <!-- ══════ PASO 3: CONTRATO (antes del pago) ══════ -->
@@ -261,7 +263,12 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
     <a class="eg-contrato-btn" id="egContratoBtn" href="/contrato/?tipo=sesion">Leer y firmar mi contrato →</a>
   </div>
 
-  <div class="pay-card">
+  <!-- El pago queda oculto hasta firmar el contrato (ver script "Estado del
+       contrato" más abajo, que le agrega la clase .show cuando corresponde).
+       Antes se mostraba siempre, con el QR y los montos a la vista incluso
+       antes de firmar — dos decisiones distintas (firmar, pagar) compitiendo
+       por la atención al mismo tiempo, en vez de una después de la otra. -->
+  <div class="pay-card" id="egPayCard" style="display:none;">
     <p class="card-label" id="eg-gs-pay-label" style="color: rgba(24,24,24,0.75);">¿Cuánto vas a depositar?</p>
     <div class="pay-toggle">
       <button id="btnAdelanto" class="active">50% adelanto</button>
@@ -313,7 +320,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
     {
       badge: '📸 Sesión de fotos',
       titulo: 'Tu sesión está a un <span class="cursive">paso</span>.',
-      subtitulo: 'Ajusta la cantidad de fotos si quieres cambiar el paquete, y realiza tu adelanto para apartar la fecha.',
+      subtitulo: 'Ahora firma tu contrato. El adelanto para apartar la fecha se hace justo después, en esta misma página.',
       configuraLabel: 'Configura tu sesión',
       precioNota: 'Precio referencial. Se confirma en tu sesión.',
       depositoLabel: '¿Cuánto vas a depositar?',
@@ -362,8 +369,6 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
   })();
 
   (function () {
-    var slider = document.getElementById('fotosSlider');
-    var fotosValue = document.getElementById('fotosValue');
     var paqueteName = document.getElementById('paqueteName');
     var precioValue = document.getElementById('precioValue');
     var benefitsList = document.getElementById('benefitsList');
@@ -378,23 +383,18 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
     var precioTotalActual = 0;
     var paqueteActual = '';
 
-    // Recupera el paquete que el cliente realmente armó y reservó en
-    // /precios (localStorage eg_paquete_v1) para que esta página arranque
-    // mostrando SU paquete, no siempre "15 fotos" por defecto — así el
-    // cliente no tiene que volver a elegir algo que ya había elegido.
+    // El paquete ya no se edita en esta página (ver el cambio de la
+    // tarjeta de arriba) — se lee tal cual quedó guardado desde /precios.
+    // 15 fotos es solo el respaldo por si alguien llega acá sin haber
+    // pasado por /precios (link directo, por ejemplo).
+    var fotos = 15;
     try {
       var guardado = JSON.parse(localStorage.getItem('eg_paquete_v1') || '{}');
       if (guardado && guardado.tipo === 'sesion' && guardado.fotos) {
-        var fotosGuardadas = parseInt(guardado.fotos, 10);
-        if (fotosGuardadas >= parseInt(slider.min, 10) && fotosGuardadas <= parseInt(slider.max, 10)) {
-          slider.value = fotosGuardadas;
-        }
+        fotos = parseInt(guardado.fotos, 10);
       }
     } catch (e) {}
 
-    // Si el cliente ajusta el slider acá, actualizamos el mismo
-    // localStorage que lee /contrato — así el contrato y el pago siempre
-    // muestran el mismo paquete, sin importar en qué página lo tocó.
     function guardarPaquete(fotos, precio, paquete) {
       try {
         var actual = JSON.parse(localStorage.getItem('eg_paquete_v1') || '{}');
@@ -404,12 +404,10 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
     }
 
     function render() {
-      var fotos = parseInt(slider.value, 10);
       var data = EGPricing.calcSesion(fotos);
       var benefits = EGPricing.sesionBenefits(fotos);
       guardarPaquete(fotos, data.precio, data.paquete);
 
-      fotosValue.textContent = fotos + ' fotos';
       paqueteName.textContent = 'Paquete ' + data.paquete;
       precioValue.innerHTML = 'Bs. ' + data.precio + '<span class="price-unit">pago único</span>';
       benefitsList.innerHTML = benefits.map(function (b) {
@@ -427,7 +425,6 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
       paqueteActual = data.paquete;
     }
 
-    slider.addEventListener('input', render);
     btnAdelanto.addEventListener('click', function () {
       modoAdelanto = true; btnAdelanto.classList.add('active'); btnCompleto.classList.remove('active'); render();
     });
@@ -464,16 +461,15 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
         });
       }
 
-      // Ajustó la cantidad de fotos o el modo de pago antes de depositar:
-      // sigue siendo "armar el paquete a medida", igual que en /precios.
+      // El paquete ya no se edita acá (ver /precios), así que lo único que
+      // queda por "ajustar" en esta página es el modo de pago.
       var trackCustomize = window.EG.debounce(function () {
         window.EG.trackEvent(egEventName('Ajustó el paquete (slider / toggle de pago)', 'CustomizeProduct'), {
-          content_name: 'Ajustó paquete - Gracias sesión',
+          content_name: 'Ajustó modo de pago - Gracias sesión',
           content_type: 'sesion',
           origen: window.EG.getOrigen(),
         });
       }, 700);
-      slider.addEventListener('input', trackCustomize);
       btnAdelanto.addEventListener('click', trackCustomize);
       btnCompleto.addEventListener('click', trackCustomize);
     }
@@ -496,6 +492,11 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
     if (window.EGFlowSteps) {
       window.EGFlowSteps.render('egSteps', firmado ? 'pago' : 'contrato');
     }
+
+    // El pago recién se muestra cuando el contrato ya está firmado —
+    // mientras tanto, lo único que hay que decidir es firmar, no pagar.
+    var payCard = document.getElementById('egPayCard');
+    if (payCard) payCard.style.display = firmado ? 'block' : 'none';
 
     var card = document.getElementById('egContratoCard');
     if (!card) return;
