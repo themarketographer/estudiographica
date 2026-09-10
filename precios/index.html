@@ -195,8 +195,17 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
   .wa-link:hover { color: var(--dark); }
 
   @media (max-width: 880px) {
+    /* En mobile, .left-col (fotos, duración, extras) y .right-col (paquete,
+       precio, botón de reservar) se apilan en una sola columna. Antes el
+       precio y el botón de reservar quedaban AL FINAL, después de toda la
+       configuración — el cliente entraba a la página y lo primero que veía
+       eran sliders y extras sin saber a qué paquete ni precio corresponden.
+       Con order:-1 el paquete y el precio aparecen primero (igual que en
+       desktop, donde están a la vista todo el tiempo en la columna derecha),
+       y la configuración queda debajo, ya con el precio como referencia. */
     .card { grid-template-columns: 1fr; gap: 24px; padding: 24px; }
-    .right-col { border-left: none; border-top: 1px dashed rgba(24,24,24,0.12); padding-left: 0; padding-top: 24px; }
+    .right-col { order: -1; border-left: none; padding-left: 0; padding-bottom: 24px; border-bottom: 1px dashed rgba(24,24,24,0.12); }
+    .left-col { padding-top: 24px; }
   }
 </style>
   <link rel="stylesheet" href="/assets/css/funnel-ux.css">
@@ -218,7 +227,6 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
 </div>
 
 <div class="steps" id="egSteps"></div>
-<div class="eg-retomar" id="egRetomar"></div>
 
 <div class="toggle-wrap">
   <div class="toggle">
@@ -604,13 +612,18 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
 
     render();
 
-    // ── Barra de progreso + aviso de retomar ──
+    // ── Barra de progreso ──
     // /precios es siempre el paso "Paquete y reserva" — con o sin
     // diagnóstico previo, según lo que haya quedado guardado en
     // localStorage cuando el visitante eligió su camino en /empezar.
+    // Sin aviso de "retomar" acá: esta página SIEMPRE guarda un paquete
+    // por defecto apenas carga (para que el precio se vea de entrada),
+    // así que ese aviso saldría también en la primera visita, diciendo
+    // "ya armaste un paquete" cuando el cliente recién está por armarlo.
+    // El aviso de retomar tiene sentido en /empezar (varias puertas de
+    // entrada), no en la página donde ya se está configurando.
     if (window.EGFlowSteps) {
       window.EGFlowSteps.render('egSteps', 'reserva');
-      window.EGFlowSteps.renderRetomar('egRetomar');
     }
     document.body.classList.add('eg-has-sticky-bar');
 

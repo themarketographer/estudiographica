@@ -482,8 +482,15 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
     var firmado = null;
     try { firmado = JSON.parse(localStorage.getItem('eg_contrato_firmado') || 'null'); } catch (e) {}
 
+    var pasoInfo = null;
     if (window.EGFlowSteps) {
-      window.EGFlowSteps.render('egSteps', firmado ? 'pago' : 'contrato');
+      pasoInfo = window.EGFlowSteps.render('egSteps', firmado ? 'pago' : 'contrato');
+    }
+    // Ver /gracias-sesion: la etiqueta de la tarjeta tiene que coincidir
+    // con la barra de arriba, nunca quedarse fija en "Paso 3 de 4".
+    var badgeEl = document.getElementById('egContratoBadge');
+    if (badgeEl && pasoInfo && !firmado) {
+      badgeEl.textContent = 'Paso ' + pasoInfo.index + ' de ' + pasoInfo.total;
     }
 
     // El pago queda oculto hasta que el contrato está firmado — así no
@@ -505,7 +512,8 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
     if (!firmado) return;
 
     card.classList.add('firmado');
-    document.getElementById('egContratoBadge').textContent = '✓ Paso 3 completado';
+    var contratoIdx = pasoInfo ? (pasoInfo.total - 1) : 2;
+    document.getElementById('egContratoBadge').textContent = '✓ Paso ' + contratoIdx + ' completado';
     document.getElementById('egContratoTitle').textContent = 'Contrato firmado';
     document.getElementById('egContratoDesc').textContent =
       'Ya firmaste, ' + (firmado.nombre || '') + '. Te enviamos la copia en PDF por correo. Lo único que falta es el adelanto de aquí abajo.';

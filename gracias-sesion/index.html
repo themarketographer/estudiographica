@@ -482,8 +482,20 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
     // Barra de progreso: esta página cubre los pasos "Contrato" y "Pago"
     // (el contrato se firma en /contrato, pero el paso empieza acá), así
     // que el paso actual depende de si ya se firmó o no.
+    var pasoInfo = null;
     if (window.EGFlowSteps) {
-      window.EGFlowSteps.render('egSteps', firmado ? 'pago' : 'contrato');
+      pasoInfo = window.EGFlowSteps.render('egSteps', firmado ? 'pago' : 'contrato');
+    }
+    // La etiqueta "Paso X de Y" de la tarjeta del contrato tiene que
+    // coincidir siempre con la barra de arriba. Antes decía "Paso 3 de 4"
+    // fijo en el HTML, así que a cualquiera que llegara por el camino
+    // directo (sin diagnóstico gratuito, 3 pasos en total) le aparecía la
+    // barra marcando "Contrato" como paso 2 de 3 mientras esta tarjeta,
+    // debajo, decía "Paso 3 de 4" — dos números distintos en la misma
+    // pantalla para el mismo paso.
+    var badgeEl = document.getElementById('egContratoBadge');
+    if (badgeEl && pasoInfo && !firmado) {
+      badgeEl.textContent = 'Paso ' + pasoInfo.index + ' de ' + pasoInfo.total;
     }
 
     // El pago recién se muestra cuando el contrato ya está firmado —
@@ -507,7 +519,8 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
     if (!firmado) return;
 
     card.classList.add('firmado');
-    document.getElementById('egContratoBadge').textContent = '✓ Paso 3 completado';
+    var contratoIdx = pasoInfo ? (pasoInfo.total - 1) : 2;
+    document.getElementById('egContratoBadge').textContent = '✓ Paso ' + contratoIdx + ' completado';
     document.getElementById('egContratoTitle').textContent = 'Contrato firmado';
     document.getElementById('egContratoDesc').textContent =
       'Ya firmaste, ' + (firmado.nombre || '') + '. Te enviamos la copia en PDF por correo. Lo único que falta es el adelanto de aquí abajo.';
