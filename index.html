@@ -208,7 +208,8 @@ a:hover { color: #F5D000; }
 
 @media (prefers-reduced-motion: reduce) {
   .eg-hero__shape, .eg-hero__photo-frame, .eg-hero__bubble--1, .eg-hero__bubble--2,
-  .eg-hero__bubble--3, .eg-sobre__badge, .eg-hero__left, .eg-hero__right {
+  .eg-hero__bubble--3, .eg-sobre__badge, .eg-hero__left, .eg-hero__right,
+  .eg-cta__blob, .eg-cta__blob--2, .eg-lb, .eg-lb__img {
     animation: none !important;
   }
   .eg-reveal { transition-duration: 0.01ms !important; }
@@ -1369,6 +1370,9 @@ footer { background: #0A0A0A; padding: clamp(36px, 6vw, 56px) 0 24px; }
       var pos = 0, baseSpeed = 0.9, speed = baseSpeed, raf = null;
       var dragging = false, startX = 0, startPos = 0, lastX = 0, lastT = 0, velocity = 0;
       var THROW = 3.2, FRICTION = 0.94, MAX = 5;
+      // Respeta prefers-reduced-motion: el auto-scroll no arranca solo,
+      // pero arrastrar la fila con el dedo/mouse sigue funcionando igual.
+      var marcasReduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
       function half() { return track.scrollWidth / 2; }
       function normalize() { var h = half(); if (pos < 0) pos = h + (pos % h); if (pos >= h) pos %= h; }
@@ -1377,7 +1381,7 @@ footer { background: #0A0A0A; padding: clamp(36px, 6vw, 56px) 0 24px; }
         track.style.transform = 'translateX(' + (-pos) + 'px)';
         raf = requestAnimationFrame(loop);
       }
-      function start() { if (!raf) raf = requestAnimationFrame(loop); }
+      function start() { if (marcasReduceMotion) return; if (!raf) raf = requestAnimationFrame(loop); }
       function stop() { if (raf) { cancelAnimationFrame(raf); raf = null; } }
 
       function getX(e) { return e.touches ? e.touches[0].pageX : e.pageX; }
