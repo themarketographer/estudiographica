@@ -645,6 +645,7 @@ footer { background: #0A0A0A; padding: clamp(36px, 6vw, 56px) 0 24px; }
       <p class="eg-footer__copy" id="eg-footer-copy"></p>
       <a href="https://api.whatsapp.com/send?phone=+59169422335&text=%C2%A1Hola%2C%20Estudio%20Graphica!%20Vengo%20de%20su%20p%C3%A1gina%20web%2C%20quiero%20trabajar%20con%20ustedes%20%F0%9F%93%B8" target="_blank" rel="noopener" class="eg-footer__wa">Escríbenos por WhatsApp →</a>
     </div>
+    <p class="eg-footer__copy" style="margin-top:14px;">¿Eres fotógrafo? Aprende a vender tu trabajo en <a href="https://marketographers.com/" target="_blank" rel="noopener" style="color:rgba(248,248,248,0.7);text-decoration:underline;">The Marketographers →</a></p>
   </div>
 </footer>
 
@@ -984,7 +985,14 @@ footer { background: #0A0A0A; padding: clamp(36px, 6vw, 56px) 0 24px; }
         if (!m) { el.textContent = raw; return; } // sin número reconocible (no debería pasar): se muestra tal cual
         var prefix = m[1], target = parseInt(m[2], 10), suffix = m[3];
         if (reduceMotion) { el.textContent = raw; return; }
-        var duration = 1100, start = null;
+        /* En móvil el scroll suele ser más rápido que la animación, así que
+           un visitante que baja rápido alcanza a ver valores intermedios
+           poco creíbles (ej. "+61" en vez de "+400"). Se acorta la duración
+           a la mitad por debajo de los 880px (mismo breakpoint móvil usado
+           en el resto del sitio) para que termine bien dentro del tiempo
+           típico de carga/scroll en un celular, sin tocar el look en desktop. */
+        var isMobileViewport = window.innerWidth <= 880;
+        var duration = isMobileViewport ? 550 : 1100, start = null;
         function frame(ts) {
           if (start === null) start = ts;
           var p = Math.min((ts - start) / duration, 1);
