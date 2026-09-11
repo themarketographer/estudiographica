@@ -381,6 +381,32 @@ a:hover { color: #F5D000; }
 .eg-cta__wa:hover { color: var(--eg-yellow); }
 .eg-cta__micro { font-size: 12px; color: rgba(248,248,248,0.48); margin-top: 14px; }
 
+/* ═══════════ CTA STICKY MÓVIL ═══════════
+   Barra fija abajo, solo en móvil: el nav de arriba es chico y se pierde
+   de vista en un scroll largo, así que damos un recordatorio persistente
+   del botón principal. Aparece al pasar el hero y se oculta de nuevo al
+   llegar a la sección #cta final, para no ser redundante ahí. */
+.eg-sticky-cta {
+  display: none;
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  z-index: 90;
+  background: rgba(255,255,255,0.97);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 -6px 24px rgba(24,24,24,0.12);
+  padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+}
+.eg-sticky-cta.is-visible { transform: translateY(0); }
+.eg-sticky-cta__btn { width: 100%; justify-content: center; padding: 14px 22px; font-size: 14px; }
+@media (max-width: 640px) {
+  .eg-sticky-cta { display: block; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .eg-sticky-cta { transition: none; }
+}
+
 /* ═══════════ FOOTER ═══════════ */
 /* ═══════════ FOCO VISIBLE (teclado) — elementos que no son .btn ═══════════ */
 .eg-nav__link:focus-visible,
@@ -629,6 +655,10 @@ footer { background: #0A0A0A; padding: clamp(36px, 6vw, 56px) 0 24px; }
     </div>
   </div>
 </section>
+
+<div class="eg-sticky-cta" id="eg-sticky-cta">
+  <a href="/empezar/" class="eg-btn-primary eg-sticky-cta__btn">Quiero una sesión <span style="font-size:16px;line-height:1;">→</span></a>
+</div>
 
 <footer>
   <div class="eg-footer__inner">
@@ -967,6 +997,31 @@ footer { background: #0A0A0A; padding: clamp(36px, 6vw, 56px) 0 24px; }
     } else {
       revealEls.forEach(function (el) { el.classList.add('is-visible'); });
     }
+
+    /* ═══════════ CTA sticky móvil ═══════════
+       Se muestra apenas se deja de ver el hero (el nav de arriba ya no
+       alcanza a recordar el botón principal en un scroll largo) y se
+       vuelve a ocultar al llegar a la sección #cta final, para no
+       mostrar dos veces el mismo llamado a la acción. */
+    (function () {
+      var bar = document.getElementById('eg-sticky-cta');
+      var heroEl = document.getElementById('hero');
+      var ctaEl = document.getElementById('cta');
+      if (!bar || !heroEl || !ctaEl || !('IntersectionObserver' in window)) return;
+
+      var heroVisible = true, ctaVisible = false;
+      function sync() {
+        bar.classList.toggle('is-visible', !heroVisible && !ctaVisible);
+      }
+      new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) { heroVisible = entry.isIntersecting; });
+        sync();
+      }, { threshold: 0 }).observe(heroEl);
+      new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) { ctaVisible = entry.isIntersecting; });
+        sync();
+      }, { threshold: 0 }).observe(ctaEl);
+    })();
 
     /* ═══════════ Hero — stats contados (0 → valor real) ═══════════
        Cada stat tiene su valor real guardado en data-target (ej. "+400",
