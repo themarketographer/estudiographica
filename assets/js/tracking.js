@@ -190,6 +190,66 @@ window.EG = window.EG || {};
   }
 
   // ─────────────────────────────────────────────
+  // Prefill del contrato con los datos que ya dio en Cal.com
+  // ─────────────────────────────────────────────
+  // Cal.com, con "Reenviar parámetros" activado en el redirect del evento,
+  // manda de vuelta lo que el cliente ya escribió en el formulario de
+  // reserva como query params: ?name=...&email=...&title=...&location=...
+  // Como el cliente YA dio su nombre, el nombre de su negocio, su correo,
+  // la dirección de la sesión y (en sesión, vía el workflow de WhatsApp;
+  // en plan mensual, como pregunta propia) su WhatsApp — no tiene sentido
+  // pedírselo otra vez en /contrato/. Guardamos lo que llegue en el mismo
+  // localStorage que ya usa /contrato/ para restaurar un borrador
+  // (eg_contrato_v1), así ese formulario lo recoge solo, sin tocar su
+  // código. Nunca pisa un campo que el cliente ya haya escrito a mano ahí.
+  //
+  // OJO: los nombres exactos de estos parámetros dependen de cómo Cal.com
+  // serializa cada tipo de pregunta — quedan confirmados recién con una
+  // reserva real después de desplegar esto. Por eso se prueban varios
+  // nombres candidatos por campo.
+  function guardarPrefillContratoDesdeURL() {
+    try {
+      var p = new URLSearchParams(window.location.search);
+      function primero() {
+        for (var i = 0; i < arguments.length; i++) {
+          var v = p.get(arguments[i]);
+          if (v) return v;
+        }
+        return '';
+      }
+      // El campo "whatsapp" del contrato es solo el número LOCAL (el
+      // selector de país de al lado ya pone el +591 por defecto) — si
+      // Cal.com manda el número con el código de país incluido, se lo
+      // quitamos para no terminar con "+591 591 69422335".
+      function soloNumeroLocal(tel) {
+        if (!tel) return '';
+        var limpio = tel.replace(/[^\d+]/g, '');
+        limpio = limpio.replace(/^\+?591/, '');
+        return limpio;
+      }
+
+      var datos = {
+        nombre: primero('name'),
+        negocio: primero('title'),
+        email: primero('email'),
+        direccion: primero('location'),
+        whatsapp: soloNumeroLocal(primero('aiAgentCallPhoneNumber', 'Whatsapp', 'whatsapp', 'attendeePhoneNumber')),
+      };
+      // Si Cal.com no mandó nada útil (visita directa, sin reserva recién
+      // hecha), no tocamos el localStorage para nada.
+      var hayAlgo = Object.keys(datos).some(function (k) { return datos[k]; });
+      if (!hayAlgo) return;
+
+      var actual = {};
+      try { actual = JSON.parse(localStorage.getItem('eg_contrato_v1') || '{}'); } catch (e) {}
+      Object.keys(datos).forEach(function (k) {
+        if (datos[k] && !actual[k]) actual[k] = datos[k];
+      });
+      localStorage.setItem('eg_contrato_v1', JSON.stringify(actual));
+    } catch (e) { /* silencioso: esto es una comodidad, no algo crítico */ }
+  }
+
+  // ─────────────────────────────────────────────
   // Detección de origen "vino del blog"
   // ─────────────────────────────────────────────
   // Evento "inicio_en_blog": se dispara en landing/precios cuando el
@@ -232,5 +292,6 @@ window.EG = window.EG || {};
   EG.debounce = debounce;
   EG.cameFromBlog = cameFromBlog;
   EG.trackBlogReferrerIfApplicable = trackBlogReferrerIfApplicable;
+  EG.guardarPrefillContratoDesdeURL = guardarPrefillContratoDesdeURL;
 
 })(window.EG);

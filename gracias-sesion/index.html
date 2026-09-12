@@ -131,6 +131,8 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
     border-radius: 9999px; border: none; cursor: pointer; background: transparent; color: var(--dark); transition: all 0.2s;
   }
   .pay-toggle button.active { background: var(--dark); color: var(--yellow); }
+  .pay-bonus-note { font-size: 12.5px; color: rgba(24,24,24,0.8); line-height: 1.6; margin: -10px 0 20px; }
+  .pay-bonus-note strong { color: var(--dark); }
   .pay-row { display: flex; justify-content: space-between; align-items: center; background: #fff; border-radius: 14px; padding: 14px 18px; margin-bottom: 10px; }
   .pay-row-label { font-size: 12px; color: var(--gray-text); text-align: left; }
   .pay-row-value { font-family: 'Izmir', 'Syne', sans-serif; font-weight: 800; font-size: 15px; }
@@ -268,6 +270,8 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
       <button id="btnCompleto">100% completo</button>
     </div>
 
+    <p class="pay-bonus-note" id="eg-gs-bonus-note">🎁 Si pagas el <strong>100% de una vez</strong>, te regalo <strong>2 fotos extra</strong> en tu paquete.</p>
+
     <div class="pay-row">
       <span class="pay-row-label">Precio de tu sesión<br><strong id="payPaqueteLabel">Sesión Estándar</strong></span>
       <span class="pay-row-value" id="payPrecioTotal">Bs. 1020</span>
@@ -290,17 +294,22 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
       </div>
       <p class="qr-caption" id="eg-gs-qr-caption">BCP · Pablo Villarroel Rocabado<br>Escanea desde la app de tu banco</p>
     </div>
-  </div>
 
-  <div class="card-dark" id="eg-gs-importante">
-    <strong>Importante:</strong> tu fecha se aparta cuando confirmamos el pago. Envíanos el comprobante por WhatsApp para coordinar el día y la hora exacta de la sesión.
-  </div>
+    <!-- Estos dos elementos vivían FUERA de #egPayCard, así que se veían
+         siempre, incluso antes de firmar el contrato — el aviso de "envía
+         tu comprobante" y el botón de WhatsApp aparecían sin que hubiera
+         nada que pagar todavía. Los movemos adentro para que compartan el
+         mismo display:none/"block" que ya controla el resto del pago. -->
+    <div class="card-dark" id="eg-gs-importante" style="text-align: left;">
+      <strong>Importante:</strong> tu fecha se aparta cuando confirmamos el pago. Envíanos el comprobante por WhatsApp para coordinar el día y la hora exacta de la sesión.
+    </div>
 
-  <a class="btn-wa track-wa-comprobante" id="eg-gs-wa-btn"
-     href="https://api.whatsapp.com/send?phone=+59169422335&text=%C2%A1Hola%2C%20Pablo!%20Ya%20hice%20el%20dep%C3%B3sito%20de%20mi%20sesi%C3%B3n%20de%20fotos%2C%20te%20env%C3%ADo%20el%20comprobante%20%F0%9F%93%B8"
-     target="_blank" rel="noopener">
-    Enviar comprobante por WhatsApp
-  </a>
+    <a class="btn-wa track-wa-comprobante" id="eg-gs-wa-btn"
+       href="https://api.whatsapp.com/send?phone=+59169422335&text=%C2%A1Hola%2C%20Pablo!%20Ya%20hice%20el%20dep%C3%B3sito%20de%20mi%20sesi%C3%B3n%20de%20fotos%2C%20te%20env%C3%ADo%20el%20comprobante%20%F0%9F%93%B8"
+       target="_blank" rel="noopener">
+      Enviar comprobante por WhatsApp
+    </a>
+  </div>
 
   <a class="back-link" href="/" id="eg-gs-back-link">← Volver al inicio</a>
 </div>
@@ -317,6 +326,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
       configuraLabel: 'Configura tu sesión',
       precioNota: 'Precio referencial. Se confirma en tu sesión.',
       depositoLabel: '¿Cuánto vas a depositar?',
+      bonoPagoCompleto: '🎁 Si pagas el <strong>100% de una vez</strong>, te regalo <strong>2 fotos extra</strong> en tu paquete.',
       qrCaption: 'BCP · Pablo Villarroel Rocabado<br>Escanea desde la app de tu banco',
       importante: '<strong>Importante:</strong> tu fecha se aparta cuando confirmamos el pago. Envíanos el comprobante por WhatsApp para coordinar el día y la hora exacta de la sesión.',
       botonWhatsapp: 'Enviar comprobante por WhatsApp',
@@ -355,6 +365,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
     set('eg-gs-card-label', t.configuraLabel);
     set('eg-gs-price-note', t.precioNota);
     set('eg-gs-pay-label', t.depositoLabel);
+    set('eg-gs-bonus-note', t.bonoPagoCompleto, true);
     set('eg-gs-qr-caption', t.qrCaption, true);
     set('eg-gs-importante', t.importante, true);
     set('eg-gs-wa-btn', t.botonWhatsapp);
@@ -411,7 +422,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
       payPrecioTotal.textContent = 'Bs. ' + data.precio;
 
       var monto = modoAdelanto ? Math.round(data.precio * 0.5) : data.precio;
-      payLabel.innerHTML = modoAdelanto ? 'PAGAS AHORA<br>50% de adelanto' : 'PAGAS AHORA<br>100% completo';
+      payLabel.innerHTML = modoAdelanto ? 'PAGAS AHORA<br>50% de adelanto' : 'PAGAS AHORA<br>100% completo + 2 fotos de regalo';
       payMonto.textContent = 'Bs. ' + monto;
       montoActual = monto;
       precioTotalActual = data.precio;
@@ -429,6 +440,14 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 
     // Tracking
     if (window.EG) {
+      // El cliente ya dio su nombre, negocio, correo, dirección y WhatsApp
+      // al reservar en Cal.com — si vienen en la URL (Cal.com los reenvía
+      // con "Reenviar parámetros" activado), los dejamos listos para que
+      // /contrato/ los encuentre solos y no se los vuelva a pedir.
+      if (window.EG.guardarPrefillContratoDesdeURL) {
+        window.EG.guardarPrefillContratoDesdeURL();
+      }
+
       window.EG.trackEvent(egEventName('Carga de la página (inicia checkout)', 'InitiateCheckout'), {
         content_name: 'Gracias - Sesión',
         content_type: 'sesion',

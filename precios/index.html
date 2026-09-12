@@ -630,6 +630,41 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
     }
     document.body.classList.add('eg-has-sticky-bar');
 
+    // ── Ocultar la barra fija de precio mientras el modal de Cal.com
+    // está abierto ──
+    // En pantallas angostas, el modal de Cal.com (que vive dentro de un
+    // <cal-modal-box> con Shadow DOM) no siempre queda por encima de
+    // nuestra barra fija de precio/Reservar, aunque su z-index interno
+    // sea altísimo: el host <cal-modal-box> se posiciona "absolute" con
+    // z-index "auto", así que no abre una nueva capa de apilamiento y el
+    // navegador puede terminar pintando nuestra barra fija encima del
+    // modal. La forma robusta de evitarlo es simplemente esconder la
+    // barra mientras el modal está abierto, en vez de pelear con z-index.
+    (function () {
+      var bar = document.getElementById('egStickyBar');
+      if (!bar) return;
+      function syncStickyBarWithModal() {
+        // Cal.com no quita el <cal-modal-box> del DOM ni resetea su
+        // atributo "state" al cerrar (queda en "loaded" para siempre
+        // después de la primera apertura) — la señal confiable de que
+        // está VISIBLE en pantalla es su "visibility" calculado, que
+        // Cal.com sí alterna entre "visible" y "hidden".
+        var boxes = document.querySelectorAll('cal-modal-box');
+        var modalAbierto = Array.prototype.some.call(boxes, function (b) {
+          return getComputedStyle(b).visibility === 'visible';
+        });
+        bar.style.display = modalAbierto ? 'none' : '';
+      }
+      var mo = new MutationObserver(syncStickyBarWithModal);
+      mo.observe(document.body, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        attributeFilter: ['style', 'state'],
+      });
+      syncStickyBarWithModal();
+    })();
+
     // ── Tracking + metadata para Cal.com ──
     // IMPORTANTE: la sintaxis real del embed de Cal.com para metadata
     // custom es "metadata[miClave]": "miValor" como CLAVE PLANA dentro del
