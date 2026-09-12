@@ -92,30 +92,6 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
   .h1-accent::after { content:''; position:absolute; bottom:0.06em; left:0; right:0; height:0.2em; background: var(--yellow); z-index:-1; }
   .sub { font-size:16px; color: var(--gray-text); max-width: 560px; margin: 0 auto; line-height:1.65; }
 
-  /* ── Mapa de 4 pasos ── */
-  /* ── Mapa de 4 pasos: carrusel tipo "stories" ──
-     Antes era una grilla fija de 4 tarjetas con bastante texto cada una —
-     mucho para leer de un vistazo. Ahora es una tira horizontal que se
-     desliza sola (como un carrusel de Instagram), se puede arrastrar a
-     mano en cualquier momento, y cada tarjeta trae solo lo esencial. */
-  .mapa-carousel { margin: 26px 0 30px; }
-  .mapa-track {
-    display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch; padding: 2px 2px 4px; scrollbar-width: none;
-  }
-  .mapa-track::-webkit-scrollbar { display: none; }
-  .mapa-item {
-    scroll-snap-align: center; flex: 0 0 78%; background:#fff; border-radius:16px; padding:16px 18px;
-    border:1.5px solid rgba(24,24,24,0.06); box-shadow: 0 6px 24px rgba(24,24,24,0.05);
-  }
-  @media (min-width: 620px) { .mapa-item { flex: 0 0 44%; } }
-  @media (min-width: 900px) { .mapa-item { flex: 0 0 23%; } }
-  .mapa-num { font-family:'Izmir','Syne',sans-serif; font-weight:800; font-size:1.5rem; color: var(--yellow); -webkit-text-stroke: 1px var(--dark); line-height:1; margin-bottom:8px; }
-  .mapa-title { font-family:'Izmir','Syne',sans-serif; font-weight:700; font-size:14px; margin-bottom:5px; }
-  .mapa-desc { font-size:12px; color: var(--gray-text); line-height:1.5; }
-  .mapa-dots { display:flex; justify-content:center; gap:6px; margin-top:12px; }
-  .mapa-dot { width:6px; height:6px; border-radius:50%; background:rgba(24,24,24,0.15); transition: background 0.2s, transform 0.2s; padding:0; border:none; cursor:pointer; }
-  .mapa-dot.active { background: var(--dark); transform: scale(1.35); }
 
   /* ── VSL ── */
   .vsl-card { background:#fff; border-radius:26px; padding:26px; box-shadow: 0 20px 60px rgba(24,24,24,0.10); border:1px solid rgba(24,24,24,0.06); margin-bottom:20px; }
@@ -235,20 +211,6 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
     <a href="/contrato/" id="retomarLink">Retomar →</a>
   </div>
 
-  <!-- Carrusel de los 4 pasos: se desliza solo (como una historia de
-       Instagram), y en cualquier momento se puede arrastrar a mano para
-       ir más rápido o volver atrás. Cada tarjeta trae solo lo esencial —
-       antes tenían una oración completa cada una, ahora una frase corta. -->
-  <div class="mapa-carousel">
-    <div class="mapa-track" id="mapaTrack">
-      <div class="mapa-item"><div class="mapa-num">01</div><div class="mapa-title">Diagnóstico</div><div class="mapa-desc">Llamada gratis de 30 min. Se puede saltar.</div></div>
-      <div class="mapa-item"><div class="mapa-num">02</div><div class="mapa-title">Reserva</div><div class="mapa-desc">Armas tu paquete y eliges fecha.</div></div>
-      <div class="mapa-item"><div class="mapa-num">03</div><div class="mapa-title">Contrato</div><div class="mapa-desc">Lo firmas con el dedo. Llega en PDF.</div></div>
-      <div class="mapa-item"><div class="mapa-num">04</div><div class="mapa-title">Pago</div><div class="mapa-desc">Escaneas el QR y apartas tu fecha.</div></div>
-    </div>
-    <div class="mapa-dots" id="mapaDots"></div>
-  </div>
-
   <div class="vsl-card eg-reveal">
     <!-- ⚠️ Cuando grabes el video: pega el ID de YouTube en configEmpezar.videoId
          (abajo, al final de la página) y este bloque se reemplaza solo por el reproductor. -->
@@ -309,7 +271,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
    ══════════════════════════════════════════════════════════════════════ */
 const configEmpezar = [
   {
-    videoId: '',
+    videoId: 'Y-fV-JVCIu4',
     videoCaption: '2 minutos. Te explico cómo trabajamos y qué recibes.',
   },
 ];
@@ -358,74 +320,6 @@ const configEmpezar = [
       caja.classList.add('show');
     }
   } catch (e) {}
-
-  // ── Carrusel de los 4 pasos ──
-  // Se desliza solo cada 2.8s (como una historia), pero es 100% táctil en
-  // cualquier momento: arrastrar con el dedo o el mouse pausa el autoplay
-  // por un rato, y los puntos de abajo también saltan a cualquier paso.
-  // Respeta prefers-reduced-motion: ahí no se mueve solo, solo queda
-  // deslizable a mano.
-  (function () {
-    var track = document.getElementById('mapaTrack');
-    var dotsWrap = document.getElementById('mapaDots');
-    if (!track || !dotsWrap) return;
-    var items = track.querySelectorAll('.mapa-item');
-    var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    items.forEach(function (_, i) {
-      var dot = document.createElement('button');
-      dot.type = 'button';
-      dot.className = 'mapa-dot' + (i === 0 ? ' active' : '');
-      dot.setAttribute('aria-label', 'Ir al paso ' + (i + 1));
-      dot.addEventListener('click', function () {
-        pausarAutoplay();
-        items[i].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-      });
-      dotsWrap.appendChild(dot);
-    });
-    var dots = dotsWrap.querySelectorAll('.mapa-dot');
-
-    function actualizarDotActivo() {
-      var centro = track.scrollLeft + track.clientWidth / 2;
-      var masCercano = 0;
-      var distMin = Infinity;
-      items.forEach(function (item, i) {
-        var centroItem = item.offsetLeft + item.offsetWidth / 2;
-        var dist = Math.abs(centroItem - centro);
-        if (dist < distMin) { distMin = dist; masCercano = i; }
-      });
-      dots.forEach(function (d, i) { d.classList.toggle('active', i === masCercano); });
-      return masCercano;
-    }
-
-    var autoplayTimer = null;
-    function siguientePaso() {
-      var actual = actualizarDotActivo();
-      var siguiente = (actual + 1) % items.length;
-      items[siguiente].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-    }
-    function iniciarAutoplay() {
-      if (reduceMotion) return;
-      autoplayTimer = setInterval(siguientePaso, 2800);
-    }
-    function pausarAutoplay(reanudarEnMs) {
-      if (autoplayTimer) { clearInterval(autoplayTimer); autoplayTimer = null; }
-      if (reduceMotion) return;
-      clearTimeout(track._reanudarTimer);
-      track._reanudarTimer = setTimeout(iniciarAutoplay, reanudarEnMs || 6000);
-    }
-
-    var scrollTimeout;
-    track.addEventListener('scroll', function () {
-      clearTimeout(scrollTimeout);
-      scrollTimeout = setTimeout(actualizarDotActivo, 80);
-    });
-    ['touchstart', 'mousedown', 'wheel'].forEach(function (evt) {
-      track.addEventListener(evt, function () { pausarAutoplay(); }, { passive: true });
-    });
-
-    iniciarAutoplay();
-  })();
 
   // Reveal al hacer scroll — mismo mecanismo (IntersectionObserver) que
   // usa la landing principal para las animaciones de entrada.
