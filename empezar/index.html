@@ -285,7 +285,7 @@ const configEmpezar = [
     var frame = document.getElementById('vslFrame');
     frame.classList.remove('vsl-frame--text');
     frame.innerHTML = '<iframe src="https://www.youtube.com/embed/' + cfg.videoId +
-      '?rel=0&modestbranding=1" title="Cómo trabajamos" ' +
+      '?rel=0&modestbranding=1&cc_load_policy=0" title="Cómo trabajamos" ' +
       'allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" ' +
       'allowfullscreen loading="lazy"></iframe>';
     if (cfg.videoCaption) document.getElementById('vslCaption').textContent = cfg.videoCaption;
