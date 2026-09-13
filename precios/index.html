@@ -140,6 +140,28 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
   input[type="range"]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 50%; background: var(--dark); cursor: pointer; border: 3px solid var(--yellow); }
   .range-labels { display: flex; justify-content: space-between; margin-top: 6px; font-size: 11px; color: var(--gray-text); }
 
+  /* ── Slider principal (Cantidad de fotos / Fotos mensuales) ──
+     Es lo primero que el cliente ve y toca en la página, así que necesita
+     verse claramente distinto de los demás controles (duración, reels) y
+     tener un área de toque bastante más grande que un slider normal —
+     tanto para que sea fácil de arrastrar con el dedo en celular como para
+     que llame la atención de inmediato. */
+  .slider-block--main {
+    background: linear-gradient(160deg, var(--yellow) 0%, #ffe98a 100%);
+    border-radius: 20px; padding: 24px 22px 20px; margin-bottom: 24px;
+    box-shadow: 0 12px 28px rgba(255, 221, 90, 0.4);
+  }
+  .slider-block--main .slider-label { font-size: 15.5px; }
+  .slider-block--main .slider-value { font-size: 16px; background: var(--dark); color: var(--yellow); padding: 6px 14px; }
+  .slider-block--main input[type="range"] { height: 16px; background: rgba(24,24,24,0.14); }
+  .slider-block--main input[type="range"]::-webkit-slider-thumb {
+    width: 40px; height: 40px; border: 5px solid #fff; box-shadow: 0 6px 18px rgba(24,24,24,0.35);
+  }
+  .slider-block--main input[type="range"]::-moz-range-thumb {
+    width: 40px; height: 40px; border: 5px solid #fff; box-shadow: 0 6px 18px rgba(24,24,24,0.35);
+  }
+  .slider-block--main .range-labels { font-size: 12px; font-weight: 600; color: rgba(24,24,24,0.65); margin-top: 10px; }
+
   .dur-chips { display: flex; gap: 8px; margin-top: 8px; }
   .dur-chip { flex: 1; padding: 10px 8px; text-align: center; border-radius: 12px; border: 1.5px solid rgba(24,24,24,0.10); background: #fff; color: var(--dark); font-weight: 500; font-size: 13px; cursor: pointer; transition: all 0.2s; }
   .dur-chip.active { border-color: var(--dark); background: var(--yellow); font-weight: 700; }
@@ -199,16 +221,20 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
 
   @media (max-width: 880px) {
     /* En mobile, .left-col (fotos, duración, extras) y .right-col (paquete,
-       precio, botón de reservar) se apilan en una sola columna. Antes el
-       precio y el botón de reservar quedaban AL FINAL, después de toda la
-       configuración — el cliente entraba a la página y lo primero que veía
-       eran sliders y extras sin saber a qué paquete ni precio corresponden.
-       Con order:-1 el paquete y el precio aparecen primero (igual que en
-       desktop, donde están a la vista todo el tiempo en la columna derecha),
-       y la configuración queda debajo, ya con el precio como referencia. */
+       precio, botón de reservar) se apilan en una sola columna. Hubo una
+       versión que ponía el precio y el botón de reservar PRIMERO (con
+       order:-1), para que el cliente supiera a qué precio correspondía la
+       configuración antes de tocar nada. A pedido de Pablo se volvió al
+       orden natural: lo primero que ve el cliente es el slider de
+       "Cantidad de fotos" (la config, no el precio todavía), porque el
+       objetivo ahora es que interactúe y arme su paquete antes de ver el
+       botón de reservar — no tiene sentido mostrar "Reservar" antes de los
+       extras y de la config. El precio y el botón siempre están de todas
+       formas en la barra fija de abajo (#egStickyBar), así que nunca
+       quedan "escondidos" aunque el cliente no baje hasta el final. */
     .card { grid-template-columns: 1fr; gap: 24px; padding: 24px; }
-    .right-col { order: -1; border-left: none; padding-left: 0; padding-bottom: 24px; border-bottom: 1px dashed rgba(24,24,24,0.12); }
-    .left-col { padding-top: 24px; }
+    .right-col { border-left: none; padding-left: 0; padding-top: 24px; border-top: 1px dashed rgba(24,24,24,0.12); }
+    .left-col { padding-top: 0; }
   }
 </style>
   <link rel="stylesheet" href="/assets/css/funnel-ux.css">
@@ -243,7 +269,7 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
     <div class="left-col">
       <!-- SESIÓN -->
       <div id="panelSesion">
-        <div class="slider-block">
+        <div class="slider-block slider-block--main">
           <div class="slider-head">
             <span class="slider-label">Cantidad de fotos</span>
             <span class="slider-value" id="fotosValue">15 fotos</span>
@@ -255,7 +281,7 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
 
       <!-- PLAN -->
       <div id="panelPlan" style="display:none;">
-        <div class="slider-block">
+        <div class="slider-block slider-block--main">
           <div class="slider-head">
             <span class="slider-label">Fotos mensuales</span>
             <span class="slider-value" id="planFotosValue">16 fotos/mes</span>
