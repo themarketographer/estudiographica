@@ -97,6 +97,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
   .vsl-card { background:#fff; border-radius:26px; padding:26px; box-shadow: 0 20px 60px rgba(24,24,24,0.10); border:1px solid rgba(24,24,24,0.06); margin-bottom:20px; }
   .vsl-frame { position: relative; width:100%; padding-top:56.25%; border-radius:18px; overflow:hidden; background: var(--dark); }
   .vsl-frame iframe { position:absolute; inset:0; width:100%; height:100%; border:0; }
+  .vsl-frame video { position:absolute; inset:0; width:100%; height:100%; border:0; background:#000; object-fit:contain; }
   .vsl-fallback { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; text-align:center; color: rgba(248,248,248,0.75); padding:24px; }
   .vsl-fallback .big { font-size:34px; }
   .vsl-fallback .txt { font-size:13.5px; max-width:340px; line-height:1.5; }
@@ -266,12 +267,17 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 <script>
 /* ══════════════════════════════════════════════════════════════════════
    Textos y video — editables desde el panel
-   videoId: el ID del video de YouTube (lo que va después de "v=" en la URL).
-   Ejemplo: si tu link es youtube.com/watch?v=AbC123xyz → videoId: 'AbC123xyz'
+   videoUrl: link directo al archivo de video (mp4). Si el link es de
+   Dropbox, tiene que terminar en "raw=1" (no "dl=0" ni "dl=1") para que
+   el navegador lo reproduzca directo en la página en vez de descargarlo.
+   videoId: alternativa si en algún momento el video vive en YouTube (el
+   ID es lo que va después de "v=" en la URL). Solo se usa si no hay
+   videoUrl.
    ══════════════════════════════════════════════════════════════════════ */
 const configEmpezar = [
   {
-    videoId: 'Y-fV-JVCIu4',
+    videoUrl: 'https://www.dropbox.com/scl/fi/8qwop3gkelyb5elo3l5h6/VSL-Subt.MP4?rlkey=sjp8y17fc4mp4xdafai5ewy4j&st=gez6zw73&raw=1',
+    videoId: '',
     videoCaption: '2 minutos. Te explico cómo trabajamos y qué recibes.',
   },
 ];
@@ -281,7 +287,13 @@ const configEmpezar = [
   var cfg = configEmpezar[0] || {};
 
   // ── Video ──
-  if (cfg.videoId) {
+  if (cfg.videoUrl) {
+    var frame = document.getElementById('vslFrame');
+    frame.classList.remove('vsl-frame--text');
+    frame.innerHTML = '<video src="' + cfg.videoUrl + '" controls playsinline preload="metadata" ' +
+      'title="Cómo trabajamos"></video>';
+    if (cfg.videoCaption) document.getElementById('vslCaption').textContent = cfg.videoCaption;
+  } else if (cfg.videoId) {
     var frame = document.getElementById('vslFrame');
     frame.classList.remove('vsl-frame--text');
     frame.innerHTML = '<iframe src="https://www.youtube.com/embed/' + cfg.videoId +
