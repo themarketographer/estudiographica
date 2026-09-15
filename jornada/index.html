@@ -43,6 +43,7 @@
 <noscript><img height="1" width="1" style="display:none"
   src="https://www.facebook.com/tr?id=1059099676340072&ev=PageView&noscript=1"/></noscript>
 <script src="/assets/js/tracking.js"></script>
+<script src="/assets/js/funnel-ux.js"></script>
 <!-- ═══════════════════════════════════════════════════ -->
 
 <!-- Cal element-click embed code begins -->
@@ -168,6 +169,8 @@ Cal.ns.jornada("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-brand":"#
     .right-col { border-left: none; padding-left: 0; padding-top: 24px; border-top: 1px dashed rgba(24,24,24,0.12); }
   }
 </style>
+  <link rel="stylesheet" href="/assets/css/funnel-ux.css">
+  <link rel="stylesheet" href="/assets/css/button-states.css">
 </head>
 <body>
 
@@ -183,6 +186,8 @@ Cal.ns.jornada("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-brand":"#
   <h1>Ajusta las horas y <span class="h1-accent cursive">reserva</span> tu fecha.</h1>
   <p class="sub">Ya trabajamos juntos antes, así que vamos directo al precio. Elegí las horas que necesitás para esta sesión.</p>
 </div>
+
+<div class="steps" id="egSteps"></div>
 
 <div class="container">
   <div class="card">
@@ -327,6 +332,8 @@ Cal.ns.jornada("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-brand":"#
     calc();
     refreshCalConfig();
 
+    if (window.EGFlowSteps) window.EGFlowSteps.render('egSteps', 'reserva');
+
     if (window.EG) {
       window.EG.trackEvent('ViewContent', { content_name: 'Jornadas', origen: window.EG.getOrigen() });
 
@@ -364,6 +371,8 @@ Cal.ns.jornada("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-brand":"#
     }
   })();
 </script>
+
+<script src="/assets/js/button-states.js" defer></script>
 
 </body>
 </html>

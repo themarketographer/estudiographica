@@ -92,7 +92,7 @@ window.EGFlowSteps = (function () {
 
       if (firmado) {
         txt = '<b>Ya firmaste tu contrato.</b> Solo falta el adelanto para apartar tu fecha.';
-        href = firmado.tipo === 'plan' ? '/gracias-plan/' : '/gracias-sesion/';
+        href = firmado.tipo === 'plan' ? '/gracias-plan/' : firmado.tipo === 'jornada' ? '/gracias-jornada/' : '/gracias-sesion/';
         cta = 'Ir al pago →';
       } else if (borrador && borrador.nombre) {
         txt = '<b>Tienes tu contrato a medio llenar.</b> Retómalo donde lo dejaste.';
