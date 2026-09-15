@@ -656,8 +656,24 @@ const contratoConfig = [
   var LS_CONTRATO = 'eg_contrato_v1';   // borrador de datos del cliente
   var LS_FIRMADOS = 'eg_contratos_firmados_v1';
 
+  // Misma fórmula que /jornadas y /gracias-jornada — la hora 1 es fija en
+  // Bs. 350 (clientes que solo contratan una hora), de la hora 2 en
+  // adelante corre la misma curva de descuento por volumen del resto del
+  // catálogo (base Bs. 300/hora). pricing-logic.js no tiene esta fórmula
+  // (solo conoce sesión y plan mensual), así que vive acá como respaldo
+  // para cuando el precio no llega ya calculado por URL o localStorage.
+  function calcJornadaFallback(horas) {
+    var precio, paquete;
+    if (horas === 1) { precio = 350; paquete = 'Jornada Básica'; }
+    else if (horas === 2) { precio = Math.round(300 * 2 * 0.95); paquete = 'Jornada Básica'; }
+    else if (horas <= 5) { precio = Math.round(300 * horas * (1 - (0.07 + (horas - 3) * 0.04))); paquete = 'Jornada Estándar'; }
+    else { precio = Math.round(300 * horas * (1 - (0.17 + (horas - 6) * 0.04))); paquete = 'Jornada Completa'; }
+    return { precio: precio, paquete: paquete };
+  }
+
   // ── 1. De dónde salen el paquete y el precio ───────────────────────
-  // Prioridad: parámetros en la URL → lo que guardó /precios → default.
+  // Prioridad: parámetros en la URL → lo que guardó /precios (o /jornadas)
+  // → default.
   function leerPaquete() {
     var p = new URLSearchParams(location.search);
     var guardado = {};
@@ -665,35 +681,42 @@ const contratoConfig = [
 
     var tipo = p.get('tipo') || guardado.tipo || 'sesion';
     var precio = parseInt(p.get('precio') || guardado.precio || 0, 10);
-    var fotos = parseInt(p.get('fotos') || guardado.fotos || (tipo === 'plan' ? 16 : 15), 10);
+    var horas = parseInt(p.get('horas') || guardado.horas || 1, 10);
+    var fotos = parseInt(p.get('fotos') || guardado.fotos || (tipo === 'plan' ? 16 : tipo === 'jornada' ? horas * 15 : 15), 10);
     var duracion = parseInt(p.get('duracion') || guardado.duracion || 3, 10);
     var reels = parseInt(p.get('reels') || guardado.reels || 0, 10);
     var extras = p.get('extras') || guardado.extras || '';
 
     // Si no llegó precio por ningún lado, lo calculamos con la misma
-    // lógica de /precios (fuente única de verdad: pricing-logic.js).
+    // lógica de origen (pricing-logic.js para sesión/plan, la fórmula de
+    // jornada de arriba porque pricing-logic.js no la tiene).
     var paquete = p.get('paquete') || guardado.paquete || '';
-    if ((!precio || !paquete) && window.EGPricing) {
-      if (tipo === 'plan') {
+    if (!precio || !paquete) {
+      if (tipo === 'jornada') {
+        var dj = calcJornadaFallback(horas);
+        precio = precio || dj.precio;
+        paquete = paquete || dj.paquete;
+      } else if (window.EGPricing && tipo === 'plan') {
         var dp = EGPricing.calcPlan(fotos, duracion, reels > 0, reels || 4);
         precio = precio || dp.precio;
         paquete = paquete || dp.paquete;
-      } else {
+      } else if (window.EGPricing) {
         var ds = EGPricing.calcSesion(fotos);
         precio = precio || ds.precio;
         paquete = paquete || ds.paquete;
       }
     }
-    return { tipo: tipo, precio: precio, fotos: fotos, duracion: duracion, reels: reels, extras: extras, paquete: paquete };
+    return { tipo: tipo, precio: precio, fotos: fotos, horas: horas, duracion: duracion, reels: reels, extras: extras, paquete: paquete };
   }
 
   var PKG = leerPaquete();
 
   function esPlan() { return PKG.tipo === 'plan'; }
+  function esJornada() { return PKG.tipo === 'jornada'; }
 
-  function servicioNombre() { return esPlan() ? 'Plan Mensual de contenido' : 'Sesión de fotos'; }
+  function servicioNombre() { return esPlan() ? 'Plan Mensual de contenido' : esJornada() ? 'Jornada de trabajo' : 'Sesión de fotos'; }
 
-  function paqueteNombre() { return (esPlan() ? 'Plan ' : 'Paquete ') + (PKG.paquete || 'a medida'); }
+  function paqueteNombre() { return (esPlan() ? 'Plan ' : esJornada() ? '' : 'Paquete ') + (PKG.paquete || 'a medida'); }
 
   function detalleTexto() {
     var partes = [];
@@ -701,6 +724,9 @@ const contratoConfig = [
       partes.push(PKG.fotos + ' fotos por mes');
       partes.push('durante ' + PKG.duracion + ' ' + (PKG.duracion > 1 ? 'meses' : 'mes'));
       if (PKG.reels > 0) partes.push(PKG.reels + ' reels por mes');
+    } else if (esJornada()) {
+      partes.push(PKG.horas + ' hora' + (PKG.horas > 1 ? 's' : '') + ' de trabajo continuo');
+      partes.push('aprox. ' + PKG.fotos + ' fotos editadas');
     } else {
       partes.push(PKG.fotos + ' fotos editadas');
     }
@@ -711,6 +737,7 @@ const contratoConfig = [
   function entregaTexto() {
     var f = PKG.fotos;
     if (esPlan()) return f <= 14 ? 'un máximo de 72 horas' : f <= 20 ? 'un máximo de 48 horas' : 'un máximo de 24 horas';
+    if (esJornada()) return PKG.horas <= 2 ? 'un máximo de 48 horas' : 'un máximo de 24 horas';
     return f <= 10 ? 'un máximo de 72 horas' : f <= 18 ? 'un máximo de 48 horas' : 'un máximo de 24 horas';
   }
 
@@ -1261,7 +1288,7 @@ const contratoConfig = [
     }
 
     // Botón de pago según el tipo de servicio
-    var destinoPago = esPlan() ? '/gracias-plan/' : '/gracias-sesion/';
+    var destinoPago = esPlan() ? '/gracias-plan/' : esJornada() ? '/gracias-jornada/' : '/gracias-sesion/';
     document.getElementById('btnPagar').href = destinoPago;
 
     // WhatsApp de aviso

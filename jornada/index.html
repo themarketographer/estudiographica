@@ -4,13 +4,13 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Jornada de trabajo · Estudio Graphica</title>
-<meta name="description" content="Sesión de fotos por horas para clientes que ya conocen Estudio Graphica. Ajusta las horas, mira el precio al instante y reserva por WhatsApp." />
+<meta name="description" content="Sesión de fotos por horas para clientes que ya conocen Estudio Graphica. Ajusta las horas, mira el precio al instante y reserva tu fecha." />
 <meta name="robots" content="noindex,nofollow" />
 <meta name="theme-color" content="#FFDD5A" />
 
 <meta property="og:type" content="website" />
 <meta property="og:title" content="Jornada de trabajo · Estudio Graphica" />
-<meta property="og:description" content="Sesión de fotos por horas. Ajusta las horas y reserva por WhatsApp." />
+<meta property="og:description" content="Sesión de fotos por horas. Ajusta las horas y reserva tu fecha." />
 <meta property="og:image" content="https://res.cloudinary.com/dplhu2z6j/image/upload/v1777509513/Open_Graph_ajvxef.png" />
 <meta property="og:url" content="https://estudiographica.com/jornadas" />
 <meta name="twitter:card" content="summary_large_image" />
@@ -42,7 +42,18 @@
 </script>
 <noscript><img height="1" width="1" style="display:none"
   src="https://www.facebook.com/tr?id=1059099676340072&ev=PageView&noscript=1"/></noscript>
+<script src="/assets/js/tracking.js"></script>
 <!-- ═══════════════════════════════════════════════════ -->
+
+<!-- Cal element-click embed code begins -->
+<script type="text/javascript">
+  (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if(typeof namespace === "string"){cal.ns[namespace] = cal.ns[namespace] || api;p(cal.ns[namespace], ar);p(cal, ["initNamespace", namespace]);} else p(cal, ar); return;} p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
+Cal("init", "jornada", {origin:"https://app.cal.com"});
+Cal.config = Cal.config || {};
+Cal.config.forwardQueryParams = true;
+Cal.ns.jornada("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-brand":"#181818"},"dark":{"cal-brand":"#f8f8f8"}},"hideEventTypeDetails":false,"layout":"month_view"});
+</script>
+<!-- Cal element-click embed code ends -->
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -197,8 +208,15 @@
       <div class="price" id="precioValue">Bs. <span id="precioNum">350</span><span class="price-unit">pago único</span></div>
       <div class="price-note">Precio referencial. Se confirma en tu sesión.</div>
       <ul class="benefits" id="benefitsList"></ul>
-      <a class="btn-primary" id="btnReservar" target="_blank" rel="noopener">Reservar por WhatsApp →</a>
-      <a class="wa-link" href="https://cal.com/themarketographer/reunion" target="_blank" rel="noopener">o agenda una llamada →</a>
+      <button
+        class="btn-primary"
+        id="btnReservar"
+        type="button"
+        data-cal-link="themarketographer/jornada"
+        data-cal-namespace="jornada"
+        data-cal-config='{"layout":"month_view","useSlotsViewOnSmallScreen":"true","theme":"light"}'
+      >Reservar mi fecha →</button>
+      <a class="wa-link" id="waLink" href="#" target="_blank" rel="noopener">o pídelo directo por WhatsApp →</a>
     </div>
   </div>
 </div>
@@ -206,6 +224,7 @@
 <script>
   (function () {
     var WA_PHONE = '59169422335';
+    var LS_PAQUETE = 'eg_paquete_v1';
 
     var horasSlider = document.getElementById('horasSlider');
     var horasValue = document.getElementById('horasValue');
@@ -214,6 +233,20 @@
     var precioValue = document.getElementById('precioValue');
     var benefitsList = document.getElementById('benefitsList');
     var btnReservar = document.getElementById('btnReservar');
+    var waLink = document.getElementById('waLink');
+
+    var precioActual = 0, paqueteActual = '', horasActual = 1, fotosActual = 15;
+
+    // Igual que /precios: guarda el paquete configurado para que
+    // /gracias-jornada y /contrato lo lean sin tener que volver a pedirlo.
+    function guardarPaquete() {
+      try {
+        localStorage.setItem(LS_PAQUETE, JSON.stringify({
+          tipo: 'jornada', horas: horasActual, fotos: fotosActual,
+          precio: precioActual, paquete: paqueteActual,
+        }));
+      } catch (e) {}
+    }
 
     function calc() {
       var h = parseInt(horasSlider.value, 10);
@@ -254,6 +287,9 @@
         return '<li><span class="check">✓</span>' + b + '</li>';
       }).join('');
 
+      horasActual = h; precioActual = price; paqueteActual = pkg; fotosActual = fotos;
+      guardarPaquete();
+
       var msg = 'Hola, quiero reservar una jornada de trabajo.\n\n' +
         '*Detalles:*\n' +
         '- ' + pkg + '\n' +
@@ -261,16 +297,71 @@
         '- Total aproximado: ' + fotos + ' fotos\n' +
         '- Precio: Bs. ' + price + '\n\n' +
         '¿Podemos coordinar fecha?';
-      btnReservar.href = 'https://wa.me/' + WA_PHONE + '?text=' + encodeURIComponent(msg);
+      waLink.href = 'https://wa.me/' + WA_PHONE + '?text=' + encodeURIComponent(msg);
+    }
+
+    // Antes de abrir el widget de Cal, regeneramos data-cal-config con el
+    // eventId/origen/fbp/fbc actuales — mismo patrón que /precios, para
+    // que Pixel (client-side) y CAPI (server-side, cal-webhook.js) manden
+    // el mismo event_id y Meta deduplique en una sola conversión.
+    function refreshCalConfig() {
+      var eventId = window.EG ? window.EG.prepareCalBooking('jornada', 'checkout') : null;
+      var origen = window.EG ? window.EG.getOrigen() : 'organico';
+      var config = { layout: 'month_view', useSlotsViewOnSmallScreen: 'true', theme: 'light' };
+      if (eventId) config['metadata[eventId]'] = eventId;
+      config['metadata[origen]'] = origen;
+      config['metadata[horas]'] = String(horasActual);
+      config['metadata[precio]'] = String(precioActual);
+      config['metadata[paquete]'] = paqueteActual;
+      if (window.EG) {
+        var fbp = window.EG.getFbp();
+        var fbc = window.EG.getFbc();
+        if (fbp) config['metadata[fbp]'] = fbp;
+        if (fbc) config['metadata[fbc]'] = fbc;
+      }
+      btnReservar.setAttribute('data-cal-config', JSON.stringify(config));
+      return eventId;
     }
 
     horasSlider.addEventListener('input', calc);
-    btnReservar.addEventListener('click', function () {
-      try { fbq('track', 'Contact', { content_name: 'WhatsApp desde jornadas' }); } catch (e) {}
-      try { gtag('event', 'contacto_whatsapp', { content_name: 'jornadas' }); } catch (e) {}
-    });
-
     calc();
+    refreshCalConfig();
+
+    if (window.EG) {
+      window.EG.trackEvent('ViewContent', { content_name: 'Jornadas', origen: window.EG.getOrigen() });
+
+      waLink.addEventListener('click', function () {
+        window.EG.trackEvent('Contact', { content_name: 'WhatsApp desde jornadas', origen: window.EG.getOrigen() });
+      });
+
+      function onReservarPress() {
+        var eventId = refreshCalConfig();
+        window.EG.trackEvent('InitiateCheckout', { content_name: 'Reservar', content_type: 'jornada', origen: window.EG.getOrigen(), event_id: eventId });
+      }
+      btnReservar.addEventListener('mousedown', onReservarPress);
+      btnReservar.addEventListener('touchstart', function () { refreshCalConfig(); });
+
+      var trackCustomize = window.EG.debounce(function () {
+        window.EG.trackEvent('CustomizeProduct', { content_name: 'Slider jornada', content_type: 'jornada', origen: window.EG.getOrigen() });
+      }, 700);
+      horasSlider.addEventListener('input', trackCustomize);
+
+      if (window.Cal && Cal.ns && Cal.ns.jornada) {
+        Cal.ns.jornada('on', {
+          action: 'bookingSuccessfulV2',
+          callback: function () {
+            var eventId = window.EG.getLastEventId('jornada');
+            window.EG.trackEvent('Schedule', {
+              content_name: 'Reserva confirmada',
+              content_type: 'jornada',
+              origen: window.EG.getOrigen(),
+              event_id: eventId,
+            });
+            try { localStorage.removeItem('eg_contrato_firmado'); } catch (err) {}
+          },
+        });
+      }
+    }
   })();
 </script>
 
