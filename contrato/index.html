@@ -656,7 +656,7 @@ const contratoConfig = [
   var LS_CONTRATO = 'eg_contrato_v1';   // borrador de datos del cliente
   var LS_FIRMADOS = 'eg_contratos_firmados_v1';
 
-  // Misma fórmula que /jornadas y /gracias-jornada — la hora 1 es fija en
+  // Misma fórmula que /jornada y /gracias-jornada — la hora 1 es fija en
   // Bs. 350 (clientes que solo contratan una hora), de la hora 2 en
   // adelante corre la misma curva de descuento por volumen del resto del
   // catálogo (base Bs. 300/hora). pricing-logic.js no tiene esta fórmula
@@ -672,7 +672,7 @@ const contratoConfig = [
   }
 
   // ── 1. De dónde salen el paquete y el precio ───────────────────────
-  // Prioridad: parámetros en la URL → lo que guardó /precios (o /jornadas)
+  // Prioridad: parámetros en la URL → lo que guardó /precios (o /jornada)
   // → default.
   function leerPaquete() {
     var p = new URLSearchParams(location.search);

@@ -245,7 +245,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
     <p class="price-note" id="eg-gs-price-note">Precio referencial. Se confirma en tu sesión.</p>
 
     <ul class="benefits" id="benefitsList"></ul>
-    <a class="resumen-edit" id="egCambiarPaquete" href="/jornadas">← Cambiar mi paquete</a>
+    <a class="resumen-edit" id="egCambiarPaquete" href="/jornada">← Cambiar mi paquete</a>
   </div>
 
   <!-- ══════ PASO 3: CONTRATO (antes del pago) ══════ -->
@@ -388,9 +388,9 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
     var paqueteActual = '';
 
     // El paquete ya no se edita en esta página (ver el cambio de la
-    // tarjeta de arriba) — se lee tal cual quedó guardado desde /jornadas.
+    // tarjeta de arriba) — se lee tal cual quedó guardado desde /jornada.
     // 1 hora es solo el respaldo por si alguien llega acá sin haber
-    // pasado por /jornadas (link directo, por ejemplo).
+    // pasado por /jornada (link directo, por ejemplo).
     var horas = 1;
     try {
       var guardado = JSON.parse(localStorage.getItem('eg_paquete_v1') || '{}');
@@ -400,7 +400,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
     } catch (e) {}
 
     // pricing-logic.js no conoce la jornada (solo sesión y plan mensual),
-    // así que la fórmula vive acá — misma que /jornadas y /contrato.
+    // así que la fórmula vive acá — misma que /jornada y /contrato.
     function calcJornada(h) {
       var precio, paquete;
       if (h === 1) { precio = 350; paquete = 'Jornada Básica'; }
@@ -496,7 +496,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
         });
       }
 
-      // El paquete ya no se edita acá (ver /jornadas), así que lo único que
+      // El paquete ya no se edita acá (ver /jornada), así que lo único que
       // queda por "ajustar" en esta página es el modo de pago.
       var trackCustomize = window.EG.debounce(function () {
         window.EG.trackEvent(egEventName('Ajustó el paquete (slider / toggle de pago)', 'CustomizeProduct'), {
