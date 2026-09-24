@@ -94,6 +94,20 @@ function extraerFbc(payload) {
   return metadata.fbc || null;
 }
 
+function extraerTelefono(responses) {
+  if (!responses || typeof responses !== 'object') return null;
+  const valor = (r) => (r && typeof r === 'object' ? r.value : r);
+  const directo = valor(responses.whatsapp) || valor(responses.attendeePhoneNumber);
+  if (directo && typeof directo === 'string') return directo;
+  for (const key of Object.keys(responses)) {
+    if (/whats|phone|tel[eé]fono|celular/i.test(key)) {
+      const v = valor(responses[key]);
+      if (v && typeof v === 'string' && /\d{6,}/.test(v.replace(/\D/g, ''))) return v;
+    }
+  }
+  return null;
+}
+
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: 'Method Not Allowed' };
@@ -129,7 +143,13 @@ exports.handler = async (event) => {
   const booking = payload.payload || {};
   const attendee = (booking.attendees && booking.attendees[0]) || {};
   const email = attendee.email || booking.email;
-  const phone = attendee.phoneNumber || booking.phone;
+  // El WhatsApp se pide como pregunta propia del formulario de Cal.com
+  // (campo "whatsapp"), así que llega dentro de booking.responses y no en
+  // attendee.phoneNumber. Antes solo se leía attendee.phoneNumber, por eso
+  // el teléfono nunca llegaba a Meta (solo el correo). Se busca en orden:
+  // campo de sistema, campo "whatsapp" y cualquier respuesta cuyo nombre
+  // hable de teléfono/whatsapp (sirve para sesión, jornada y plan mensual).
+  const phone = attendee.phoneNumber || booking.phone || extraerTelefono(booking.responses);
   const bookingUid = booking.uid || booking.uuid || String(Date.now());
   const sourceUrl = `https://cal.com/themarketographer/${slug}`;
 
