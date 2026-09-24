@@ -74,9 +74,9 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&family=Playfair+Display:ital,wght@1,700&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
 
 <style>
-  @font-face { font-family:'Izmir'; src:url('/fonts/izmir-extrabold.otf') format('opentype'); font-weight:800; font-display:swap; }
-  @font-face { font-family:'Izmir'; src:url('/fonts/izmir-bold.otf') format('opentype'); font-weight:700; font-display:swap; }
-  @font-face { font-family:'Izmir'; src:url('/fonts/izmir-regular.otf') format('opentype'); font-weight:400; font-display:swap; }
+  @font-face { font-family:'Izmir'; src:url('/fonts/izmir-extrabold.woff2') format('woff2'), url('/fonts/izmir-extrabold.otf') format('opentype'); font-weight:800; font-display:swap; }
+  @font-face { font-family:'Izmir'; src:url('/fonts/izmir-bold.woff2') format('woff2'), url('/fonts/izmir-bold.otf') format('opentype'); font-weight:700; font-display:swap; }
+  @font-face { font-family:'Izmir'; src:url('/fonts/izmir-regular.woff2') format('woff2'), url('/fonts/izmir-regular.otf') format('opentype'); font-weight:400; font-display:swap; }
 
   :root {
     --dark: #181818; --yellow: #FFDD5A; --off-white: #F8F8F8;
@@ -721,6 +721,10 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
         var fbc = window.EG.getFbc();
         if (fbp) config['metadata[fbp]'] = fbp;
         if (fbc) config['metadata[fbc]'] = fbc;
+        // user-agent + página real: con esto el CAPI puede marcar la reserva
+        // como hecha en el sitio (action_source 'website') y Meta la empareja mejor.
+        config['metadata[ua]'] = String(navigator.userAgent || '').slice(0, 450);
+        config['metadata[pagina]'] = (location.origin + location.pathname).slice(0, 450);
       }
       btnReservar.setAttribute('data-cal-config', JSON.stringify(config));
       // La barra de precio fija (celular) reserva exactamente igual: mismos

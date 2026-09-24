@@ -15,7 +15,7 @@ function normalizePhone(phone) {
   return phone.replace(/[^\d]/g, '');
 }
 
-async function sendCapiEvent({ eventName, eventId, email, phone, sourceUrl, eventTime, fbp, fbc }) {
+async function sendCapiEvent({ eventName, eventId, email, phone, sourceUrl, eventTime, fbp, fbc, clientUserAgent, nombre }) {
   if (!PIXEL_ID || !ACCESS_TOKEN) {
     throw new Error('Faltan META_PIXEL_ID o META_ACCESS_TOKEN en las variables de entorno.');
   }
@@ -30,6 +30,20 @@ async function sendCapiEvent({ eventName, eventId, email, phone, sourceUrl, even
   // el Event Match Quality frente a solo correo/telefono.
   if (fbp) userData.fbp = fbp;
   if (fbc) userData.fbc = fbc;
+  // Nombre y apellido hasheados (fn / ln): otra señal de coincidencia que
+  // Meta suma al Event Match Quality. Se normalizan en minúsculas y sin
+  // tildes, como pide Meta, antes de hashear.
+  if (nombre) {
+    const partes = String(nombre).normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase().replace(/[^a-zñ\s]/g, ' ').trim().split(/\s+/).filter(Boolean);
+    if (partes[0]) userData.fn = [sha256(partes[0])];
+    if (partes.length > 1) userData.ln = [sha256(partes[partes.length - 1])];
+  }
+  // Con el user-agent real del visitante la reserva se puede declarar como
+  // hecha en el sitio web ('website'), que es lo que Meta espera para
+  // emparejarla con el evento del Pixel. Sin user-agent se mantiene
+  // 'system_generated', porque 'website' lo exige.
+  if (clientUserAgent) userData.client_user_agent = clientUserAgent;
   
   const payload = {
     data: [
@@ -37,7 +51,7 @@ async function sendCapiEvent({ eventName, eventId, email, phone, sourceUrl, even
         event_name: eventName,
         event_time: eventTime || Math.floor(Date.now() / 1000),
         event_id: eventId,
-        action_source: 'system_generated',
+        action_source: clientUserAgent ? 'website' : 'system_generated',
         event_source_url: sourceUrl || undefined,
         user_data: userData,
       },

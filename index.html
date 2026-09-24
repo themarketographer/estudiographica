@@ -15,12 +15,12 @@
 <meta property="og:locale" content="es_BO" />
 <meta property="og:title" content="Fotografía Gastronómica en Cochabamba | Estudio Graphica" />
 <meta property="og:description" content="El único estudio con un fotógrafo especializado en fotografía gastronómica para restaurantes en Cochabamba. Sesiones con foodstyling, entrega en 24 horas y planes mensuales de contenido. +400 restaurantes fotografiados." />
-<meta property="og:image" content="https://res.cloudinary.com/dplhu2z6j/image/upload/v1777509513/Open_Graph_ajvxef.png" />
+<meta property="og:image" content="https://res.cloudinary.com/dplhu2z6j/image/upload/c_limit,w_1200,q_auto:good,f_jpg/v1777509513/Open_Graph_ajvxef.png" />
 <meta property="og:url" content="https://estudiographica.com/" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Fotografía Gastronómica en Cochabamba | Estudio Graphica" />
 <meta name="twitter:description" content="Sesiones que antojan y atraen clientes. Portafolio y contacto." />
-<meta name="twitter:image" content="https://res.cloudinary.com/dplhu2z6j/image/upload/v1777509513/Open_Graph_ajvxef.png" />
+<meta name="twitter:image" content="https://res.cloudinary.com/dplhu2z6j/image/upload/c_limit,w_1200,q_auto:good,f_jpg/v1777509513/Open_Graph_ajvxef.png" />
 
 <link rel="icon" href="/favicon.ico" sizes="any" />
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
@@ -33,7 +33,7 @@
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
   "name": "Estudio Graphica",
-  "image": "https://res.cloudinary.com/dplhu2z6j/image/upload/v1777509513/Open_Graph_ajvxef.png",
+  "image": "https://res.cloudinary.com/dplhu2z6j/image/upload/c_limit,w_1200,q_auto:good,f_jpg/v1777509513/Open_Graph_ajvxef.png",
   "url": "https://estudiographica.com/",
   "telephone": "+59169422335",
   "priceRange": "Bs. 300 - Bs. 1300",
@@ -88,6 +88,16 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 </script>
 <!-- TikTok Pixel Code End -->
 <script src="/assets/js/tracking.js"></script>
+<script>
+/* egOpt: optimiza al vuelo cualquier foto de Cloudinary (ancho máximo, calidad
+   y formato automáticos: WebP/AVIF según el navegador). Si la URL guardada en
+   el CMS ya trae f_auto, se deja tal cual. Así las fotos nuevas que se suban
+   desde el panel quedan livianas aunque se peguen "crudas". */
+window.egOpt = function (url, w) {
+  if (!url || url.indexOf('/image/upload/') === -1 || url.indexOf('f_auto') !== -1) return url;
+  return url.replace('/image/upload/', '/image/upload/c_limit,w_' + (w || 1100) + ',q_auto,f_auto/');
+};
+</script>
 <!-- ═══════════════════════════════════════════════════ -->
 
 <!-- Cal.com element-click embed -->
@@ -97,14 +107,16 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
   Cal.ns.reunion("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-brand":"#181818"},"dark":{"cal-brand":"#f8f8f8"}},"hideEventTypeDetails":false,"layout":"month_view"});
 </script>
 
+<link rel="preload" href="fonts/izmir-extrabold.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="fonts/izmir-bold.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&family=Playfair+Display:ital,wght@1,700&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
 <style>
-@font-face { font-family:'Izmir'; src:url('fonts/izmir-extrabold.otf') format('opentype'); font-weight:800; font-display:swap; }
-@font-face { font-family:'Izmir'; src:url('fonts/izmir-bold.otf') format('opentype'); font-weight:700; font-display:swap; }
-@font-face { font-family:'Izmir'; src:url('fonts/izmir-regular.otf') format('opentype'); font-weight:400; font-display:swap; }
-@font-face { font-family:'Izmir'; src:url('fonts/izmir-light.otf') format('opentype'); font-weight:300; font-display:swap; }
+@font-face { font-family:'Izmir'; src:url('fonts/izmir-extrabold.woff2') format('woff2'), url('fonts/izmir-extrabold.otf') format('opentype'); font-weight:800; font-display:swap; }
+@font-face { font-family:'Izmir'; src:url('fonts/izmir-bold.woff2') format('woff2'), url('fonts/izmir-bold.otf') format('opentype'); font-weight:700; font-display:swap; }
+@font-face { font-family:'Izmir'; src:url('fonts/izmir-regular.woff2') format('woff2'), url('fonts/izmir-regular.otf') format('opentype'); font-weight:400; font-display:swap; }
+@font-face { font-family:'Izmir'; src:url('fonts/izmir-light.woff2') format('woff2'), url('fonts/izmir-light.otf') format('opentype'); font-weight:300; font-display:swap; }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { max-width: 100vw; overflow-x: hidden; }
@@ -502,7 +514,7 @@ footer { background: #0A0A0A; padding: clamp(36px, 6vw, 56px) 0 24px; }
     <div class="eg-hero__right">
       <div class="eg-no-select eg-hero__photo-frame">
         <div class="eg-hero__photo-inner">
-          <img class="eg-hero__photo-img" id="eg-hero-img" src="https://res.cloudinary.com/dplhu2z6j/image/upload/w_1100,q_auto,f_auto/v1777509515/Portada_p9ijpa.jpg" alt="Fotografía gastronómica profesional" />
+          <img class="eg-hero__photo-img" id="eg-hero-img" fetchpriority="high" src="https://res.cloudinary.com/dplhu2z6j/image/upload/w_1100,q_auto,f_auto/v1777509515/Portada_p9ijpa.jpg" alt="Fotografía gastronómica profesional" />
         </div>
         <div class="eg-hero__bubble eg-hero__bubble--1"><img class="eg-hero__bubble-img" src="https://res.cloudinary.com/dplhu2z6j/image/upload/w_1100,q_auto,f_auto/v1777509530/Mama_Chicken_ljrocy.png" alt="Mama Chicken" /></div>
         <div class="eg-hero__bubble eg-hero__bubble--2"><img class="eg-hero__bubble-img" src="https://res.cloudinary.com/dplhu2z6j/image/upload/w_1100,q_auto,f_auto/v1777509530/Happy_Tea_tz44zb.png" alt="Happy Tea" /></div>
@@ -520,15 +532,15 @@ footer { background: #0A0A0A; padding: clamp(36px, 6vw, 56px) 0 24px; }
       <p class="eg-problema__lead">"La gente come primero con los <span class="eg-cursive">ojos</span>." Y si lo que ven primero es una foto del celular, no le haces justicia a tantas horas cocinando.</p>
       <ul class="eg-problema__bullets">
         <li><span class="eg-problema__dot"></span>¿Los clientes te buscan pero eligen la "opción segura" que ya conocen?</li>
-        <li><span class="eg-problema__dot"></span>¿Tienes fotos diferentes en Instagram y en Pedidos Ya?.</li>
-        <li><span class="eg-problema__dot"></span>¿Pagas anuncios o apps de delivery y aún así no mejoras en ventas?</li>
+        <li><span class="eg-problema__dot"></span>¿Tienes fotos diferentes en Instagram y en PedidosYa?</li>
+        <li><span class="eg-problema__dot"></span>¿Pagas anuncios o apps de delivery y aun así no mejoras en ventas?</li>
       </ul>
     </div>
     <div class="eg-reveal" data-delay="0.15">
       <div id="eg-cmp" class="eg-no-select eg-cmp">
-        <img id="eg-cmp-img-despues" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1788295234/2_ylgf7o.png" alt="Después — Estudio Graphica" class="eg-cmp__img" />
+        <img id="eg-cmp-img-despues" src="https://res.cloudinary.com/dplhu2z6j/image/upload/w_1100,q_auto,f_auto/v1788295234/2_ylgf7o.png" loading="lazy" decoding="async" alt="Después — Estudio Graphica" class="eg-cmp__img" />
         <div id="eg-cmp-before" class="eg-cmp__before">
-          <img id="eg-cmp-img-antes" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1788295201/1_ymdvor.png" alt="Antes — celular" class="eg-cmp__img" />
+          <img id="eg-cmp-img-antes" src="https://res.cloudinary.com/dplhu2z6j/image/upload/w_1100,q_auto,f_auto/v1788295201/1_ymdvor.png" loading="lazy" decoding="async" alt="Antes — celular" class="eg-cmp__img" />
         </div>
         <div id="eg-cmp-divider" class="eg-cmp__divider"></div>
         <div id="eg-cmp-handle" class="eg-cmp__handle">⇆</div>
@@ -615,7 +627,7 @@ footer { background: #0A0A0A; padding: clamp(36px, 6vw, 56px) 0 24px; }
   <div class="eg-sobre__grid">
     <div class="eg-reveal">
       <div class="eg-sobre__img-wrap">
-        <img class="eg-sobre__img" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1785908020/Pablo_Villarroel_elpzzq.png" alt="Pablo Villarroel" />
+        <img class="eg-sobre__img" loading="lazy" decoding="async" src="https://res.cloudinary.com/dplhu2z6j/image/upload/c_limit,w_800,q_auto,f_auto/v1785908020/Pablo_Villarroel_elpzzq.png" alt="Pablo Villarroel" />
         <div class="eg-sobre__badge"><div class="eg-sobre__badge-num" id="eg-sobre-badge-num"></div><div class="eg-sobre__badge-text" id="eg-sobre-badge-text"></div></div>
       </div>
     </div>
@@ -864,7 +876,7 @@ footer { background: #0A0A0A; padding: clamp(36px, 6vw, 56px) 0 24px; }
       set('eg-hero-h1', hero.titulo, true);
       set('eg-hero-sub', hero.subtitulo);
       var heroImg = document.getElementById('eg-hero-img');
-      if (heroImg && hero.imagen) heroImg.src = hero.imagen;
+      if (heroImg && hero.imagen) heroImg.src = egOpt(hero.imagen, 1100);
       // Los stats NO se escriben directo: quedan guardados en data-target y
       // los cuenta desde 0 el contador animado (ver "Hero — stats contados").
       [['eg-hero-stat-num-1', hero.statValor1], ['eg-hero-stat-num-2', hero.statValor2], ['eg-hero-stat-num-3', hero.statValor3]]
@@ -896,12 +908,12 @@ footer { background: #0A0A0A; padding: clamp(36px, 6vw, 56px) 0 24px; }
       set('eg-problema-hint', copy.cmpHint);
       var cmpImgAntes = document.getElementById('eg-cmp-img-antes');
       if (cmpImgAntes) {
-        if (copy.cmpImgAntes) cmpImgAntes.src = copy.cmpImgAntes;
+        if (copy.cmpImgAntes) cmpImgAntes.src = egOpt(copy.cmpImgAntes, 1100);
         if (copy.cmpImgAntesAlt != null) cmpImgAntes.alt = copy.cmpImgAntesAlt;
       }
       var cmpImgDespues = document.getElementById('eg-cmp-img-despues');
       if (cmpImgDespues) {
-        if (copy.cmpImgDespues) cmpImgDespues.src = copy.cmpImgDespues;
+        if (copy.cmpImgDespues) cmpImgDespues.src = egOpt(copy.cmpImgDespues, 1100);
         if (copy.cmpImgDespuesAlt != null) cmpImgDespues.alt = copy.cmpImgDespuesAlt;
       }
       set('eg-cta-h2', copy.ctaTitulo, true);
@@ -1327,7 +1339,7 @@ footer { background: #0A0A0A; padding: clamp(36px, 6vw, 56px) 0 24px; }
       }
       Array.prototype.slice.call(grid.querySelectorAll('.eg-portafolio__item')).forEach(function (el, i) {
         var img = el.querySelector('img');
-        img.src = portafolio[i].imagen;
+        img.src = egOpt(portafolio[i].imagen, 1100);
         img.alt = portafolio[i].alt;
         el.querySelector('.eg-portafolio__overlay-label').textContent = portafolio[i].alt;
       });

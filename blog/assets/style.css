@@ -4,8 +4,8 @@
    cambia todo el blog; no copiar este bloque dentro de un post.
    ============================================================ */
 
-@font-face { font-family:'Izmir'; src:url('/fonts/izmir-extrabold.otf') format('opentype'); font-weight:800; font-display:swap; }
-@font-face { font-family:'Izmir'; src:url('/fonts/izmir-bold.otf') format('opentype'); font-weight:700; font-display:swap; }
+@font-face { font-family:'Izmir'; src:url('/fonts/izmir-extrabold.woff2') format('woff2'), url('/fonts/izmir-extrabold.otf') format('opentype'); font-weight:800; font-display:swap; }
+@font-face { font-family:'Izmir'; src:url('/fonts/izmir-bold.woff2') format('woff2'), url('/fonts/izmir-bold.otf') format('opentype'); font-weight:700; font-display:swap; }
 
 :root {
   --dark: #181818;

@@ -139,10 +139,15 @@ exports.handler = async (event) => {
   const audiencia = audienceForSlug(slug);
   const fbp = extraerFbp(payload);
   const fbc = extraerFbc(payload);
-  // El webhook lo manda Cal.com, no el navegador del cliente, asi que la
-  // IP/user-agent del request no son los del visitante real — no se
-  // pueden sacar de aca. Quedan fuera del CAPI a proposito en vez de
-  // mandar datos que no sirven para el match.
+  // El webhook lo manda Cal.com, asi que los headers de este request no
+  // son del visitante. El user-agent y la pagina reales viajan desde el
+  // navegador como metadata[ua] / metadata[pagina] (mismo mecanismo que
+  // fbp/fbc). La IP del visitante sigue fuera: no hay forma confiable de
+  // obtenerla desde el navegador.
+  const meta = booking.metadata || {};
+  const clientUserAgent = meta.ua || null;
+  const paginaReal = meta.pagina || null;
+  const nombre = attendee.name || booking.name || null;
 
   console.log(`Booking recibido: slug="${slug}" evento="${eventName}" origen="${origen}" eventId="${eventId}"`);
 
@@ -152,9 +157,11 @@ exports.handler = async (event) => {
       eventId,
       email,
       phone,
-      sourceUrl,
+      sourceUrl: paginaReal || sourceUrl,
       fbp,
       fbc,
+      clientUserAgent,
+      nombre,
     });
   } catch (err) {
     console.error('Error enviando evento CAPI a Meta:', err.message);
