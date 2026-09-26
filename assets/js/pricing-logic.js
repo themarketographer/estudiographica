@@ -60,7 +60,7 @@ window.EGPricing = (function () {
     "beneficioSesion2": "Foodstyling profesional",
     "beneficioPlan1": "1 visita al mes",
     "beneficioPlan2": "Foodstyling de alimentos",
-    "beneficioAsesoria": "Asesoría estratégica de marketing",
+    "beneficioAsesoria": "Curso en video: redes, contenido y ads",
     "beneficioPaginaWeb": "Estrategia de anuncios para Instagram",
     "beneficioGuion": "Guion + concepto creativo",
     "beneficioMusica": "Música con licencia comercial"
@@ -154,7 +154,7 @@ window.EGPricing = (function () {
       planFotos <= 14 ? 'Entrega en 72h' : planFotos <= 20 ? 'Entrega en 48h' : 'Entrega en 24h',
       planFotos <= 14 ? 'Edición básica' : 'Edición profesional',
     ];
-    if (planFotos >= 16) b.push(t.beneficioAsesoria);
+    b.push(t.beneficioAsesoria);
     if (duracion >= 3 && planFotos >= 16) b.push(t.beneficioPaginaWeb);
     if (addVideo) b.push(reels + ' reels/mes', t.beneficioGuion, t.beneficioMusica);
     return b;
