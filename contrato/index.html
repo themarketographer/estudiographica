@@ -468,7 +468,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
    Del cliente / la reserva (vienen del formulario o de /precios):
      {{nombre}} {{ci}} {{negocio}} {{direccion}} {{email}} {{whatsapp}}
      {{fecha}} {{servicio}} {{paquete}} {{detalle}} {{precio}} {{adelanto}}
-     {{saldo}} {{hoy}}
+     {{saldo}} {{entrega}} {{hoy}}
 
    Fijas del estudio (se editan una sola vez, en contratoConfig más abajo):
      {{banco}} {{cuentaNumero}} {{cuentaTitular}} {{cuentaTipo}} {{carnetTitular}}
@@ -505,7 +505,7 @@ const contratoClausulas = [
   },
   {
     titulo: 'Formatos y medios',
-    cuerpo: 'El material final será entregado en un catálogo digital para que EL/LA CLIENTE pueda utilizarlas para el fin convenido en el presente contrato. Este catálogo estará protegido por marca de agua y la descarga de fotografías estará restringida hasta que se complete el pago de los honorarios. Ejecutado el pago, el catálogo se habilitará para su descarga en dos formatos: Alta Calidad (JPEG, con espacio de color sRGB en la máxima resolución posible) y Optimizado (JPEG, con espacio de color sRGB y con redimensionamiento a 1080px x 1350px). El material final podrá ser seleccionado por EL/LA CLIENTE si así lo desea, en un plazo de 7 días. Caso contrario, el material final será elegido a consideración de EL FOTÓGRAFO.',
+    cuerpo: 'El plazo de entrega del material final es de {{entrega}} desde la fecha de la producción fotográfica. El material final será entregado en un catálogo digital para que EL/LA CLIENTE pueda utilizarlas para el fin convenido en el presente contrato. Este catálogo estará protegido por marca de agua y la descarga de fotografías estará restringida hasta que se complete el pago de los honorarios. Ejecutado el pago, el catálogo se habilitará para su descarga en dos formatos: Alta Calidad (JPEG, con espacio de color sRGB en la máxima resolución posible) y Optimizado (JPEG, con espacio de color sRGB y con redimensionamiento a 1080px x 1350px). El material final podrá ser seleccionado por EL/LA CLIENTE si así lo desea, en un plazo de 7 días. Caso contrario, el material final será elegido a consideración de EL FOTÓGRAFO.',
   },
   {
     titulo: 'Honorarios',
@@ -721,9 +721,18 @@ const contratoConfig = [
   function detalleTexto() {
     var partes = [];
     if (esPlan()) {
-      partes.push(PKG.fotos + ' fotos por mes');
+      // Antes esto solo decía "X fotos por mes": el cliente firmaba un
+      // contrato que no mencionaba el foodstyling, el curso en video ni
+      // la velocidad de entrega que sí ve en /precios. Usamos la misma
+      // función que arma esos beneficios ahí, para que el contrato liste
+      // exactamente lo mismo que se le vendió — sin mantener una segunda
+      // lista a mano que se puede desactualizar.
+      if (window.EGPricing) {
+        partes = EGPricing.planBenefits(PKG.fotos, PKG.duracion, PKG.reels > 0, PKG.reels || 4).slice();
+      } else {
+        partes.push(PKG.fotos + ' fotos por mes');
+      }
       partes.push('durante ' + PKG.duracion + ' ' + (PKG.duracion > 1 ? 'meses' : 'mes'));
-      if (PKG.reels > 0) partes.push(PKG.reels + ' reels por mes');
     } else if (esJornada()) {
       partes.push(PKG.horas + ' hora' + (PKG.horas > 1 ? 's' : '') + ' de trabajo continuo');
       partes.push('aprox. ' + PKG.fotos + ' fotos editadas');
@@ -1319,18 +1328,35 @@ const contratoConfig = [
     enviarPorCorreo();
   });
 
+  // Chrome y Firefox bloquean, desde hace varios años, la navegación de una
+  // pestaña a un data: URI directamente (por seguridad, para evitar
+  // phishing) — eso es lo que hacía que el botón de descarga a veces no
+  // hiciera nada. Un Blob URL sí se puede abrir sin problema.
+  function dataURItoBlob(dataURI) {
+    var partes = dataURI.split(',');
+    var mime = partes[0].match(/:(.*?);/)[1];
+    var binario = atob(partes[1]);
+    var buffer = new Uint8Array(binario.length);
+    for (var i = 0; i < binario.length; i++) buffer[i] = binario.charCodeAt(i);
+    return new Blob([buffer], { type: mime });
+  }
+
   document.getElementById('btnDescargar').addEventListener('click', function () {
     if (!pdfDataUri) return;
+    var url;
+    try {
+      url = URL.createObjectURL(dataURItoBlob(pdfDataUri));
+    } catch (e) {
+      url = pdfDataUri; // si algo falla al convertir, al menos intentamos con el original
+    }
     // Abrimos en una pestaña/ventana nueva a propósito: en iPhone, Safari abre
     // el PDF en vez de descargarlo, y si lo hiciéramos en la misma pestaña el
     // usuario se quedaría sin forma de volver a continuar con el pago.
-    var nueva = window.open('', '_blank');
-    if (nueva) {
-      nueva.location.href = pdfDataUri;
-    } else {
+    var nueva = window.open(url, '_blank');
+    if (!nueva) {
       // Si el navegador bloqueó la ventana nueva, como último recurso
       // navegamos la pestaña actual (mejor eso que no ofrecer nada).
-      window.location.href = pdfDataUri;
+      window.location.href = url;
     }
   });
 
