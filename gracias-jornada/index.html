@@ -56,6 +56,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 <link rel="stylesheet" href="/assets/css/eg-ui.css" />
 <link rel="stylesheet" href="/assets/css/eg-pages.css" />
 <link rel="stylesheet" href="/assets/css/funnel-ux.css" />
+<link rel="stylesheet" href="/assets/css/eg-gracias.css" />
 </head>
 <body class="pg pg-gracias">
 
@@ -64,11 +65,14 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
   <a class="nav-back" href="/"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12H5M11 6l-6 6 6 6"/></svg> Volver al inicio</a>
 </nav>
 
+<div class="gx-bg" aria-hidden="true"><i class="orb o1"></i><i class="orb o2"></i><i class="orb o3"></i></div>
+
 <div class="wrap">
 
   <div class="steps" id="egSteps"></div>
 
   <div class="center">
+    <div class="gx-seal" aria-hidden="true"><span class="gx-ring"></span><span class="gx-ring r2"></span><i class="c y" style="--a:-3deg;--r:79px;--d:202ms;--s:11px"></i><i class="c k" style="--a:15deg;--r:104px;--d:48ms;--s:8px"></i><i class="c w" style="--a:46deg;--r:102px;--d:109ms;--s:6px"></i><i class="c y" style="--a:61deg;--r:96px;--d:35ms;--s:7px"></i><i class="c y" style="--a:83deg;--r:97px;--d:30ms;--s:10px"></i><i class="c k" style="--a:106deg;--r:84px;--d:322ms;--s:11px"></i><i class="c y" style="--a:136deg;--r:73px;--d:295ms;--s:10px"></i><i class="c k" style="--a:156deg;--r:84px;--d:23ms;--s:10px"></i><i class="c w" style="--a:186deg;--r:88px;--d:214ms;--s:7px"></i><i class="c y" style="--a:203deg;--r:106px;--d:157ms;--s:10px"></i><i class="c y" style="--a:230deg;--r:81px;--d:52ms;--s:10px"></i><i class="c k" style="--a:249deg;--r:82px;--d:190ms;--s:6px"></i><i class="c y" style="--a:271deg;--r:74px;--d:288ms;--s:6px"></i><i class="c k" style="--a:294deg;--r:101px;--d:348ms;--s:10px"></i><i class="c w" style="--a:314deg;--r:90px;--d:238ms;--s:10px"></i><i class="c y" style="--a:344deg;--r:93px;--d:153ms;--s:7px"></i><div class="gx-disc"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg><span class="gx-tick"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></div></div>
     <span class="badge sr" id="eg-gs-badge">Servicio</span>
     <h1 class="page-title" data-words id="eg-gs-h1">Tu jornada está a un <span class="h1-accent cursive">paso</span>.</h1>
     <p class="sub" id="eg-gs-sub">Ahora firma tu contrato. El adelanto para apartar la fecha se hace justo después, en esta misma página.</p>
@@ -82,7 +86,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
        había reservado. Si de verdad quiere otra cantidad, el link de abajo
        lo manda a /precios YA con su paquete cargado (ver restauración
        agregada ahí), no desde cero. -->
-  <div class="card">
+  <div class="card rv">
     <p class="card-label" id="eg-gs-card-label">Tu jornada reservada</p>
     <div class="paquete-name" id="paqueteName">Jornada Básica</div>
     <div class="price" id="precioValue">Bs. 350<span class="price-unit">pago único</span></div>
@@ -93,8 +97,8 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
   </div>
 
   <!-- ══════ PASO 3: CONTRATO (antes del pago) ══════ -->
-  <div class="card eg-contrato-card" id="egContratoCard" data-tipo="jornada">
-    <span class="eg-contrato-badge" id="egContratoBadge">Paso 3 de 4</span>
+  <div class="card eg-contrato-card gx-ink rv" style="--d:90ms" id="egContratoCard" data-tipo="jornada">
+    <svg class="gx-sign" viewBox="0 0 150 44" aria-hidden="true"><path d="M6 32c8-18 14-26 20-24 7 3-6 28 2 28 8 0 12-20 22-20 7 0 2 14 10 14 9 0 10-12 18-12 7 0 3 13 12 13 7 0 12-6 20-6"/></svg><span class="eg-contrato-badge" id="egContratoBadge">Paso 3 de 4</span>
     <div class="eg-contrato-title" id="egContratoTitle">Firma tu contrato</div>
     <p class="eg-contrato-desc" id="egContratoDesc">
       Antes del adelanto, firma el contrato con el dedo desde tu celular. Te llega en PDF a tu correo y ahí queda claro qué recibes, cuándo y por cuánto.
@@ -155,8 +159,11 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
     </a>
   </div>
 
-  <a class="back-link" href="/" id="eg-gs-back-link">Volver al inicio</a>
-</div>
+  </div>
+
+<section class="gx-strip" aria-label="Trabajos de Estudio Graphica"><ul class="gx-track"><li><img src="https://res.cloudinary.com/dplhu2z6j/image/upload/w_900,q_auto,f_auto/v1777509515/Portada_p9ijpa.jpg" alt="Rolls de salmón sobre un plato azul junto a un cóctel de frutilla con menta" loading="lazy" decoding="async" width="260" height="325"></li><li><img src="https://res.cloudinary.com/dplhu2z6j/image/upload/w_900,q_auto,f_auto/v1777509532/Bros_zehqtz.png" alt="Plato de pollo frito con arroz y cremas visto desde arriba" loading="lazy" decoding="async" width="260" height="325"></li><li><img src="https://res.cloudinary.com/dplhu2z6j/image/upload/w_900,q_auto,f_auto/v1777509533/Chanchi_Broaster_yjkv9z.png" alt="Vaso de comida servido sobre mantel de cuadros rojos" loading="lazy" decoding="async" width="260" height="325"></li><li><img src="https://res.cloudinary.com/dplhu2z6j/image/upload/w_900,q_auto,f_auto/v1777509529/Happy_Fry_pvyr8x.png" alt="Alitas con salsa y papas fritas sobre una tabla de madera" loading="lazy" decoding="async" width="260" height="325"></li><li><img src="https://res.cloudinary.com/dplhu2z6j/image/upload/w_900,q_auto,f_auto/v1777509530/Mama_Chicken_ljrocy.png" alt="Mano sosteniendo una hamburguesa de pollo frito" loading="lazy" decoding="async" width="260" height="325"></li><li><img src="https://res.cloudinary.com/dplhu2z6j/image/upload/w_900,q_auto,f_auto/v1777509521/El_Ed%C3%A9n_m5murs.png" alt="Plato fotografiado para El Edén" loading="lazy" decoding="async" width="260" height="325"></li><li aria-hidden="true"><img src="https://res.cloudinary.com/dplhu2z6j/image/upload/w_900,q_auto,f_auto/v1777509515/Portada_p9ijpa.jpg" alt="" loading="lazy" decoding="async" width="260" height="325"></li><li aria-hidden="true"><img src="https://res.cloudinary.com/dplhu2z6j/image/upload/w_900,q_auto,f_auto/v1777509532/Bros_zehqtz.png" alt="" loading="lazy" decoding="async" width="260" height="325"></li><li aria-hidden="true"><img src="https://res.cloudinary.com/dplhu2z6j/image/upload/w_900,q_auto,f_auto/v1777509533/Chanchi_Broaster_yjkv9z.png" alt="" loading="lazy" decoding="async" width="260" height="325"></li><li aria-hidden="true"><img src="https://res.cloudinary.com/dplhu2z6j/image/upload/w_900,q_auto,f_auto/v1777509529/Happy_Fry_pvyr8x.png" alt="" loading="lazy" decoding="async" width="260" height="325"></li><li aria-hidden="true"><img src="https://res.cloudinary.com/dplhu2z6j/image/upload/w_900,q_auto,f_auto/v1777509530/Mama_Chicken_ljrocy.png" alt="" loading="lazy" decoding="async" width="260" height="325"></li><li aria-hidden="true"><img src="https://res.cloudinary.com/dplhu2z6j/image/upload/w_900,q_auto,f_auto/v1777509521/El_Ed%C3%A9n_m5murs.png" alt="" loading="lazy" decoding="async" width="260" height="325"></li></ul></section>
+
+<div class="wrap gx-after"><a class="back-link" href="/" id="eg-gs-back-link">Volver al inicio</a></div>
 
 <script>
   // Textos editables desde el panel (mismo patrón "const NOMBRE = [...]"
