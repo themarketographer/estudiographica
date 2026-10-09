@@ -202,6 +202,32 @@
       if (b && c.cmpImgDespues) { b.src = egOpt(c.cmpImgDespues, 1000); if (c.cmpImgDespuesAlt != null) b.alt = c.cmpImgDespuesAlt; }
     })();
 
+    /* ---- Textos e imágenes sueltos de la página (editables desde el panel) ----
+       Cada elemento declara qué clave lee: data-eg-t (texto), data-eg-h (texto con
+       resaltados), data-eg-src / data-eg-alt (foto), data-eg-href (link) y
+       data-eg-lines (una línea por viñeta). Si la clave viene vacía se deja el
+       texto que ya trae el HTML, así nunca queda un hueco en la página. */
+    (function () {
+      var c = first(d.landingCopy), hh = first(d.landingHero);
+      function val(k) { var v = c[k]; return (v == null || v === '') ? hh[k] : v; }
+      function tick(n) { return '<svg width="' + n + '" height="' + n + '" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5l4 4 8-9"/></svg>'; }
+      $$('[data-eg-t]').forEach(function (el) { var v = val(el.getAttribute('data-eg-t')); if (v != null && v !== '' && el.textContent !== v) el.textContent = v; });
+      $$('[data-eg-h]').forEach(function (el) { var v = val(el.getAttribute('data-eg-h')); if (v != null && v !== '' && el.innerHTML !== v) el.innerHTML = v; });
+      $$('[data-eg-src]').forEach(function (el) {
+        var v = val(el.getAttribute('data-eg-src'));
+        if (v) { var u = egOpt(v, parseInt(el.getAttribute('data-eg-w'), 10) || 900); if (el.getAttribute('src') !== u) el.src = u; }
+      });
+      $$('[data-eg-alt]').forEach(function (el) { var v = val(el.getAttribute('data-eg-alt')); if (v != null) el.alt = v; });
+      $$('[data-eg-href]').forEach(function (el) { var v = val(el.getAttribute('data-eg-href')); if (v) el.setAttribute('href', v); });
+      $$('[data-eg-lines]').forEach(function (el) {
+        var v = val(el.getAttribute('data-eg-lines'));
+        if (!v) return;
+        var t = tick(parseInt(el.getAttribute('data-eg-tick'), 10) || 18);
+        var html = String(v).split('\n').filter(function (l) { return l.trim(); }).map(function (l) { return '<li>' + t + esc(l.trim()) + '</li>'; }).join('');
+        if (html && el.innerHTML !== html) el.innerHTML = html;
+      });
+    })();
+
     /* ---- 2. Hero: título palabra por palabra, números que cuentan ---- */
     var h1 = $('#eg-hero-h1');
     if (h1 && !reduce && window.EGUI) window.EGUI.splitWords(h1);
