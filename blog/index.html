@@ -43,29 +43,26 @@
 <script src="/assets/js/tracking.js"></script>
 <!-- ═══════════════════════════════════════════════════ -->
 
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&family=Playfair+Display:ital,wght@1,700&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+<link rel="preload" href="/fonts/poppins-600.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="/fonts/poppins-700.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="stylesheet" href="/assets/css/button-states.css" />
+<link rel="stylesheet" href="/assets/css/eg-ui.css" />
 <link rel="stylesheet" href="/blog/assets/style.css" />
-  <link rel="stylesheet" href="/assets/css/button-states.css">
 </head>
-<body>
+<body class="pg pg-blog">
 
-<nav>
-  <div class="inner">
-    <a href="/"><img src="/assets/logo-black.png" alt="Estudio Graphica" /></a>
-    <a class="back" href="/">← Inicio</a>
-  </div>
+<nav class="nav nav--page" id="nav" aria-label="Principal">
+  <a class="brand" href="/" aria-label="Estudio Graphica, inicio"><img class="lg-b" src="/assets/logo-mark-black.png" alt="Estudio Graphica" width="20" height="24"><img class="lg-w" src="/assets/logo-mark-white.png" alt="" width="20" height="24" aria-hidden="true"></a>
+  <a class="nav-back" href="/"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12H5M11 6l-6 6 6 6"/></svg> Inicio</a>
 </nav>
 
 <div class="header">
-  <span class="tag">Blog</span>
-  <h1>Consejos para que tu restaurante <span class="cursive">se vea bien</span> donde te buscan.</h1>
-  <p class="sub">Fotografía, marketing visual y posicionamiento local para restaurantes en Cochabamba.</p>
+  <h1 class="page-title" data-words>Consejos para que tu restaurante <span class="mark">se vea bien</span> donde te buscan.</h1>
+  <p class="sub intro" style="--d:500ms">Fotografía, marketing visual y posicionamiento local para restaurantes en Cochabamba.</p>
 </div>
 
 <div class="blog-search">
-  <input type="search" id="blog-search-input" placeholder="Buscar artículos… (ej. \"delivery\", \"precio\", \"celular\")" aria-label="Buscar artículos del blog" />
+  <input type="search" id="blog-search-input" placeholder="Buscar artículos… (ej. delivery, precio, celular)" aria-label="Buscar artículos del blog" />
 </div>
 
 <div class="posts" id="blog-posts">
@@ -201,9 +198,11 @@
 </div>
 <p class="blog-search__empty" id="blog-search-empty">No hay artículos que coincidan con esa búsqueda.</p>
 
-<footer>
-  <p>© 2026 Estudio Graphica · Cochabamba, Bolivia</p>
-  <p style="margin-top: 8px;"><a href="/">← Volver al inicio</a> · <a href="/privacidad">Privacidad</a></p>
+<footer class="foot foot--plain">
+  <div class="wrap">
+    <p>© 2026 Estudio Graphica · Cochabamba, Bolivia</p>
+    <p><a href="/">Volver al inicio</a> · <a href="/privacidad">Privacidad</a></p>
+  </div>
 </footer>
 
 <script>
@@ -236,5 +235,6 @@
 </script>
 
   <script src="/assets/js/button-states.js" defer></script>
+<script src="/assets/js/eg-ui.js" defer></script>
 </body>
 </html>

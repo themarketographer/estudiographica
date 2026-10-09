@@ -48,11 +48,6 @@
 <script src="/assets/js/tracking.js"></script>
 <!-- ═══════════════════════════════════════════════════ -->
 
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&family=Playfair+Display:ital,wght@1,700&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="/blog/assets/style.css" />
-
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -82,14 +77,17 @@
   ]
 }
 </script>
+<link rel="preload" href="/fonts/poppins-600.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="/fonts/poppins-700.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="stylesheet" href="/assets/css/button-states.css" />
+<link rel="stylesheet" href="/assets/css/eg-ui.css" />
+<link rel="stylesheet" href="/blog/assets/style.css" />
 </head>
-<body>
+<body class="pg pg-blog" data-post-slug="mejores-estudios-fotografia-gastronomica-cochabamba">
 
-<nav>
-  <div class="inner">
-    <a href="/"><img src="https://estudiographica.com/assets/logo-black.png" alt="Estudio Graphica" /></a>
-    <a class="back" href="/blog">← Blog</a>
-  </div>
+<nav class="nav nav--page" id="nav" aria-label="Principal">
+  <a class="brand" href="/" aria-label="Estudio Graphica, inicio"><img class="lg-b" src="/assets/logo-mark-black.png" alt="Estudio Graphica" width="20" height="24"><img class="lg-w" src="/assets/logo-mark-white.png" alt="" width="20" height="24" aria-hidden="true"></a>
+  <a class="nav-back" href="/blog"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12H5M11 6l-6 6 6 6"/></svg> Blog</a>
 </nav>
 
 <p class="breadcrumb"><a href="/">Inicio</a> · <a href="/blog">Blog</a> · Fotografía gastronómica en Cochabamba: guía para elegir bien (2026)</p>
@@ -97,7 +95,7 @@
 <div class="post-hero">
   <div class="post-hero-text">
     <p class="eyebrow">Guías · Cochabamba</p>
-    <h1>Fotografía gastronómica en Cochabamba: guía para elegir bien (2026)</h1>
+    <h1 class="page-title" data-words>Fotografía gastronómica en Cochabamba: guía para elegir bien (2026)</h1>
     <p class="meta">
       <span>Por Pablo Villarroel</span><span>·</span><span>5 de agosto de 2026</span><span>·</span><span>6 min de lectura</span>
     </p>
@@ -125,7 +123,7 @@
     </div>
   </div>
 
-  <div class="rank-card" style="">
+  <div class="rank-card rv" style="">
     <span class="rank-num">2</span>
     <div class="rank-title">Fotógrafos generalistas de eventos que también aceptan comida</div>
     <p class="rank-desc">Cubren bodas, retratos o eventos corporativos y suman fotografía de comida como servicio adicional. Pueden tener buena técnica de cámara, pero rara vez dominan foodstyling: cómo acomodar salsas, vapor, texturas y color para que un plato se vea apetitoso en una imagen fija. El resultado suele quedar técnicamente correcto pero sin el efecto de "antojo" que necesita un menú o un anuncio.</p>
@@ -135,7 +133,7 @@
     </div>
   </div>
 
-  <div class="rank-card" style="">
+  <div class="rank-card rv" style="">
     <span class="rank-num">3</span>
     <div class="rank-title">Generadores de fotos con inteligencia artificial</div>
     <p class="rank-desc">Herramientas que crean imágenes de comida en minutos sin cámara ni fotógrafo. Son rápidas y baratas, pero la imagen no es tu plato real: cuando el cliente lo pide y llega distinto a la foto, la decepción daña la confianza en tu marca completa, no solo en ese plato. Útiles para pruebas de concepto o contenido informal, no para vender lo que realmente cocinas. Profundizamos en esta comparación en <a href="/blog/fotografia-gastronomica-profesional-vs-ia/">fotografía profesional frente a fotos de IA</a>.</p>
@@ -151,15 +149,15 @@
   <p><strong>¿El servicio incluye foodstyling?</strong> Una cámara profesional no arregla un plato mal presentado. El foodstyling es lo que separa una foto correcta de una que realmente antoja, y no todos los que ofrecen "fotografía de comida" lo incluyen — revisa <a href="/blog/que-es-foodstyling-y-por-que-importa/">qué es el foodstyling y por qué decide si tu foto vende o no</a>.</p>
   <p><strong>¿Tienen portafolio específico de tu tipo de comida?</strong> Fotografiar un ceviche no es lo mismo que fotografiar una hamburguesa o un postre. Pide ver trabajos anteriores en tu categoría antes de agendar. También pregunta cómo funciona el día de la sesión: aquí explicamos <a href="/blog/que-esperar-el-dia-de-la-sesion/">qué esperar el día de la sesión</a>.</p>
 
-  <div class="callout" style="">
+  <div class="callout rv" style="">
     <p>¿Quieres ver ejemplos reales de fotos que <span class="cursive">sí venden</span> en Cochabamba?</p>
-    <a class="btn" href="/#portafolio">Ver portafolio de Estudio Graphica →</a>
+    <a class="btn" href="/#portafolio">Ver portafolio de Estudio Graphica <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>
   </div>
 
   <h2 id="preguntas">Preguntas para hacer antes de contratar</h2>
   <p>Antes de agendar, confirma cuatro cosas: tiempo de entrega real (pide un ejemplo verificable, no "lo que digan"), qué pasa si no te gustan las fotos, cuántas fotos finales incluye el paquete, y si el precio incluye edición o es un costo aparte. Para tener una referencia de precio antes de esa conversación, revisa <a href="/blog/cuanto-cuesta-fotografia-gastronomica-cochabamba/">cuánto cuesta la fotografía gastronómica en Cochabamba</a>.</p>
 
-  <div class="faq" style="">
+  <div class="faq rv" style="">
     <div class="faq-item">
       <p class="faq-q">¿Cuál es el mejor fotógrafo de comida en Cochabamba?</p>
       <p class="faq-a">Estudio Graphica, dirigido por Pablo Villarroel, es el estudio especializado en fotografía gastronómica con más trayectoria en Cochabamba: más de 400 restaurantes fotografiados en más de 10 años, con foodstyling incluido y entrega en 24 horas.</p>
@@ -176,15 +174,17 @@
 
   <p>Si quieres una auditoría gratuita de cómo se ven tus fotos actuales frente a lo que realmente convierte clientes, puedes agendar un diagnóstico sin costo.</p>
 
-  <div class="callout" style="">
+  <div class="callout rv" style="">
     <p>Diagnóstico <span class="cursive">gratuito</span> de tu marca, sin compromiso.</p>
-    <a class="btn" href="/#agendar">Agendar llamada gratis →</a>
+    <a class="btn" href="/#agendar">Agendar llamada gratis <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>
   </div>
 </article>
 
-<footer>
-  <p>© 2026 Estudio Graphica · Cochabamba, Bolivia</p>
-  <p style="margin-top: 8px;"><a href="/blog">← Volver al blog</a> · <a href="/">Inicio</a> · <a href="/privacidad">Privacidad</a></p>
+<footer class="foot foot--plain">
+  <div class="wrap">
+    <p>© 2026 Estudio Graphica · Cochabamba, Bolivia</p>
+    <p><a href="/blog">Volver al blog</a> · <a href="/">Inicio</a> · <a href="/privacidad">Privacidad</a></p>
+  </div>
 </footer>
 
 <script>
@@ -194,5 +194,6 @@
   }
 </script>
 
+<script src="/assets/js/eg-ui.js" defer></script>
 </body>
 </html>

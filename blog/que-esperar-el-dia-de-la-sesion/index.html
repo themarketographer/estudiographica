@@ -48,11 +48,6 @@
 <script src="/assets/js/tracking.js"></script>
 <!-- ═══════════════════════════════════════════════════ -->
 
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&family=Playfair+Display:ital,wght@1,700&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="/blog/assets/style.css" />
-
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -82,15 +77,17 @@
   ]
 }
 </script>
-  <link rel="stylesheet" href="/assets/css/button-states.css">
+  <link rel="preload" href="/fonts/poppins-600.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="/fonts/poppins-700.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="stylesheet" href="/assets/css/button-states.css" />
+<link rel="stylesheet" href="/assets/css/eg-ui.css" />
+<link rel="stylesheet" href="/blog/assets/style.css" />
 </head>
-<body data-post-slug="que-esperar-el-dia-de-la-sesion">
+<body class="pg pg-blog" data-post-slug="que-esperar-el-dia-de-la-sesion">
 
-<nav>
-  <div class="inner">
-    <a href="/"><img src="/assets/logo-black.png" alt="Estudio Graphica" /></a>
-    <a class="back" href="/blog">← Blog</a>
-  </div>
+<nav class="nav nav--page" id="nav" aria-label="Principal">
+  <a class="brand" href="/" aria-label="Estudio Graphica, inicio"><img class="lg-b" src="/assets/logo-mark-black.png" alt="Estudio Graphica" width="20" height="24"><img class="lg-w" src="/assets/logo-mark-white.png" alt="" width="20" height="24" aria-hidden="true"></a>
+  <a class="nav-back" href="/blog"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12H5M11 6l-6 6 6 6"/></svg> Blog</a>
 </nav>
 
 <p class="breadcrumb"><a href="/">Inicio</a> · <a href="/blog">Blog</a> · Qué esperar el día de la sesión</p>
@@ -98,7 +95,7 @@
 <div class="post-hero">
   <div class="post-hero-text">
     <p class="eyebrow">Guías · Fotografía gastronómica</p>
-    <h1>Qué esperar el día de tu sesión de fotos en el restaurante</h1>
+    <h1 class="page-title" data-words>Qué esperar el día de tu sesión de fotos en el restaurante</h1>
     <p class="meta">
       <span>Por Pablo Villarroel</span><span>·</span><span>22 de agosto de 2026</span><span>·</span><span>4 min de lectura</span>
     </p>
@@ -126,13 +123,13 @@
   <h2>Después de la sesión</h2>
   <p>La entrega se hace según el paquete contratado: los paquetes más chicos en menos de 72 horas, los intermedios en menos de 48, y los más grandes en menos de 24 horas. Todo llega editado y listo para subir, en los formatos que necesitas para redes, menú y delivery. Puedes ver los rangos de precio de cada paquete en <a href="/blog/cuanto-cuesta-fotografia-gastronomica-cochabamba/">cuánto cuesta la fotografía gastronómica en Cochabamba</a>.</p>
 
-  <div class="callout">
+  <div class="callout rv">
     <p>Agenda tu <span class="cursive">llamada de diagnóstico gratuita</span> y coordina tu sesión.</p>
-    <a class="btn" href="https://cal.com/themarketographer/reunion" target="_blank" rel="noopener">Agendar llamada →</a>
+    <a class="btn" href="https://cal.com/themarketographer/reunion" target="_blank" rel="noopener">Agendar llamada <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>
   </div>
 
   <h2>Preguntas frecuentes</h2>
-  <div class="faq">
+  <div class="faq rv">
     <div class="faq-item">
       <p class="faq-q">¿Tengo que cerrar el restaurante para la sesión?</p>
       <p class="faq-a">No. La sesión se coordina en un horario y una zona del local que no interfiera con el servicio normal.</p>
@@ -150,9 +147,11 @@
   <div class="posts posts--related" id="eg-related-posts"></div>
 </section>
 
-<footer>
-  <p>© 2026 Estudio Graphica · Cochabamba, Bolivia</p>
-  <p style="margin-top: 8px;"><a href="/blog">← Volver al blog</a> · <a href="/">Inicio</a> · <a href="/privacidad">Privacidad</a></p>
+<footer class="foot foot--plain">
+  <div class="wrap">
+    <p>© 2026 Estudio Graphica · Cochabamba, Bolivia</p>
+    <p><a href="/blog">Volver al blog</a> · <a href="/">Inicio</a> · <a href="/privacidad">Privacidad</a></p>
+  </div>
 </footer>
 
 <script>
@@ -165,5 +164,6 @@
   <script src="/assets/js/button-states.js" defer></script>
 <script src="/blog/assets/posts.js"></script>
 <script src="/blog/assets/related.js"></script>
+<script src="/assets/js/eg-ui.js" defer></script>
 </body>
 </html>

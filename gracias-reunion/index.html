@@ -48,106 +48,35 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 <script src="/assets/js/tracking.js"></script>
 <!-- ═══════════════════════════════════════════════════ -->
 
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&family=Playfair+Display:ital,wght@1,700&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
-
-<style>
-  @font-face { font-family:'Izmir'; src:url('/fonts/izmir-extrabold.woff2') format('woff2'), url('/fonts/izmir-extrabold.otf') format('opentype'); font-weight:800; font-display:swap; }
-  @font-face { font-family:'Izmir'; src:url('/fonts/izmir-bold.woff2') format('woff2'), url('/fonts/izmir-bold.otf') format('opentype'); font-weight:700; font-display:swap; }
-  @font-face { font-family:'Izmir'; src:url('/fonts/izmir-regular.woff2') format('woff2'), url('/fonts/izmir-regular.otf') format('opentype'); font-weight:400; font-display:swap; }
-
-  :root {
-    --dark: #181818; --yellow: #FFDD5A; --off-white: #F8F8F8;
-    --cream: #F0EDE6; --gray-text: #6B6660;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: 'DM Sans', sans-serif; background: var(--dark); color: var(--off-white);
-    -webkit-font-smoothing: antialiased; min-height: 100vh;
-  }
-  .cursive { font-family: 'Playfair Display', serif; font-style: italic; font-weight: 700; color: var(--yellow); }
-  .wrap { max-width: 640px; margin: 0 auto; padding: 64px 24px 80px; }
-
-  .logo { height: 40px; display: block; margin: 0 auto 40px; }
-
-  .badge {
-    display: inline-flex; align-items: center; gap: 8px; background: rgba(255,221,90,0.12);
-    color: var(--yellow); border: 1px solid rgba(255,221,90,0.3); border-radius: 9999px;
-    padding: 8px 18px; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
-    margin-bottom: 24px;
-  }
-  .center { text-align: center; }
-
-  h1 {
-    font-family: 'Izmir', 'Syne', sans-serif; font-weight: 800; letter-spacing: -0.02em;
-    font-size: clamp(1.9rem, 5vw, 2.8rem); line-height: 1.1; margin-bottom: 18px;
-  }
-  .sub { color: rgba(248,248,248,0.72); font-size: 16px; line-height: 1.7; max-width: 480px; margin: 0 auto 40px; }
-
-  .card {
-    background: var(--cream); color: var(--dark); border-radius: 22px; padding: 32px;
-    margin-bottom: 20px;
-  }
-  .card h2 {
-    font-family: 'Izmir', 'Syne', sans-serif; font-weight: 800; font-size: 1.3rem;
-    margin-bottom: 16px; display: flex; align-items: center; gap: 10px;
-  }
-  .checklist { list-style: none; display: flex; flex-direction: column; gap: 14px; }
-  .checklist li { display: flex; align-items: flex-start; gap: 12px; font-size: 14.5px; line-height: 1.55; }
-  .checklist .check {
-    width: 20px; height: 20px; min-width: 20px; border-radius: 50%; background: var(--dark); color: var(--yellow);
-    display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; margin-top: 1px;
-  }
-
-  .card-dark {
-    background: #0E0E0E; border: 1px solid rgba(255,221,90,0.18); border-radius: 22px; padding: 32px; margin-bottom: 32px;
-  }
-  .card-dark h2 {
-    font-family: 'Izmir', 'Syne', sans-serif; font-weight: 800; font-size: 1.3rem; color: var(--yellow); margin-bottom: 14px;
-  }
-  .card-dark p { color: rgba(248,248,248,0.75); font-size: 14.5px; line-height: 1.7; margin-bottom: 10px; }
-  .card-dark p:last-child { margin-bottom: 0; }
-
-  .btn-wa {
-    display: flex; align-items: center; justify-content: center; gap: 10px;
-    background: #25D366; color: #0a0a0a; font-family: 'Izmir', 'Syne', sans-serif; font-weight: 700; font-size: 16px;
-    padding: 18px 28px; border-radius: 9999px; text-decoration: none; width: 100%;
-    transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 8px 24px rgba(37,211,102,0.28);
-  }
-  .btn-wa:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(37,211,102,0.4); }
-
-  .micro { text-align: center; font-size: 12.5px; color: rgba(248,248,248,0.4); margin-top: 18px; }
-
-  .back-link {
-    display: block; text-align: center; margin-top: 40px; font-size: 13px;
-    color: rgba(248,248,248,0.5); text-decoration: none; transition: color 0.2s;
-  }
-  .back-link:hover { color: var(--yellow); }
-  .back-link:focus-visible { outline: 2.5px solid var(--yellow); outline-offset: 3px; border-radius: 4px; }
-</style>
-  <link rel="stylesheet" href="/assets/css/button-states.css">
+<link rel="preload" href="/fonts/poppins-600.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="/fonts/poppins-700.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="stylesheet" href="/assets/css/button-states.css" />
+<link rel="stylesheet" href="/assets/css/eg-ui.css" />
+<link rel="stylesheet" href="/assets/css/eg-pages.css" />
+<link rel="stylesheet" href="/assets/css/funnel-ux.css" />
 </head>
-<body>
+<body class="pg pg-gracias">
+
+<nav class="nav nav--page" id="nav" aria-label="Principal">
+  <a class="brand" href="/" aria-label="Estudio Graphica, inicio"><img class="lg-b" src="/assets/logo-mark-black.png" alt="Estudio Graphica" width="20" height="24"><img class="lg-w" src="/assets/logo-mark-white.png" alt="" width="20" height="24" aria-hidden="true"></a>
+  <a class="nav-back" href="/"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12H5M11 6l-6 6 6 6"/></svg> Volver al inicio</a>
+</nav>
 
 <div class="wrap">
-  <a href="/" style="display:block; text-align:center;">
-    <img class="logo" src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1777509513/Logo_B_S_F_kdolev.png" alt="Estudio Graphica" />
-  </a>
 
   <div class="center">
-    <span class="badge" id="eg-gr-badge">✓ Reunión agendada</span>
-    <h1 id="eg-gr-h1">Nos vemos <span class="cursive">pronto</span>,<br>hablemos de tu marca.</h1>
+    <span class="badge" id="eg-gr-badge">Reunión agendada</span>
+    <h1 class="page-title" data-words id="eg-gr-h1">Nos vemos <span class="mark">pronto</span>,<br>hablemos de tu marca.</h1>
     <p class="sub" id="eg-gr-sub">Te llegó un correo de Cal.com con tu reserva. Cuando la confirme, recibes el link de Zoom o el lugar donde nos vemos. Mientras tanto, esto te ayuda a aprovecharla:</p>
   </div>
 
   <div class="card">
-    <h2 id="eg-gr-card-h2">📋 Cómo aprovechar la reunión</h2>
+    <h2 id="eg-gr-card-h2">Cómo aprovechar la reunión</h2>
     <ul class="checklist">
-      <li><span class="check">✓</span> <strong>Sé puntual.</strong> Si empezamos tarde, perdemos tiempo de diagnóstico real.</li>
-      <li><span class="check">✓</span> <strong>Ten a mano tu Instagram o menú actual.</strong> Así podemos revisar juntos qué está pasando con tus fotos ahora mismo.</li>
-      <li><span class="check">✓</span> <strong>Piensa en tu objetivo real.</strong> ¿Quieres refrescar el menú, mejorar redes, o lanzar delivery? Con eso armamos la sesión ideal para ti.</li>
-      <li><span class="check">✓</span> <strong>No es una venta agresiva.</strong> Es un diagnóstico honesto: si no encajamos, te lo digo directo.</li>
+      <li><span class="check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span> <strong>Sé puntual.</strong> Si empezamos tarde, perdemos tiempo de diagnóstico real.</li>
+      <li><span class="check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span> <strong>Ten a mano tu Instagram o menú actual.</strong> Así podemos revisar juntos qué está pasando con tus fotos ahora mismo.</li>
+      <li><span class="check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span> <strong>Piensa en tu objetivo real.</strong> ¿Quieres refrescar el menú, mejorar redes, o lanzar delivery? Con eso armamos la sesión ideal para ti.</li>
+      <li><span class="check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span> <strong>No es una venta agresiva.</strong> Es un diagnóstico honesto: si no encajamos, te lo digo directo.</li>
     </ul>
   </div>
 
@@ -167,7 +96,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
   </a>
   <p class="micro" id="eg-gr-micro">Te respondemos en menos de 24h.</p>
 
-  <a class="back-link" href="/" id="eg-gr-back-link">← Volver al inicio</a>
+  <a class="back-link" href="/" id="eg-gr-back-link">Volver al inicio</a>
 </div>
 
 <script>
@@ -175,16 +104,16 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
   // que faqs/landingHero en index.html).
   const textosGraciasReunion = [
     {
-      badge: '✓ Reunión agendada',
-      titulo: 'Nos vemos <span class="cursive">pronto</span>,<br>hablemos de tu marca.',
+      badge: 'Reunión agendada',
+      titulo: 'Nos vemos <span class="mark">pronto</span>,<br>hablemos de tu marca.',
       subtitulo: 'Te llegó un correo de Cal.com con tu reserva. Cuando la confirme, recibes el link de Zoom o el lugar donde nos vemos. Mientras tanto, esto te ayuda a aprovecharla:',
-      tarjetaTitulo: '📋 Cómo aprovechar la reunión',
+      tarjetaTitulo: 'Cómo aprovechar la reunión',
       oscuraTitulo: '¿Qué resolvemos en la reunión?',
       oscuraParrafo1: 'Vemos tu situación actual (fotos, menú, redes), definimos qué tipo de sesión o plan mensual te conviene según tu presupuesto y objetivo, y salimos con una fecha tentativa para la sesión.',
       oscuraParrafo2: 'Si tienes dudas antes de la reunión, o necesitas mover el horario, escríbeme directo.',
       botonWhatsapp: 'Confirmar asistencia por WhatsApp',
       micro: 'Te respondemos en menos de 24h.',
-      volverInicio: '← Volver al inicio',
+      volverInicio: 'Volver al inicio',
     },
   ];
 
@@ -245,5 +174,6 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 </script>
 
   <script src="/assets/js/button-states.js" defer></script>
+<script src="/assets/js/eg-ui.js" defer></script>
 </body>
 </html>

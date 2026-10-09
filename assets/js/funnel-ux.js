@@ -67,7 +67,7 @@ window.EGFlowSteps = (function () {
     container.innerHTML = keys.map(function (key, i) {
       var cls = 'step';
       var numContent = i + 1;
-      if (i < currentIdx) { cls += ' done'; numContent = '✓'; }
+      if (i < currentIdx) { cls += ' done'; numContent = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>'; }
       else if (i === currentIdx) { cls += ' current'; }
       return '<div class="' + cls + '"><div class="step-num">' + numContent + '</div>' +
         '<div class="step-label">' + STEP_LABELS[key] + '</div></div>';
@@ -93,20 +93,20 @@ window.EGFlowSteps = (function () {
       if (firmado) {
         txt = '<b>Ya firmaste tu contrato.</b> Solo falta el adelanto para apartar tu fecha.';
         href = firmado.tipo === 'plan' ? '/gracias-plan/' : firmado.tipo === 'jornada' ? '/gracias-jornada/' : '/gracias-sesion/';
-        cta = 'Ir al pago →';
+        cta = 'Ir al pago';
       } else if (borrador && borrador.nombre) {
         txt = '<b>Tienes tu contrato a medio llenar.</b> Retómalo donde lo dejaste.';
         href = '/contrato/';
-        cta = 'Seguir firmando →';
+        cta = 'Seguir firmando';
       } else if (paquete && paquete.precio) {
         txt = '<b>Ya armaste un paquete</b> de Bs. ' + paquete.precio + '. ¿Seguimos con el contrato?';
         href = '/contrato/';
-        cta = 'Firmar contrato →';
+        cta = 'Firmar contrato';
       } else {
         return;
       }
 
-      container.innerHTML = '<span class="eg-retomar-icon">📄</span>' +
+      container.innerHTML = '<span class="eg-retomar-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h7l5 5v11a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg></span>' +
         '<span class="eg-retomar-txt">' + txt + '</span>' +
         '<a class="eg-retomar-link" href="' + href + '">' + cta + '</a>';
       container.classList.add('show');
