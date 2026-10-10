@@ -9,3 +9,11 @@ node_bundler = "esbuild"
 # dentro de ese archivo para saber como recibir el aviso en el celular.
 [functions."uptime-check"]
   schedule = "*/15 * * * *"
+
+# Las fuentes (Izmir) las usa tambien el panel del CMS, que vive en otro
+# dominio. Sin esta cabecera el navegador bloquea la carga entre dominios.
+[[headers]]
+  for = "/fonts/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Cache-Control = "public, max-age=31536000, immutable"

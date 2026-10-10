@@ -59,8 +59,8 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 </script>
 <!-- ═══════════════════════════════════════════════════ -->
 
-<link rel="preload" href="/fonts/poppins-600.woff2" as="font" type="font/woff2" crossorigin />
-<link rel="preload" href="/fonts/poppins-700.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="/fonts/izmir-regular.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="/fonts/izmir-extrabold.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="stylesheet" href="/assets/css/button-states.css" />
 <link rel="stylesheet" href="/assets/css/eg-ui.css" />
 <link rel="stylesheet" href="/assets/css/eg-pages.css" />
@@ -845,11 +845,42 @@ const contratoConfig = [
   var pdfDataUri = null;
   var nombreArchivo = 'Contrato.pdf';
 
+  // Izmir dentro del PDF. Las dos fuentes se descargan al abrir la página; si no
+  // llegaron (red lenta, navegador viejo) el PDF sale igual, con Helvetica.
+  var IZMIR_PDF = { normal: null, bold: null };
+  (function () {
+    if (!window.fetch) return;
+    [['normal', 'regular'], ['bold', 'bold']].forEach(function (par) {
+      fetch('/fonts/izmir-' + par[1] + '.ttf')
+        .then(function (r) { if (!r.ok) throw 0; return r.arrayBuffer(); })
+        .then(function (buf) {
+          var b = new Uint8Array(buf), t = '';
+          for (var k = 0; k < b.length; k += 0x8000) t += String.fromCharCode.apply(null, b.subarray(k, k + 0x8000));
+          IZMIR_PDF[par[0]] = t;
+        })
+        .catch(function () {});
+    });
+  })();
+
+  function fuentePdf(doc) {
+    if (IZMIR_PDF.normal && IZMIR_PDF.bold) {
+      try {
+        doc.addFileToVFS('Izmir-Regular.ttf', IZMIR_PDF.normal);
+        doc.addFont('Izmir-Regular.ttf', 'Izmir', 'normal');
+        doc.addFileToVFS('Izmir-Bold.ttf', IZMIR_PDF.bold);
+        doc.addFont('Izmir-Bold.ttf', 'Izmir', 'bold');
+        return 'Izmir';
+      } catch (e) {}
+    }
+    return 'helvetica';
+  }
+
   function generarPdf() {
     var jsPDFCtor = (window.jspdf && window.jspdf.jsPDF) || window.jsPDF;
     if (!jsPDFCtor) throw new Error('jsPDF no cargó');
 
     var doc = new jsPDFCtor({ unit: 'pt', format: 'a4' });
+    var FUENTE = fuentePdf(doc);
     var MX = 56, ANCHO = 483, LH = 14;
     var y = 62;
 
@@ -861,21 +892,21 @@ const contratoConfig = [
     doc.setFillColor(24, 24, 24);
     doc.rect(0, 0, 595, 34, 'F');
     doc.setTextColor(255, 221, 90);
-    doc.setFont('helvetica', 'bold');
+    doc.setFont(FUENTE, 'bold');
     doc.setFontSize(11);
     doc.text('ESTUDIO GRAPHICA', MX, 22);
     doc.setTextColor(248, 248, 248);
-    doc.setFont('helvetica', 'normal');
+    doc.setFont(FUENTE, 'normal');
     doc.setFontSize(8.5);
     doc.text('Fotografia gastronomica · Cochabamba, Bolivia', 595 - MX, 22, { align: 'right' });
 
     doc.setTextColor(24, 24, 24);
-    doc.setFont('helvetica', 'bold');
+    doc.setFont(FUENTE, 'bold');
     doc.setFontSize(15);
     doc.text('Contrato de prestacion de servicios fotograficos', MX, y);
     y += 20;
 
-    doc.setFont('helvetica', 'normal');
+    doc.setFont(FUENTE, 'normal');
     doc.setFontSize(9);
     doc.setTextColor(107, 102, 96);
     doc.text('Documento generado y firmado digitalmente el ' + new Date().toLocaleString('es-BO'), MX, y);
@@ -886,16 +917,16 @@ const contratoConfig = [
     doc.setFillColor(248, 248, 248);
     doc.roundedRect(MX, y - 12, ANCHO, 74, 8, 8, 'FD');
     doc.setTextColor(24, 24, 24);
-    doc.setFont('helvetica', 'bold');
+    doc.setFont(FUENTE, 'bold');
     doc.setFontSize(9.5);
     doc.text(servicioNombre() + ' — ' + paqueteNombre(), MX + 14, y + 6);
-    doc.setFont('helvetica', 'normal');
+    doc.setFont(FUENTE, 'normal');
     doc.setFontSize(9);
     doc.setTextColor(107, 102, 96);
     var resumenLineas = doc.splitTextToSize(detalleTexto(), ANCHO - 28);
     doc.text(resumenLineas, MX + 14, y + 22);
     doc.setTextColor(24, 24, 24);
-    doc.setFont('helvetica', 'bold');
+    doc.setFont(FUENTE, 'bold');
     doc.text('Total: Bs. ' + PKG.precio + '    Adelanto 50%: Bs. ' + adelanto + '    Saldo: Bs. ' + saldo, MX + 14, y + 50);
     y += 86;
 
@@ -905,12 +936,12 @@ const contratoConfig = [
       var cuerpo = aplicarVariables(c.cuerpo, vars).replace(/<[^>]+>/g, '');
       var lineas = doc.splitTextToSize(cuerpo, ANCHO);
       saltoSiHaceFalta(24 + lineas.length * LH);
-      doc.setFont('helvetica', 'bold');
+      doc.setFont(FUENTE, 'bold');
       doc.setFontSize(10);
       doc.setTextColor(24, 24, 24);
       doc.text(c.titulo, MX, y);
       y += 15;
-      doc.setFont('helvetica', 'normal');
+      doc.setFont(FUENTE, 'normal');
       doc.setFontSize(9.5);
       doc.setTextColor(43, 43, 43);
       doc.text(lineas, MX, y);
@@ -929,13 +960,13 @@ const contratoConfig = [
     try { doc.addImage(firmaImg, 'PNG', MX, y - 62, 190, 58); } catch (e) {}
 
     y += 14;
-    doc.setFont('helvetica', 'bold');
+    doc.setFont(FUENTE, 'bold');
     doc.setFontSize(9);
     doc.setTextColor(24, 24, 24);
     doc.text(inputs.nombre.value.trim() || 'EL CLIENTE', MX, y);
     doc.text('Pablo Villarroel Rocabado', MX + 263, y);
     y += 12;
-    doc.setFont('helvetica', 'normal');
+    doc.setFont(FUENTE, 'normal');
     doc.setFontSize(8);
     doc.setTextColor(107, 102, 96);
     doc.text('CI/NIT ' + (inputs.ci.value.trim() || '—') + ' · ' + (inputs.negocio.value.trim() || ''), MX, y);
