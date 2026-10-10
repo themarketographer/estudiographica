@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://estudiographica.com/blog/fotos-menu-que-aumentan-pedidos/</loc>
+    <lastmod>2026-07-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
     <loc>https://estudiographica.com/blog/errores-fotos-celular-restaurantes/</loc>
     <lastmod>2026-07-02</lastmod>
     <changefreq>monthly</changefreq>
@@ -51,13 +58,7 @@
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
-  <url>
-    <loc>https://estudiographica.com/blog/fotos-menu-que-aumentan-pedidos/</loc>
-    <lastmod>2026-08-20</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
+<url>
     <loc>https://estudiographica.com/blog/que-es-foodstyling-y-por-que-importa/</loc>
     <lastmod>2026-07-14</lastmod>
     <changefreq>monthly</changefreq>
