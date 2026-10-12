@@ -4,29 +4,26 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>Reto para restauranteros | Estudio Graphica</title>
-<meta name="description" content="Reto de marketing para restauranteros, incluido en los planes mensuales de Estudio Graphica. Una o dos clases nuevas por semana para que tomes el control de tu marca, tus redes y tus ventas." />
+<meta name="description" content="Reto de marketing para restauranteros, incluido en los planes mensuales de Estudio Graphica. 12 clases grabadas, una nueva cada semana, para manejar tu marca, tus redes y tus ventas." />
 <meta name="robots" content="noindex,nofollow" />
 <meta name="theme-color" content="#FFDD5A" />
 <link rel="canonical" href="https://estudiographica.com/reto/" />
 <link rel="icon" href="/favicon.ico" sizes="any" />
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-
-<!-- GA4 / Meta Pixel / TikTok: copiar aqui el mismo bloque del index.html del sitio (lineas 60 a 90) -->
-
 <link rel="preload" href="/fonts/izmir-regular.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="preload" href="/fonts/izmir-extrabold.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="stylesheet" href="/assets/css/button-states.css" />
 <link rel="stylesheet" href="/assets/css/eg-ui.css" />
 <style>
-.r-hero{position:relative;overflow:hidden;padding:150px 0 90px}
+.r-hero{position:relative;overflow:hidden;padding:150px 0 96px}
 .r-hero::after{content:"";position:absolute;right:-8vw;top:0;width:min(46vw,620px);height:100%;background:var(--y);border-radius:0 0 0 min(30vw,420px);z-index:0}
 .r-hero .wrap{position:relative;z-index:1}
-.r-hero h1{font-size:clamp(38px,6vw,76px);max-width:15ch}
-.r-hero .lead{margin-top:20px;max-width:46ch}
+.r-hero h1{font-size:clamp(40px,6.4vw,84px);max-width:13ch}
+.r-hero .lead{margin-top:22px;max-width:44ch}
 .r-badge{display:inline-block;margin-bottom:20px;padding:8px 16px;border-radius:999px;background:var(--ink);color:var(--y);font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
 .r-cta{display:flex;gap:14px;flex-wrap:wrap;margin-top:32px}
-.r-sec{padding:84px 0}
-.r-sec h2{font-size:clamp(30px,4.4vw,52px);max-width:20ch;margin-bottom:14px}
+.r-sec{padding:88px 0}
+.r-sec h2{font-size:clamp(30px,4.4vw,54px);max-width:18ch;margin-bottom:16px}
 .r-sec .lead{margin-bottom:40px}
 .r-grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
 .r-card{padding:28px;border-radius:24px;background:var(--paper);color:var(--ink);border:1.5px solid var(--hair)}
@@ -34,21 +31,38 @@
 .r-card p{font-size:16px;color:var(--muted)}
 .s-ink .r-card{background:var(--ink-2);border-color:var(--ink-3);color:var(--paper)}
 .s-ink .r-card h3{color:var(--y)}
-.s-ink .r-card p{color:rgba(248,248,248,.72)}
+.s-ink .r-card p{color:rgba(248,248,248,.74)}
+.r-card--hot{background:var(--y);border-color:var(--y)}
+.s-ink .r-card--hot{background:var(--y);border-color:var(--y);color:var(--ink)}
+.s-ink .r-card--hot h3{color:var(--ink)}
+.s-ink .r-card--hot p{color:var(--ink)}
 .r-step{font-size:44px;font-weight:800;line-height:1;margin-bottom:10px}
-.r-phase{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--y);margin-bottom:6px}
+.r-phase{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin:48px 0 18px}
+.r-phase:first-of-type{margin-top:0}
+.r-phase h3{font-size:clamp(22px,2.6vw,30px)}
+.r-phase span{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.r-class{display:grid;grid-template-columns:56px 1fr;gap:6px 18px;padding:22px 0;border-top:1px solid var(--hair)}
+.r-class:last-child{border-bottom:1px solid var(--hair)}
+.r-n{grid-row:span 2;font-size:34px;font-weight:800;line-height:1;letter-spacing:-.04em}
+.r-class h4{font-size:20px}
+.r-class p{font-size:16px;color:var(--muted);max-width:60ch}
+.r-class p b{color:var(--ink)}
+.r-weeks{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin:8px 0 28px}
+.r-weeks li{list-style:none;aspect-ratio:1;display:grid;place-items:center;border-radius:18px;background:var(--ink-2);border:1.5px solid var(--ink-3);font-weight:800;font-size:22px;color:var(--y)}
+.r-weeks small{display:block;font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:rgba(248,248,248,.6);text-align:center;margin-top:-6px}
 .r-note{margin-top:28px;font-size:15px;color:var(--muted)}
 .r-form{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px}
 .r-form input{flex:1;min-width:220px;min-height:56px;padding:0 22px;border-radius:999px;border:2px solid var(--ink);background:#fff;font-size:16px}
-.faq-i{border-bottom:1px solid var(--hair)}
-.faq-q{width:100%;display:flex;justify-content:space-between;gap:16px;align-items:center;padding:22px 0;background:none;border:0;text-align:left;font-weight:600;font-size:18px}
-.faq-a{display:none;padding:0 0 22px}
+.r-msg{margin-top:14px;font-size:15px;color:var(--err);min-height:1.4em}
+.faq-i{border-bottom:1px solid var(--ink-3)}
+.faq-q{width:100%;display:flex;justify-content:space-between;gap:16px;align-items:center;padding:22px 0;background:none;border:0;text-align:left;font-weight:600;font-size:18px;color:var(--paper)}
+.faq-a{display:none;padding:0 0 22px;color:rgba(248,248,248,.78)}
 .faq-i.is-open .faq-a{display:block}
 .faq-i.is-open .faq-x{rotate:45deg}
 .faq-x{width:14px;height:14px;position:relative;flex:none;transition:rotate .3s}
 .faq-x::before,.faq-x::after{content:"";position:absolute;background:currentColor;left:0;top:6px;width:14px;height:2px}
 .faq-x::after{rotate:90deg}
-@media(max-width:760px){.r-hero::after{width:60vw;opacity:.9}.r-hero{padding-top:120px}}
+@media(max-width:760px){.r-hero::after{width:60vw;opacity:.9}.r-hero{padding-top:120px}.r-class{grid-template-columns:42px 1fr}.r-n{font-size:28px}}
 </style>
 </head>
 <body class="has-dock">
@@ -68,8 +82,8 @@
 <section class="s-paper r-hero">
   <div class="wrap">
     <span class="r-badge">Incluido en tu plan mensual</span>
-    <h1>Vende más sin depender de una <span class="eg-accent">agencia</span></h1>
-    <p class="lead">Una o dos clases nuevas por semana para que tomes el control de tu marca, tus redes y tus ventas. Tú escribes tu copy, tú programas tu contenido, tú decides tus anuncios.</p>
+    <h1>Tu menú lo cocinas tú. Tu marketing <span class="eg-accent">también</span>.</h1>
+    <p class="lead">Un reto de 12 clases grabadas para dueños de restaurante. Cada semana se abre una clase nueva y cada clase termina con una misión que haces esa misma semana.</p>
     <div class="r-cta">
       <a class="btn" href="#acceso">Entrar con mi cupón</a>
       <a class="btn btn--ghost" href="#programa">Ver el programa</a>
@@ -79,72 +93,67 @@
 
 <section class="s-ink r-sec" id="problema">
   <div class="wrap">
-    <h2>Las agencias genéricas le entregan lo mismo a todos sus clientes</h2>
-    <p class="lead">Tu restaurante tiene una historia propia. Con las herramientas correctas, esa historia la cuentas tú. [DATO REAL: una anécdota de Pablo con un restaurante cliente que ilustre esto]</p>
+    <h2>Imagina que son las 11 de la noche</h2>
+    <p class="lead">Cerraste la cocina, contaste la caja y todavía falta decidir qué publicar mañana. Si dependes de una agencia, esperas su calendario. Si dependes de la inspiración, esperas un milagro. Los dos horarios tienen algo en común: ninguno lo manejas tú.</p>
+    <div class="r-grid">
+      <div class="r-card"><h3>Final 1: todo igual</h3><p>Otro sigue decidiendo cómo se ve, cómo se llama y qué promete tu restaurante en redes. Tú sigues pagando por eso.</p></div>
+      <div class="r-card"><h3>Final 2: lo haces solo</h3><p>Ves tutoriales sueltos a las 2 de la mañana. Alguno funciona y otro te deja una tienda virtual a medio armar.</p></div>
+      <div class="r-card r-card--hot"><h3>Final 3: lo haces con el reto</h3><p>12 clases en orden, una misión por semana y al final un marketing que entiendes y manejas tú.</p></div>
+    </div>
   </div>
 </section>
 
 <section class="s-paper r-sec" id="programa">
-  <div class="wrap">
-    <h2>Un programa en tres fases</h2>
-    <p class="lead">Cada clase termina con una tarea concreta que avanza tu negocio esa misma semana.</p>
+  <div class="wrap wrap--narrow">
+    <h2>12 clases en tres fases</h2>
+    <p class="lead">Cada clase trae una misión concreta. Si la haces, esa semana tu restaurante queda mejor que la anterior.</p>
 
-    <p class="r-phase" style="color:var(--ink)">Fase 1, Fundamentos</p>
-    <div class="r-grid" style="margin-bottom:44px">
-      <div class="r-card"><h3>Tu diferenciador</h3><p>Qué haces que la competencia de tu calle no puede copiar.</p></div>
-      <div class="r-card"><h3>Tu pro, pro, pro</h3><p>[DATO REAL: definición de Pablo del pro, pro, pro]</p></div>
-      <div class="r-card"><h3>Tu cliente ideal</h3><p>Un asistente de IA te entrevista y arma el perfil de quien más te conviene atender.</p></div>
-      <div class="r-card"><h3>Tu oferta</h3><p>Un plato o paquete con nombre, precio y razón clara para pedirlo hoy.</p></div>
-      <div class="r-card"><h3>Tu personalidad y colores</h3><p>Con ayuda de IA eliges tono de voz y paleta coherentes con tu cocina.</p></div>
-      <div class="r-card"><h3>Tu brief de marca</h3><p>Un documento de una página que guía cada publicación.</p></div>
-    </div>
+    <div class="r-phase"><h3>Fase 1. Fundamentos</h3><span>Semanas 1 a 5</span></div>
+    <div class="r-class"><div class="r-n">1</div><h4>Tu diferenciador</h4><p><b>Misión:</b> escribir en una frase qué hace tu restaurante que el de la otra esquina no puede copiar.</p></div>
+    <div class="r-class"><div class="r-n">2</div><h4>Tu Problema, tu Proceso y tu Promesa</h4><p><b>Misión:</b> dejar por escrito los tres, en lenguaje que entienda tu cliente.</p></div>
+    <div class="r-class"><div class="r-n">3</div><h4>Tu cliente ideal</h4><p><b>Misión:</b> con un asistente de IA que te entrevista, armar el perfil de la persona que más te conviene atender.</p></div>
+    <div class="r-class"><div class="r-n">4</div><h4>Tu oferta</h4><p><b>Misión:</b> armar un plato o paquete con nombre, precio y una razón clara para pedirlo hoy.</p></div>
+    <div class="r-class"><div class="r-n">5</div><h4>Tu voz y tus colores</h4><p><b>Misión:</b> elegir tono y paleta con ayuda de IA y cerrarlos en un brief de una página que guíe cada publicación.</p></div>
 
-    <p class="r-phase" style="color:var(--ink)">Fase 2, Presencia y venta</p>
-    <div class="r-grid" style="margin-bottom:44px">
-      <div class="r-card"><h3>Instagram con propósito</h3><p>Por qué tu perfil es tu vitrina y cómo ordenarlo para que venda.</p></div>
-      <div class="r-card"><h3>Tu página web</h3><p>Qué debe tener una web de restaurante para aparecer en Google y convertir visitas.</p></div>
-      <div class="r-card"><h3>Tu tienda virtual</h3><p>Armas tu tienda en TakeApp paso a paso, con menú, precios y pedidos.</p></div>
-      <div class="r-card"><h3>Reservas con Cal.com</h3><p>Una agenda que acepta reservas mientras tú cocinas.</p></div>
-      <div class="r-card"><h3>Tu propio copy</h3><p>Fórmulas simples para escribir captions, ofertas y descripciones de platos, con un asistente de IA que te da borradores en tu voz.</p></div>
-    </div>
+    <div class="r-phase"><h3>Fase 2. Presencia y venta</h3><span>Semanas 6 a 9</span></div>
+    <div class="r-class"><div class="r-n">6</div><h4>Instagram con propósito</h4><p><b>Misión:</b> ordenar tu perfil para que funcione como vitrina de tu restaurante.</p></div>
+    <div class="r-class"><div class="r-n">7</div><h4>Tu propio copy</h4><p><b>Misión:</b> escribir captions, ofertas y descripciones de platos con fórmulas simples y un asistente de IA que te da borradores en tu voz.</p></div>
+    <div class="r-class"><div class="r-n">8</div><h4>Tu web y tu tienda virtual</h4><p><b>Misión:</b> revisar qué le falta a tu página web y armar tu tienda en TakeApp con menú, precios y pedidos.</p></div>
+    <div class="r-class"><div class="r-n">9</div><h4>Reservas con Cal.com</h4><p><b>Misión:</b> dejar activa una agenda que acepta reservas mientras tú cocinas.</p></div>
 
-    <p class="r-phase" style="color:var(--ink)">Fase 3, Crecimiento y autonomía</p>
-    <div class="r-grid">
-      <div class="r-card"><h3>Contenido programado</h3><p>Un día de grabación, dos semanas de publicaciones ya agendadas.</p></div>
-      <div class="r-card"><h3>Anuncios propios</h3><p>Tu primera campaña en Meta con poco presupuesto y una métrica para saber si funcionó.</p></div>
-      <div class="r-card"><h3>Automatiza con tu iPhone</h3><p>Atajos que responden, recuerdan y publican por ti.</p></div>
-      <div class="r-card"><h3>Controla tu marketing</h3><p>Qué delegar, qué hacer tú y cómo evaluar a cualquier agencia con criterio.</p></div>
-    </div>
-    <p class="r-note">Temporada 1: [DATO REAL: semanas y clases]. Después llegan temporadas nuevas con tendencias y herramientas actualizadas.</p>
+    <div class="r-phase"><h3>Fase 3. Autonomía</h3><span>Semanas 10 a 12</span></div>
+    <div class="r-class"><div class="r-n">10</div><h4>Contenido programado</h4><p><b>Misión:</b> grabar en un solo día y dejar agendadas tus próximas publicaciones.</p></div>
+    <div class="r-class"><div class="r-n">11</div><h4>Tus propios anuncios</h4><p><b>Misión:</b> lanzar tu primera campaña en Meta con poco presupuesto y una métrica para saber si funcionó.</p></div>
+    <div class="r-class"><div class="r-n">12</div><h4>Automatiza y toma el control</h4><p><b>Misión:</b> crear atajos en tu iPhone (si tienes uno) que trabajen por ti y definir qué haces tú, qué delegas y cómo evaluar a cualquier agencia con criterio.</p></div>
   </div>
 </section>
 
-<section class="s-ink r-sec" id="formato">
-  <div class="wrap">
-    <h2>Siempre activo, con clases nuevas cada semana</h2>
-    <p class="lead">Mientras tu plan mensual siga activo, el contenido nuevo sigue llegando.</p>
-    <div class="r-grid">
-      <div class="r-card"><h3>1 o 2 clases por semana</h3><p>Clases cortas, pensadas para un restaurante en operación.</p></div>
-      <div class="r-card"><h3>Una misión por clase</h3><p>Cada clase cierra con una tarea que puedes hacer esa misma semana.</p></div>
-      <div class="r-card"><h3>Asistentes de IA</h3><p>[DATO REAL: cómo se accede a los asistentes y si hace falta cuenta propia]</p></div>
-    </div>
+<section class="s-ink r-sec" id="ritmo">
+  <div class="wrap wrap--narrow">
+    <h2>Una clase por semana</h2>
+    <p class="lead">Las clases ya están grabadas y se abren de a una. Así avanzas al ritmo que aguanta un restaurante en operación y cada misión se hace antes de que llegue la siguiente.</p>
+    <ol class="r-weeks" aria-label="Doce semanas de clases">
+      <li><span>1</span></li><li><span>2</span></li><li><span>3</span></li><li><span>4</span></li><li><span>5</span></li><li><span>6</span></li>
+      <li><span>7</span></li><li><span>8</span></li><li><span>9</span></li><li><span>10</span></li><li><span>11</span></li><li><span>12</span></li>
+    </ol>
+    <p class="lead" style="margin-bottom:0">Mientras tu plan mensual siga activo, el reto sigue abierto para ti.</p>
   </div>
 </section>
 
 <section class="s-paper r-sec" id="acceso">
   <div class="wrap wrap--narrow">
-    <h2>Cuatro pasos y estás dentro</h2>
+    <h2>Tres pasos y estás dentro</h2>
     <p class="lead">El reto está oculto. Se entra con el cupón que Pablo te entrega con tu plan mensual.</p>
-    <div class="r-grid" style="margin-bottom:36px">
-      <div class="r-card"><div class="r-step">1</div><h3>Recibes tu cupón</h3><p>Pablo te lo envía junto con tu plan mensual.</p></div>
-      <div class="r-card"><div class="r-step">2</div><h3>Escribes tu cupón</h3><p>Lo pegas aquí abajo y te llevamos al reto.</p></div>
-      <div class="r-card"><div class="r-step">3</div><h3>Pagas con descuento</h3><p>El checkout de NAS aplica tu cupón. [DATO REAL: porcentaje y duración del cupón]</p></div>
-      <div class="r-card"><div class="r-step">4</div><h3>Empiezas</h3><p>Entras a la primera clase y recibes aviso de cada clase nueva.</p></div>
+    <div class="r-grid" style="margin-bottom:36px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))">
+      <div class="r-card"><div class="r-step">1</div><h3>Recibes tu cupón</h3><p>Pablo te lo envía cuando empieza tu plan mensual.</p></div>
+      <div class="r-card"><div class="r-step">2</div><h3>Lo escribes aquí</h3><p>Lo pegas en el campo de abajo y te llevamos al reto en NAS.</p></div>
+      <div class="r-card"><div class="r-step">3</div><h3>Empiezas la clase 1</h3><p>Entras con tu cupón aplicado y cada semana se abre la siguiente.</p></div>
     </div>
     <form class="r-form" id="r-form" novalidate>
       <input type="text" id="r-cupon" name="cupon" placeholder="Tu cupón" autocomplete="off" aria-label="Tu cupón" />
       <button class="btn btn--ink" type="submit">Ir al reto</button>
     </form>
+    <p class="r-msg" id="r-msg" role="status" aria-live="polite"></p>
     <p class="r-note">¿Sin cupón? Escríbele a Pablo por <a class="link" href="https://api.whatsapp.com/send?phone=59169422335&text=Hola%20Pablo%2C%20quiero%20mi%20cup%C3%B3n%20del%20reto%20para%20restauranteros" target="_blank" rel="noopener">WhatsApp</a>. El acceso va ligado a tu plan mensual con Estudio Graphica.</p>
   </div>
 </section>
@@ -152,13 +161,10 @@
 <section class="s-ink r-sec" id="faq">
   <div class="wrap wrap--narrow">
     <h2>Preguntas frecuentes</h2>
-    <div id="faq-list">
-      <div class="faq-i is-open"><h3><button class="faq-q" type="button" aria-expanded="true"><span>¿Qué es exactamente el reto?</span><i class="faq-x" aria-hidden="true"></i></button></h3><div class="faq-a"><p>Un programa de clases cortas en NAS donde aprendes a manejar tu propio marketing. Cada clase trae una tarea concreta.</p></div></div>
-      <div class="faq-i"><h3><button class="faq-q" type="button" aria-expanded="false"><span>¿Cuánto cuesta?</span><i class="faq-x" aria-hidden="true"></i></button></h3><div class="faq-a"><p>Va incluido en todos los planes mensuales de Estudio Graphica. [DATO REAL: precio de referencia y cómo funciona el cupón]</p></div></div>
-      <div class="faq-i"><h3><button class="faq-q" type="button" aria-expanded="false"><span>¿Qué pasa si dejo mi plan mensual?</span><i class="faq-x" aria-hidden="true"></i></button></h3><div class="faq-a"><p>El acceso al reto se retira cuando termina tu plan. [DATO REAL: confirmar con Pablo el plazo y si conservan lo ya descargado]</p></div></div>
-      <div class="faq-i"><h3><button class="faq-q" type="button" aria-expanded="false"><span>¿Necesito saber de marketing?</span><i class="faq-x" aria-hidden="true"></i></button></h3><div class="faq-a"><p>Empiezas desde cero. Las clases están pensadas para dueños de restaurante con poco tiempo.</p></div></div>
-      <div class="faq-i"><h3><button class="faq-q" type="button" aria-expanded="false"><span>¿Cuánto tiempo toma cada clase?</span><i class="faq-x" aria-hidden="true"></i></button></h3><div class="faq-a"><p>[DATO REAL: duración promedio de cada clase]</p></div></div>
-    </div>
+    <div class="faq-i"><button class="faq-q" aria-expanded="false">¿Qué es exactamente el reto?<span class="faq-x" aria-hidden="true"></span></button><div class="faq-a"><p>Un programa de 12 clases grabadas en NAS donde aprendes a manejar tu propio marketing. Cada clase termina con una misión.</p></div></div>
+    <div class="faq-i"><button class="faq-q" aria-expanded="false">¿Cuánto cuesta?<span class="faq-x" aria-hidden="true"></span></button><div class="faq-a"><p>Va incluido en tu plan mensual de Estudio Graphica.</p></div></div>
+    <div class="faq-i"><button class="faq-q" aria-expanded="false">¿Qué pasa si dejo mi plan mensual?<span class="faq-x" aria-hidden="true"></span></button><div class="faq-a"><p>El acceso al reto se retira cuando termina tu plan. Si lo retomas, escríbele a Pablo y se reactiva.</p></div></div>
+    <div class="faq-i"><button class="faq-q" aria-expanded="false">¿Necesito saber de marketing?<span class="faq-x" aria-hidden="true"></span></button><div class="faq-a"><p>Puedes empezar desde cero. Las clases siguen un orden y cada una se apoya en la anterior.</p></div></div>
   </div>
 </section>
 
@@ -172,11 +178,12 @@
   </div>
 </footer>
 
-<script src="/assets/js/tracking.js"></script>
+<script src="/assets/js/button-states.js" defer></script>
+<script src="/assets/js/eg-ui.js" defer></script>
 <script>
 (function(){
-  /* Enlace del reto en NAS. Pegar aqui la URL real. */
-  var RETO_URL = "[DATO REAL: URL del reto en NAS]";
+  /* Enlace del reto en NAS. Se pega aquí cuando el reto esté publicado en The Marketographers. */
+  var RETO_URL = "";
 
   document.querySelectorAll('.faq-q').forEach(function(b){
     b.addEventListener('click', function(){
@@ -187,14 +194,14 @@
   });
 
   var form = document.getElementById('r-form');
+  var msg = document.getElementById('r-msg');
   form.addEventListener('submit', function(e){
     e.preventDefault();
+    msg.textContent = '';
     var cupon = (document.getElementById('r-cupon').value || '').trim();
-    if(!cupon){ document.getElementById('r-cupon').focus(); return; }
-    try { if(window.EG && EG.track) EG.track('reto_cupon_enviado'); } catch(_){}
-    try { if(window.fbq) fbq('trackCustom','RetoCupon'); } catch(_){}
-    var url = RETO_URL;
-    url += (url.indexOf('?') > -1 ? '&' : '?') + 'discount=' + encodeURIComponent(cupon);
+    if(!cupon){ msg.textContent = 'Escribe tu cupón para continuar.'; document.getElementById('r-cupon').focus(); return; }
+    if(!RETO_URL){ msg.textContent = 'Estamos terminando de abrir el reto. Escríbele a Pablo por WhatsApp y te avisa apenas esté listo.'; return; }
+    var url = RETO_URL + (RETO_URL.indexOf('?') > -1 ? '&' : '?') + 'discount=' + encodeURIComponent(cupon);
     window.location.href = url;
   });
 })();
