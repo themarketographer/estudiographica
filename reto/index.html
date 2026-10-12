@@ -68,18 +68,24 @@
 .r-sec h2{font-size:clamp(30px,4.4vw,54px);max-width:18ch;margin-bottom:16px}
 .r-sec .lead{margin-bottom:44px}
 
-/* Problema y tres finales */
-.r-fin{display:grid;gap:18px}
-@media(min-width:860px){.r-fin{grid-template-columns:1fr 1.2fr;align-items:stretch}}
-.r-fin-l{display:grid;gap:18px}
-.r-card{padding:26px;border-radius:26px;background:var(--ink-2);border:1.5px solid var(--ink-3);color:var(--paper);display:grid;gap:14px;align-content:start;transition:transform .3s var(--ease),border-color .25s}
-.r-card h3{font-size:21px;color:var(--y)}
-.r-card p{font-size:16px;color:rgba(248,248,248,.76)}
-.r-card--hot{background:var(--y);border-color:var(--y);padding:36px;gap:20px;align-content:center}
-.r-card--hot h3{font-size:clamp(26px,3vw,34px);color:var(--ink)}
-.r-card--hot p{font-size:clamp(17px,1.7vw,20px);color:var(--ink)}
-.r-card--hot .tile{width:60px;height:60px;border-radius:18px}
-@media(hover:hover) and (pointer:fine){.r-card:hover{transform:translateY(-4px);border-color:var(--y)}}
+/* Problema y tres finales: tres filas que escalan, sin cajas del mismo tamaño */
+.r-fin{display:grid;gap:0}
+.r-row{display:grid;grid-template-columns:44px 1fr;column-gap:18px;row-gap:6px;align-items:start;padding:26px 4px;border-bottom:1px solid var(--ink-3)}
+.r-row:first-child{border-top:1px solid var(--ink-3)}
+.r-row .tile{grid-row:span 2;width:44px;height:44px;border-radius:14px}
+.r-row h3{font-size:clamp(20px,2vw,24px);color:var(--y);padding-top:2px}
+.r-row p{font-size:17px;color:rgba(248,248,248,.76);max-width:56ch}
+@media(min-width:860px){
+  .r-row{grid-template-columns:44px minmax(230px,320px) 1fr;column-gap:28px;align-items:center}
+  .r-row .tile{grid-row:auto}
+}
+.r-row--hot{margin-top:18px;padding:28px 30px;border:0;border-radius:28px;background:var(--y);align-items:center}
+.r-row--hot:first-child{border:0}
+.r-row--hot .tile{background:var(--ink);color:var(--y);width:52px;height:52px;border-radius:16px}
+.r-row--hot h3{color:var(--ink);font-size:clamp(24px,2.8vw,32px);line-height:1.1}
+.r-row--hot p{color:var(--ink);font-size:clamp(17px,1.5vw,19px);max-width:48ch}
+@media(min-width:860px){.r-row--hot{grid-template-columns:52px minmax(230px,320px) 1fr}}
+@media(max-width:640px){.r-row{padding:22px 0}.r-row--hot{padding:24px 20px}}
 
 /* Programa */
 .r-ph{display:grid;gap:14px;margin-top:64px}
@@ -163,7 +169,7 @@
 .r-msg a{color:inherit;text-decoration-color:currentColor}
 
 /* Pregunta que cierra los tres finales */
-.r-q{margin-top:44px;font-size:clamp(22px,3vw,34px);font-weight:800;letter-spacing:-.03em;line-height:1.15;color:var(--y);max-width:24ch;text-wrap:balance}
+.r-q{margin-top:40px;font-size:clamp(22px,3vw,34px);font-weight:800;letter-spacing:-.03em;line-height:1.15;color:var(--y);max-width:24ch;text-wrap:balance}
 
 /* Cierre */
 .r-close{margin-top:72px;padding-top:56px;border-top:1px solid var(--ink-3);display:grid;gap:22px;justify-items:start}
@@ -265,11 +271,9 @@
     <h2 class="rv">Imagina que son las 11 de la noche</h2>
     <p class="lead rv" style="--d:80ms">Cerraste la cocina, contaste la caja y todavía falta decidir qué publicar mañana. Si esperas a la agencia, publicas cuando ella pueda. Si esperas inspiración, publicas cuando llegue. Dos horarios y ninguno lo marcas tú.</p>
     <div class="r-fin">
-      <div class="r-fin-l">
-        <div class="r-card rv"><span class="tile tile--soft"><svg class="ic"><use href="#i-loop"/></svg></span><h3>Final 1: todo igual</h3><p>Otro sigue decidiendo cómo se ve, cómo se llama y qué promete tu restaurante en redes. Tú sigues pagando por eso.</p></div>
-        <div class="r-card rv" style="--d:90ms"><span class="tile tile--soft"><svg class="ic"><use href="#i-user"/></svg></span><h3>Final 2: lo haces solo</h3><p>Ves tutoriales sueltos a las 2 de la mañana. Alguno funciona y otro te deja una tienda virtual a medio armar.</p></div>
-      </div>
-      <div class="r-card r-card--hot rv" style="--d:180ms"><span class="tile tile--ink"><svg class="ic"><use href="#i-flag"/></svg></span><h3>Final 3: lo haces con el reto</h3><p>12 clases en orden, una misión por semana y al final un marketing que entiendes y manejas tú.</p></div>
+      <div class="r-row rv"><span class="tile tile--soft"><svg class="ic"><use href="#i-loop"/></svg></span><h3>Final 1: todo igual</h3><p>Otro sigue decidiendo cómo se ve, cómo se llama y qué promete tu restaurante en redes. Tú sigues pagando por eso.</p></div>
+      <div class="r-row rv" style="--d:70ms"><span class="tile tile--soft"><svg class="ic"><use href="#i-user"/></svg></span><h3>Final 2: lo haces solo</h3><p>Ves tutoriales sueltos a las 2 de la mañana. Alguno funciona y otro te deja una tienda virtual a medio armar.</p></div>
+      <div class="r-row r-row--hot rv" style="--d:140ms"><span class="tile"><svg class="ic"><use href="#i-flag"/></svg></span><h3>Final 3: lo haces con el reto</h3><p>12 clases en orden, una misión por semana y al final un marketing que entiendes y manejas tú.</p></div>
     </div>
     <p class="r-q rv">¿Cuál de los tres estás escribiendo esta semana?</p>
   </div>
