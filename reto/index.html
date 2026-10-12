@@ -7,6 +7,11 @@
 <meta name="description" content="Reto de marketing para restauranteros: 12 clases grabadas, una nueva cada semana, para manejar tu marca, tus redes y tus ventas. Gratis con el plan mensual de Estudio Graphica." />
 <meta name="robots" content="noindex,nofollow" />
 <meta name="theme-color" content="#FFDD5A" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Reto para restauranteros | Estudio Graphica" />
+<meta property="og:description" content="12 clases grabadas, una nueva cada semana, para manejar tu marca, tus redes y tus ventas." />
+<meta property="og:url" content="https://estudiographica.com/reto/" />
+<meta name="twitter:card" content="summary" />
 <link rel="canonical" href="https://estudiographica.com/reto/" />
 <link rel="icon" href="/favicon.ico" sizes="any" />
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
@@ -18,7 +23,7 @@
 /* Iconos: un solo trazo, un solo grosor */
 .ic{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;flex:none}
 .ic--sm{width:18px;height:18px}
-.tile{display:grid;place-items:center;width:52px;height:52px;border-radius:16px;background:var(--y);color:var(--ink);flex:none;transition:background .3s,color .3s,transform .45s var(--ease)}
+.tile{display:grid;place-items:center;width:52px;height:52px;border-radius:16px;background:var(--y);color:var(--ink);flex:none;transition:background .25s,color .25s,transform .3s var(--ease)}
 .tile--ink{background:var(--ink);color:var(--y)}
 .tile--soft{background:var(--ink-3);color:var(--y)}
 
@@ -67,7 +72,7 @@
 .r-fin{display:grid;gap:18px}
 @media(min-width:860px){.r-fin{grid-template-columns:1fr 1.2fr;align-items:stretch}}
 .r-fin-l{display:grid;gap:18px}
-.r-card{padding:26px;border-radius:26px;background:var(--ink-2);border:1.5px solid var(--ink-3);color:var(--paper);display:grid;gap:14px;align-content:start;transition:transform .35s var(--ease),border-color .25s}
+.r-card{padding:26px;border-radius:26px;background:var(--ink-2);border:1.5px solid var(--ink-3);color:var(--paper);display:grid;gap:14px;align-content:start;transition:transform .3s var(--ease),border-color .25s}
 .r-card h3{font-size:21px;color:var(--y)}
 .r-card p{font-size:16px;color:rgba(248,248,248,.76)}
 .r-card--hot{background:var(--y);border-color:var(--y);padding:36px;gap:20px;align-content:center}
@@ -99,12 +104,16 @@
   .r-wk{justify-self:start;margin-bottom:4px}
 }
 
-/* Una clase por semana: barra delgada que se llena en orden */
-.r-rail{display:grid;grid-template-columns:repeat(12,1fr);gap:6px;margin:0 0 14px;padding:0}
-.r-rail li{list-style:none;height:14px;border-radius:999px;background:var(--ink-3);transition:background .5s var(--ease) calc(.3s + var(--i) * 90ms),transform .6s var(--ease) calc(.3s + var(--i) * 90ms)}
-.r-rail.is-armed li{transform:scaleY(.4)}
-.r-rail.is-armed.is-seen li{background:var(--y);transform:none}
-.r-rail-l{display:flex;justify-content:space-between;font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:rgba(248,248,248,.6);margin-bottom:34px}
+/* Una clase por semana: tres tramos que se llenan en orden */
+.r-phases{display:grid;grid-template-columns:5fr 4fr 3fr;gap:18px;margin:0 0 34px}
+.r-grp{display:grid;gap:12px;align-content:start}
+.r-rail{display:flex;gap:6px;margin:0;padding:0}
+.r-rail li{flex:1;list-style:none;height:14px;border-radius:999px;background:var(--ink-3);transition:background .45s var(--ease) calc(.25s + var(--i) * 80ms),transform .5s var(--ease) calc(.25s + var(--i) * 80ms)}
+.r-phases.is-armed .r-rail li{transform:scaleY(.4)}
+.r-phases.is-armed.is-seen .r-rail li{background:var(--y);transform:none}
+.r-grp b{display:block;font-size:15px;font-weight:600;color:var(--paper);line-height:1.25}
+.r-grp small{display:block;margin-top:3px;font-size:13px;color:rgba(248,248,248,.62)}
+@media(max-width:640px){.r-phases{gap:10px}.r-rail{gap:4px}.r-grp b{font-size:13px}.r-grp small{font-size:12px}}
 .r-sec--slim{padding:68px 0}
 .r-sec--slim .lead{margin-bottom:34px}
 
@@ -133,14 +142,33 @@
 .faq-i{border-bottom:1px solid var(--ink-3)}
 .faq-q{width:100%;display:flex;justify-content:space-between;gap:16px;align-items:center;padding:24px 0;background:none;border:0;text-align:left;font-weight:600;font-size:clamp(17px,2vw,20px);color:var(--paper);transition:color .25s}
 .faq-q:hover{color:var(--y)}
-.faq-x{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;border:1.5px solid var(--ink-3);flex:none;transition:rotate .4s var(--ease),background .3s,color .3s,border-color .3s}
+.faq-x{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;border:1.5px solid var(--ink-3);flex:none;transition:rotate .3s var(--ease),background .25s,color .25s,border-color .25s,scale .15s var(--ease)}
 .faq-x .ic{width:16px;height:16px;stroke-width:2.2}
 .faq-i.is-open .faq-x{rotate:45deg;background:var(--y);color:var(--ink);border-color:var(--y)}
-.faq-a{display:grid;grid-template-rows:0fr;transition:grid-template-rows .4s var(--ease)}
-.faq-a>div{overflow:hidden;min-height:0;visibility:hidden;transition:visibility .4s}
+.faq-a{display:grid;grid-template-rows:0fr;transition:grid-template-rows .35s var(--ease)}
+.faq-a>div{overflow:hidden;min-height:0;visibility:hidden;transition:visibility .35s}
 .faq-a p{padding:0 0 24px;color:rgba(248,248,248,.78)}
 .faq-i.is-open .faq-a{grid-template-rows:1fr}
 .faq-i.is-open .faq-a>div{visibility:visible}
+
+
+/* Superficies del navegador con la paleta */
+::selection{background:var(--y);color:var(--ink)}
+.r-field input{caret-color:var(--ink)}
+.r-hero h1,.r-sec h2{text-wrap:balance}
+.lead{text-wrap:pretty}
+.faq-q:focus-visible{outline:2px solid var(--y);outline-offset:4px;border-radius:10px}
+.faq-q:active .faq-x{scale:.92}
+.r-field.is-bad input{border-color:var(--err);box-shadow:0 0 0 5px rgba(179,57,43,.16)}
+.r-msg a{color:inherit;text-decoration-color:currentColor}
+
+/* Pregunta que cierra los tres finales */
+.r-q{margin-top:44px;font-size:clamp(22px,3vw,34px);font-weight:800;letter-spacing:-.03em;line-height:1.15;color:var(--y);max-width:24ch;text-wrap:balance}
+
+/* Cierre */
+.r-close{margin-top:72px;padding-top:56px;border-top:1px solid var(--ink-3);display:grid;gap:22px;justify-items:start}
+.r-close h2{font-size:clamp(28px,4vw,46px);max-width:20ch;margin:0}
+.r-close p{max-width:44ch;color:rgba(248,248,248,.78)}
 
 @media(max-width:899px){.r-hero::after{display:none}.r-stack{background:var(--y);padding:22px;border-radius:32px}}
 @media(max-width:760px){.r-hero{padding-top:118px}.r-sec{padding:72px 0}.r-card--hot{padding:28px}.r-path{padding:26px}}
@@ -151,7 +179,7 @@
   .r-c--open .pill--lock{display:none}
   .r-c--open .pill--open{animation:none}
   .r-c--open .shackle{animation:none;transform:translateY(-3px) rotate(-26deg)}
-  .r-rail.is-armed li,.r-rail li{transform:none;background:var(--y)}
+  .r-phases.is-armed .r-rail li,.r-rail li{transform:none;background:var(--y);transition:none}
 }
 </style>
 </head>
@@ -199,7 +227,7 @@
   <div class="wrap">
     <div>
       <h1 class="intro">Tu menú lo cocinas tú. Tu marketing <span class="eg-accent">también</span>.</h1>
-      <p class="lead intro" style="--d:90ms">Un reto de 12 clases grabadas para dueños de restaurante. Cada semana se abre una clase nueva y cada clase termina con una misión que haces esa misma semana.</p>
+      <p class="lead intro" style="--d:90ms">Doce clases grabadas para dueños de restaurante. Una se abre cada semana y termina con una misión que haces esa misma semana.</p>
       <div class="r-cta intro" style="--d:180ms">
         <a class="btn" href="#acceso">Quiero el reto <svg class="ic ic--sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>
         <a class="btn btn--ghost" href="#programa">Ver el programa</a>
@@ -235,7 +263,7 @@
   <div class="spot"></div>
   <div class="wrap">
     <h2 class="rv">Imagina que son las 11 de la noche</h2>
-    <p class="lead rv" style="--d:80ms">Cerraste la cocina, contaste la caja y todavía falta decidir qué publicar mañana. Si dependes de una agencia, esperas su calendario. Si dependes de la inspiración, esperas un milagro. Los dos horarios tienen algo en común: ninguno lo manejas tú.</p>
+    <p class="lead rv" style="--d:80ms">Cerraste la cocina, contaste la caja y todavía falta decidir qué publicar mañana. Si esperas a la agencia, publicas cuando ella pueda. Si esperas inspiración, publicas cuando llegue. Dos horarios y ninguno lo marcas tú.</p>
     <div class="r-fin">
       <div class="r-fin-l">
         <div class="r-card rv"><span class="tile tile--soft"><svg class="ic"><use href="#i-loop"/></svg></span><h3>Final 1: todo igual</h3><p>Otro sigue decidiendo cómo se ve, cómo se llama y qué promete tu restaurante en redes. Tú sigues pagando por eso.</p></div>
@@ -243,6 +271,7 @@
       </div>
       <div class="r-card r-card--hot rv" style="--d:180ms"><span class="tile tile--ink"><svg class="ic"><use href="#i-flag"/></svg></span><h3>Final 3: lo haces con el reto</h3><p>12 clases en orden, una misión por semana y al final un marketing que entiendes y manejas tú.</p></div>
     </div>
+    <p class="r-q rv">¿Cuál de los tres estás escribiendo esta semana?</p>
   </div>
 </section>
 
@@ -288,11 +317,11 @@
   <div class="wrap wrap--narrow">
     <h2 class="rv">Una clase por semana</h2>
     <p class="lead rv" style="--d:80ms">Las clases ya están grabadas y se abren de a una. Así avanzas al ritmo que aguanta un restaurante en operación y cada misión se hace antes de que llegue la siguiente.</p>
-    <ol class="r-rail rv" aria-label="Doce semanas de clases">
-      <li style="--i:0"></li><li style="--i:1"></li><li style="--i:2"></li><li style="--i:3"></li><li style="--i:4"></li><li style="--i:5"></li>
-      <li style="--i:6"></li><li style="--i:7"></li><li style="--i:8"></li><li style="--i:9"></li><li style="--i:10"></li><li style="--i:11"></li>
-    </ol>
-    <div class="r-rail-l rv" aria-hidden="true"><span>Semana 1</span><span>Semana 12</span></div>
+    <div class="r-phases rv" role="img" aria-label="Doce semanas de clases en tres fases: Fundamentos, semanas 1 a 5; Presencia y venta, semanas 6 a 9; Autonomía, semanas 10 a 12">
+      <div class="r-grp"><ol class="r-rail"><li style="--i:0"></li><li style="--i:1"></li><li style="--i:2"></li><li style="--i:3"></li><li style="--i:4"></li></ol><div><b>Fundamentos</b><small>Semanas 1 a 5</small></div></div>
+      <div class="r-grp"><ol class="r-rail"><li style="--i:5"></li><li style="--i:6"></li><li style="--i:7"></li><li style="--i:8"></li></ol><div><b>Presencia y venta</b><small>Semanas 6 a 9</small></div></div>
+      <div class="r-grp"><ol class="r-rail"><li style="--i:9"></li><li style="--i:10"></li><li style="--i:11"></li></ol><div><b>Autonomía</b><small>Semanas 10 a 12</small></div></div>
+    </div>
     <p class="lead rv" style="margin-bottom:0">Mientras tu plan mensual siga activo, el reto sigue abierto para ti.</p>
   </div>
 </section>
@@ -335,7 +364,12 @@
     <div class="faq-i rv"><button class="faq-q" aria-expanded="false">¿Qué es exactamente el reto?<span class="faq-x" aria-hidden="true"><svg class="ic"><use href="#i-plus"/></svg></span></button><div class="faq-a"><div><p>Un programa de 12 clases grabadas en NAS donde aprendes a manejar tu propio marketing. Cada clase termina con una misión.</p></div></div></div>
     <div class="faq-i rv" style="--d:50ms"><button class="faq-q" aria-expanded="false">¿Cuánto cuesta?<span class="faq-x" aria-hidden="true"><svg class="ic"><use href="#i-plus"/></svg></span></button><div class="faq-a"><div><p>El reto se vende por separado y el precio lo ves en el checkout de NAS. Si tienes plan mensual con Estudio Graphica, entras gratis con tu cupón.</p></div></div></div>
     <div class="faq-i rv" style="--d:100ms"><button class="faq-q" aria-expanded="false">¿Qué pasa si dejo mi plan mensual?<span class="faq-x" aria-hidden="true"><svg class="ic"><use href="#i-plus"/></svg></span></button><div class="faq-a"><div><p>El acceso con cupón se retira cuando termina tu plan. La compra por separado no depende del plan.</p></div></div></div>
-    <div class="faq-i rv" style="--d:150ms"><button class="faq-q" aria-expanded="false">¿Necesito saber de marketing?<span class="faq-x" aria-hidden="true"><svg class="ic"><use href="#i-plus"/></svg></span></button><div class="faq-a"><div><p>Puedes empezar desde cero. Las clases siguen un orden y cada una se apoya en la anterior.</p></div></div></div>
+    <div class="faq-i rv" style="--d:150ms"><button class="faq-q" aria-expanded="false">¿Necesito saber de marketing?<span class="faq-x" aria-hidden="true"><svg class="ic"><use href="#i-plus"/></svg></span></button><div class="faq-a"><div><p>Empiezas desde cero. Cada clase se apoya en la anterior, así que el orden hace el trabajo pesado.</p></div></div></div>
+    <div class="r-close rv">
+      <h2>¿Qué restaurante quieres tener en 12 semanas?</h2>
+      <p>Entra con tu cupón o compra el reto y empieza esta semana.</p>
+      <a class="btn" href="#acceso">Entrar al reto <svg class="ic ic--sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+    </div>
   </div>
 </section>
 
@@ -361,13 +395,24 @@
   var priceEl = document.getElementById('r-price');
   if (PRECIO) { priceEl.textContent = PRECIO; priceEl.classList.add('is-on'); }
 
+  var WA = 'https://api.whatsapp.com/send?phone=59169422335&text=' + encodeURIComponent('Hola Pablo, quiero entrar al reto para restauranteros');
+  var NOTICE = 'Estamos terminando de abrir el reto. Escríbele a Pablo por ';
+
+  function notice(el){
+    el.textContent = NOTICE;
+    var a = document.createElement('a');
+    a.href = WA; a.target = '_blank'; a.rel = 'noopener'; a.textContent = 'WhatsApp';
+    el.appendChild(a);
+    el.appendChild(document.createTextNode(' y te avisa apenas esté listo.'));
+  }
+
   var buy = document.getElementById('r-buy');
   var buyMsg = document.getElementById('r-buymsg');
   if (RETO_URL) { buy.href = RETO_URL; buy.target = '_self'; }
   buy.addEventListener('click', function(e){
     if (RETO_URL) return;
     e.preventDefault();
-    buyMsg.textContent = 'Estamos terminando de abrir el reto. Escríbele a Pablo por WhatsApp y te avisa apenas esté listo.';
+    notice(buyMsg);
   });
 
   document.querySelectorAll('.faq-q').forEach(function(b){
@@ -381,13 +426,38 @@
   var form = document.getElementById('r-form');
   var msg = document.getElementById('r-msg');
   var go = document.getElementById('r-go');
+  var input = document.getElementById('r-cupon');
+  var field = input.closest('.r-field');
+
+  /* Pablo puede mandar el enlace con el cupón ya puesto: /reto/?cupon=TUCUPON#acceso */
+  try {
+    var pre = new URLSearchParams(window.location.search).get('cupon');
+    if (pre) input.value = pre.trim();
+  } catch (err) {}
+
+  input.addEventListener('input', function(){
+    field.classList.remove('is-bad');
+    input.removeAttribute('aria-invalid');
+    msg.classList.remove('is-ok');
+    msg.textContent = '';
+  });
+
   form.addEventListener('submit', function(e){
     e.preventDefault();
+    msg.classList.remove('is-ok');
     msg.textContent = '';
-    var cupon = (document.getElementById('r-cupon').value || '').trim();
-    if (!cupon) { msg.textContent = 'Escribe tu cupón para continuar.'; document.getElementById('r-cupon').focus(); return; }
-    if (!RETO_URL) { msg.textContent = 'Estamos terminando de abrir el reto. Escríbele a Pablo por WhatsApp y te avisa apenas esté listo.'; return; }
+    var cupon = (input.value || '').trim();
+    if (!cupon) {
+      field.classList.add('is-bad');
+      input.setAttribute('aria-invalid', 'true');
+      msg.textContent = 'Escribe tu cupón para continuar.';
+      input.focus();
+      return;
+    }
+    if (!RETO_URL) { notice(msg); return; }
     go.classList.add('is-loading');
+    msg.classList.add('is-ok');
+    msg.textContent = 'Abriendo el reto…';
     var url = RETO_URL + (RETO_URL.indexOf('?') > -1 ? '&' : '?') + 'discount=' + encodeURIComponent(cupon);
     window.location.href = url;
   });
