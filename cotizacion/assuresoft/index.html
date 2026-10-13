@@ -13,12 +13,22 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
 
   <style>
-    :root{--y:#ffdd5a;--ink:#181818;--bg:#f8f8f8;--muted:#5d5d5d;--line:#e7e7e7}
+    :root{--y:#ffdd5a;--ink:#181818;--bg:#f8f8f8;--muted:#5d5d5d;--line:#e7e7e7;--ease-out:cubic-bezier(.23,1,.32,1)}
     *{box-sizing:border-box;margin:0;padding:0}
     html{scroll-behavior:smooth}
     body{font-family:'Poppins',sans-serif;background:var(--bg);color:var(--ink);letter-spacing:-.02em;line-height:1.55}
     img{display:block;max-width:100%}
+    p{text-wrap:pretty}
+    h1,h2{text-wrap:balance}
     .wrap{width:min(1120px,92vw);margin-inline:auto}
+    .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+    /* Superficies del navegador */
+    ::selection{background:var(--y);color:var(--ink)}
+    input{caret-color:var(--ink)}
+    ::placeholder{color:#767676;opacity:1}
+    :focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+    .sum b,.total strong,.mbar strong{font-variant-numeric:tabular-nums}
 
     header{padding:22px 0}
     .top{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
@@ -26,11 +36,16 @@
     .tag{font-size:.85rem;color:var(--muted);text-align:right}
     .tag b{color:var(--ink)}
 
-    .hero{padding:36px 0 28px}
-    .kicker{display:inline-block;background:var(--y);font-weight:600;font-size:.8rem;padding:6px 14px;border-radius:999px;margin-bottom:18px}
+    /* Hero: el único momento animado de la página */
+    .hero{padding:44px 0 28px}
     h1{font-weight:800;font-size:clamp(1.9rem,4.6vw,3.2rem);line-height:1.1;letter-spacing:-.04em;max-width:18ch}
-    h1 span{background:linear-gradient(transparent 62%,var(--y) 62%)}
+    h1 .mark{background-image:linear-gradient(transparent 62%,var(--y) 62%);background-repeat:no-repeat;background-size:100% 100%;-webkit-box-decoration-break:clone;box-decoration-break:clone;animation:sweep 700ms var(--ease-out) 320ms both}
     .lead{margin-top:18px;max-width:58ch;color:var(--muted);font-size:1.05rem}
+    .hero-in{animation:rise 520ms var(--ease-out) both}
+    .hero-in.d1{animation-delay:70ms}
+    @keyframes rise{from{opacity:0;transform:translateY(10px)}}
+    @keyframes sweep{from{background-size:0% 100%}}
+    @keyframes fade{from{opacity:0}}
 
     h2{font-weight:700;font-size:clamp(1.4rem,3vw,2rem);letter-spacing:-.03em;margin-bottom:8px}
     .sub{color:var(--muted);margin-bottom:26px;max-width:62ch}
@@ -42,41 +57,44 @@
     .card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:26px;box-shadow:0 8px 24px rgba(0,0,0,.05)}
     .block+.block{margin-top:26px;padding-top:26px;border-top:1px solid var(--line)}
     .lbl{font-weight:600;font-size:1rem;margin-bottom:4px}
-    .hint{font-size:.85rem;color:var(--muted);margin-bottom:14px}
+    .hint{font-size:.85rem;color:var(--muted);margin-bottom:14px;max-width:60ch}
 
     .hours{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-    .hbtn{font:inherit;cursor:pointer;border:2px solid var(--line);background:#fff;border-radius:14px;padding:14px 8px;text-align:center;transition:.15s}
-    .hbtn:hover{transform:translateY(-2px);border-color:#cfcfcf}
+    .hbtn{font:inherit;cursor:pointer;border:2px solid var(--line);background:#fff;border-radius:14px;padding:14px 8px;text-align:center;transition:transform 160ms var(--ease-out),background-color 160ms var(--ease-out),border-color 160ms var(--ease-out)}
+    @media(hover:hover) and (pointer:fine){.hbtn:hover{transform:translateY(-2px);border-color:#cfcfcf}}
+    .hbtn:active{transform:scale(.97)}
     .hbtn strong{display:block;font-size:1.5rem;font-weight:800;line-height:1.1}
     .hbtn small{color:var(--muted);font-size:.78rem}
     .hbtn[aria-pressed="true"]{border-color:var(--ink);background:var(--y)}
     .hbtn[aria-pressed="true"] small{color:var(--ink)}
 
     .row{display:flex;align-items:flex-start;gap:14px}
-    .switch{position:relative;flex:0 0 auto;width:52px;height:30px;border-radius:999px;background:#d4d4d4;border:0;cursor:pointer;transition:.2s}
-    .switch::after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:.2s}
+    .switch{position:relative;flex:0 0 auto;width:52px;height:30px;border-radius:999px;background:#d4d4d4;border:0;cursor:pointer;transition:background-color 180ms var(--ease-out)}
+    .switch::after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:transform 180ms var(--ease-out),background-color 180ms var(--ease-out)}
     .switch[aria-checked="true"]{background:var(--ink)}
-    .switch[aria-checked="true"]::after{left:25px;background:var(--y)}
+    .switch[aria-checked="true"]::after{transform:translateX(22px);background:var(--y)}
+    .switch.static{cursor:default}
     .row .txt{flex:1}
     .row .txt p{font-size:.88rem;color:var(--muted)}
     .fixed{display:inline-block;font-size:.72rem;font-weight:600;background:var(--ink);color:var(--y);padding:2px 10px;border-radius:999px;margin-left:8px;vertical-align:middle}
 
-    .sub-opt{margin-top:16px;margin-left:66px;padding:14px 16px;border-radius:14px;background:var(--bg);border:1px dashed #cfcfcf}
+    .sub-opt{margin-top:16px;margin-left:66px;padding:14px 16px;border-radius:14px;background:var(--bg);border:1px dashed #cfcfcf;transition:opacity 200ms var(--ease-out),transform 200ms var(--ease-out)}
     .sub-opt[hidden]{display:none}
+    @media(max-width:520px){.sub-opt{margin-left:0}}
     .chk{display:flex;gap:10px;align-items:flex-start;cursor:pointer}
     .chk input{width:18px;height:18px;margin-top:4px;accent-color:var(--ink)}
     .chk span{font-size:.92rem}
     .chk small{display:block;color:var(--muted);font-size:.8rem}
 
     ul.ok{list-style:none;margin-top:12px}
-    ul.ok li{position:relative;padding-left:26px;margin-bottom:7px;font-size:.92rem}
-    ul.ok li::before{content:"✓";position:absolute;left:0;top:0;font-weight:800;background:var(--y);width:18px;height:18px;border-radius:50%;font-size:.7rem;display:flex;align-items:center;justify-content:center;top:4px}
+    ul.ok li{position:relative;padding-left:28px;margin-bottom:7px;font-size:.92rem}
+    ul.ok li::before{content:"";position:absolute;left:0;top:4px;width:18px;height:18px;border-radius:50%;background:var(--y) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2.5 6.4l2.3 2.3 4.7-5' fill='none' stroke='%23181818' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/12px no-repeat}
 
     /* Resumen */
     .sum{position:sticky;top:18px;background:var(--ink);color:#fff;border-radius:20px;padding:26px}
     @media(max-width:860px){.sum{position:static}}
     .sum h3{font-size:1rem;font-weight:600;color:var(--y);margin-bottom:14px}
-    .line{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.14);font-size:.92rem}
+    .line{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.14);font-size:.92rem;transition:opacity 200ms var(--ease-out),transform 200ms var(--ease-out)}
     .line small{display:block;color:#b9b9b9;font-size:.76rem}
     .line[hidden]{display:none}
     .total{display:flex;justify-content:space-between;align-items:baseline;margin-top:18px}
@@ -85,35 +103,63 @@
     .note{font-size:.76rem;color:#b9b9b9;margin-top:10px}
     .valid{margin-top:16px;font-size:.8rem;background:rgba(255,222,89,.12);border-radius:10px;padding:10px 12px;color:#f1f1f1}
 
-    /* Cuidados */
-    .care{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-    @media(max-width:860px){.care{grid-template-columns:1fr}}
-    .care article{background:#fff;border:1px solid var(--line);border-radius:18px;padding:22px}
-    .care h3{font-size:1.02rem;font-weight:700;margin-bottom:6px}
-    .care p{font-size:.9rem;color:var(--muted)}
+    /* Entrada de elementos que aparecen al activar opciones */
+    @starting-style{.line,.sub-opt{opacity:0;transform:translateY(-5px)}}
+
+    /* Cuidados: filas con separadores, sin tarjetas */
+    .care{border-top:1px solid var(--line)}
+    .care .item{display:grid;grid-template-columns:minmax(150px,240px) minmax(0,1fr);gap:6px 40px;padding:22px 0;border-bottom:1px solid var(--line)}
+    @media(max-width:700px){.care .item{grid-template-columns:1fr}}
+    .care h3{font-size:1.02rem;font-weight:700}
+    .care p{font-size:.95rem;color:var(--muted);max-width:62ch}
 
     /* Galería */
     .gal{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
     @media(max-width:700px){.gal{grid-template-columns:repeat(2,1fr)}}
     .gal figure{border-radius:16px;overflow:hidden;aspect-ratio:4/5;background:#e9e9e9;box-shadow:0 10px 24px rgba(0,0,0,.1)}
-    .gal img{width:100%;height:100%;object-fit:cover}
+    .gal img{width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 320ms var(--ease-out)}
+    .gal img.on{opacity:1}
 
     /* Cierre */
     .close{background:#fff;border:1px solid var(--line);border-radius:24px;padding:32px;box-shadow:0 8px 24px rgba(0,0,0,.05)}
+    @media(max-width:520px){.close{padding:22px}}
     .grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:18px 0 6px}
     @media(max-width:700px){.grid2{grid-template-columns:1fr}}
     .fld label{display:block;font-size:.82rem;font-weight:600;margin-bottom:5px}
-    .fld input{width:100%;font:inherit;padding:12px 14px;border:2px solid var(--line);border-radius:12px;background:#fff}
-    .fld input:focus{outline:none;border-color:var(--ink)}
+    .fld input{width:100%;font:inherit;padding:12px 14px;border:2px solid var(--line);border-radius:12px;background:#fff;transition:border-color 160ms var(--ease-out),box-shadow 160ms var(--ease-out)}
+    .fld input:focus-visible{outline:none;border-color:var(--ink);box-shadow:0 0 0 3px var(--y)}
     .btns{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
-    .btn{font:inherit;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:10px;border-radius:999px;padding:15px 28px;border:2px solid var(--ink);text-decoration:none;transition:.15s;color:var(--ink)}
-    .btn:hover{transform:translateY(-2px)}
+    .btn{font:inherit;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:10px;border-radius:999px;padding:15px 28px;border:2px solid var(--ink);text-decoration:none;color:var(--ink);transition:transform 160ms var(--ease-out),background-color 160ms var(--ease-out)}
+    @media(hover:hover) and (pointer:fine){.btn:hover{transform:translateY(-2px)}}
+    .btn:active{transform:scale(.97)}
     .btn.main{background:var(--y);box-shadow:0 10px 18px rgba(255,222,89,.35)}
     .btn.alt{background:#fff}
     .small{font-size:.8rem;color:var(--muted);margin-top:14px}
 
     footer{padding:34px 0 50px;text-align:center;color:var(--muted);font-size:.85rem}
     footer img{height:44px;margin:0 auto 12px}
+
+    /* Barra de total en celular: el precio queda a la vista mientras eliges */
+    .mbar{display:none}
+    @media(max-width:860px){
+      .mbar{display:flex;position:fixed;left:12px;right:12px;bottom:12px;z-index:20;justify-content:space-between;align-items:center;gap:12px;background:var(--ink);color:#fff;border-radius:18px;padding:10px 10px 10px 18px;box-shadow:0 10px 24px rgba(0,0,0,.25);transform:translateY(calc(100% + 24px));visibility:hidden;transition:transform 240ms var(--ease-out),visibility 0s linear 240ms}
+      .mbar.show{transform:none;visibility:visible;transition:transform 240ms var(--ease-out),visibility 0s}
+      .mbar span{display:block;font-size:.75rem;color:#cfcfcf;line-height:1.2}
+      .mbar strong{font-size:1.3rem;color:var(--y);font-weight:800;letter-spacing:-.03em}
+      .mbar .btn{padding:11px 22px;font-size:.9rem;box-shadow:none}
+      .mbar :focus-visible{outline-color:var(--y)}
+    }
+
+    @media(prefers-reduced-motion:reduce){
+      html{scroll-behavior:auto}
+      .hero-in{animation-name:fade}
+      h1 .mark{animation:none}
+      .hbtn,.btn{transition-property:background-color,border-color}
+      .hbtn:active,.btn:active{transform:none}
+      .line,.sub-opt{transition-property:opacity}
+      @starting-style{.line,.sub-opt{transform:none}}
+      .mbar{transition-duration:.01ms}
+    }
   </style>
 </head>
 <body>
@@ -128,19 +174,18 @@
   <main>
     <section class="hero">
       <div class="wrap">
-        <span class="kicker">Cena corporativa de fin de año</span>
-        <h1>Tu equipo en <span>fotos y video</span> que dan gusto mostrar</h1>
-        <p class="lead">Elige cuántas horas necesitas y si quieres video. El precio se actualiza solo mientras decides, así que puedes probar combinaciones hasta encontrar la que encaja con tu presupuesto.</p>
+        <h1 class="hero-in">Tu equipo en <span class="mark">fotos y video</span> que dan gusto mostrar</h1>
+        <p class="lead hero-in d1">Cobertura de fotografía y video para la cena corporativa de fin de año. Elige cuántas horas necesitas y si quieres video. El total se actualiza mientras decides.</p>
       </div>
     </section>
 
     <section style="padding-top:10px">
       <div class="wrap cfg">
 
-        <div class="card">
+        <div class="card" id="cfgCard">
           <div class="block">
             <div class="lbl">Duración de la cobertura</div>
-            <div class="hint">Tu evento está estimado entre 3 y 4 horas. Si prefieres un margen extra para la llegada y la despedida, tienes la opción de 5.</div>
+            <div class="hint">Tu evento está estimado entre 3 y 4 horas. Si quieres margen para la llegada y la despedida, elige 5.</div>
             <div class="hours" id="hours">
               <button type="button" class="hbtn" data-h="3" aria-pressed="false"><strong>3</strong><small>horas</small></button>
               <button type="button" class="hbtn" data-h="4" aria-pressed="true"><strong>4</strong><small>horas</small></button>
@@ -150,7 +195,7 @@
 
           <div class="block">
             <div class="row">
-              <button type="button" class="switch" role="switch" aria-checked="true" aria-label="Fotografía incluida" disabled style="opacity:.55;cursor:default"></button>
+              <span class="switch static" aria-hidden="true" aria-checked="true" style="background:var(--y)"></span>
               <div class="txt">
                 <div class="lbl">Fotografía corporativa <span class="fixed">Incluida</span></div>
                 <p>Momentos importantes y expresiones espontáneas, con fondos cuidados.</p>
@@ -179,7 +224,7 @@
           </div>
         </div>
 
-        <aside class="sum" aria-live="polite">
+        <aside class="sum" id="resumen">
           <h3>Resumen de tu cotización</h3>
           <div class="line"><div>Fotografía corporativa<small id="sPhotoDet"></small></div><b id="sPhoto"></b></div>
           <div class="line" id="lVideo"><div>Filmación del evento<small id="sVideoDet"></small></div><b id="sVideo"></b></div>
@@ -189,37 +234,38 @@
           <div class="valid">Cotización válida hasta el 28 de octubre de 2026.</div>
         </aside>
       </div>
+      <p class="sr" id="live" role="status"></p>
     </section>
 
     <section>
       <div class="wrap">
-        <h2>Lo que pediste, cuidado toma a toma</h2>
-        <p class="sub">Leímos tu mensaje con lupa. Esto es lo que haremos con cada punto.</p>
+        <h2>Lo que pediste, toma por toma</h2>
+        <p class="sub">Esto es lo que haremos con cada punto de tu correo.</p>
         <div class="care">
-          <article>
+          <div class="item">
             <h3>Fondos limpios</h3>
-            <p>Elegimos el ángulo de cada foto pensando en lo que queda detrás de las personas, para que el ruido visual se quede fuera del cuadro.</p>
-          </article>
-          <article>
+            <p>Elegimos cada ángulo mirando lo que queda detrás de las personas. Lo que sobra en el fondo sale del cuadro o queda fuera de foco.</p>
+          </div>
+          <div class="item">
             <h3>Mesas presentables</h3>
-            <p>Disparamos cuando los platos están servidos. Si en una mesa hay platos vacíos, sobras, copas o botellas, cambiamos de posición o esperamos el momento limpio.</p>
-          </article>
-          <article>
+            <p>Disparamos cuando los platos están servidos. Un plato vacío o con sobras no entra en ninguna foto, ni siquiera de fondo. Lo mismo con copas y botellas.</p>
+          </div>
+          <div class="item">
             <h3>Gente natural</h3>
-            <p>Buscamos las expresiones espontáneas: la risa, el reconocimiento, la conversación. Las fotos posadas se hacen solo cuando las pidan.</p>
-          </article>
-          <article>
+            <p>Buscamos la risa, la conversación y el momento en que alguien recibe un reconocimiento. Las fotos posadas las hacemos solo si las piden.</p>
+          </div>
+          <div class="item">
             <h3>Entrega pronta</h3>
-            <p>Las fotos seleccionadas llegan en 48 horas. Las tomas en bruto del video se entregan el mismo día del evento. El plazo del video editado lo confirmamos al coordinar la fecha.</p>
-          </article>
-          <article>
+            <p>Las fotos seleccionadas llegan en 48 horas. Las tomas en bruto del video llegan el mismo día del evento. El plazo del video editado lo confirmamos al fijar la fecha.</p>
+          </div>
+          <div class="item">
             <h3>Facturación exacta</h3>
-            <p>Escribe abajo la razón social y el NIT tal como deben aparecer. Los copiamos tal cual en la factura y en los datos de pago.</p>
-          </article>
-          <article>
-            <h3>Portafolio a la vista</h3>
-            <p>Más abajo tienes una muestra de nuestro trabajo. Si necesitas ver eventos similares, los enviamos por WhatsApp.</p>
-          </article>
+            <p>Escribe abajo la razón social y el NIT como deben aparecer. Los copiamos igual en la factura y en los datos de pago.</p>
+          </div>
+          <div class="item">
+            <h3>Portafolio</h3>
+            <p>Más abajo tienes una muestra de nuestro trabajo. Si quieres ver eventos parecidos, te los enviamos por WhatsApp.</p>
+          </div>
         </div>
       </div>
     </section>
@@ -233,11 +279,11 @@
       </div>
     </section>
 
-    <section>
+    <section id="confirmar">
       <div class="wrap">
         <div class="close">
           <h2>Confirma tu cotización</h2>
-          <p class="sub" style="margin-bottom:0">Completa los datos de facturación y te abrimos un chat de WhatsApp con tu selección ya escrita. También puedes agendar una reunión corta para resolver dudas.</p>
+          <p class="sub" style="margin-bottom:0">Completa los datos de facturación y se abre un chat de WhatsApp con tu selección ya escrita. Si prefieres hablar antes, agenda una reunión corta.</p>
           <div class="grid2">
             <div class="fld"><label for="razon">Razón social</label><input id="razon" type="text" autocomplete="organization" placeholder="Tal como aparece en tu NIT" /></div>
             <div class="fld"><label for="nit">NIT</label><input id="nit" type="text" inputmode="numeric" placeholder="Número de NIT" /></div>
@@ -260,6 +306,11 @@
       <p>Estudio Graphica. Cochabamba, Bolivia.</p>
     </div>
   </footer>
+
+  <div class="mbar" id="mbar">
+    <div><span>Total</span><strong id="mTotal"></strong></div>
+    <a class="btn main" href="#confirmar">Continuar</a>
+  </div>
 
   <script>
     // ============ CONFIGURACIÓN (editar aquí) ============
@@ -293,6 +344,34 @@
     var state = { h: 4, video: true, recap: true };
     var $ = function(id){ return document.getElementById(id); };
     var bs = function(n){ return 'Bs. ' + n; };
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Total animado: parte del valor que se ve en pantalla, así que un clic rápido no reinicia desde cero
+    var shown = null, target = null, raf = null, liveT = null;
+    function paintTotal(n){ $('sTotal').textContent = bs(n); $('mTotal').textContent = bs(n); }
+    function setTotal(n){
+      if (n === target) return;
+      target = n;
+      cancelAnimationFrame(raf);
+      if (reduce || shown === null) { shown = n; paintTotal(n); }
+      else {
+        var from = shown, t0 = performance.now(), dur = 280;
+        raf = requestAnimationFrame(function step(now){
+          var p = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - p, 3);
+          shown = Math.round(from + (n - from) * e);
+          paintTotal(shown);
+          if (p < 1) raf = requestAnimationFrame(step);
+        });
+      }
+      clearTimeout(liveT);
+      liveT = setTimeout(function(){ $('live').textContent = 'Total actualizado: ' + bs(n); }, 700);
+    }
+
+    var listCache = { photo: '', video: '' };
+    function setList(id, key, items){
+      var html = items.map(function(t){ return '<li>' + t + '</li>'; }).join('');
+      if (listCache[key] !== html) { listCache[key] = html; $(id).innerHTML = html; }
+    }
 
     function render(){
       var r = calcular(state.h, state.video, state.recap);
@@ -303,7 +382,7 @@
       $('sVideo').textContent = bs(r.video);
       $('sVideoDet').textContent = state.h + ' horas de filmación, tomas en bruto en alta resolución';
       $('sRecap').textContent = bs(r.resumen);
-      $('sTotal').textContent = bs(r.total);
+      setTotal(r.total);
       $('recapBox').hidden = !state.video;
 
       document.querySelectorAll('.hbtn').forEach(function(b){
@@ -311,17 +390,16 @@
       });
       $('videoSwitch').setAttribute('aria-checked', String(state.video));
 
-      $('photoList').innerHTML = [
+      setList('photoList', 'photo', [
         state.h + ' horas de cobertura continua',
         'Aproximadamente ' + r.fotos + ' fotos en alta resolución',
         'Edición profesional',
         'Asistente de producción'
-      ].map(function(t){ return '<li>' + t + '</li>'; }).join('');
-
-      $('videoList').innerHTML = [
+      ]);
+      setList('videoList', 'video', [
         state.h + ' horas de filmación con cámara profesional, lentes, iluminación y audio',
         'Tomas en bruto en alta resolución, entregadas el mismo día'
-      ].map(function(t){ return '<li>' + t + '</li>'; }).join('');
+      ]);
 
       var msg = 'Hola, Estudio Graphica. Somos ' + CFG.CLIENTE + ' y queremos aceptar la cotización para nuestra cena corporativa de fin de año.\n\n' +
         '*Selección:*\n' +
@@ -344,7 +422,7 @@
     $('recap').addEventListener('change', function(e){ state.recap = e.target.checked; render(); });
     ['razon','nit','contacto','fecha'].forEach(function(id){ $(id).addEventListener('input', render); });
 
-    // Galería (fotos del portafolio en Cloudinary)
+    // Galería (fotos del portafolio en Cloudinary), con aparición suave al cargar cada imagen
     var base = 'https://res.cloudinary.com/dplhu2z6j/image/upload/';
     var tf = 'w_700,c_fill,ar_4:5,q_auto,f_auto/';
     var fotos = [
@@ -358,6 +436,21 @@
     $('gal').innerHTML = fotos.map(function(f){
       return '<figure><img loading="lazy" src="' + base + tf + f + '" alt="Fotografía del portafolio de Estudio Graphica" /></figure>';
     }).join('');
+    document.querySelectorAll('#gal img').forEach(function(img){
+      var show = function(){ img.classList.add('on'); };
+      if (img.complete) show(); else { img.addEventListener('load', show); img.addEventListener('error', show); }
+    });
+
+    // Barra de total en celular: visible mientras se configura, oculta cuando ya se ve el resumen o el cierre
+    (function(){
+      if (!('IntersectionObserver' in window)) return;
+      var seen = { cfgCard: false, resumen: false, confirmar: false };
+      var io = new IntersectionObserver(function(entries){
+        entries.forEach(function(en){ seen[en.target.id] = en.isIntersecting; });
+        $('mbar').classList.toggle('show', seen.cfgCard && !seen.resumen && !seen.confirmar);
+      });
+      ['cfgCard','resumen','confirmar'].forEach(function(id){ io.observe($(id)); });
+    })();
 
     render();
   </script>
