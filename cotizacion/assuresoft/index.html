@@ -78,9 +78,6 @@
     .row .txt p{font-size:.88rem;color:var(--muted)}
     .fixed{display:inline-block;font-size:.72rem;font-weight:600;background:var(--ink);color:var(--y);padding:2px 10px;border-radius:999px;margin-left:8px;vertical-align:middle}
 
-    .sub-opt{margin-top:16px;margin-left:66px;padding:14px 16px;border-radius:14px;background:var(--bg);border:1px dashed #cfcfcf;transition:opacity 200ms var(--ease-out),transform 200ms var(--ease-out)}
-    .sub-opt[hidden]{display:none}
-    @media(max-width:520px){.sub-opt{margin-left:0}}
     .chk{display:flex;gap:10px;align-items:flex-start;cursor:pointer}
     .chk input{width:18px;height:18px;margin-top:4px;accent-color:var(--ink)}
     .chk span{font-size:.92rem}
@@ -104,7 +101,7 @@
     .valid{margin-top:16px;font-size:.8rem;background:rgba(255,222,89,.12);border-radius:10px;padding:10px 12px;color:#f1f1f1}
 
     /* Entrada de elementos que aparecen al activar opciones */
-    @starting-style{.line,.sub-opt{opacity:0;transform:translateY(-5px)}}
+    @starting-style{.line{opacity:0;transform:translateY(-5px)}}
 
     /* Cuidados: filas con separadores, sin tarjetas */
     .care{border-top:1px solid var(--line)}
@@ -156,8 +153,8 @@
       h1 .mark{animation:none}
       .hbtn,.btn{transition-property:background-color,border-color}
       .hbtn:active,.btn:active{transform:none}
-      .line,.sub-opt{transition-property:opacity}
-      @starting-style{.line,.sub-opt{transform:none}}
+      .line{transition-property:opacity}
+      @starting-style{.line{transform:none}}
       .mbar{transition-duration:.01ms}
     }
   </style>
@@ -167,7 +164,7 @@
   <header>
     <div class="wrap top">
       <img src="https://res.cloudinary.com/dplhu2z6j/image/upload/v1745619722/Logo_S_F_l66fym.png" alt="Estudio Graphica" />
-      <div class="tag">Cotización preparada para <b>AssureSoft</b><br />13 de octubre de 2026</div>
+      <div class="tag">Cotización preparada para <b>AssureSoft</b><br />15 de octubre de 2026</div>
     </div>
   </header>
 
@@ -175,7 +172,7 @@
     <section class="hero">
       <div class="wrap">
         <h1 class="hero-in">Tu equipo en <span class="mark">fotos y video</span> que dan gusto mostrar</h1>
-        <p class="lead hero-in d1">Cobertura de fotografía y video para la cena corporativa de fin de año. Elige cuántas horas necesitas y si quieres video. El total se actualiza mientras decides.</p>
+        <p class="lead hero-in d1">Cobertura de fotografía y video para la cena corporativa del jueves 10 de diciembre en El Portal. El horario nocturno queda por confirmar. Elige cuántas horas necesitas y si quieres video, y el total se actualiza mientras decides.</p>
       </div>
     </section>
 
@@ -185,12 +182,13 @@
         <div class="card" id="cfgCard">
           <div class="block">
             <div class="lbl">Duración de la cobertura</div>
-            <div class="hint">Tu evento está estimado entre 3 y 4 horas. Si quieres margen para la llegada y la despedida, elige 5.</div>
+            <div class="hint">Tu evento dura unas 3 horas. Si se extiende, aquí ves cuánto suma cada hora extra.</div>
             <div class="hours" id="hours">
-              <button type="button" class="hbtn" data-h="3" aria-pressed="false"><strong>3</strong><small>horas</small></button>
-              <button type="button" class="hbtn" data-h="4" aria-pressed="true"><strong>4</strong><small>horas</small></button>
+              <button type="button" class="hbtn" data-h="3" aria-pressed="true"><strong>3</strong><small>horas</small></button>
+              <button type="button" class="hbtn" data-h="4" aria-pressed="false"><strong>4</strong><small>horas</small></button>
               <button type="button" class="hbtn" data-h="5" aria-pressed="false"><strong>5</strong><small>horas</small></button>
             </div>
+            <p class="hint" id="extraHint" style="margin:12px 0 0"></p>
           </div>
 
           <div class="block">
@@ -198,7 +196,7 @@
               <span class="switch static" aria-hidden="true" aria-checked="true" style="background:var(--y)"></span>
               <div class="txt">
                 <div class="lbl">Fotografía corporativa <span class="fixed">Incluida</span></div>
-                <p>Momentos importantes y expresiones espontáneas, con fondos cuidados.</p>
+                <p>Los momentos principales de la cena y tomas espontáneas de los asistentes, con fondos cuidados.</p>
                 <ul class="ok" id="photoList"></ul>
               </div>
             </div>
@@ -209,17 +207,9 @@
               <button type="button" class="switch" id="videoSwitch" role="switch" aria-checked="true" aria-label="Agregar servicio de video"></button>
               <div class="txt">
                 <div class="lbl">Video del evento</div>
-                <p>Un filmmaker profesional con equipo completo cubre el evento junto a la fotografía.</p>
+                <p>Un filmmaker profesional cubre los momentos más espontáneos y emotivos del evento junto a la fotografía.</p>
                 <ul class="ok" id="videoList"></ul>
               </div>
-            </div>
-            <div class="sub-opt" id="recapBox">
-              <label class="chk">
-                <input type="checkbox" id="recap" checked />
-                <span>Video resumen editado de hasta 1 minuto
-                  <small>Corrección de color, edición completa, música con licencia y una ronda de revisión.</small>
-                </span>
-              </label>
             </div>
           </div>
         </div>
@@ -228,7 +218,6 @@
           <h3>Resumen de tu cotización</h3>
           <div class="line"><div>Fotografía corporativa<small id="sPhotoDet"></small></div><b id="sPhoto"></b></div>
           <div class="line" id="lVideo"><div>Filmación del evento<small id="sVideoDet"></small></div><b id="sVideo"></b></div>
-          <div class="line" id="lRecap"><div>Video resumen editado<small>Hasta 1 minuto</small></div><b id="sRecap"></b></div>
           <div class="total"><span>Total</span><strong id="sTotal"></strong></div>
           <p class="note">Precios en bolivianos, pago único por el evento.</p>
           <div class="valid">Cotización válida hasta el 28 de octubre de 2026.</div>
@@ -256,7 +245,7 @@
           </div>
           <div class="item">
             <h3>Entrega pronta</h3>
-            <p>Las fotos seleccionadas llegan en 48 horas. Las tomas en bruto del video llegan el mismo día del evento. El plazo del video editado lo confirmamos al fijar la fecha.</p>
+            <p>Las fotografías llegan por Google Drive en 24 horas, en su calidad original y sin edición. El plazo de los videos lo coordinamos contigo al confirmar la fecha.</p>
           </div>
           <div class="item">
             <h3>Facturación exacta</h3>
@@ -288,7 +277,7 @@
             <div class="fld"><label for="razon">Razón social</label><input id="razon" type="text" autocomplete="organization" placeholder="Tal como aparece en tu NIT" /></div>
             <div class="fld"><label for="nit">NIT</label><input id="nit" type="text" inputmode="numeric" placeholder="Número de NIT" /></div>
             <div class="fld"><label for="contacto">Tu nombre</label><input id="contacto" type="text" autocomplete="name" /></div>
-            <div class="fld"><label for="fecha">Fecha del evento (si ya la tienen)</label><input id="fecha" type="text" placeholder="Ejemplo: viernes 12 de diciembre" /></div>
+            <div class="fld"><label for="fecha">Horario de inicio (si ya lo tienen)</label><input id="fecha" type="text" placeholder="Ejemplo: 20:00" /></div>
           </div>
           <div class="btns">
             <a class="btn main" id="wa" href="#" target="_blank" rel="noopener">Aceptar por WhatsApp</a>
@@ -320,28 +309,29 @@
       // Fotografía: misma lógica que la jornada de trabajo del catálogo
       FOTO_HORA: 300,
       FOTO_DESC: { 3: 0.07, 4: 0.11, 5: 0.15 },
-      FOTOS_POR_HORA: 15,
-      // Video: costo del filmmaker aliado + margen de coordinación (el cliente NO ve estos dos números)
-      VIDEO_COSTO_HORA: 370,
-      VIDEO_COSTO_EDICION: 512.5, // 2050 / 4 videos del plan de 1 mes
+      // Video: paquete del filmmaker aliado (3 a 4 horas, 2 videos editados) + margen de coordinación
+      // El cliente NO ve el costo ni el margen
+      VIDEO_PAQUETE_COSTO: 1600,
+      VIDEO_HORAS_INCLUIDAS: 4,
+      VIDEO_HORA_EXTRA_COSTO: 370,
       MARGEN: 0.20,
       REDONDEO: 5
     };
 
     // PRICING_START
     function redondear(n){ return Math.round(n / CFG.REDONDEO) * CFG.REDONDEO; }
-    function calcular(horas, conVideo, conResumen){
+    function calcular(horas, conVideo){
       var foto = Math.round(CFG.FOTO_HORA * horas * (1 - CFG.FOTO_DESC[horas]));
-      var video = 0, resumen = 0;
+      var video = 0;
       if (conVideo) {
-        video = redondear(CFG.VIDEO_COSTO_HORA * horas * (1 + CFG.MARGEN));
-        if (conResumen) resumen = redondear(CFG.VIDEO_COSTO_EDICION * (1 + CFG.MARGEN));
+        var extra = Math.max(0, horas - CFG.VIDEO_HORAS_INCLUIDAS);
+        video = redondear(CFG.VIDEO_PAQUETE_COSTO * (1 + CFG.MARGEN)) + extra * redondear(CFG.VIDEO_HORA_EXTRA_COSTO * (1 + CFG.MARGEN));
       }
-      return { foto: foto, video: video, resumen: resumen, total: foto + video + resumen, fotos: horas * CFG.FOTOS_POR_HORA };
+      return { foto: foto, video: video, total: foto + video };
     }
     // PRICING_END
 
-    var state = { h: 4, video: true, recap: true };
+    var state = { h: 3, video: true };
     var $ = function(id){ return document.getElementById(id); };
     var bs = function(n){ return 'Bs. ' + n; };
     var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -374,44 +364,44 @@
     }
 
     function render(){
-      var r = calcular(state.h, state.video, state.recap);
+      var r = calcular(state.h, state.video);
       $('sPhoto').textContent = bs(r.foto);
-      $('sPhotoDet').textContent = state.h + ' horas, aproximadamente ' + r.fotos + ' fotos editadas';
+      $('sPhotoDet').textContent = state.h + ' horas de cobertura, fotos en calidad original';
       $('lVideo').hidden = !state.video;
-      $('lRecap').hidden = !(state.video && state.recap);
       $('sVideo').textContent = bs(r.video);
-      $('sVideoDet').textContent = state.h + ' horas de filmación, tomas en bruto en alta resolución';
-      $('sRecap').textContent = bs(r.resumen);
+      $('sVideoDet').textContent = '2 videos editados (vertical y horizontal)' + (state.h > CFG.VIDEO_HORAS_INCLUIDAS ? ' y ' + (state.h - CFG.VIDEO_HORAS_INCLUIDAS) + ' hora extra' : '');
       setTotal(r.total);
-      $('recapBox').hidden = !state.video;
 
       document.querySelectorAll('.hbtn').forEach(function(b){
         b.setAttribute('aria-pressed', String(Number(b.dataset.h) === state.h));
       });
       $('videoSwitch').setAttribute('aria-checked', String(state.video));
 
+      var f3 = calcular(3, false).foto, f4 = calcular(4, false).foto, f5 = calcular(5, false).foto;
+      var v4 = calcular(4, true).video, v5 = calcular(5, true).video;
+      $('extraHint').textContent = 'Hora extra de fotografía: Bs. ' + (f4 - f3) + ' la cuarta y Bs. ' + (f5 - f4) + ' la quinta. El video cubre hasta ' + CFG.VIDEO_HORAS_INCLUIDAS + ' horas y la quinta suma Bs. ' + (v5 - v4) + '.';
+
       setList('photoList', 'photo', [
         state.h + ' horas de cobertura continua',
-        'Aproximadamente ' + r.fotos + ' fotos en alta resolución',
-        'Edición profesional',
-        'Asistente de producción'
+        'Todas las fotografías en su calidad original, sin edición',
+        'Entrega por Google Drive en 24 horas'
       ]);
       setList('videoList', 'video', [
-        state.h + ' horas de filmación con cámara profesional, lentes, iluminación y audio',
-        'Tomas en bruto en alta resolución, entregadas el mismo día'
+        'Cobertura de hasta ' + CFG.VIDEO_HORAS_INCLUIDAS + ' horas con un filmmaker profesional',
+        '2 videos finales editados: uno vertical y otro horizontal, de 2 a 5 minutos cada uno',
+        'Plazo de entrega a coordinar contigo'
       ]);
 
-      var msg = 'Hola, Estudio Graphica. Somos ' + CFG.CLIENTE + ' y queremos aceptar la cotización para nuestra cena corporativa de fin de año.\n\n' +
+      var msg = 'Hola, Estudio Graphica. Somos ' + CFG.CLIENTE + ' y queremos aceptar la cotización para nuestra cena corporativa del jueves 10 de diciembre en El Portal.\n\n' +
         '*Selección:*\n' +
         '- Fotografía corporativa: ' + state.h + ' horas (' + bs(r.foto) + ')\n' +
-        (state.video ? '- Filmación del evento: ' + state.h + ' horas (' + bs(r.video) + ')\n' : '- Sin servicio de video\n') +
-        (state.video && state.recap ? '- Video resumen editado de hasta 1 minuto (' + bs(r.resumen) + ')\n' : '') +
+        (state.video ? '- Video del evento: 2 videos editados, vertical y horizontal (' + bs(r.video) + ')\n' : '- Sin servicio de video\n') +
         '*Total: ' + bs(r.total) + '*\n\n' +
         '*Datos para facturar:*\n' +
         '- Razón social: ' + ($('razon').value.trim() || 'pendiente') + '\n' +
         '- NIT: ' + ($('nit').value.trim() || 'pendiente') + '\n' +
         '- Contacto: ' + ($('contacto').value.trim() || 'pendiente') + '\n' +
-        '- Fecha del evento: ' + ($('fecha').value.trim() || 'por confirmar');
+        '- Horario de inicio: ' + ($('fecha').value.trim() || 'por confirmar');
       $('wa').href = 'https://wa.me/' + CFG.WHATSAPP + '?text=' + encodeURIComponent(msg);
     }
 
@@ -419,7 +409,6 @@
       b.addEventListener('click', function(){ state.h = Number(b.dataset.h); render(); });
     });
     $('videoSwitch').addEventListener('click', function(){ state.video = !state.video; render(); });
-    $('recap').addEventListener('change', function(e){ state.recap = e.target.checked; render(); });
     ['razon','nit','contacto','fecha'].forEach(function(id){ $(id).addEventListener('input', render); });
 
     // Galería (fotos del portafolio en Cloudinary), con aparición suave al cargar cada imagen
