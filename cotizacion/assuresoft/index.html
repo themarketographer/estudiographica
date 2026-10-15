@@ -59,14 +59,6 @@
     .lbl{font-weight:600;font-size:1rem;margin-bottom:4px}
     .hint{font-size:.85rem;color:var(--muted);margin-bottom:14px;max-width:60ch}
 
-    .hours{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-    .hbtn{font:inherit;cursor:pointer;border:2px solid var(--line);background:#fff;border-radius:14px;padding:14px 8px;text-align:center;transition:transform 160ms var(--ease-out),background-color 160ms var(--ease-out),border-color 160ms var(--ease-out)}
-    @media(hover:hover) and (pointer:fine){.hbtn:hover{transform:translateY(-2px);border-color:#cfcfcf}}
-    .hbtn:active{transform:scale(.97)}
-    .hbtn strong{display:block;font-size:1.5rem;font-weight:800;line-height:1.1}
-    .hbtn small{color:var(--muted);font-size:.78rem}
-    .hbtn[aria-pressed="true"]{border-color:var(--ink);background:var(--y)}
-    .hbtn[aria-pressed="true"] small{color:var(--ink)}
 
     .row{display:flex;align-items:flex-start;gap:14px}
     .switch{position:relative;flex:0 0 auto;width:52px;height:30px;border-radius:999px;background:#d4d4d4;border:0;cursor:pointer;transition:background-color 180ms var(--ease-out)}
@@ -97,6 +89,8 @@
     .total{display:flex;justify-content:space-between;align-items:baseline;margin-top:18px}
     .total span{font-size:.9rem;color:#cfcfcf}
     .total strong{font-size:2.2rem;font-weight:800;color:var(--y);letter-spacing:-.04em}
+    .extra{display:flex;justify-content:space-between;gap:12px;align-items:baseline;margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.14);font-size:.88rem;color:#cfcfcf}
+    .extra b{color:#fff;font-weight:600;text-align:right}
     .note{font-size:.76rem;color:#b9b9b9;margin-top:10px}
     .valid{margin-top:16px;font-size:.8rem;background:rgba(255,222,89,.12);border-radius:10px;padding:10px 12px;color:#f1f1f1}
 
@@ -151,8 +145,8 @@
       html{scroll-behavior:auto}
       .hero-in{animation-name:fade}
       h1 .mark{animation:none}
-      .hbtn,.btn{transition-property:background-color,border-color}
-      .hbtn:active,.btn:active{transform:none}
+      .btn{transition-property:background-color,border-color}
+      .btn:active{transform:none}
       .line{transition-property:opacity}
       @starting-style{.line{transform:none}}
       .mbar{transition-duration:.01ms}
@@ -172,7 +166,7 @@
     <section class="hero">
       <div class="wrap">
         <h1 class="hero-in">Tu equipo en <span class="mark">fotos y video</span> que dan gusto mostrar</h1>
-        <p class="lead hero-in d1">Cobertura de fotografía y video para la cena corporativa del jueves 10 de diciembre en El Portal. El horario nocturno queda por confirmar. Elige cuántas horas necesitas y si quieres video, y el total se actualiza mientras decides.</p>
+        <p class="lead hero-in d1">Cobertura de fotografía y video para la cena corporativa del jueves 10 de diciembre en El Portal. El horario nocturno queda por confirmar. Activa o desactiva el video y el total se actualiza mientras decides.</p>
       </div>
     </section>
 
@@ -180,17 +174,6 @@
       <div class="wrap cfg">
 
         <div class="card" id="cfgCard">
-          <div class="block">
-            <div class="lbl">Duración de la cobertura</div>
-            <div class="hint">Tu evento dura unas 3 horas. Si se extiende, aquí ves cuánto suma cada hora extra.</div>
-            <div class="hours" id="hours">
-              <button type="button" class="hbtn" data-h="3" aria-pressed="true"><strong>3</strong><small>horas</small></button>
-              <button type="button" class="hbtn" data-h="4" aria-pressed="false"><strong>4</strong><small>horas</small></button>
-              <button type="button" class="hbtn" data-h="5" aria-pressed="false"><strong>5</strong><small>horas</small></button>
-            </div>
-            <p class="hint" id="extraHint" style="margin:12px 0 0"></p>
-          </div>
-
           <div class="block">
             <div class="row">
               <span class="switch static" aria-hidden="true" aria-checked="true" style="background:var(--y)"></span>
@@ -220,6 +203,7 @@
           <div class="line" id="lVideo"><div>Filmación del evento<small id="sVideoDet"></small></div><b id="sVideo"></b></div>
           <div class="total"><span>Total</span><strong id="sTotal"></strong></div>
           <p class="note">Precios en bolivianos, pago único por el evento.</p>
+          <div class="extra"><span>Hora extra</span><b>Fotografía Bs. 230, video Bs. 445</b></div>
           <div class="valid">Cotización válida hasta el 28 de octubre de 2026.</div>
         </aside>
       </div>
@@ -369,25 +353,19 @@
       $('sPhotoDet').textContent = state.h + ' horas de cobertura, fotos en calidad original';
       $('lVideo').hidden = !state.video;
       $('sVideo').textContent = bs(r.video);
-      $('sVideoDet').textContent = '2 videos editados (vertical y horizontal)' + (state.h > CFG.VIDEO_HORAS_INCLUIDAS ? ' y ' + (state.h - CFG.VIDEO_HORAS_INCLUIDAS) + ' hora extra' : '');
+      $('sVideoDet').textContent = '2 videos editados, vertical y horizontal';
       setTotal(r.total);
 
-      document.querySelectorAll('.hbtn').forEach(function(b){
-        b.setAttribute('aria-pressed', String(Number(b.dataset.h) === state.h));
-      });
       $('videoSwitch').setAttribute('aria-checked', String(state.video));
-
-      var f3 = calcular(3, false).foto, f4 = calcular(4, false).foto, f5 = calcular(5, false).foto;
-      var v4 = calcular(4, true).video, v5 = calcular(5, true).video;
-      $('extraHint').textContent = 'Hora extra de fotografía: Bs. ' + (f4 - f3) + ' la cuarta y Bs. ' + (f5 - f4) + ' la quinta. El video cubre hasta ' + CFG.VIDEO_HORAS_INCLUIDAS + ' horas y la quinta suma Bs. ' + (v5 - v4) + '.';
 
       setList('photoList', 'photo', [
         state.h + ' horas de cobertura continua',
         'Todas las fotografías en su calidad original, sin edición',
-        'Entrega por Google Drive en 24 horas'
+        'Entrega por Google Drive en 24 horas',
+        'Cobertura a cargo de un fotógrafo profesional aliado de Estudio Graphica. Pablo Villarroel coordina el servicio y es tu contacto en todo momento'
       ]);
       setList('videoList', 'video', [
-        'Cobertura de hasta ' + CFG.VIDEO_HORAS_INCLUIDAS + ' horas con un filmmaker profesional',
+        'Cobertura de ' + state.h + ' horas a cargo de un filmmaker profesional aliado',
         '2 videos finales editados: uno vertical y otro horizontal, de 2 a 5 minutos cada uno',
         'Plazo de entrega a coordinar contigo'
       ]);
@@ -405,9 +383,6 @@
       $('wa').href = 'https://wa.me/' + CFG.WHATSAPP + '?text=' + encodeURIComponent(msg);
     }
 
-    document.querySelectorAll('.hbtn').forEach(function(b){
-      b.addEventListener('click', function(){ state.h = Number(b.dataset.h); render(); });
-    });
     $('videoSwitch').addEventListener('click', function(){ state.video = !state.video; render(); });
     ['razon','nit','contacto','fecha'].forEach(function(id){ $(id).addEventListener('input', render); });
 
