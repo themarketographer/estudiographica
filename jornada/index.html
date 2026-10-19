@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Jornada de trabajo · Estudio Graphica</title>
-<meta name="description" content="Sesión de fotos por horas para clientes que ya conocen Estudio Graphica. Ajusta las horas, mira el precio al instante y reserva tu fecha." />
+<title data-t="pg_jornada.seoTitle">Jornada de trabajo · Estudio Graphica</title>
+<meta name="description" content="Sesión de fotos por horas para clientes que ya conocen Estudio Graphica. Ajusta las horas, mira el precio al instante y reserva tu fecha."  data-ta="content:pg_jornada.seoDesc"/>
 <meta name="robots" content="noindex,nofollow" />
 <meta name="theme-color" content="#FFDD5A" />
 
@@ -66,13 +66,13 @@ Cal.ns.jornada("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-brand":"#
 <body class="pg pg-jornada">
 
 <nav class="nav nav--page" id="nav" aria-label="Principal">
-  <a class="brand" href="/" aria-label="Estudio Graphica, inicio"><img class="lg-b" src="/assets/logo-mark-black.png" alt="Estudio Graphica" width="20" height="24"><img class="lg-w" src="/assets/logo-mark-white.png" alt="" width="20" height="24" aria-hidden="true"></a>
-  <a class="nav-back" href="/"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12H5M11 6l-6 6 6 6"/></svg> Volver al inicio</a>
+  <a class="brand" href="/" aria-label="Estudio Graphica, inicio"><img class="lg-b" src="/assets/logo-mark-black.png" alt="Estudio Graphica" width="20" height="24" data-ta="src:pg_jornada.i1_src|alt:pg_jornada.i1_alt"><img class="lg-w" src="/assets/logo-mark-white.png" alt="" width="20" height="24" aria-hidden="true" data-ta="src:pg_jornada.i2_src|alt:pg_jornada.i2_alt"></a>
+  <a class="nav-back" href="/" data-tx="pg_jornada.t01" data-ta="href:pg_jornada.h1"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12H5M11 6l-6 6 6 6"/></svg> Volver al inicio</a>
 </nav>
 
 <div class="header">
-  <h1 class="page-title" data-words>Ajusta las horas y <span class="mark">reserva</span> tu fecha.</h1>
-  <p class="sub intro" style="--d:500ms">Ya trabajamos juntos antes, así que vamos directo al precio. Elegí las horas que necesitás para esta sesión.</p>
+  <h1 class="page-title" data-words data-t="pg_jornada.t02">Ajusta las horas y <span class="mark">reserva</span> tu fecha.</h1>
+  <p class="sub intro" style="--d:500ms" data-t="pg_jornada.t03">Ya trabajamos juntos antes, así que vamos directo al precio. Elegí las horas que necesitás para esta sesión.</p>
 </div>
 
 <div class="steps" id="egSteps"></div>
@@ -82,7 +82,7 @@ Cal.ns.jornada("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-brand":"#
     <div class="left-col">
       <div class="slider-block slider-block--main">
         <div class="slider-head">
-          <span class="slider-label">Horas de trabajo</span>
+          <span class="slider-label" data-t="pg_jornada.t04">Horas de trabajo</span>
           <span class="slider-value" id="horasValue">1 hora</span>
         </div>
         <input type="range" id="horasSlider" min="1" max="8" step="1" value="1" />
@@ -90,16 +90,16 @@ Cal.ns.jornada("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-brand":"#
       </div>
 
       <div class="extras-block">
-        <p class="extras-title">Antes de reservar</p>
-        <p class="extras-note">Esta jornada es sesión de fotos por horas y no incluye foodstyling. Si necesitás que los platos se preparen y presenten especialmente para cámara, lo coordinamos aparte por WhatsApp.</p>
+        <p class="extras-title" data-t="pg_jornada.t05">Antes de reservar</p>
+        <p class="extras-note" data-t="pg_jornada.t06">Esta jornada es sesión de fotos por horas y no incluye foodstyling. Si necesitás que los platos se preparen y presenten especialmente para cámara, lo coordinamos aparte por WhatsApp.</p>
       </div>
     </div>
 
     <div class="right-col">
-      <div class="paquete-label" id="paqueteLabel">Jornada de trabajo</div>
+      <div class="paquete-label" id="paqueteLabel" data-t="pg_jornada.t07">Jornada de trabajo</div>
       <div class="paquete-name" id="paqueteName">Jornada Básica</div>
       <div class="price" id="precioValue">Bs. <span id="precioNum">350</span><span class="price-unit">pago único</span></div>
-      <div class="price-note">Precio referencial. Se confirma en tu sesión.</div>
+      <div class="price-note" data-t="pg_jornada.t08">Precio referencial. Se confirma en tu sesión.</div>
       <ul class="benefits" id="benefitsList"></ul>
       <button
         class="btn-primary"
@@ -266,9 +266,9 @@ Cal.ns.jornada("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-brand":"#
 
 <footer class="foot">
   <div class="wrap foot-row">
-    <img src="/assets/logo-mark-white.png" alt="Estudio Graphica" width="19" height="22">
-    <p>© 2026 Estudio Graphica · Cochabamba, Bolivia · <a href="/privacidad">Privacidad</a></p>
-    <nav class="foot-links" aria-label="Pie de página"><a href="/precios/">Precios</a><a href="/empezar/">Empieza aquí</a><a href="/blog/">Blog</a></nav>
+    <img src="/assets/logo-mark-white.png" alt="Estudio Graphica" width="19" height="22" data-ta="src:pg_jornada.i3_src|alt:pg_jornada.i3_alt">
+    <p data-t="pg_jornada.t09">© 2026 Estudio Graphica · Cochabamba, Bolivia · <a href="/privacidad">Privacidad</a></p>
+    <nav class="foot-links" aria-label="Pie de página"><a href="/precios/" data-t="pg_jornada.t10" data-ta="href:pg_jornada.h10">Precios</a><a href="/empezar/" data-t="pg_jornada.t11" data-ta="href:pg_jornada.h11">Empieza aquí</a><a href="/blog/" data-t="pg_jornada.t12" data-ta="href:pg_jornada.h12">Blog</a></nav>
   </div>
 </footer>
 
