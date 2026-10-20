@@ -83,6 +83,34 @@ window.EG = window.EG || {};
   }
 
   // ─────────────────────────────────────────────
+  // Relevo al servidor (CAPI) — netlify/functions/capi-web.js
+  // ─────────────────────────────────────────────
+  // Manda el mismo evento que el Pixel, con el MISMO event_id, a la API de
+  // conversiones. Meta deduplica (cuenta 1, no 2) y, si el Pixel del
+  // navegador fue bloqueado, el evento igual llega por el servidor.
+  // keepalive: el envío sobrevive aunque el clic saque al visitante de la
+  // página (por ejemplo un botón a WhatsApp o a otra página del sitio).
+  // Solo corre en el dominio real, nunca en pruebas locales ni previews.
+  function sendToServer(eventName, eventId, params) {
+    try {
+      if (!/(^|\.)estudiographica\.com$/.test(window.location.hostname)) return;
+      fetch('/.netlify/functions/capi-web', {
+        method: 'POST',
+        keepalive: true,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          event_name: eventName,
+          event_id: eventId,
+          event_source_url: window.location.href,
+          custom_data: params || undefined,
+          fbp: getFbp(),
+          fbc: getFbc()
+        })
+      }).catch(function () {});
+    } catch (e) { /* silencioso */ }
+  }
+
+  // ─────────────────────────────────────────────
   // Envío de eventos (Pixel + GA4 en paralelo)
   // ─────────────────────────────────────────────
 
@@ -111,6 +139,8 @@ window.EG = window.EG || {};
       }
     } catch (e) { /* silencioso */ }
 
+    sendToServer(eventName, eventId, params);
+
     return eventId;
   }
 
@@ -133,6 +163,7 @@ window.EG = window.EG || {};
         ttq.track(eventName, Object.assign({}, params, { event_id: eventId }));
       }
     } catch (e) { /* silencioso */ }
+    sendToServer(eventName, eventId, params);
     return eventId;
   }
 
