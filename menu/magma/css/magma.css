@@ -610,3 +610,18 @@ dialog.sheet{--muted:#efe0cf}
   .pay-amt b{font-size:34px}
   .pay-head{font-size:19px}
 }
+
+/* Barra flotante del pedido: más baja para no tapar el menú, con el conteo y el aviso del mínimo.
+   Oscura con borde naranja: se distingue sobre fondos oscuros, naranjas y claros. */
+.dock{bottom:calc(10px + env(safe-area-inset-bottom,0px));width:min(520px,calc(100% - 24px));gap:var(--s3);padding:6px 18px 6px 6px;color:var(--cream);background:linear-gradient(180deg,#3c1618,#260c0d);-webkit-backdrop-filter:none;backdrop-filter:none;border:2px solid var(--lava);box-shadow:0 14px 30px -10px rgba(0,0,0,.75),0 0 0 4px rgba(38,12,13,.35),inset 0 1px 0 rgba(255,255,255,.12)}
+.dock-bag{width:42px;height:42px;background:var(--lava);color:var(--ember-dark)}
+.dock-bag .ic{width:21px;height:21px}
+.dock-bag b{top:-5px;right:-5px;min-width:20px;height:20px;font-size:12px;line-height:20px;padding:0 5px;background:var(--cream);color:var(--ember-dark);box-shadow:0 0 0 2px #260c0d}
+.dock-label{display:grid;gap:1px;margin-right:auto;text-align:left;min-width:0}
+.dock-label b{font:700 16px/1.15 var(--body);color:var(--cream)}
+.dock-label small{font:500 12.5px/1.2 var(--body);color:rgba(253,240,220,.78);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dock.is-short .dock-label small{font-weight:700;color:#ffd23f}
+.dock-total{font-size:28px;color:var(--lava-hi)}
+body.has-cart{padding-bottom:calc(78px + env(safe-area-inset-bottom,0px))}
+@media (max-width:359px){.dock-label b{font-size:15px}.dock-total{font-size:24px}.dock{padding-right:14px}}
+@media (prefers-contrast:more){.dock{border-color:var(--cream)}}

@@ -176,6 +176,15 @@
     dlg.addEventListener('transitionend', onEnd);
     setTimeout(fin, 600);
   }
+  /* Si el navegador restaura la página desde su memoria (volver desde WhatsApp), una hoja que quedó abierta bloquea todo lo demás. */
+  window.addEventListener('pageshow', function (e) {
+    if (!e.persisted) return;
+    var item = $('#itemDlg'), cart = $('#cartDlg');
+    if (item.open) { try { item.close(); } catch (x) {} item.classList.remove('open'); item._closing = false; }
+    if (cart.open && (cartView === 'done' || cartView === 'cart')) { try { cart.close(); } catch (x) {} cart.classList.remove('open'); cart._closing = false; }
+    openCount = ($('#itemDlg').open ? 1 : 0) + ($('#cartDlg').open ? 1 : 0);
+    if (!openCount) document.documentElement.classList.remove('locked');
+  });
   function wireSheet(dlg) {
     dlg.addEventListener('cancel', function (e) { e.preventDefault(); closeSheet(dlg); });
     dlg.addEventListener('click', function (e) {
@@ -330,6 +339,10 @@
     tickNumber($('#cartTotal'), shownTotal, t.total);
     shownTotal = t.total;
     $('#cartStatus').textContent = on ? t.count + (t.count === 1 ? ' producto' : ' productos') + ' en tu pedido, ' + money(t.total) : 'Tu pedido está vacío';
+    var min = menu && menu.service && menu.service.minOrder, short = on && min && t.total < min;
+    $('#dockSub').textContent = short ? 'Faltan ' + money(min - t.total) + ' para el mínimo' : t.count + (t.count === 1 ? ' producto' : ' productos');
+    bar.classList.toggle('is-short', !!short);
+    bar.setAttribute('aria-label', on ? 'Ver pedido, ' + t.count + (t.count === 1 ? ' producto' : ' productos') + ', ' + money(t.total) + (short ? '. Faltan ' + money(min - t.total) + ' para el pedido mínimo' : '') : 'Ver pedido');
     bar.classList.toggle('on', on);
     if (on) bar.removeAttribute('inert'); else bar.setAttribute('inert', '');
     document.body.classList.toggle('has-cart', on);
@@ -408,6 +421,14 @@
     return u;
   }
   function openItem(pid, portionId, edit, opener) {
+    try { openItemUnsafe(pid, portionId, edit, opener); }
+    catch (err) {
+      emit('js_error', { where: 'openItem', message: String(err && err.message || err).slice(0, 120) });
+      var dlg = $('#itemDlg'); if (dlg.open) { try { dlg.close(); } catch (e) {} }
+      toast('No pudimos abrir esa opción. Recarga la página e inténtalo de nuevo.');
+    }
+  }
+  function openItemUnsafe(pid, portionId, edit, opener) {
     var product = P.findProduct(menu, pid);
     if (!product || product.available === false) return;
     var st = { product: product, sel: {}, qty: 1, note: '', editKey: null };
