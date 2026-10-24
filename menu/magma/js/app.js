@@ -579,7 +579,7 @@
         out.push(chip('i-' + (g.icon || 'drop'), (c.group === 'salsa-extra' ? 'Extra: ' : '') + o.name + (o.price ? ' +' + o.price : ''), c.group === 'salsa-extra' ? 'extra' : ''));
       });
     });
-    if (l.note) out.push(chip('i-note', l.note, 'note'));
+    if (l.note) out.push(chip('i-note', l.note, 'is-note'));
     return out;
   }
   function renderCart() {
