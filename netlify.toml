@@ -17,3 +17,25 @@ node_bundler = "esbuild"
   [headers.values]
     Access-Control-Allow-Origin = "*"
     Cache-Control = "public, max-age=31536000, immutable"
+
+# Menu de Magma Wings: API publica del menu y recepcion de pedidos.
+# Ver menu/magma/README.md.
+[[redirects]]
+  from = "/api/magma/menu"
+  to = "/.netlify/functions/magma-menu"
+  status = 200
+
+[[redirects]]
+  from = "/api/magma/order"
+  to = "/.netlify/functions/magma-order"
+  status = 200
+
+[[redirects]]
+  from = "/api/magma/orders"
+  to = "/.netlify/functions/magma-orders"
+  status = 200
+
+[[headers]]
+  for = "/menu/magma/fonts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"

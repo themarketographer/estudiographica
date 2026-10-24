@@ -1,0 +1,176 @@
+{
+  "version": 2,
+  "brand": {
+    "name": "Magma Wings",
+    "tagline": "Aplasta tus límites",
+    "currency": "Bs",
+    "whatsapp": "59176980828",
+    "whatsappDisplay": "+591 76980828",
+    "address": "Calle Juan Capriles, entre Calle Potosí y Av. Pando, Cochabamba",
+    "orderPrefix": "MW"
+  },
+  "hours": null,
+  "service": {
+    "pickup": true,
+    "delivery": true,
+    "deliveryNote": "El costo de envío te lo confirmamos por WhatsApp.",
+    "minOrder": null
+  },
+  "tracking": {
+    "ga4": "",
+    "metaPixel": ""
+  },
+  "draftNote": null,
+  "sauces": [
+    {
+      "id": "bbq-lava",
+      "name": "BBQ Lava"
+    },
+    {
+      "id": "bufalo",
+      "name": "Búfalo"
+    },
+    {
+      "id": "miel-picante",
+      "name": "Miel picante"
+    },
+    {
+      "id": "ajo-parmesano",
+      "name": "Ajo parmesano"
+    },
+    {
+      "id": "ranch",
+      "name": "Ranch"
+    },
+    {
+      "id": "mango-habanero",
+      "name": "Mango habanero"
+    },
+    {
+      "id": "magma-extrema",
+      "name": "Magma extrema"
+    }
+  ],
+  "optionGroups": {
+    "salsa": {
+      "label": "Tu salsa",
+      "hint": "Elige 1",
+      "type": "single",
+      "required": true,
+      "source": "sauces",
+      "icon": "drop"
+    },
+    "papas": {
+      "label": "Papas",
+      "hint": "Fritas incluidas",
+      "type": "single",
+      "required": true,
+      "options": [
+        {
+          "id": "fritas",
+          "name": "Fritas",
+          "desc": "cortadas a mano",
+          "price": 0,
+          "default": true
+        },
+        {
+          "id": "gajos",
+          "name": "En gajos",
+          "desc": "con cáscara",
+          "price": 5
+        },
+        {
+          "id": "platano",
+          "name": "Con plátano",
+          "desc": "frito",
+          "price": 5
+        }
+      ],
+      "icon": "fries"
+    },
+    "salsa-extra": {
+      "label": "Salsa extra",
+      "hint": "5 Bs cada una, hasta 3",
+      "type": "multi",
+      "required": false,
+      "max": 3,
+      "source": "sauces",
+      "price": 5,
+      "icon": "drop"
+    }
+  },
+  "products": [
+    {
+      "id": "alitas",
+      "title": "Alitas",
+      "sub": "Con 1 salsa a elección",
+      "tone": "dark",
+      "photo": "images/alitas.webp",
+      "alt": "Alitas con dos salsas y papas fritas sobre plato rojo",
+      "portions": [
+        {
+          "id": "6",
+          "qty": 6,
+          "unit": "unidades",
+          "price": 35
+        },
+        {
+          "id": "12",
+          "qty": 12,
+          "unit": "unidades",
+          "price": 65
+        },
+        {
+          "id": "18",
+          "qty": 18,
+          "unit": "unidades",
+          "price": 90
+        }
+      ],
+      "groups": [
+        "salsa",
+        "papas",
+        "salsa-extra"
+      ],
+      "photoPos": "50% 58%",
+      "showSauces": true,
+      "photoSm": "images/alitas-sm.webp",
+      "icon": "flame"
+    },
+    {
+      "id": "pollo",
+      "title": "Pollo frito",
+      "sub": "Crocante por fuera, jugoso por dentro",
+      "tone": "org",
+      "photo": "images/pollo.webp",
+      "alt": "Pollo frito con papas en gajos, plátano y dos salsas sobre tabla de madera",
+      "portions": [
+        {
+          "id": "2",
+          "qty": 2,
+          "unit": "presas",
+          "price": 30
+        },
+        {
+          "id": "4",
+          "qty": 4,
+          "unit": "presas",
+          "price": 55
+        },
+        {
+          "id": "8",
+          "qty": 8,
+          "unit": "presas",
+          "price": 100
+        }
+      ],
+      "groups": [
+        "papas",
+        "salsa-extra"
+      ],
+      "photoPos": "50% 58%",
+      "photoSm": "images/pollo-sm.webp",
+      "icon": "drum"
+    }
+  ]
+}
