@@ -1,6 +1,6 @@
 /* Pago por QR con comprobante. Lo usan el menú (al terminar el pedido) y la página de seguimiento.
    MagmaProof.mount(caja, { n:'07-24OCT', p:'0828', amount:82, status:'pendiente', qr:{image,holder,note}, onStatus })
-   Reduce la foto en el navegador (máx. 1280 px, JPEG) para que suba rápido con datos móviles. */
+   Reduce la foto en el navegador (máx. 1000 px, JPEG) para que suba rápido con datos móviles. */
 (function () {
   'use strict';
   var NS = 'http://www.w3.org/2000/svg';
@@ -12,11 +12,11 @@
       if (!file || !/^image\//.test(file.type)) return reject(new Error('Sube una foto o captura de pantalla.'));
       var url = URL.createObjectURL(file), img = new Image();
       img.onload = function () {
-        var k = Math.min(1, 1280 / Math.max(img.width, img.height)), c = document.createElement('canvas');
+        var k = Math.min(1, 1000 / Math.max(img.width, img.height)), c = document.createElement('canvas');
         c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
         var g = c.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, c.width, c.height); g.drawImage(img, 0, 0, c.width, c.height);
         URL.revokeObjectURL(url);
-        resolve(c.toDataURL('image/jpeg', 0.82));
+        resolve(c.toDataURL('image/jpeg', 0.72));
       };
       img.onerror = function () { URL.revokeObjectURL(url); reject(new Error('No pudimos leer esa foto. Prueba con otra.')); };
       img.src = url;
