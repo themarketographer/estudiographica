@@ -70,4 +70,25 @@ async function listSince(event, sinceKey) {
   return rows.filter(Boolean);
 }
 
-module.exports = { getOrder, listSince, saveRecord, STATUSES, storeName, keyFor, saveNumbered, listOrders, setStatus };
+// Comprobantes de pago: un almacén aparte para no cargar imágenes al leer la lista de pedidos.
+function openProofs(event) {
+  const { getStore, connectLambda } = require('@netlify/blobs');
+  if (event) connectLambda(event);
+  return getStore({ name: storeName() === 'magma-orders' ? 'magma-proofs' : 'magma-proofs-test' });
+}
+async function saveProof(event, key, proof) {
+  await openProofs(event).setJSON(key, proof);
+}
+async function getProof(event, key) {
+  return openProofs(event).get(key, { type: 'json' }).catch(() => null);
+}
+async function setPayment(event, key, status, extra) {
+  const store = open(event);
+  const rec = await store.get(key, { type: 'json' });
+  if (!rec) return null;
+  rec.payment = Object.assign({ method: 'cash' }, rec.payment, extra || {}, { status, updatedAt: new Date().toISOString() });
+  await store.setJSON(key, rec);
+  return rec;
+}
+
+module.exports = { saveProof, getProof, setPayment, getOrder, listSince, saveRecord, STATUSES, storeName, keyFor, saveNumbered, listOrders, setStatus };

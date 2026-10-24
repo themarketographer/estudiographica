@@ -68,24 +68,29 @@
       {
         "id": "centro",
         "name": "Centro y alrededores",
-        "fee": 8
+        "fee": 8,
+        "travelMin": 15
       },
       {
         "id": "norte",
         "name": "Zona norte",
-        "fee": 12
+        "fee": 12,
+        "travelMin": 25
       },
       {
         "id": "sur",
         "name": "Zona sur",
-        "fee": 12
+        "fee": 12,
+        "travelMin": 25
       },
       {
         "id": "otra",
         "name": "Otra zona (te confirmamos el costo)",
-        "fee": null
+        "fee": null,
+        "travelMin": 35
       }
-    ]
+    ],
+    "prepMin": 20
   },
   "tracking": {
     "ga4": "",
@@ -243,5 +248,17 @@
       "photoSm": "images/pollo-sm.webp",
       "icon": "drum"
     }
-  ]
+  ],
+  "payment": {
+    "methods": [
+      "cash",
+      "qr"
+    ],
+    "cashNote": "Pagas al recibir o recoger tu pedido.",
+    "qr": {
+      "image": "images/qr-ejemplo.svg",
+      "holder": "Magma Wings (temporal)",
+      "note": "Escanea el QR con la app de tu banco, paga el monto exacto y sube la foto del comprobante."
+    }
+  }
 }
