@@ -1,5 +1,5 @@
 {
-  "name": "estudiographica-functions",
+  "name": "estudiographica",
   "private": true,
   "description": "Dependencias de las funciones de Netlify (pedidos de Magma Wings).",
   "dependencies": {
