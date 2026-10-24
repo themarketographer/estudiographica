@@ -269,6 +269,7 @@
     var l = lines.filter(function (x) { return x.key === key; })[0];
     if (!l) return;
     if (q < 1) return removeLine(key);
+    touchedKey = key;
     commit(lines.map(function (x) { var r = P.toRaw(x); if (x.key === key) r.qty = Math.min(q, P.MAX_QTY); return r; }));
     emit('update_cart', { id: l.id, qty: q, cartTotal: totals().total });
   }
@@ -278,11 +279,15 @@
     if (idx < 0) return;
     var line = lines[idx];
     removed = { raw: P.toRaw(line), index: idx };
-    var list = rawLines();
-    list.splice(idx, 1);
-    commit(list);
-    emit('remove_from_cart', { value: line.total, items: items([line]), count: line.qty });
-    toast('Quitaste ' + line.qty + 'x ' + line.name + ' ' + line.portionLabel, 'Deshacer', undoRemove);
+    var finish = function () {
+      var list = rawLines();
+      list.splice(idx, 1);
+      commit(list);
+      emit('remove_from_cart', { value: line.total, items: items([line]), count: line.qty });
+      toast('Quitaste ' + line.qty + ' × ' + line.name + ' ' + line.portionLabel, 'Deshacer', undoRemove);
+    };
+    var node = $('.line[data-key="' + (window.CSS && CSS.escape ? CSS.escape(key) : key) + '"]');
+    if (node && !reduceMotion.matches) { node.classList.add('out'); setTimeout(finish, 190); } else finish();
   }
   function undoRemove() {
     if (!removed) return;
@@ -563,34 +568,61 @@
         h('div', { class: 'step-label', text: l })));
     });
   }
+  var lastView = 'cart', touchedKey = '';
+  function chip(ic, text, cls) { return h('li', { class: 'tag' + (cls ? ' ' + cls : '') }, icon(ic), h('span', { text: text })); }
+  function productIcon(id) { var p = P.findProduct(menu, id); return (p && p.icon) || 'flame'; }
+  function tagsOf(l) {
+    var out = [];
+    l.choices.forEach(function (c) {
+      var g = menu.optionGroups[c.group] || {};
+      c.options.forEach(function (o) {
+        out.push(chip('i-' + (g.icon || 'drop'), (c.group === 'salsa-extra' ? 'Extra: ' : '') + o.name + (o.price ? ' +' + o.price : ''), c.group === 'salsa-extra' ? 'extra' : ''));
+      });
+    });
+    if (l.note) out.push(chip('i-note', l.note, 'note'));
+    return out;
+  }
   function renderCart() {
     var body = $('#cartBody'), foot = $('#cartFoot'), title = $('#cartTitle'), back = $('#cartBack');
     body.textContent = ''; foot.textContent = '';
     back.hidden = cartView !== 'details';
     $('#cartSteps').hidden = !(lines.length || cartView === 'done');
     renderSteps();
+    var order = ['cart', 'details', 'done'];
+    var dir = order.indexOf(cartView) >= order.indexOf(lastView) ? 'fwd' : 'back';
+    if (cartView !== lastView) {
+      [body, foot].forEach(function (n) { n.classList.remove('view-fwd', 'view-back'); void n.offsetWidth; n.classList.add('view-' + dir); });
+    }
+    lastView = cartView;
     if (cartView === 'cart') {
       title.textContent = 'Tu pedido';
       if (!lines.length) return renderEmpty(body);
       var ul = h('ul', { class: 'lines' });
-      lines.forEach(function (l) {
-        var minus = h('button', { type: 'button', 'aria-label': l.qty === 1 ? 'Quitar ' + l.name : 'Menos ' + l.name, onclick: function () { setQty(l.key, l.qty - 1); } }, icon(l.qty === 1 ? 'i-trash' : 'i-minus'));
+      lines.forEach(function (l, i) {
+        var minus = h('button', { type: 'button', 'aria-label': l.qty === 1 ? 'Quitar ' + l.name + ' ' + l.portionLabel : 'Menos ' + l.name, onclick: function () { setQty(l.key, l.qty - 1); } }, icon(l.qty === 1 ? 'i-trash' : 'i-minus'));
         var plus = h('button', { type: 'button', 'aria-label': 'Más ' + l.name, onclick: function () { setQty(l.key, l.qty + 1); } }, icon('i-plus'));
-        ul.appendChild(h('li', { class: 'line' },
-          h('h3', {}, l.name, h('span', { text: l.portionLabel })),
-          h('span', { class: 'amt', text: money(l.total) }),
-          summaryOf(l) ? h('p', { class: 'opts-sum', text: summaryOf(l) }) : null,
+        var pop = touchedKey === l.key ? ' pop' : '';
+        var li = h('li', { class: 'line', 'data-key': l.key, style: 'animation-delay:' + Math.min(i, 5) * 55 + 'ms' },
+          h('span', { class: 'line-ico' }, icon('i-' + productIcon(l.id))),
+          h('div', { class: 'line-main' }, h('h3', { text: l.name }), h('p', { text: l.portionLabel + (l.qty > 1 ? ' · ' + money(l.unitPrice) + ' c/u' : '') })),
+          h('span', { class: 'amt' + pop, text: money(l.total) }),
+          tagsOf(l).length ? h('ul', { class: 'tags' }, tagsOf(l)) : null,
           h('div', { class: 'ctl' },
-            h('div', { class: 'stepper' }, minus, h('output', { text: String(l.qty) }), plus),
-            h('button', { class: 'link', type: 'button', text: 'Editar', onclick: function (e) { var r = P.toRaw(l); openItem(l.id, l.portion, { sel: r.sel, portion: l.portion, qty: l.qty, note: l.note, key: l.key }, e.currentTarget); } }))));
+            h('div', { class: 'stepper' }, minus, h('output', { class: pop.trim(), text: String(l.qty) }), plus),
+            h('button', { class: 'link', type: 'button', onclick: function (e) { var r = P.toRaw(l); openItem(l.id, l.portion, { sel: r.sel, portion: l.portion, qty: l.qty, note: l.note, key: l.key }, e.currentTarget); } }, icon('i-edit'), 'Editar')));
+        ul.appendChild(li);
       });
+      touchedKey = '';
       body.appendChild(ul);
-      body.appendChild(h('div', { class: 'sum' }, h('span', { text: 'Total productos' }), h('b', { text: money(totals().total) })));
-      if (menu.service.delivery) body.appendChild(h('p', { class: 'small', text: menu.service.deliveryNote }));
+      var t = totals();
+      body.appendChild(h('div', { class: 'receipt' },
+        h('div', { class: 'rrow' }, icon('i-receipt'), h('span', { text: 'Productos (' + t.count + ')' }), h('b', { text: money(t.total) })),
+        menu.service.delivery ? h('div', { class: 'rrow soft' }, icon('i-moto'), h('span', { text: 'Envío' }), h('em', { text: 'Te lo confirmamos' })) : null,
+        h('div', { class: 'rrow total' }, h('span', { text: 'Total' }), h('b', { class: 'display', text: money(t.total) }))));
       var min = menu.service.minOrder;
-      var short = min && totals().total < min;
-      if (short) body.appendChild(h('p', { class: 'small', text: 'El pedido mínimo es de ' + money(min) + '. Te faltan ' + money(min - totals().total) + '.' }));
-      foot.appendChild(h('button', { class: 'btn btn--block', type: 'button', disabled: !!short, text: 'Continuar', onclick: function () { cartView = 'details'; renderCart(); emit('checkout_start', { value: totals().total, items: items(lines), count: totals().count }); } }));
+      var short = min && t.total < min;
+      if (short) body.appendChild(h('p', { class: 'hint warn' }, icon('i-clock'), 'El pedido mínimo es de ' + money(min) + '. Te faltan ' + money(min - t.total) + '.'));
+      foot.appendChild(h('button', { class: 'btn btn--block', type: 'button', disabled: !!short, onclick: function () { cartView = 'details'; renderCart(); emit('checkout_start', { value: totals().total, items: items(lines), count: totals().count }); } }, 'Continuar', icon('i-arrow')));
     } else if (cartView === 'details') {
       title.textContent = 'Tus datos';
       renderDetails(body, foot);
@@ -602,9 +634,9 @@
     motionRefresh();
   }
   function renderEmpty(body) {
-    var kids = [h('p', { text: 'Tu pedido está vacío. Las alitas no se piden solas.' })];
-    kids.push(h('button', { class: 'btn', type: 'button', text: 'Ver el menú', onclick: function () { closeSheet($('#cartDlg')); } }));
-    if (lastOrder) kids.push(h('p', { class: 'small' }, h('button', { class: 'link', type: 'button', text: 'Repetir mi último pedido (' + lastOrder.orderId + ')', onclick: restoreLast })));
+    var kids = [h('div', { class: 'empty-ico' }, icon('i-bag')), h('h3', { class: 'display', text: 'Tu pedido está vacío' }), h('p', { text: 'Las alitas no se piden solas.' })];
+    kids.push(h('button', { class: 'btn', type: 'button', onclick: function () { closeSheet($('#cartDlg')); } }, icon('i-flame'), 'Ver el menú'));
+    if (lastOrder) kids.push(h('button', { class: 'link center', type: 'button', onclick: restoreLast }, icon('i-receipt'), 'Repetir mi último pedido (' + lastOrder.orderId + ')'));
     body.appendChild(h('div', { class: 'empty' }, kids));
     motionRefresh();
   }
@@ -620,23 +652,23 @@
     var saved = load(CUST_KEY) || {};
     var both = menu.service.pickup !== false && menu.service.delivery;
     var mode = saved.mode === 'delivery' && menu.service.delivery ? 'delivery' : (menu.service.pickup === false ? 'delivery' : 'pickup');
-    var field = function (id, label, attrs, hint) {
+    var field = function (id, label, ic, attrs, hint) {
       var input = h('input', Object.assign({ type: 'text', id: id, name: id, 'aria-describedby': 'e-' + id, maxlength: '120' }, attrs));
-      return h('div', { class: 'f', id: 'row-' + id }, h('label', { for: id }, label, hint ? h('small', { text: ' ' + hint }) : null), input, h('p', { class: 'field-err', id: 'e-' + id, role: 'alert', hidden: true }));
+      return h('div', { class: 'f', id: 'row-' + id }, h('label', { for: id }, label, hint ? h('small', { text: ' ' + hint }) : null), h('div', { class: 'inp' }, icon(ic), input), h('p', { class: 'field-err', id: 'e-' + id, role: 'alert', hidden: true }));
     };
-    var fFirst = field('firstName', 'Nombre', { autocomplete: 'given-name', value: saved.firstName || '', enterkeyhint: 'next' });
-    var fLast = field('lastName', 'Apellido', { autocomplete: 'family-name', value: saved.lastName || '', enterkeyhint: 'next' });
-    var fPhone = field('phone', 'Celular', { type: 'tel', inputmode: 'tel', autocomplete: 'tel', value: saved.phone ? saved.phone.replace(/^591/, '') : '', placeholder: '7XXXXXXX', maxlength: '20', enterkeyhint: 'next' }, '(WhatsApp)');
-    var fEmail = field('email', 'Correo', { type: 'email', inputmode: 'email', autocomplete: 'email', value: saved.email || '', placeholder: 'tu@correo.com', enterkeyhint: 'next' }, menu.service.requireEmail ? '' : '(opcional)');
+    var fFirst = field('firstName', 'Nombre', 'i-user', { autocomplete: 'given-name', value: saved.firstName || '', enterkeyhint: 'next' });
+    var fLast = field('lastName', 'Apellido', 'i-user', { autocomplete: 'family-name', value: saved.lastName || '', enterkeyhint: 'next' });
+    var fPhone = field('phone', 'Celular', 'i-phone', { type: 'tel', inputmode: 'tel', autocomplete: 'tel', value: saved.phone ? saved.phone.replace(/^591/, '') : '', placeholder: '7XXXXXXX', maxlength: '20', enterkeyhint: 'next' }, '(WhatsApp)');
+    var fEmail = field('email', 'Correo', 'i-mail', { type: 'email', inputmode: 'email', autocomplete: 'email', value: saved.email || '', placeholder: 'tu@correo.com', enterkeyhint: 'next' }, menu.service.requireEmail ? '' : '(opcional)');
     var addr = h('textarea', { id: 'address', name: 'address', autocomplete: 'street-address', maxlength: '160', rows: '2', 'aria-describedby': 'e-address', placeholder: 'Calle, número y una referencia' });
     addr.value = saved.address || '';
     var notes = h('textarea', { id: 'notes', name: 'notes', maxlength: '240', rows: '2', placeholder: 'Más servilletas, tocar el timbre, lo que necesites' });
-    var fAddr = h('div', { class: 'f', id: 'row-address' }, h('label', { for: 'address' }, 'Dirección', h('br'), h('small', { text: menu.service.deliveryNote })), addr, h('p', { class: 'field-err', id: 'e-address', role: 'alert', hidden: true }));
+    var fAddr = h('div', { class: 'f', id: 'row-address' }, h('label', { for: 'address' }, 'Dirección'), h('p', { class: 'hint' }, icon('i-moto'), menu.service.deliveryNote), h('div', { class: 'inp area' }, icon('i-pin'), addr), h('p', { class: 'field-err', id: 'e-address', role: 'alert', hidden: true }));
     var seg = null;
     if (both) {
-      var mk = function (val, label) {
+      var mk = function (val, label, ic) {
         var input = h('input', { type: 'radio', name: 'mode', value: val, checked: mode === val });
-        var lab = h('label', { class: 'opt' + (mode === val ? ' on' : '') }, input, h('span', { class: 'nm', text: label }));
+        var lab = h('label', { class: 'opt mode' + (mode === val ? ' on' : '') }, input, icon(ic), h('span', { class: 'nm', text: label }));
         input.addEventListener('change', function () {
           mode = val;
           $$('.seg .opt').forEach(function (x) { x.classList.toggle('on', $('input', x).checked); });
@@ -644,21 +676,22 @@
         });
         return lab;
       };
-      seg = h('div', { class: 'f' }, h('span', { class: 'lab', text: '¿Cómo lo recibes?' }), h('div', { class: 'seg' }, mk('pickup', 'Recojo en el local'), mk('delivery', 'Entrega')));
+      seg = h('div', { class: 'f' }, h('span', { class: 'lab', text: '¿Cómo lo recibes?' }), h('div', { class: 'seg' }, mk('pickup', 'Recojo en el local', 'i-store'), mk('delivery', 'Entrega', 'i-moto')));
     }
     fAddr.hidden = mode !== 'delivery';
     var consent = h('input', { type: 'checkbox', id: 'consent', name: 'consent' });
-    var consentRow = h('label', { class: 'consent', for: 'consent' }, consent,
-      h('span', {}, 'Quiero recibir ofertas y novedades de ' + menu.brand.name + '. ', h('small', { text: 'Usamos tus datos para tu pedido y, si aceptas, para ofertas y anuncios. Puedes pedir que los borremos cuando quieras.' })));
+    var consentRow = h('label', { class: 'consent', for: 'consent' }, consent, h('span', { class: 'box' }, icon('i-check')),
+      h('span', { class: 'ctext' }, h('b', { text: 'Quiero recibir ofertas y novedades de ' + menu.brand.name }),
+        h('small', {}, icon('i-shield'), 'Usamos tus datos para tu pedido y, si aceptas, para ofertas y anuncios. Puedes pedir que los borremos cuando quieras.')));
     var form = h('form', { class: 'form', id: 'orderForm', novalidate: true, onsubmit: function (e) { e.preventDefault(); sendOrder(function () {
       return { firstName: fFirst.querySelector('input').value, lastName: fLast.querySelector('input').value, phone: fPhone.querySelector('input').value, email: fEmail.querySelector('input').value,
         consent: consent.checked, mode: mode, address: addr.value, notes: notes.value };
     }); } },
       h('div', { class: 'pair' }, fFirst, fLast), fPhone, fEmail,
       seg, fAddr,
-      h('div', { class: 'f' }, h('label', { for: 'notes' }, 'Notas del pedido ', h('small', { text: '(opcional)' })), notes),
+      h('div', { class: 'f' }, h('label', { for: 'notes' }, 'Notas del pedido ', h('small', { text: '(opcional)' })), h('div', { class: 'inp area' }, icon('i-note'), notes)),
       consentRow,
-      h('div', { class: 'sum' }, h('span', { text: 'Total productos' }), h('b', { text: money(totals().total) })));
+      h('div', { class: 'receipt' }, h('div', { class: 'rrow total' }, h('span', { text: 'Total productos' }), h('b', { class: 'display', text: money(totals().total) }))));
     form.addEventListener('input', function (e) {
       var row = e.target.closest && e.target.closest('.f');
       if (!row || !row.classList.contains('err')) return;
@@ -738,18 +771,22 @@
 
   function renderDone(body, foot) {
     var o = lastOrder;
-    var tick = h('div', { class: 'tick' });
-    tick.innerHTML = '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    var tick = h('div', { class: 'tick' }, icon('i-check'));
+    var sparks = h('div', { class: 'sparks', 'aria-hidden': 'true' });
+    for (var i = 0; i < 10; i++) { var s = document.createElement('i'); s.style.setProperty('--a', (i * 36) + 'deg'); s.style.setProperty('--r', (54 + (i % 3) * 14) + 'px'); sparks.appendChild(s); }
+    var lines2 = (o.lines || []).reduce(function (n, l) { return n + (l.qty || 0); }, 0);
     body.appendChild(h('div', { class: 'done' },
-      tick,
-      h('h3', { text: 'Pedido ' + o.orderId }),
-      h('p', { text: 'Abrimos WhatsApp con tu pedido listo. Envía el mensaje y lo confirmamos contigo.' }),
+      h('div', { class: 'tick-wrap' }, sparks, tick),
+      h('p', { class: 'done-k', text: 'Tu pedido es el' }),
+      h('h3', { class: 'display', text: o.orderId }),
+      h('p', { class: 'done-sum' }, icon('i-receipt'), lines2 + (lines2 === 1 ? ' producto' : ' productos') + ' · ' + money(o.total)),
+      h('p', { class: 'done-t', text: 'Abrimos WhatsApp con tu pedido listo. Envía el mensaje y lo confirmamos contigo.' }),
       h('div', { class: 'stack' },
         h('a', { class: 'btn btn--wa btn--block', href: o.whatsappUrl, rel: 'noopener', onclick: function () { emit('whatsapp_click', { source: 'done', orderId: o.orderId }); } }, icon('i-wa'), 'Abrir WhatsApp'),
         h('button', { class: 'btn btn--ghost btn--block', type: 'button', onclick: function () { copyText(o.message); } }, icon('i-copy'), 'Copiar mensaje'),
-        h('button', { class: 'link', type: 'button', text: 'Editar pedido', onclick: restoreLast })),
+        h('button', { class: 'link center', type: 'button', onclick: restoreLast }, icon('i-edit'), 'Editar pedido')),
       h('pre', { class: 'preview', text: o.message })));
-    foot.appendChild(h('button', { class: 'btn btn--ghost btn--block', type: 'button', text: 'Cerrar', onclick: function () { closeSheet($('#cartDlg')); } }));
+    foot.appendChild(h('button', { class: 'btn btn--ghost btn--block', type: 'button', onclick: function () { closeSheet($('#cartDlg')); } }, icon('i-x'), 'Cerrar'));
   }
   function copyText(t) {
     var done = function () { toast('Mensaje copiado'); };

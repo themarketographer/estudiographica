@@ -9,7 +9,6 @@
 
   var MAX_QTY = 20;
   var MAX_LINES = 30;
-  var ID_ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 
   function groupOptions(menu, group) {
     if (group.source === 'sauces') {
@@ -140,11 +139,21 @@
     return { ok: true, lines: lines, total: total, count: count };
   }
 
-  function makeOrderId(prefix) {
-    var s = '';
-    for (var i = 0; i < 5; i++) s += ID_ALPHABET.charAt(Math.floor(Math.random() * ID_ALPHABET.length));
-    return (prefix || 'MW') + '-' + s;
+  /* Fecha en Bolivia (UTC-4, sin horario de verano). Devuelve { key: '2026-10-24', label: '24OCT', hm: '1432' }. */
+  var MESES = ['ENE', 'FEB', 'MAR', 'ABR', 'MAY', 'JUN', 'JUL', 'AGO', 'SEP', 'OCT', 'NOV', 'DIC'];
+  function boliviaDate(d) {
+    var t = new Date((d || new Date()).getTime() - 4 * 3600 * 1000);
+    var p = function (n) { return String(n).padStart(2, '0'); };
+    return {
+      key: t.getUTCFullYear() + '-' + p(t.getUTCMonth() + 1) + '-' + p(t.getUTCDate()),
+      label: p(t.getUTCDate()) + MESES[t.getUTCMonth()],
+      hm: p(t.getUTCHours()) + p(t.getUTCMinutes())
+    };
   }
+  /* Número de pedido: #07-24OCT (el 7.º del día 24 de octubre). El servidor lleva la cuenta del día. */
+  function orderNumber(n, date) { return '#' + String(n).padStart(2, '0') + '-' + boliviaDate(date).label; }
+  /* Sin servidor no hay cuenta: se marca con la hora, por ejemplo #T1432-24OCT. */
+  function makeOrderId() { var d = boliviaDate(); return '#T' + d.hm + '-' + d.label; }
 
   /* Celular a solo dígitos con código de país. En Bolivia los móviles tienen 8 dígitos y empiezan con 6 o 7. */
   function normalizePhone(v) {
@@ -153,6 +162,7 @@
     if (d.length === 8 && /^[67]/.test(d)) d = '591' + d;
     return d;
   }
+  function fmtPhone(d) { return d.indexOf('591') === 0 ? '+591 ' + d.slice(3) : '+' + d; }
   function validPhone(d) {
     if (d.indexOf('591') === 0) return d.length === 11 && /^[67]/.test(d.slice(3));
     return d.length >= 10 && d.length <= 15;
@@ -184,26 +194,32 @@
 
   function buildMessage(menu, order) {
     var cur = menu.brand.currency;
+    var c = order.customer;
     var out = [];
-    out.push('*Pedido ' + order.orderId + '* · ' + menu.brand.name);
-    out.push('Nombre: ' + order.customer.name);
-    out.push('Celular: +' + order.customer.phone);
-    if (order.customer.email) out.push('Correo: ' + order.customer.email);
-    out.push(order.customer.mode === 'delivery' ? 'Entrega a domicilio' : 'Recojo en el local');
-    if (order.customer.address) out.push('Dirección: ' + order.customer.address);
+    out.push('🔥 *Pedido ' + order.orderId + '*');
+    out.push(menu.brand.name + ' · Cochabamba');
     out.push('');
+    out.push('👤 *' + c.name + '*');
+    out.push('📱 ' + fmtPhone(c.phone));
+    if (c.email) out.push('✉️ ' + c.email);
+    out.push(c.mode === 'delivery' ? '🛵 Entrega a domicilio' : '🏪 Recojo en el local');
+    if (c.address) out.push('📍 ' + c.address);
+    out.push('');
+    out.push('🍗 *Mi pedido*');
     order.lines.forEach(function (l) {
-      out.push(l.qty + 'x ' + l.name + ' · ' + l.portionLabel + ' (' + money(l.unitPrice, cur) + ' c/u)');
-      l.choices.forEach(function (c) {
-        var names = c.options.map(function (o) { return o.name + (o.price ? ' +' + o.price : ''); }).join(', ');
-        out.push('   ' + c.label + ': ' + names);
+      out.push('• ' + l.qty + ' × ' + l.name + ' ' + l.portionLabel + ' · ' + money(l.total, cur) + (l.qty > 1 ? ' (' + money(l.unitPrice, cur) + ' c/u)' : ''));
+      l.choices.forEach(function (ch) {
+        var names = ch.options.map(function (o) { return o.name + (o.price ? ' (+' + o.price + ')' : ''); }).join(', ');
+        out.push('   ▸ ' + ch.label + ': ' + names);
       });
-      if (l.note) out.push('   Nota: ' + l.note);
+      if (l.note) out.push('   ▸ Nota: ' + l.note);
     });
     out.push('');
-    out.push('*Total productos: ' + money(order.total, cur) + '*');
-    if (order.customer.mode === 'delivery') out.push('Envío: por confirmar');
-    if (order.customer.notes) { out.push(''); out.push('Notas: ' + order.customer.notes); }
+    out.push('💰 *Total: ' + money(order.total, cur) + '*' + (c.mode === 'delivery' ? ' + envío' : ''));
+    if (c.mode === 'delivery') out.push('🛵 El costo de envío me lo confirman por aquí.');
+    if (c.notes) { out.push(''); out.push('📝 ' + c.notes); }
+    out.push('');
+    out.push('Gracias, quedo atento a la confirmación 🙌');
     return out.join('\n');
   }
 
@@ -212,13 +228,13 @@
   }
 
   /* payload: { lines:[raw], customer:{...} }  ->  { ok, order } */
-  function validateOrder(menu, payload) {
+  function validateOrder(menu, payload, opts) {
     if (!payload || typeof payload !== 'object') return { ok: false, error: 'Pedido inválido.' };
     var r = resolveOrder(menu, payload.lines);
     if (!r.ok) return r;
     var c = cleanCustomer(menu, payload.customer);
     if (!c.ok) return c;
-    var order = { orderId: makeOrderId(menu.brand.orderPrefix), customer: c.customer, lines: r.lines, total: r.total, count: r.count };
+    var order = { orderId: (opts && opts.orderId) || makeOrderId(), customer: c.customer, lines: r.lines, total: r.total, count: r.count };
     order.message = buildMessage(menu, order);
     order.whatsappUrl = whatsappUrl(menu, order.message);
     return { ok: true, order: order };
@@ -233,8 +249,11 @@
     resolveOrder: resolveOrder,
     toRaw: toRaw,
     makeOrderId: makeOrderId,
+    orderNumber: orderNumber,
+    boliviaDate: boliviaDate,
     cleanCustomer: cleanCustomer,
     normalizePhone: normalizePhone,
+    fmtPhone: fmtPhone,
     buildMessage: buildMessage,
     whatsappUrl: whatsappUrl,
     validateOrder: validateOrder

@@ -57,7 +57,8 @@
       "hint": "Elige 1",
       "type": "single",
       "required": true,
-      "source": "sauces"
+      "source": "sauces",
+      "icon": "drop"
     },
     "papas": {
       "label": "Papas",
@@ -84,7 +85,8 @@
           "desc": "frito",
           "price": 5
         }
-      ]
+      ],
+      "icon": "fries"
     },
     "salsa-extra": {
       "label": "Salsa extra",
@@ -93,7 +95,8 @@
       "required": false,
       "max": 3,
       "source": "sauces",
-      "price": 5
+      "price": 5,
+      "icon": "drop"
     }
   },
   "products": [
@@ -131,7 +134,8 @@
       ],
       "photoPos": "50% 58%",
       "showSauces": true,
-      "photoSm": "images/alitas-sm.webp"
+      "photoSm": "images/alitas-sm.webp",
+      "icon": "flame"
     },
     {
       "id": "pollo",
@@ -165,7 +169,8 @@
         "salsa-extra"
       ],
       "photoPos": "50% 58%",
-      "photoSm": "images/pollo-sm.webp"
+      "photoSm": "images/pollo-sm.webp",
+      "icon": "drum"
     }
   ]
 }

@@ -14,15 +14,21 @@ function open(event) {
   return getStore({ name: storeName() });
 }
 
-// La clave empieza con la fecha ISO para que el orden alfabético sea el cronológico.
-function keyFor(createdAt, orderId) {
-  return createdAt.replace(/[:.]/g, '-') + '_' + orderId;
-}
+// Cada pedido tiene una clave por fecha y número del día: "2026-10-24/007". El número visible es #07-24OCT.
+// "onlyIfNew" hace que dos pedidos simultáneos nunca se queden con el mismo número.
+function keyFor(dateKey, n) { return dateKey + '/' + String(n).padStart(3, '0'); }
 
-async function saveOrder(event, record) {
+async function saveNumbered(event, dateKey, build) {
   try {
-    await open(event).setJSON(record.key, record);
-    return { ok: true };
+    const store = open(event);
+    const { blobs } = await store.list({ prefix: dateKey + '/' });
+    let n = blobs.length + 1;
+    for (let i = 0; i < 12; i++, n++) {
+      const rec = build(n, keyFor(dateKey, n));
+      const r = await store.setJSON(rec.key, rec, { onlyIfNew: true });
+      if (r.modified !== false) return { ok: true, rec };
+    }
+    return { ok: false, error: 'No se pudo asignar número de pedido.' };
   } catch (e) {
     console.error('magma store save:', e && e.message);
     return { ok: false, error: String((e && e.message) || e).slice(0, 200) };
@@ -34,7 +40,7 @@ async function listOrders(event, limit) {
   const { blobs } = await store.list();
   const keys = blobs.map((b) => b.key).sort().reverse().slice(0, limit || 100);
   const rows = await Promise.all(keys.map((k) => store.get(k, { type: 'json' }).catch(() => null)));
-  return rows.filter(Boolean);
+  return rows.filter(Boolean).sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
 }
 
 async function setStatus(event, key, status) {
@@ -51,4 +57,4 @@ async function saveRecord(event, rec) {
   await open(event).setJSON(rec.key, rec);
 }
 
-module.exports = { saveRecord, STATUSES, storeName, keyFor, saveOrder, listOrders, setStatus };
+module.exports = { saveRecord, STATUSES, storeName, keyFor, saveNumbered, listOrders, setStatus };

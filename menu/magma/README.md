@@ -22,7 +22,7 @@ Todo el contenido vive en `menu.json`. Cambiar un precio, agregar una salsa o ma
 | Ruta | Método | Respuesta |
 |---|---|---|
 | `/api/magma/menu` | GET | El `menu.json` completo. Abierta a cualquier origen (`Access-Control-Allow-Origin: *`) |
-| `/api/magma/order` | POST | Valida el pedido con los precios del menú, genera el número `MW-XXXXX` y devuelve el mensaje y el enlace de WhatsApp |
+| `/api/magma/order` | POST | Valida el pedido con los precios del menú, genera el número del día (`#01-24OCT`) y devuelve el mensaje y el enlace de WhatsApp |
 
 Cuerpo del POST:
 
@@ -82,3 +82,7 @@ El pedido pide nombre, apellido, celular y correo (opcional; para exigirlo pon `
 - **API de Conversiones (servidor):** crea en Netlify `MAGMA_META_PIXEL_ID` y `MAGMA_META_ACCESS_TOKEN` (token del píxel del negocio, no el de Estudio Graphica). Para probar, agrega `MAGMA_META_TEST_CODE` con el código de Administrador de eventos. Al enviar un pedido sale `Lead` con el mismo número de pedido que el del navegador, así Meta no lo cuenta doble. Al marcar un pedido como **Entregado** en el panel sale `Purchase`, una sola vez, con el valor real de la venta.
 - Los datos personales viajan en hash SHA-256 y solo si el cliente aceptó. Sin aceptación el evento sale sin datos personales.
 - **Audiencias:** en el panel, "Audiencia para Meta (CSV)" descarga solo a quienes aceptaron, con el formato que pide Meta para listas de clientes.
+
+## Números de pedido
+
+El primer pedido de cada día es el `#01`, el segundo el `#02`, y así. Después del número va la fecha: `#07-24OCT` es el séptimo pedido del 24 de octubre (hora de Bolivia). Cada día vuelve a empezar en `#01`. Si el servidor no responde y el pedido sale sin guardarse, el número lleva la hora en vez de la cuenta (`#T1432-24OCT`).

@@ -31,35 +31,31 @@ exports.handler = async function (event) {
     return reply(400, { ok: false, error: 'No pudimos leer el pedido.' });
   }
 
-  const result = Pricing.validateOrder(menu, payload);
-  if (!result.ok) return reply(422, { ok: false, error: result.error, field: result.field || null });
+  const check = Pricing.validateOrder(menu, payload);
+  if (!check.ok) return reply(422, { ok: false, error: check.error, field: check.field || null });
 
   const h = event.headers || {};
-  const order = result.order;
-  const createdAt = new Date().toISOString();
-  const record = {
-    key: Store.keyFor(createdAt, order.orderId),
-    orderId: order.orderId,
-    createdAt,
-    status: 'nuevo',
-    mode: order.customer.mode,
-    customer: order.customer,
-    total: order.total,
-    count: order.count,
-    currency: menu.brand.currency,
-    lines: order.lines.map((l) => ({ name: l.name, portion: l.portionLabel, qty: l.qty, unitPrice: l.unitPrice, total: l.total, choices: l.choices, note: l.note })),
-    message: order.message,
-    context: process.env.CONTEXT || 'dev',
-    // Datos técnicos para la API de Conversiones de Meta (coinciden el evento del navegador y el del servidor).
-    meta: {
-      ip: String(h['x-nf-client-connection-ip'] || String(h['x-forwarded-for'] || '').split(',')[0] || '').trim().slice(0, 64),
-      ua: String(h['user-agent'] || '').slice(0, 300),
-      fbp: FB_RE.test(String((payload.meta || {}).fbp || '')) ? payload.meta.fbp : '',
-      fbc: FB_RE.test(String((payload.meta || {}).fbc || '')) ? payload.meta.fbc : ''
-    }
+  const now = new Date();
+  const createdAt = now.toISOString();
+  const day = Pricing.boliviaDate(now);
+  const meta = {
+    ip: String(h['x-nf-client-connection-ip'] || String(h['x-forwarded-for'] || '').split(',')[0] || '').trim().slice(0, 64),
+    ua: String(h['user-agent'] || '').slice(0, 300),
+    fbp: FB_RE.test(String((payload.meta || {}).fbp || '')) ? payload.meta.fbp : '',
+    fbc: FB_RE.test(String((payload.meta || {}).fbc || '')) ? payload.meta.fbc : ''
   };
-  // Si no se puede guardar, el cliente igual puede pedir por WhatsApp.
-  const save = await Store.saveOrder(event, record);
+
+  // El número del día (#01, #02...) se reserva al guardar. Si no se puede guardar, queda un número por hora (#T1432-24OCT).
+  const make = (o, n, key) => ({
+    key, orderId: o.orderId, number: n, createdAt, status: 'nuevo', mode: o.customer.mode, customer: o.customer,
+    total: o.total, count: o.count, currency: menu.brand.currency,
+    lines: o.lines.map((l) => ({ name: l.name, portion: l.portionLabel, qty: l.qty, unitPrice: l.unitPrice, total: l.total, choices: l.choices, note: l.note })),
+    message: o.message, context: process.env.CONTEXT || 'dev', meta
+  });
+  const save = await Store.saveNumbered(event, day.key, (n, key) =>
+    make(Pricing.validateOrder(menu, payload, { orderId: Pricing.orderNumber(n, now) }).order, n, key));
+  const record = save.ok ? save.rec : make(check.order, 0, 'sin-guardar/' + createdAt);
+  const order = { orderId: record.orderId, customer: record.customer, total: record.total, count: record.count, lines: record.lines, message: record.message, whatsappUrl: Pricing.whatsappUrl(menu, record.message) };
   const sourceUrl = 'https://' + (h.host || 'estudiographica.com') + '/menu/magma/';
   const capi = await Meta.sendEvent('Lead', record, sourceUrl);
   const hook = process.env.ORDER_WEBHOOK_URL;
@@ -75,7 +71,7 @@ exports.handler = async function (event) {
           customer: order.customer,
           total: order.total,
           currency: menu.brand.currency,
-          lines: order.lines,
+          lines: record.lines,
           message: order.message,
           createdAt
         }),
@@ -96,6 +92,7 @@ exports.handler = async function (event) {
     message: order.message,
     whatsappUrl: order.whatsappUrl,
     saved: save.ok,
+    number: record.number || null,
     // En previews y pruebas se devuelve el motivo para poder diagnosticar; en producción no.
     saveError: save.ok || process.env.CONTEXT === 'production' ? undefined : save.error,
     capi: process.env.CONTEXT === 'production' ? undefined : capi.status
