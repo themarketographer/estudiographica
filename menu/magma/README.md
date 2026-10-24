@@ -140,3 +140,10 @@ Lo que más gasta en un sitio con anuncios son las ejecuciones de funciones y el
 ## Flujo de pago en el menú
 
 El pedido tiene 4 pasos: Pedido, Datos, Pago y Listo. En **Pago** el cliente debe elegir Efectivo o QR; ninguna opción viene marcada. Con efectivo se envía por WhatsApp. Con QR se crea el pedido (ya con su número), se muestra el QR con el monto exacto y el botón de WhatsApp queda bloqueado hasta que suba el comprobante. En el panel, un pedido por QR no pasa a cocina hasta que el pago esté confirmado ("Esperando el pago", "Revisar comprobante"), y el aviso sonoro y el de Telegram llegan cuando entra el comprobante, no cuando se crea el pedido. Si el cliente cierra la ventana antes de subirlo, puede terminar desde el seguimiento (`/menu/magma/pedido/`).
+
+### Ahorros adicionales
+- Fuentes recortadas a los caracteres que se usan (letras latinas, tildes, signos) y a los pesos que se usan: unos 17 KB menos por visitante nuevo.
+- Fotos recodificadas (calidad 72, WebP): de 198 KB a 140 KB y de 149 KB a 106 KB las grandes, de 72 KB a 51 KB y de 53 KB a 35 KB las de celular.
+- Comprobantes reducidos a 1.000 px antes de subir.
+- El panel deja de consultar tras 10 minutos sin tocar la pantalla, salvo que el sonido esté encendido (en ese caso el panel es el aviso del local). Al tocar la pantalla se reanuda.
+- El seguimiento deja de consultar a los 20 minutos y ofrece un botón "Actualizar estado".

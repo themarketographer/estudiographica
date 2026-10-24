@@ -146,11 +146,11 @@
         $('#f').hidden = true; document.querySelector('.lead').hidden = true;
         clearInterval(timer);
         if (x.d.status !== 'entregado' && x.d.status !== 'cancelado') {
-          /* Cada 30 s los primeros 10 minutos, después cada 60 s, y se detiene a los 40 minutos. Con la pestaña oculta no consulta. */
+          /* Cada 30 s los primeros 10 minutos, después cada 60 s, y se detiene a los 20 minutos. Con la pestaña oculta no consulta. */
           var t0 = Date.now(), last = '';
           timer = setInterval(function () {
             var age = Date.now() - t0;
-            if (age > 40 * 60000) { clearInterval(timer); $('.tk-live').textContent = 'Toca actualizar para ver el estado.'; return; }
+            if (age > 20 * 60000) { clearInterval(timer); var lv = $('.tk-live'); if (lv) { lv.textContent = ''; var rb = document.createElement('button'); rb.type = 'button'; rb.className = 'btn'; rb.style.minHeight = '44px'; rb.textContent = 'Actualizar estado'; rb.addEventListener('click', function () { check(cur.n, cur.p); }); lv.appendChild(rb); } return; }
             if (document.hidden || (age > 10 * 60000 && Math.round(age / 30000) % 2)) return;
             check(cur.n, cur.p, true);
           }, 30000);

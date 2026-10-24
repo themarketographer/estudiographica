@@ -407,7 +407,10 @@ a{color:inherit}
   function setLive(ok) { var l = $('#live'); l.hidden = false; l.classList.toggle('off', !ok); l.textContent = ok ? 'En vivo · actualizado ahora' : 'Sin conexión, reintentando'; }
   /* Lectura barata: la primera vez trae hoy y ayer; después solo pregunta qué cambió (una consulta liviana).
      Así el panel puede quedarse abierto todo el día sin releer cada pedido en cada vuelta. */
-  var lastNow = 0, loadedDays = 0, idle = 0;
+  var lastNow = 0, loadedDays = 0, idle = 0, lastAct = Date.now(), paused = false;
+  function setPaused() { var l = $('#live'); l.hidden = false; l.classList.add('off'); l.textContent = 'En pausa por inactividad. Toca para actualizar'; }
+  function wake() { lastAct = Date.now(); if (paused) { paused = false; idle = 0; load().catch(function () {}); } }
+  ['pointerdown', 'keydown', 'touchstart'].forEach(function (ev) { document.addEventListener(ev, wake, { passive: true }); });
   function merge(list) {
     var changed = 0, fresh = 0;
     list.forEach(function (o) {
@@ -796,8 +799,14 @@ a{color:inherit}
     clearInterval(timer); clearInterval(tick);
     /* Cada 30 s mientras haya movimiento; si pasan 6 consultas sin cambios, cada 90 s. Con la pestaña oculta no consulta. */
     var n = 0;
-    timer = setInterval(function () { if (document.hidden) return; n++; if (idle >= 6 && n % 3) return; load().catch(function () {}); }, 30000);
-    tick = setInterval(function () { if (!document.hidden && !$('#panel').hidden) { render(); var s = Math.round((Date.now() - loadedAt) / 1000); if (s > 150) setLive(false); } }, 60000);
+    /* Sin actividad por 10 minutos y con el sonido apagado, deja de consultar hasta que alguien toque la pantalla.
+       Con el sonido encendido el panel es el aviso del local y sigue consultando. */
+    timer = setInterval(function () {
+      if (document.hidden) return;
+      if (!soundOn && Date.now() - lastAct > 600000) { if (!paused) { paused = true; setPaused(); } return; }
+      n++; if (idle >= 6 && n % 3) return; load().catch(function () {});
+    }, 30000);
+    tick = setInterval(function () { if (!document.hidden && !$('#panel').hidden) { render(); var s = Math.round((Date.now() - loadedAt) / 1000); if (s > 150 && !paused) setLive(false); } }, 60000);
   }
   function leave(msg) {
     token = ''; put(KEY, ''); clearInterval(timer); clearInterval(tick); lastNew = null; first = true; orders = []; lastNow = 0; loadedDays = 0; idle = 0;
