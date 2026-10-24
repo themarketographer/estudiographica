@@ -5,6 +5,7 @@
 // reenvía el pedido ahí (Make, Zapier, un bot de Telegram, etc.).
 const menu = require('../../menu/magma/menu.json');
 const Pricing = require('../../menu/magma/js/pricing.js');
+const Store = require('./lib-magma/store.js');
 
 const MAX_BODY = 20000;
 
@@ -31,6 +32,23 @@ exports.handler = async function (event) {
   if (!result.ok) return reply(422, { ok: false, error: result.error, field: result.field || null });
 
   const order = result.order;
+  const createdAt = new Date().toISOString();
+  const record = {
+    key: Store.keyFor(createdAt, order.orderId),
+    orderId: order.orderId,
+    createdAt,
+    status: 'nuevo',
+    mode: order.customer.mode,
+    customer: order.customer,
+    total: order.total,
+    count: order.count,
+    currency: menu.brand.currency,
+    lines: order.lines.map((l) => ({ name: l.name, portion: l.portionLabel, qty: l.qty, unitPrice: l.unitPrice, total: l.total, choices: l.choices, note: l.note })),
+    message: order.message,
+    context: process.env.CONTEXT || 'dev'
+  };
+  // Si no se puede guardar, el cliente igual puede pedir por WhatsApp.
+  const saved = await Store.saveOrder(event, record);
   const hook = process.env.ORDER_WEBHOOK_URL;
   if (hook) {
     try {
@@ -46,7 +64,7 @@ exports.handler = async function (event) {
           currency: menu.brand.currency,
           lines: order.lines,
           message: order.message,
-          createdAt: new Date().toISOString()
+          createdAt
         }),
         signal: ctrl.signal
       });
@@ -63,6 +81,7 @@ exports.handler = async function (event) {
     total: order.total,
     count: order.count,
     message: order.message,
-    whatsappUrl: order.whatsappUrl
+    whatsappUrl: order.whatsappUrl,
+    saved
   });
 };

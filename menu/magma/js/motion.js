@@ -131,6 +131,29 @@
     });
   }
 
+  /* 7. Brasas: partículas que suben (movimiento ambiente). Solo corren mientras se ven. */
+  function embers() {
+    if (reduce) return;
+    $$('.embers:not([data-e])').forEach(function (box) {
+      box.setAttribute('data-e', '1');
+      var n = 16, frag = document.createDocumentFragment();
+      for (var i = 0; i < n; i++) {
+        var s = document.createElement('i');
+        var r = function (k) { return ((Math.sin(i * 12.9898 + k * 78.233) * 43758.5453) % 1 + 1) % 1; };
+        s.style.setProperty('--x', (r(1) * 100).toFixed(1) + '%');
+        s.style.setProperty('--s', (3 + r(2) * 5).toFixed(1) + 'px');
+        s.style.setProperty('--d', (7 + r(3) * 8).toFixed(1) + 's');
+        s.style.setProperty('--w', (-r(4) * 12).toFixed(1) + 's');
+        s.style.setProperty('--dx', ((r(5) - 0.5) * 90).toFixed(0) + 'px');
+        frag.appendChild(s);
+      }
+      box.appendChild(frag);
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver(function (es) { box.classList.toggle('is-live', es[0].isIntersecting); }, { rootMargin: '80px' }).observe(box.parentElement);
+      } else box.classList.add('is-live');
+    });
+  }
+
   /* 6. Paralaje de fotos */
   function frame() {
     ticking = false;
@@ -153,7 +176,7 @@
 
   function init() {
     nav = $('#nav');
-    collect(); armReveals(); magnetic(); pointerSpots(); shine();
+    collect(); armReveals(); magnetic(); pointerSpots(); shine(); embers();
     $$('[data-words]').forEach(function (el) { if (!reduce) splitWords(el); });
     window.addEventListener('scroll', req, { passive: true });
     frame();

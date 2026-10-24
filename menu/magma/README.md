@@ -61,3 +61,15 @@ Control del carrito desde otros scripts: `Magma.cart.add(id, portion, sel, qty, 
 ## Movimiento y tipografía
 
 `js/motion.js` adapta el sistema de movimiento de Estudio Graphica (entradas con blur, título por palabras, botones con relleno, nav de vidrio, foco de luz, paralaje). Tipografía: Bricolage Grotesque (títulos y cifras) e Instrument Sans (texto), alojadas en `fonts/`.
+
+## Dónde se guardan los pedidos
+
+Cada pedido que sale del menú se guarda en **Netlify Blobs** (almacenamiento del propio sitio, sin cuentas extra). Se ve en el panel:
+
+**/menu/magma/pedidos/** (no aparece en Google). Pide la clave que está en Netlify como `MAGMA_ADMIN_TOKEN`.
+
+- El panel muestra lo pedido, el cliente, el total y permite marcar el estado: nuevo, preparando, listo, entregado o cancelado. Se actualiza solo cada 30 segundos y descarga todo en CSV.
+- Los pedidos reales (deploy de producción) van al almacén `magma-orders`. Los de previews y pruebas van a `magma-orders-test`, para que una prueba no ensucie las ventas reales.
+- Si la API no responde, el cliente igual completa su pedido por WhatsApp, pero ese pedido no queda guardado.
+- Los datos del cliente (nombre, dirección, notas) quedan guardados. Avísalo en la política de privacidad del negocio.
+- Para cambiar la clave: Netlify, Site configuration, Environment variables, `MAGMA_ADMIN_TOKEN`, y vuelve a desplegar.

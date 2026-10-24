@@ -1,0 +1,8 @@
+{
+  "name": "estudiographica-functions",
+  "private": true,
+  "description": "Dependencias de las funciones de Netlify (pedidos de Magma Wings).",
+  "dependencies": {
+    "@netlify/blobs": "^8.1.0"
+  }
+}

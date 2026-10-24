@@ -30,6 +30,11 @@ node_bundler = "esbuild"
   to = "/.netlify/functions/magma-order"
   status = 200
 
+[[redirects]]
+  from = "/api/magma/orders"
+  to = "/.netlify/functions/magma-orders"
+  status = 200
+
 [[headers]]
   for = "/menu/magma/fonts/*"
   [headers.values]

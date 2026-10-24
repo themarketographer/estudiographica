@@ -21,6 +21,8 @@
   var removed = null;
   var openCount = 0;
   var sending = false;
+  var shownTotal = 0;
+  var tickRaf = 0;
 
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   var sheetMode = window.matchMedia('(max-width: 759px)');
@@ -306,7 +308,8 @@
     var bar = $('#cartBar');
     var on = t.count > 0;
     $('#cartCount').textContent = t.count;
-    $('#cartTotal').textContent = money(t.total);
+    tickNumber($('#cartTotal'), shownTotal, t.total);
+    shownTotal = t.total;
     $('#cartStatus').textContent = on ? t.count + (t.count === 1 ? ' producto' : ' productos') + ' en tu pedido, ' + money(t.total) : 'Tu pedido está vacío';
     bar.classList.toggle('on', on);
     if (on) bar.removeAttribute('inert'); else bar.setAttribute('inert', '');
@@ -316,6 +319,45 @@
     nc.hidden = !on;
     $('#navCart').setAttribute('aria-label', on ? 'Ver pedido, ' + t.count + (t.count === 1 ? ' producto' : ' productos') : 'Ver pedido');
     renderBadges();
+  }
+  /* Number ticker: el total cuenta hasta su nuevo valor (cifras tabulares, no se mueve el layout). */
+  function tickNumber(el, from, to) {
+    cancelAnimationFrame(tickRaf);
+    if (reduceMotion.matches || from === to || !el.isConnected) { el.textContent = money(to); return; }
+    var t0 = performance.now(), dur = 380;
+    (function step(now) {
+      var k = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - k, 3);
+      el.textContent = money(Math.round(from + (to - from) * e));
+      if (k < 1) tickRaf = requestAnimationFrame(step);
+    })(t0);
+  }
+  /* Continuidad: un punto de brasa viaja del botón Agregar al carrito de la barra superior. */
+  function flyToCart(fromEl) {
+    var fly = $('#fly'), cart = $('#navCart');
+    if (reduceMotion.matches || !fromEl || !fly || !fly.showPopover || !fly.animate) return;
+    var a = fromEl.getBoundingClientRect(), b = cart.getBoundingClientRect();
+    var x0 = a.left + a.width / 2 - 11, y0 = a.top + a.height / 2 - 11;
+    var x1 = b.left + b.width / 2 - 11, y1 = b.top + b.height / 2 - 11;
+    try { fly.showPopover(); } catch (e) { return; }
+    var arc = Math.min(120, Math.abs(y1 - y0) * 0.25);
+    var anim = fly.animate([
+      { transform: 'translate(' + x0 + 'px,' + y0 + 'px) scale(1.3)', opacity: 1 },
+      { transform: 'translate(' + ((x0 + x1) / 2) + 'px,' + (Math.min(y0, y1) - arc) + 'px) scale(1)', opacity: 1, offset: 0.55 },
+      { transform: 'translate(' + x1 + 'px,' + y1 + 'px) scale(.45)', opacity: 0.9 }
+    ], { duration: 520, easing: 'cubic-bezier(.5,0,.2,1)' });
+    anim.onfinish = anim.oncancel = function () {
+      try { fly.hidePopover(); } catch (e) {}
+      if (cart.animate) cart.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.18)', offset: 0.4 }, { transform: 'scale(1)' }], { duration: 300, easing: 'cubic-bezier(.23,1,.32,1)' });
+    };
+  }
+  function renderTicker() {
+    var track = $('#tickerTrack');
+    if (!track) return;
+    var copy = function (hidden) {
+      return h('ul', { 'aria-hidden': hidden ? 'true' : null }, menu.sauces.map(function (s) { return h('li', { text: s.name }); }));
+    };
+    track.appendChild(copy(false));
+    track.appendChild(copy(true));
   }
   function renderBadges() {
     $$('.row').forEach(function (row) {
@@ -490,7 +532,7 @@
       var list = lines.filter(function (l) { return l.key !== st.editKey; }).map(P.toRaw);
       commit(list.concat([raw]));
       emit('edit_cart_item', { id: st.product.id });
-    } else addToCart(raw);
+    } else { addToCart(raw); flyToCart($('#itemFoot .btn')); }
     var pf = load(PREF_KEY) || {};
     ['salsa', 'papas'].forEach(function (g) { if (sel[g] && sel[g][0]) pf[g] = sel[g][0]; });
     store(PREF_KEY, pf);
@@ -715,9 +757,6 @@
             h('h2', { class: 'rv', id: p.id + '-h', text: p.title }),
             h('p', { class: 'sub rv', style: '--d:100ms', text: p.sub }),
             rows,
-            p.showSauces ? h('div', { class: 'sauces rv', style: '--d:300ms' },
-              h('p', { class: 'sauces-h', text: menu.sauces.length + ' salsas para elegir' }),
-              h('ul', {}, menu.sauces.map(function (s) { return h('li', { text: s.name }); }))) : null,
             h('p', { class: 'note rv', style: '--d:350ms', text: 'Eliges papas y salsas al armar tu pedido.' })))));
     });
     main.removeAttribute('aria-busy');
@@ -795,6 +834,7 @@
     menu = m;
     document.title = 'Menú ' + m.brand.name;
     renderFooter();
+    renderTicker();
     renderMenu();
     restoreFromStorage();
     renderBar();

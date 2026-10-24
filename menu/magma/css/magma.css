@@ -74,6 +74,7 @@ p{text-wrap:pretty}
 
 /* ---------- Introducción compacta: el menú empieza en la primera pantalla ---------- */
 .intro{position:relative;isolation:isolate;overflow:clip;padding:calc(92px + env(safe-area-inset-top,0px)) 0 var(--s6)}
+.intro-grid{display:grid;grid-template-columns:1fr;gap:var(--s5);align-items:center}
 .intro h1{font:800 clamp(48px,9vw,84px)/.92 var(--display);font-stretch:75%;letter-spacing:-.012em}
 .intro .lead{margin-top:var(--s3);max-width:44ch;font-size:clamp(16px,1.8vw,19px);line-height:1.5;color:var(--muted)}
 .intro .status{margin-top:var(--s3);font:500 15px var(--body);color:var(--muted);display:flex;align-items:center;gap:10px}
@@ -81,7 +82,33 @@ p{text-wrap:pretty}
 .intro .status.open::before{background:var(--wa);box-shadow:0 0 0 4px rgba(37,211,102,.22)}
 .orb-a{width:min(70vw,560px);aspect-ratio:1;right:-14%;top:-30%;background:radial-gradient(circle,rgba(244,148,12,.26),transparent 66%)}
 .cta-row{display:flex;flex-wrap:wrap;gap:var(--s3)}
-@media (min-width:900px){.intro{padding-top:120px;padding-bottom:var(--s7)}}
+/* Logo grande: flota y respira con un resplandor de brasa */
+.intro-logo,.foot-brand{position:relative;display:grid;place-items:center}
+.intro-logo img,.foot-brand img{position:relative;width:100%;height:auto;aspect-ratio:531/208;animation:float 7s ease-in-out infinite}
+.intro-logo{display:none}
+.glow{position:absolute;inset:-18%;border-radius:50%;background:radial-gradient(circle,rgba(244,148,12,.4),rgba(189,29,31,.18) 45%,transparent 68%);opacity:.7;animation:breathe 4.5s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-8px)}}
+@keyframes breathe{50%{opacity:1;transform:scale(1.08)}}
+@media (min-width:900px){
+  .intro{padding-top:120px;padding-bottom:var(--s7)}
+  .intro-grid{grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);gap:var(--s8)}
+  .intro-logo{display:grid;max-width:420px;margin-left:auto;width:100%}
+}
+
+/* Brasas: partículas que suben (solo corren mientras la sección se ve) */
+.embers{position:absolute;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+.embers i{position:absolute;bottom:-12px;left:var(--x);width:var(--s);height:var(--s);border-radius:50%;background:radial-gradient(circle,#ffd27a,var(--lava) 55%,transparent 72%);opacity:0;animation:ember var(--d) linear var(--w) infinite;animation-play-state:paused;will-change:transform,opacity}
+.embers.is-live i{animation-play-state:running}
+@keyframes ember{0%{transform:translate(0,0) scale(1);opacity:0}12%{opacity:.9}70%{opacity:.5}100%{transform:translate(var(--dx),-340px) scale(.3);opacity:0}}
+
+/* Cinta de salsas (marquee): marca las 7 salsas antes de entrar a los platos */
+.ticker{background:var(--lava);color:var(--ember-dark);overflow:hidden;border-block:1.5px solid rgba(38,12,13,.35)}
+.ticker-track{display:flex;width:max-content;animation:marquee 46s linear infinite}
+.ticker ul{display:flex;flex:none;list-style:none;padding:0}
+.ticker li{display:flex;align-items:center;font:800 24px/1 var(--display);font-stretch:75%;letter-spacing:.01em;text-transform:uppercase;padding:14px 0;white-space:nowrap}
+.ticker li::after{content:"";width:8px;height:8px;margin-inline:var(--s5);border-radius:50%;background:var(--ember-dark)}
+@keyframes marquee{to{transform:translateX(-50%)}}
+@media (hover:hover) and (pointer:fine){.ticker:hover .ticker-track{animation-play-state:paused}}
 
 /* ---------- Botones: relleno que sube, atracción magnética, carga ---------- */
 .btn{--bg:var(--lava);--tx:var(--ember-dark);--sw:var(--cream);--hv:var(--ember-dark);position:relative;isolation:isolate;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:56px;padding:0 28px;border:2px solid var(--bg);border-radius:999px;background:var(--bg);color:var(--tx);font:600 17px/1.1 var(--body);letter-spacing:0;text-decoration:none;white-space:nowrap;cursor:pointer;translate:var(--mx2,0px) var(--my2,0px);transition:color .35s var(--ease),transform .2s var(--ease-out),border-color .35s var(--ease),opacity .25s;--ring:var(--cream)}
@@ -149,21 +176,27 @@ p{text-wrap:pretty}
 .note{margin-top:var(--s5);font:500 16px/1.5 var(--body);max-width:44ch;opacity:.85}
 
 @media (min-width:900px){
-  .prod-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);min-height:clamp(460px,66vh,620px);max-width:none;padding:0}
-  .photo{order:0;aspect-ratio:auto;max-height:none;height:100%;
-    clip-path:polygon(0 0,100% 0,calc(100% - 40px) 6.25%,100% 12.5%,calc(100% - 40px) 18.75%,100% 25%,calc(100% - 40px) 31.25%,100% 37.5%,calc(100% - 40px) 43.75%,100% 50%,calc(100% - 40px) 56.25%,100% 62.5%,calc(100% - 40px) 68.75%,100% 75%,calc(100% - 40px) 81.25%,100% 87.5%,calc(100% - 40px) 93.75%,100% 100%,0 100%)}
-  .prod.flip .photo{order:1;clip-path:polygon(40px 0,0 6.25%,40px 12.5%,0 18.75%,40px 25%,0 31.25%,40px 37.5%,0 43.75%,40px 50%,0 56.25%,40px 62.5%,0 68.75%,40px 75%,0 81.25%,40px 87.5%,0 93.75%,40px 100%,100% 100%,100% 0)}
-  .txt{align-self:center;padding:var(--s7) clamp(32px,5vw,88px)}
+  .prod-grid{max-width:1240px;margin-inline:auto;padding:var(--s8) var(--gutter);grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:var(--s8);align-items:center}
+  .photo{order:0;aspect-ratio:4/3;max-height:none;height:auto;border-radius:28px;
+    clip-path:polygon(0 0,100% 0,calc(100% - 36px) 6.25%,100% 12.5%,calc(100% - 36px) 18.75%,100% 25%,calc(100% - 36px) 31.25%,100% 37.5%,calc(100% - 36px) 43.75%,100% 50%,calc(100% - 36px) 56.25%,100% 62.5%,calc(100% - 36px) 68.75%,100% 75%,calc(100% - 36px) 81.25%,100% 87.5%,calc(100% - 36px) 93.75%,100% 100%,0 100%)}
+  .prod.flip .photo{order:1;clip-path:polygon(36px 0,0 6.25%,36px 12.5%,0 18.75%,36px 25%,0 31.25%,36px 37.5%,0 43.75%,36px 50%,0 56.25%,36px 62.5%,0 68.75%,36px 75%,0 81.25%,36px 87.5%,0 93.75%,36px 100%,100% 100%,100% 0)}
+  .txt{padding:0}
 }
+@media (hover:hover) and (pointer:fine){.photo img{transition:scale .9s var(--ease)}.photo:hover img{scale:1.04}}
 
-/* ---------- Cierre: solo un recordatorio chico ---------- */
-.foot{background:var(--ember-dark);padding:var(--s7) 0 calc(var(--s7) + env(safe-area-inset-bottom,0px));border-top:1.5px solid var(--line);color:var(--muted);font-size:15px}
-.foot p{margin:0 0 var(--s2);max-width:none}
+/* ---------- Cierre: marca grande y un recordatorio chico ---------- */
+.foot{position:relative;isolation:isolate;overflow:clip;background:var(--ember-dark);padding:var(--s8) 0 calc(var(--s7) + env(safe-area-inset-bottom,0px));border-top:1.5px solid var(--line);color:var(--muted);font-size:15px;text-align:center}
+.foot p{margin:0 auto var(--s2);max-width:none}
 .foot a{color:var(--cream);text-underline-offset:3px;text-decoration-color:var(--line-strong)}
 .foot-help a{font-weight:600}
-.foot-meta{display:flex;align-items:center;gap:var(--s2)}
+.foot-brand{width:min(300px,70%);margin:0 auto var(--s4)}
+.foot-tag{font:800 28px/1 var(--display);font-stretch:75%;letter-spacing:-.01em;color:var(--lava);margin-bottom:var(--s6) !important}
+.foot-meta{display:flex;align-items:center;justify-content:center;gap:var(--s2)}
 .foot-meta .ic{width:18px;height:18px;color:var(--lava)}
 .foot .draft{margin-top:var(--s5);font-size:13px;opacity:.8}
+
+/* Punto de brasa que viaja al carrito */
+.fly{position:fixed;inset:auto;left:0;top:0;margin:0;padding:0;border:0;width:22px;height:22px;border-radius:50%;background:radial-gradient(circle,#ffe2a6,var(--lava) 60%);box-shadow:0 0 18px 6px rgba(244,148,12,.55);pointer-events:none;overflow:visible}
 
 /* ---------- Dock del pedido (vidrio) ---------- */
 .dock{position:fixed;left:50%;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:60;width:min(520px,calc(100% - 28px));display:flex;align-items:center;gap:var(--s4);padding:8px 22px 8px 8px;border-radius:999px;background:rgba(244,148,12,.86);color:var(--ember-dark);-webkit-backdrop-filter:blur(18px) saturate(180%);backdrop-filter:blur(18px) saturate(180%);border:1px solid rgba(255,255,255,.4);box-shadow:0 18px 40px -14px rgba(0,0,0,.65),inset 0 1px 0 rgba(255,255,255,.55);--ring:var(--cream);
@@ -297,6 +330,11 @@ dialog.sheet.open::backdrop{opacity:1}
 
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
+  .embers{display:none}
+  .intro-logo img,.foot-brand img,.glow{animation:none}
+  .ticker-track{animation:none;width:auto;flex-wrap:wrap;justify-content:center}
+  .ticker ul[aria-hidden]{display:none}
+  .photo:hover img{scale:1}
   .photo img{transform:none}
   .w,.mark,.line,.done .tick,.done .tick path,.step.current .step-num{animation:none}
   .mark{background-size:100% .12em}
