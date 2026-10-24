@@ -192,7 +192,7 @@
     } };
   }
 
-  /* Sin emojis: los de 4 bytes (🔥, 📱...) llegan rotos a WhatsApp Web en algunos navegadores al pasar por la redirección de wa.me.
+  /* Sin emojis: los de 4 bytes llegan rotos a WhatsApp Web en algunos navegadores al pasar por la redirección de wa.me.
      El orden, las negritas y las sangrías hacen el trabajo de ordenar. */
   function buildMessage(menu, order) {
     var cur = menu.brand.currency;
