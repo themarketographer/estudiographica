@@ -146,17 +146,40 @@
     return (prefix || 'MW') + '-' + s;
   }
 
+  /* Celular a solo dígitos con código de país. En Bolivia los móviles tienen 8 dígitos y empiezan con 6 o 7. */
+  function normalizePhone(v) {
+    var d = String(v == null ? '' : v).replace(/\D/g, '');
+    if (d.indexOf('00') === 0) d = d.slice(2);
+    if (d.length === 8 && /^[67]/.test(d)) d = '591' + d;
+    return d;
+  }
+  function validPhone(d) {
+    if (d.indexOf('591') === 0) return d.length === 11 && /^[67]/.test(d.slice(3));
+    return d.length >= 10 && d.length <= 15;
+  }
+
   function cleanCustomer(menu, raw) {
     raw = raw && typeof raw === 'object' ? raw : {};
+    var svc = menu.service || {};
     var mode = raw.mode === 'delivery' ? 'delivery' : 'pickup';
-    var name = text(raw.name, 60);
+    var firstName = text(raw.firstName, 40);
+    var lastName = text(raw.lastName, 40);
+    var email = text(raw.email, 120).toLowerCase();
+    var phone = normalizePhone(raw.phone);
     var address = text(raw.address, 160);
     var notes = text(raw.notes, 240);
-    if (!name) return { ok: false, error: 'Falta tu nombre.', field: 'name' };
-    if (mode === 'delivery' && !(menu.service && menu.service.delivery)) return { ok: false, error: 'Por ahora solo hay recojo en el local.', field: 'mode' };
-    if (mode === 'pickup' && menu.service && menu.service.pickup === false) return { ok: false, error: 'Por ahora solo hay entrega a domicilio.', field: 'mode' };
+    if (!firstName) return { ok: false, error: 'Falta tu nombre.', field: 'firstName' };
+    if (!lastName) return { ok: false, error: 'Falta tu apellido.', field: 'lastName' };
+    if (!validPhone(phone)) return { ok: false, error: 'Escribe tu celular, por ejemplo 76980828.', field: 'phone' };
+    if (email ? !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email) : !!svc.requireEmail) return { ok: false, error: email ? 'Revisa tu correo, parece incompleto.' : 'Falta tu correo.', field: 'email' };
+    if (mode === 'delivery' && !svc.delivery) return { ok: false, error: 'Por ahora solo hay recojo en el local.', field: 'mode' };
+    if (mode === 'pickup' && svc.pickup === false) return { ok: false, error: 'Por ahora solo hay entrega a domicilio.', field: 'mode' };
     if (mode === 'delivery' && !address) return { ok: false, error: 'Falta la dirección o una referencia para la entrega.', field: 'address' };
-    return { ok: true, customer: { name: name, mode: mode, address: mode === 'delivery' ? address : '', notes: notes } };
+    return { ok: true, customer: {
+      firstName: firstName, lastName: lastName, name: firstName + ' ' + lastName,
+      email: email, phone: phone, consent: raw.consent === true,
+      mode: mode, address: mode === 'delivery' ? address : '', notes: notes
+    } };
   }
 
   function buildMessage(menu, order) {
@@ -164,6 +187,8 @@
     var out = [];
     out.push('*Pedido ' + order.orderId + '* · ' + menu.brand.name);
     out.push('Nombre: ' + order.customer.name);
+    out.push('Celular: +' + order.customer.phone);
+    if (order.customer.email) out.push('Correo: ' + order.customer.email);
     out.push(order.customer.mode === 'delivery' ? 'Entrega a domicilio' : 'Recojo en el local');
     if (order.customer.address) out.push('Dirección: ' + order.customer.address);
     out.push('');
@@ -209,6 +234,7 @@
     toRaw: toRaw,
     makeOrderId: makeOrderId,
     cleanCustomer: cleanCustomer,
+    normalizePhone: normalizePhone,
     buildMessage: buildMessage,
     whatsappUrl: whatsappUrl,
     validateOrder: validateOrder

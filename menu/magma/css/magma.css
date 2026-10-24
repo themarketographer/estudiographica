@@ -101,15 +101,6 @@ p{text-wrap:pretty}
 .embers.is-live i{animation-play-state:running}
 @keyframes ember{0%{transform:translate(0,0) scale(1);opacity:0}12%{opacity:.9}70%{opacity:.5}100%{transform:translate(var(--dx),-340px) scale(.3);opacity:0}}
 
-/* Cinta de salsas (marquee): marca las 7 salsas antes de entrar a los platos */
-.ticker{background:var(--lava);color:var(--ember-dark);overflow:hidden;border-block:1.5px solid rgba(38,12,13,.35)}
-.ticker-track{display:flex;width:max-content;animation:marquee 46s linear infinite}
-.ticker ul{display:flex;flex:none;list-style:none;padding:0}
-.ticker li{display:flex;align-items:center;font:800 24px/1 var(--display);font-stretch:75%;letter-spacing:.01em;text-transform:uppercase;padding:14px 0;white-space:nowrap}
-.ticker li::after{content:"";width:8px;height:8px;margin-inline:var(--s5);border-radius:50%;background:var(--ember-dark)}
-@keyframes marquee{to{transform:translateX(-50%)}}
-@media (hover:hover) and (pointer:fine){.ticker:hover .ticker-track{animation-play-state:paused}}
-
 /* ---------- Botones: relleno que sube, atracción magnética, carga ---------- */
 .btn{--bg:var(--lava);--tx:var(--ember-dark);--sw:var(--cream);--hv:var(--ember-dark);position:relative;isolation:isolate;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:56px;padding:0 28px;border:2px solid var(--bg);border-radius:999px;background:var(--bg);color:var(--tx);font:600 17px/1.1 var(--body);letter-spacing:0;text-decoration:none;white-space:nowrap;cursor:pointer;translate:var(--mx2,0px) var(--my2,0px);transition:color .35s var(--ease),transform .2s var(--ease-out),border-color .35s var(--ease),opacity .25s;--ring:var(--cream)}
 .btn::before{content:"";position:absolute;inset:-2px;z-index:-1;background:var(--sw);transform:translateY(101%);border-radius:50% 50% 0 0/60% 60% 0 0;transition:transform .55s var(--ease),border-radius .55s var(--ease)}
@@ -309,8 +300,12 @@ dialog.sheet.open::backdrop{opacity:1}
 .form{display:grid;gap:var(--s5)}
 .f label,.f .lab{display:block;font:700 16px var(--body);margin-bottom:var(--s2)}
 .f label small,.f .lab small{font:400 14px var(--body);color:var(--muted)}
-.f input[type=text],.f textarea{width:100%;background:var(--ember-dark);border:1.5px solid var(--line-strong);border-radius:14px;padding:14px 16px;font-size:17px;line-height:1.4;transition:border-color .16s ease,box-shadow .2s ease}
+.f input:not([type=checkbox]):not([type=radio]),.f textarea{width:100%;background:var(--ember-dark);border:1.5px solid var(--line-strong);border-radius:14px;padding:14px 16px;font-size:17px;line-height:1.4;transition:border-color .16s ease,box-shadow .2s ease}
 .f textarea{resize:vertical;min-height:84px}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:var(--s3)}
+.consent{display:flex;gap:var(--s3);align-items:flex-start;cursor:pointer;font:500 15px/1.45 var(--body)}
+.consent input{width:22px;height:22px;flex:none;margin-top:2px;accent-color:var(--lava)}
+.consent small{display:block;margin-top:var(--s1);font:400 13px/1.45 var(--body);color:var(--muted)}
 .f input:focus,.f textarea:focus{outline:none;border-color:var(--lava);box-shadow:0 0 0 3px rgba(244,148,12,.28)}
 .f.err input,.f.err textarea{border-color:var(--danger)}
 .item-note{margin-bottom:var(--s2)}
@@ -332,8 +327,6 @@ dialog.sheet.open::backdrop{opacity:1}
   html{scroll-behavior:auto}
   .embers{display:none}
   .intro-logo img,.foot-brand img,.glow{animation:none}
-  .ticker-track{animation:none;width:auto;flex-wrap:wrap;justify-content:center}
-  .ticker ul[aria-hidden]{display:none}
   .photo:hover img{scale:1}
   .photo img{transform:none}
   .w,.mark,.line,.done .tick,.done .tick path,.step.current .step-num{animation:none}

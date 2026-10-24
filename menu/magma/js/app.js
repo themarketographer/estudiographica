@@ -69,6 +69,14 @@
     try { return JSON.parse(localStorage.getItem(key)); } catch (e) { return null; }
   }
   function money(n) { return P.money(n, menu ? menu.brand.currency : 'Bs'); }
+  function cookie(n) {
+    var m = document.cookie.match(new RegExp('(?:^|; )' + n + '=([^;]*)'));
+    return m ? decodeURIComponent(m[1]) : '';
+  }
+  /* Si llegó desde un anuncio de Meta, el parámetro fbclid se convierte en la cookie fbc con el formato oficial. */
+  function fbcFromUrl() {
+    try { var id = new URLSearchParams(location.search).get('fbclid'); return id ? 'fb.1.' + Date.now() + '.' + id : ''; } catch (e) { return ''; }
+  }
   function fetchTimeout(url, opts, ms) {
     var ctrl = typeof AbortController === 'function' ? new AbortController() : null;
     var t = setTimeout(function () { if (ctrl) ctrl.abort(); }, ms);
@@ -82,6 +90,7 @@
 
   var listeners = {};
   var GA = { item_view: 'view_item', add_to_cart: 'add_to_cart', remove_from_cart: 'remove_from_cart', cart_open: 'view_cart', checkout_start: 'begin_checkout', order_sent: 'generate_lead' };
+  var FBC = { category_select: 'MagmaCategoria', whatsapp_click: 'MagmaWhatsApp', order_fallback: 'MagmaPedidoSinServidor', undo_remove: 'MagmaDeshacer' };
   var FB = { item_view: 'ViewContent', add_to_cart: 'AddToCart', checkout_start: 'InitiateCheckout', order_sent: 'Lead' };
 
   function items(ls) {
@@ -98,12 +107,15 @@
       if (typeof window.gtag === 'function' && GA[name]) {
         window.gtag('event', GA[name], { currency: 'BOB', value: value, items: detail.items || [] });
       }
-      if (typeof window.fbq === 'function' && FB[name]) {
-        window.fbq('track', FB[name], {
+      if (typeof window.fbq === 'function') {
+        var fbData = {
           currency: 'BOB', value: value, content_type: 'product',
           content_ids: (detail.items || []).map(function (i) { return i.item_id; }),
           num_items: detail.count || undefined
-        });
+        };
+        /* El eventID (número de pedido) permite a Meta unir el evento del navegador con el del servidor. */
+        if (FB[name]) window.fbq('track', FB[name], fbData, detail.orderId ? { eventID: detail.orderId } : undefined);
+        else if (FBC[name]) window.fbq('trackCustom', FBC[name], fbData);
       }
     } catch (e) {}
   }
@@ -349,15 +361,6 @@
       try { fly.hidePopover(); } catch (e) {}
       if (cart.animate) cart.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.18)', offset: 0.4 }, { transform: 'scale(1)' }], { duration: 300, easing: 'cubic-bezier(.23,1,.32,1)' });
     };
-  }
-  function renderTicker() {
-    var track = $('#tickerTrack');
-    if (!track) return;
-    var copy = function (hidden) {
-      return h('ul', { 'aria-hidden': hidden ? 'true' : null }, menu.sauces.map(function (s) { return h('li', { text: s.name }); }));
-    };
-    track.appendChild(copy(false));
-    track.appendChild(copy(true));
   }
   function renderBadges() {
     $$('.row').forEach(function (row) {
@@ -617,11 +620,18 @@
     var saved = load(CUST_KEY) || {};
     var both = menu.service.pickup !== false && menu.service.delivery;
     var mode = saved.mode === 'delivery' && menu.service.delivery ? 'delivery' : (menu.service.pickup === false ? 'delivery' : 'pickup');
-    var name = h('input', { type: 'text', id: 'fName', name: 'name', autocomplete: 'name', maxlength: '60', value: saved.name || '', 'aria-describedby': 'eName', enterkeyhint: 'next' });
-    var addr = h('textarea', { id: 'fAddr', name: 'address', autocomplete: 'street-address', maxlength: '160', rows: '2', 'aria-describedby': 'eAddr', placeholder: 'Calle, número y una referencia' });
+    var field = function (id, label, attrs, hint) {
+      var input = h('input', Object.assign({ type: 'text', id: id, name: id, 'aria-describedby': 'e-' + id, maxlength: '120' }, attrs));
+      return h('div', { class: 'f', id: 'row-' + id }, h('label', { for: id }, label, hint ? h('small', { text: ' ' + hint }) : null), input, h('p', { class: 'field-err', id: 'e-' + id, role: 'alert', hidden: true }));
+    };
+    var fFirst = field('firstName', 'Nombre', { autocomplete: 'given-name', value: saved.firstName || '', enterkeyhint: 'next' });
+    var fLast = field('lastName', 'Apellido', { autocomplete: 'family-name', value: saved.lastName || '', enterkeyhint: 'next' });
+    var fPhone = field('phone', 'Celular', { type: 'tel', inputmode: 'tel', autocomplete: 'tel', value: saved.phone ? saved.phone.replace(/^591/, '') : '', placeholder: '7XXXXXXX', maxlength: '20', enterkeyhint: 'next' }, '(WhatsApp)');
+    var fEmail = field('email', 'Correo', { type: 'email', inputmode: 'email', autocomplete: 'email', value: saved.email || '', placeholder: 'tu@correo.com', enterkeyhint: 'next' }, menu.service.requireEmail ? '' : '(opcional)');
+    var addr = h('textarea', { id: 'address', name: 'address', autocomplete: 'street-address', maxlength: '160', rows: '2', 'aria-describedby': 'e-address', placeholder: 'Calle, número y una referencia' });
     addr.value = saved.address || '';
-    var notes = h('textarea', { id: 'fNotes', name: 'notes', maxlength: '240', rows: '2', placeholder: 'Más servilletas, tocar el timbre, lo que necesites' });
-    var fAddr = h('div', { class: 'f', id: 'rowAddr' }, h('label', { for: 'fAddr' }, 'Dirección', h('br'), h('small', { text: menu.service.deliveryNote })), addr, h('p', { class: 'field-err', id: 'eAddr', role: 'alert', hidden: true }));
+    var notes = h('textarea', { id: 'notes', name: 'notes', maxlength: '240', rows: '2', placeholder: 'Más servilletas, tocar el timbre, lo que necesites' });
+    var fAddr = h('div', { class: 'f', id: 'row-address' }, h('label', { for: 'address' }, 'Dirección', h('br'), h('small', { text: menu.service.deliveryNote })), addr, h('p', { class: 'field-err', id: 'e-address', role: 'alert', hidden: true }));
     var seg = null;
     if (both) {
       var mk = function (val, label) {
@@ -637,10 +647,17 @@
       seg = h('div', { class: 'f' }, h('span', { class: 'lab', text: '¿Cómo lo recibes?' }), h('div', { class: 'seg' }, mk('pickup', 'Recojo en el local'), mk('delivery', 'Entrega')));
     }
     fAddr.hidden = mode !== 'delivery';
-    var form = h('form', { class: 'form', id: 'orderForm', novalidate: true, onsubmit: function (e) { e.preventDefault(); sendOrder(function () { return { name: name.value, mode: mode, address: addr.value, notes: notes.value }; }); } },
-      h('div', { class: 'f', id: 'rowName' }, h('label', { for: 'fName', text: 'Tu nombre' }), name, h('p', { class: 'field-err', id: 'eName', role: 'alert', hidden: true })),
+    var consent = h('input', { type: 'checkbox', id: 'consent', name: 'consent' });
+    var consentRow = h('label', { class: 'consent', for: 'consent' }, consent,
+      h('span', {}, 'Quiero recibir ofertas y novedades de ' + menu.brand.name + '. ', h('small', { text: 'Usamos tus datos para tu pedido y, si aceptas, para ofertas y anuncios. Puedes pedir que los borremos cuando quieras.' })));
+    var form = h('form', { class: 'form', id: 'orderForm', novalidate: true, onsubmit: function (e) { e.preventDefault(); sendOrder(function () {
+      return { firstName: fFirst.querySelector('input').value, lastName: fLast.querySelector('input').value, phone: fPhone.querySelector('input').value, email: fEmail.querySelector('input').value,
+        consent: consent.checked, mode: mode, address: addr.value, notes: notes.value };
+    }); } },
+      h('div', { class: 'pair' }, fFirst, fLast), fPhone, fEmail,
       seg, fAddr,
-      h('div', { class: 'f' }, h('label', { for: 'fNotes' }, 'Notas del pedido ', h('small', { text: '(opcional)' })), notes),
+      h('div', { class: 'f' }, h('label', { for: 'notes' }, 'Notas del pedido ', h('small', { text: '(opcional)' })), notes),
+      consentRow,
       h('div', { class: 'sum' }, h('span', { text: 'Total productos' }), h('b', { text: money(totals().total) })));
     form.addEventListener('input', function (e) {
       var row = e.target.closest && e.target.closest('.f');
@@ -654,14 +671,14 @@
   }
 
   function fieldError(field, msg) {
-    var map = { name: ['rowName', 'eName', 'fName'], address: ['rowAddr', 'eAddr', 'fAddr'] };
     $$('.f.err').forEach(function (x) { x.classList.remove('err'); });
     $$('.field-err', $('#cartBody')).forEach(function (x) { x.hidden = true; });
-    var m = map[field];
-    if (!m) { toast(msg); return; }
-    $('#' + m[0]).classList.add('err');
-    var e = $('#' + m[1]); e.textContent = msg; e.hidden = false;
-    $('#' + m[2]).focus();
+    var row = field && $('#row-' + field);
+    if (!row) { toast(msg); return; }
+    row.classList.add('err');
+    var e = $('#e-' + field); e.textContent = msg; e.hidden = false;
+    var inp = $('input, textarea', row);
+    if (inp) inp.focus();
   }
 
   function setSending(on) {
@@ -677,8 +694,8 @@
     if (sending) return;
     var c = P.cleanCustomer(menu, read());
     if (!c.ok) return fieldError(c.field, c.error);
-    store(CUST_KEY, { name: c.customer.name, mode: c.customer.mode, address: c.customer.address });
-    var payload = { lines: rawLines(), customer: c.customer };
+    store(CUST_KEY, { firstName: c.customer.firstName, lastName: c.customer.lastName, phone: c.customer.phone, email: c.customer.email, mode: c.customer.mode, address: c.customer.address });
+    var payload = { lines: rawLines(), customer: c.customer, meta: { fbp: cookie('_fbp'), fbc: cookie('_fbc') || fbcFromUrl() } };
     emit('order_submit', { value: totals().total, items: items(lines), count: totals().count, mode: c.customer.mode });
     setSending(true);
     fetchTimeout('/api/magma/order', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }, 6000)
@@ -711,6 +728,10 @@
     setSending(false);
     cartView = 'done';
     renderCart();
+    /* Coincidencia avanzada: solo con permiso del cliente, el píxel recibe sus datos (Meta los convierte en hash). */
+    if (customer.consent && typeof window.fbq === 'function' && menu.tracking && menu.tracking.metaPixel) {
+      try { window.fbq('init', menu.tracking.metaPixel, { em: customer.email || undefined, ph: customer.phone, fn: customer.firstName.toLowerCase(), ln: customer.lastName.toLowerCase(), country: 'bo' }); } catch (e) {}
+    }
     emit('order_sent', ev);
     setTimeout(function () { if (cartView === 'done') window.location.href = d.whatsappUrl; }, reduceMotion.matches ? 0 : 900);
   }
@@ -834,7 +855,6 @@
     menu = m;
     document.title = 'Menú ' + m.brand.name;
     renderFooter();
-    renderTicker();
     renderMenu();
     restoreFromStorage();
     renderBar();

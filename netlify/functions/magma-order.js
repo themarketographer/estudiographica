@@ -6,6 +6,9 @@
 const menu = require('../../menu/magma/menu.json');
 const Pricing = require('../../menu/magma/js/pricing.js');
 const Store = require('./lib-magma/store.js');
+const Meta = require('./lib-magma/meta.js');
+
+const FB_RE = /^fb\.\d\.\d+\.[\w-]{1,100}$/;
 
 const MAX_BODY = 20000;
 
@@ -31,6 +34,7 @@ exports.handler = async function (event) {
   const result = Pricing.validateOrder(menu, payload);
   if (!result.ok) return reply(422, { ok: false, error: result.error, field: result.field || null });
 
+  const h = event.headers || {};
   const order = result.order;
   const createdAt = new Date().toISOString();
   const record = {
@@ -45,10 +49,19 @@ exports.handler = async function (event) {
     currency: menu.brand.currency,
     lines: order.lines.map((l) => ({ name: l.name, portion: l.portionLabel, qty: l.qty, unitPrice: l.unitPrice, total: l.total, choices: l.choices, note: l.note })),
     message: order.message,
-    context: process.env.CONTEXT || 'dev'
+    context: process.env.CONTEXT || 'dev',
+    // Datos técnicos para la API de Conversiones de Meta (coinciden el evento del navegador y el del servidor).
+    meta: {
+      ip: String(h['x-nf-client-connection-ip'] || String(h['x-forwarded-for'] || '').split(',')[0] || '').trim().slice(0, 64),
+      ua: String(h['user-agent'] || '').slice(0, 300),
+      fbp: FB_RE.test(String((payload.meta || {}).fbp || '')) ? payload.meta.fbp : '',
+      fbc: FB_RE.test(String((payload.meta || {}).fbc || '')) ? payload.meta.fbc : ''
+    }
   };
   // Si no se puede guardar, el cliente igual puede pedir por WhatsApp.
   const save = await Store.saveOrder(event, record);
+  const sourceUrl = 'https://' + (h.host || 'estudiographica.com') + '/menu/magma/';
+  const capi = await Meta.sendEvent('Lead', record, sourceUrl);
   const hook = process.env.ORDER_WEBHOOK_URL;
   if (hook) {
     try {
@@ -84,6 +97,7 @@ exports.handler = async function (event) {
     whatsappUrl: order.whatsappUrl,
     saved: save.ok,
     // En previews y pruebas se devuelve el motivo para poder diagnosticar; en producción no.
-    saveError: save.ok || process.env.CONTEXT === 'production' ? undefined : save.error
+    saveError: save.ok || process.env.CONTEXT === 'production' ? undefined : save.error,
+    capi: process.env.CONTEXT === 'production' ? undefined : capi.status
   });
 };

@@ -47,4 +47,8 @@ async function setStatus(event, key, status) {
   return rec;
 }
 
-module.exports = { STATUSES, storeName, keyFor, saveOrder, listOrders, setStatus };
+async function saveRecord(event, rec) {
+  await open(event).setJSON(rec.key, rec);
+}
+
+module.exports = { saveRecord, STATUSES, storeName, keyFor, saveOrder, listOrders, setStatus };

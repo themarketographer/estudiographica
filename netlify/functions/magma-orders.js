@@ -4,6 +4,7 @@
 // Pide la cabecera  Authorization: Bearer <MAGMA_ADMIN_TOKEN>  (variable de entorno en Netlify).
 const crypto = require('crypto');
 const Store = require('./lib-magma/store.js');
+const Meta = require('./lib-magma/meta.js');
 
 function reply(statusCode, body) {
   return {
@@ -36,7 +37,14 @@ exports.handler = async function (event) {
       if (typeof body.key !== 'string' || Store.STATUSES.indexOf(body.status) === -1) return reply(422, { ok: false, error: 'Estado inválido.' });
       const rec = await Store.setStatus(event, body.key, body.status);
       if (!rec) return reply(404, { ok: false, error: 'No existe ese pedido.' });
-      return reply(200, { ok: true, order: rec });
+      // Al entregar, el pedido pasa a ser una venta confirmada: se avisa a Meta una sola vez.
+      let capi = 'skipped';
+      if (body.status === 'entregado' && !rec.purchaseSent) {
+        const r = await Meta.sendEvent('Purchase', rec, 'https://' + ((event.headers || {}).host || 'estudiographica.com') + '/menu/magma/');
+        capi = r.status;
+        if (r.status === 'sent') { rec.purchaseSent = true; await Store.saveRecord(event, rec); }
+      }
+      return reply(200, { ok: true, order: rec, capi });
     }
     return reply(405, { ok: false, error: 'Método no permitido.' });
   } catch (e) {

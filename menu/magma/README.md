@@ -73,3 +73,12 @@ Cada pedido que sale del menú se guarda en **Netlify Blobs** (almacenamiento de
 - Si la API no responde, el cliente igual completa su pedido por WhatsApp, pero ese pedido no queda guardado.
 - Los datos del cliente (nombre, dirección, notas) quedan guardados. Avísalo en la política de privacidad del negocio.
 - Para cambiar la clave: Netlify, Site configuration, Environment variables, `MAGMA_ADMIN_TOKEN`, y vuelve a desplegar.
+
+## Datos para Meta (audiencias, API de Conversiones y eventos)
+
+El pedido pide nombre, apellido, celular y correo (opcional; para exigirlo pon `"requireEmail": true` en `service`). Hay una casilla, sin marcar, para aceptar ofertas y anuncios.
+
+- **Píxel en el navegador:** pon el ID del píxel del negocio en `tracking.metaPixel`. Envía ViewContent, AddToCart, InitiateCheckout y Lead, más eventos propios (MagmaCategoria, MagmaWhatsApp). Si el cliente aceptó, el píxel recibe sus datos para mejorar la coincidencia.
+- **API de Conversiones (servidor):** crea en Netlify `MAGMA_META_PIXEL_ID` y `MAGMA_META_ACCESS_TOKEN` (token del píxel del negocio, no el de Estudio Graphica). Para probar, agrega `MAGMA_META_TEST_CODE` con el código de Administrador de eventos. Al enviar un pedido sale `Lead` con el mismo número de pedido que el del navegador, así Meta no lo cuenta doble. Al marcar un pedido como **Entregado** en el panel sale `Purchase`, una sola vez, con el valor real de la venta.
+- Los datos personales viajan en hash SHA-256 y solo si el cliente aceptó. Sin aceptación el evento sale sin datos personales.
+- **Audiencias:** en el panel, "Audiencia para Meta (CSV)" descarga solo a quienes aceptaron, con el formato que pide Meta para listas de clientes.
