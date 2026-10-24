@@ -7,7 +7,8 @@
     "whatsapp": "59176980828",
     "whatsappDisplay": "+591 76980828",
     "address": "Calle Juan Capriles, entre Calle Potosí y Av. Pando, Cochabamba",
-    "orderPrefix": "MW"
+    "orderPrefix": "MW",
+    "trackUrl": "https://estudiographica.com/menu/magma/pedido/"
   },
   "hours": {
     "text": "Lun a dom, 12:00 a 22:00 (temporal)",

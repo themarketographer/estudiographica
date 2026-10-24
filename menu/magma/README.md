@@ -9,6 +9,7 @@ Todo el contenido vive en `menu.json`. Cambiar un precio, agregar una salsa o ma
 | Campo | Para qué sirve |
 |---|---|
 | `brand.whatsapp` | Número que recibe los pedidos, con código de país y sin `+` |
+| `brand.trackUrl` | Dirección de la página de seguimiento. Se agrega al final del mensaje de WhatsApp con el número del pedido. Vacío, no se agrega |
 | `hours` | `null`, o `{ "text": "Lun a dom, 12:00 a 22:00", "tz": "America/La_Paz", "days": { "0": [["12:00","22:00"]] } }`. Con `days` y `tz` aparece "Abierto ahora" |
 | `service.pickup` / `service.delivery` / `service.minOrder` | Recojo, entrega y pedido mínimo (`null` desactiva el mínimo) |
 | `service.zones` | Zonas de entrega: `{ id, name, fee }`. `fee: null` significa "se confirma por chat". Sin zonas, no se pide zona |
