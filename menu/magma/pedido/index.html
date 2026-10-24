@@ -140,7 +140,8 @@
   /* Si este mismo teléfono hizo el pedido, se abre solo con el último. */
   try {
     var last = JSON.parse(localStorage.getItem('magma.last.v2') || 'null');
-    if (last && last.orderId && !/^#T/.test(last.orderId) && last.customer && last.customer.phone) {
+    var qn = /[?&]n=([^&]+)/.exec(location.search); qn = qn ? decodeURIComponent(qn[1]).replace(/^#/, '').toUpperCase() : '';
+    if (last && last.orderId && !/^#T/.test(last.orderId) && last.customer && last.customer.phone && (!qn || qn === last.orderId.replace(/^#/, ''))) {
       var n0 = last.orderId.replace(/^#/, ''), p0 = String(last.customer.phone).slice(-4);
       $('#n').value = n0; $('#p').value = p0; check(n0, p0, true);
     }

@@ -242,6 +242,11 @@
     out.push('*TOTAL: ' + money(order.total, cur) + '*' + (order.deliveryFee === null ? ' más envío' : ''));
     if (order.deliveryFee === null) out.push('El costo de envío me lo confirman por aquí.');
     if (c.notes) { out.push(''); out.push('*Notas:* ' + c.notes); }
+    if (menu.brand.trackUrl && !/^#T/.test(order.orderId)) {
+      out.push('');
+      out.push('*Sigue tu pedido:*');
+      out.push(menu.brand.trackUrl + '?n=' + order.orderId.replace(/^#/, ''));
+    }
     out.push('');
     out.push('Gracias, quedo atento a la confirmación.');
     return out.join('\n');
