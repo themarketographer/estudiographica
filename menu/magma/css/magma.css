@@ -495,3 +495,51 @@ dialog.sheet{--muted:#efe0cf}
 .pay-prev{width:96px;height:96px;object-fit:cover;border-radius:12px;border:1.5px solid var(--line-strong)}
 .pay-pick .ic{width:22px;height:22px}
 .pay-pick:disabled{opacity:.7}
+
+/* Armar el pedido: tarjetas de porción con íconos, chips compactos y nota plegable */
+.lead-s{display:flex;align-items:center;gap:var(--s2);margin:0 0 var(--s4);color:var(--muted);font:500 15px/1.3 var(--body)}
+.lead-s .ic{width:20px;height:20px;color:var(--lava)}
+.group{margin-bottom:var(--s5)}
+.group legend{align-items:center}
+.group legend .lg{display:inline-flex;align-items:center;gap:var(--s2)}
+.group legend .lg .ic{width:22px;height:22px;color:var(--lava)}
+.opts.tiles{grid-template-columns:repeat(3,1fr);gap:var(--s2)}
+.opt.tile{flex-direction:column;justify-content:flex-start;align-items:center;gap:6px;min-height:0;padding:var(--s3) var(--s2) var(--s3);text-align:center}
+.opt.tile .cluster{display:grid;grid-template-columns:repeat(var(--c),var(--s));gap:3px;justify-content:center;min-height:48px;align-content:center;color:var(--lava);transition:transform .3s var(--ease)}
+.opt.tile .cluster .ic{width:var(--s);height:var(--s)}
+.opt.tile.on .cluster{transform:scale(1.06)}
+.opt.tile .big{font-size:34px;line-height:1;color:var(--cream)}
+.opt.tile .unit{font:500 13px/1.1 var(--body);color:var(--muted);margin-top:-2px}
+.opt.tile .pr{font:700 15px/1 var(--body);color:var(--cream);margin-top:2px}
+.opt.tile.on .pr{color:var(--lava-hi)}
+.opts.chips{grid-template-columns:repeat(2,1fr);gap:var(--s2)}
+.opt.chip{min-height:54px;padding:var(--s2) var(--s3);gap:var(--s2);border-radius:14px}
+.opt.chip .chip-ic{display:grid;place-items:center;width:32px;height:32px;border-radius:10px;background:rgba(244,148,12,.16);color:var(--lava);flex:none;transition:background-color .16s ease,color .16s ease}
+.opt.chip .chip-ic .ic{width:19px;height:19px}
+.opt.chip.on .chip-ic{background:var(--lava);color:var(--ember-dark)}
+.opt.chip .nm{font:600 15.5px/1.2 var(--body);min-width:0}
+.opt.chip .nm small{font-size:12.5px}
+.opt.chip .pr{position:absolute;top:6px;right:9px;font-size:12px}
+.opt.chip:has(.pr) .nm{padding-right:34px}
+.opt .mark-c{display:none}
+.opt.tile::after,.opt.chip::after{content:"";position:absolute;top:7px;right:7px;width:20px;height:20px;border-radius:50%;background:var(--lava) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23260c0d' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'><path d='M5 12.5l4.5 4.5L19 7.5'/></svg>") center/12px no-repeat;opacity:0;transform:scale(.6);transition:opacity .16s ease,transform .25s var(--ease)}
+.opt.on::after{opacity:1;transform:none}
+.opt.chip.on .pr{opacity:0}
+.group legend .fold{display:flex;align-items:center;justify-content:space-between;gap:var(--s3);width:100%;min-height:44px;font:inherit;text-align:left}
+.group legend .fold small{margin-left:auto;font:500 14px/1.3 var(--body);color:var(--muted)}
+.group legend .fold > .ic:last-child{width:20px;height:20px;color:var(--lava);transition:transform .3s var(--ease)}
+.group.folded legend .fold > .ic:last-child{transform:none}
+.group:not(.folded) legend .fold > .ic:last-child{transform:rotate(45deg)}
+.group.folded .opts{display:none}
+.group legend:has(.fold){padding-bottom:var(--s1)}
+.item-note{margin:0}
+.note-toggle{display:flex;align-items:center;gap:var(--s2);width:100%;min-height:50px;padding:0 var(--s3);border:1.5px dashed var(--line-strong);border-radius:14px;font:600 15.5px var(--body);color:var(--cream);text-align:left}
+.note-toggle small{font:500 14px var(--body);color:var(--muted)}
+.note-toggle .ic{width:20px;height:20px;color:var(--lava)}
+.note-toggle > .ic:last-child{margin-left:auto;transition:transform .3s var(--ease)}
+.item-note.open .note-toggle > .ic:last-child{transform:rotate(45deg)}
+.note-box{display:none;margin-top:var(--s2)}
+.item-note.open .note-box{display:block}
+.sheet-foot .btn .ic{width:22px;height:22px}
+@media (max-width:359px){.opt.tile .big{font-size:28px}.opts.chips{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){.opt.tile .cluster,.opt.tile::after,.opt.chip::after,.group legend .fold > .ic:last-child,.note-toggle > .ic:last-child{transition:none}}
