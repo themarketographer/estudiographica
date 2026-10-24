@@ -562,7 +562,7 @@
     var ol = $('#cartSteps');
     ol.textContent = '';
     labels.forEach(function (l, i) {
-      var cls = i < at ? 'done' : (i === at ? 'current' : '');
+      var cls = i < at ? 'is-done' : (i === at ? 'current' : '');
       ol.appendChild(h('li', { class: 'step ' + cls, 'aria-current': i === at ? 'step' : null },
         h('div', { class: 'step-num' }, i < at ? icon('i-check') : String(i + 1)),
         h('div', { class: 'step-label', text: l })));
@@ -656,8 +656,8 @@
       var input = h('input', Object.assign({ type: 'text', id: id, name: id, 'aria-describedby': 'e-' + id, maxlength: '120' }, attrs));
       return h('div', { class: 'f', id: 'row-' + id }, h('label', { for: id }, label, hint ? h('small', { text: ' ' + hint }) : null), h('div', { class: 'inp' }, icon(ic), input), h('p', { class: 'field-err', id: 'e-' + id, role: 'alert', hidden: true }));
     };
-    var fFirst = field('firstName', 'Nombre', 'i-user', { autocomplete: 'given-name', value: saved.firstName || '', enterkeyhint: 'next' });
-    var fLast = field('lastName', 'Apellido', 'i-user', { autocomplete: 'family-name', value: saved.lastName || '', enterkeyhint: 'next' });
+    var fFirst = field('firstName', 'Nombre', 'i-user', { autocomplete: 'given-name', value: saved.firstName || '', placeholder: 'Tu nombre', enterkeyhint: 'next' });
+    var fLast = field('lastName', 'Apellido', 'i-user', { autocomplete: 'family-name', value: saved.lastName || '', placeholder: 'Tu apellido', enterkeyhint: 'next' });
     var fPhone = field('phone', 'Celular', 'i-phone', { type: 'tel', inputmode: 'tel', autocomplete: 'tel', value: saved.phone ? saved.phone.replace(/^591/, '') : '', placeholder: '7XXXXXXX', maxlength: '20', enterkeyhint: 'next' }, '(WhatsApp)');
     var fEmail = field('email', 'Correo', 'i-mail', { type: 'email', inputmode: 'email', autocomplete: 'email', value: saved.email || '', placeholder: 'tu@correo.com', enterkeyhint: 'next' }, menu.service.requireEmail ? '' : '(opcional)');
     var addr = h('textarea', { id: 'address', name: 'address', autocomplete: 'street-address', maxlength: '160', rows: '2', 'aria-describedby': 'e-address', placeholder: 'Calle, número y una referencia' });

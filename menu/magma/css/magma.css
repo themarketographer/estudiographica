@@ -238,10 +238,10 @@ dialog.sheet.open::backdrop{opacity:1}
 .step{flex:1;text-align:center;position:relative}
 .step::before{content:"";position:absolute;top:15px;left:-50%;width:100%;height:2px;background:var(--line);z-index:0}
 .step:first-child::before{display:none}
-.step.done::before,.step.current::before{background:var(--lava)}
+.step.is-done::before,.step.current::before{background:var(--lava)}
 .step-num{position:relative;z-index:1;width:32px;height:32px;margin:0 auto var(--s2);border-radius:11px;display:grid;place-items:center;font:700 14px/1 var(--body);font-variant-numeric:tabular-nums;background:var(--surface);border:2px solid var(--line-strong);color:var(--muted);transition:background .45s var(--ease),border-color .45s var(--ease),color .3s}
 .step-num .ic{width:16px;height:16px}
-.step.done .step-num{background:var(--lava);border-color:var(--lava);color:var(--ember-dark)}
+.step.is-done .step-num{background:var(--lava);border-color:var(--lava);color:var(--ember-dark)}
 .step.current .step-num{background:var(--cream);border-color:var(--cream);color:var(--ember-dark);animation:stepPop .6s var(--ease)}
 @keyframes stepPop{0%{scale:.82}55%{scale:1.14}100%{scale:1}}
 .step-label{font:500 13.5px/1.3 var(--body);color:var(--muted)}
@@ -381,7 +381,7 @@ dialog.sheet{--muted:#efe0cf}
 .f .inp.area textarea{padding-top:15px;line-height:24px}
 .pair .f label{white-space:nowrap}
 .seg .opt.mode{flex-direction:column;align-items:center;gap:var(--s2);padding:var(--s4) var(--s3);min-height:92px;justify-content:center}
-.seg .opt.mode .ic{width:30px;height:30px;color:var(--lava);transition:transform .35s var(--ease)}
+.seg .opt.mode .ic{width:30px;height:30px;margin-inline:auto;align-self:center;color:var(--lava);transition:transform .35s var(--ease)}
 .seg .opt.mode.on .ic{transform:scale(1.12)}
 .seg .opt.mode .nm{font-size:16px}
 .consent{position:relative;align-items:flex-start;padding:var(--s4);border:1.5px solid var(--line);border-radius:18px;background:rgba(0,0,0,.14);font:500 16px/1.4 var(--body);transition:border-color .2s,background-color .2s}
@@ -408,6 +408,16 @@ dialog.sheet{--muted:#efe0cf}
 .done-sum .ic{width:22px;height:22px;color:var(--lava)}
 .done-t{font-size:16px}
 .btn .ic{width:22px;height:22px}
+
+
+/* Pulido del formulario: el ícono se enciende con el foco y la opción elegida muestra su marca */
+.inp > .ic{transition:color .2s ease,transform .3s var(--ease)}
+.inp:focus-within > .ic{color:var(--lava-hi);transform:translateY(-50%) scale(1.12)}
+.inp:focus-within > .ic{translate:0 0}
+.seg .opt.mode{position:relative}
+.seg .opt.mode::after{content:"";position:absolute;top:10px;right:10px;width:22px;height:22px;border-radius:50%;background:var(--lava) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M6 12.500l4 4 8-9' fill='none' stroke='%23260c0d' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/></svg>") center/14px no-repeat;opacity:0;transform:scale(.5);transition:opacity .15s ease,transform .3s var(--ease)}
+.seg .opt.mode.on::after{opacity:1;transform:none}
+.form{gap:var(--s5)}
 
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
