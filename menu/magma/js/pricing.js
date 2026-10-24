@@ -168,6 +168,21 @@
     return d.length >= 10 && d.length <= 15;
   }
 
+  /* Envío según la zona. fee: número, 0 si supera el monto de envío gratis, o null si se confirma por chat. */
+  function findZone(menu, id) {
+    var zs = (menu.service && menu.service.zones) || [];
+    for (var i = 0; i < zs.length; i++) if (zs[i].id === id) return zs[i];
+    return null;
+  }
+  function deliveryFee(menu, customer, subtotal) {
+    if (!customer || customer.mode !== 'delivery') return { fee: 0, free: false, label: '' };
+    var z = findZone(menu, customer.zone);
+    var free = menu.service && menu.service.freeDeliveryFrom;
+    if (free && subtotal >= free && z && z.fee !== null) return { fee: 0, free: true, label: z.name };
+    if (!z) return { fee: null, free: false, label: '' };
+    return { fee: z.fee, free: false, label: z.name };
+  }
+
   function cleanCustomer(menu, raw) {
     raw = raw && typeof raw === 'object' ? raw : {};
     var svc = menu.service || {};
@@ -178,6 +193,7 @@
     var phone = normalizePhone(raw.phone);
     var address = text(raw.address, 160);
     var notes = text(raw.notes, 240);
+    var zone = findZone(menu, String(raw.zone || ''));
     if (!firstName) return { ok: false, error: 'Falta tu nombre.', field: 'firstName' };
     if (!lastName) return { ok: false, error: 'Falta tu apellido.', field: 'lastName' };
     if (!validPhone(phone)) return { ok: false, error: 'Escribe tu celular, por ejemplo 76980828.', field: 'phone' };
@@ -185,10 +201,11 @@
     if (mode === 'delivery' && !svc.delivery) return { ok: false, error: 'Por ahora solo hay recojo en el local.', field: 'mode' };
     if (mode === 'pickup' && svc.pickup === false) return { ok: false, error: 'Por ahora solo hay entrega a domicilio.', field: 'mode' };
     if (mode === 'delivery' && !address) return { ok: false, error: 'Falta la dirección o una referencia para la entrega.', field: 'address' };
+    if (mode === 'delivery' && svc.zones && svc.zones.length && !zone) return { ok: false, error: 'Elige tu zona de entrega.', field: 'zone' };
     return { ok: true, customer: {
       firstName: firstName, lastName: lastName, name: firstName + ' ' + lastName,
       email: email, phone: phone, consent: raw.consent === true,
-      mode: mode, address: mode === 'delivery' ? address : '', notes: notes
+      mode: mode, address: mode === 'delivery' ? address : '', zone: mode === 'delivery' && zone ? zone.id : '', zoneName: mode === 'delivery' && zone ? zone.name : '', notes: notes
     } };
   }
 
@@ -217,8 +234,13 @@
       if (l.note) out.push('      Nota: ' + l.note);
     });
     out.push('');
-    out.push('*TOTAL: ' + money(order.total, cur) + '*' + (c.mode === 'delivery' ? ' más envío' : ''));
-    if (c.mode === 'delivery') out.push('El costo de envío me lo confirman por aquí.');
+    if (c.mode === 'delivery') {
+      var fee = order.deliveryFee;
+      out.push('Productos: ' + money(order.subtotal, cur));
+      out.push('Envío' + (c.zoneName ? ' (' + c.zoneName + ')' : '') + ': ' + (fee === null ? 'por confirmar' : fee === 0 ? 'gratis' : money(fee, cur)));
+    }
+    out.push('*TOTAL: ' + money(order.total, cur) + '*' + (order.deliveryFee === null ? ' más envío' : ''));
+    if (order.deliveryFee === null) out.push('El costo de envío me lo confirman por aquí.');
     if (c.notes) { out.push(''); out.push('*Notas:* ' + c.notes); }
     out.push('');
     out.push('Gracias, quedo atento a la confirmación.');
@@ -236,7 +258,8 @@
     if (!r.ok) return r;
     var c = cleanCustomer(menu, payload.customer);
     if (!c.ok) return c;
-    var order = { orderId: (opts && opts.orderId) || makeOrderId(), customer: c.customer, lines: r.lines, total: r.total, count: r.count };
+    var env = deliveryFee(menu, c.customer, r.total);
+    var order = { orderId: (opts && opts.orderId) || makeOrderId(), customer: c.customer, lines: r.lines, subtotal: r.total, deliveryFee: env.fee, total: r.total + (env.fee || 0), count: r.count };
     order.message = buildMessage(menu, order);
     order.whatsappUrl = whatsappUrl(menu, order.message);
     return { ok: true, order: order };
@@ -254,6 +277,8 @@
     orderNumber: orderNumber,
     boliviaDate: boliviaDate,
     cleanCustomer: cleanCustomer,
+    deliveryFee: deliveryFee,
+    findZone: findZone,
     normalizePhone: normalizePhone,
     fmtPhone: fmtPhone,
     buildMessage: buildMessage,

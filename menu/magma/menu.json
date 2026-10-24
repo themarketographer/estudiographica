@@ -9,12 +9,82 @@
     "address": "Calle Juan Capriles, entre Calle Potosí y Av. Pando, Cochabamba",
     "orderPrefix": "MW"
   },
-  "hours": null,
+  "hours": {
+    "text": "Lun a dom, 12:00 a 22:00 (temporal)",
+    "tz": "America/La_Paz",
+    "days": {
+      "0": [
+        [
+          "12:00",
+          "22:00"
+        ]
+      ],
+      "1": [
+        [
+          "12:00",
+          "22:00"
+        ]
+      ],
+      "2": [
+        [
+          "12:00",
+          "22:00"
+        ]
+      ],
+      "3": [
+        [
+          "12:00",
+          "22:00"
+        ]
+      ],
+      "4": [
+        [
+          "12:00",
+          "22:00"
+        ]
+      ],
+      "5": [
+        [
+          "12:00",
+          "22:00"
+        ]
+      ],
+      "6": [
+        [
+          "12:00",
+          "22:00"
+        ]
+      ]
+    }
+  },
   "service": {
     "pickup": true,
     "delivery": true,
-    "deliveryNote": "El costo de envío te lo confirmamos por WhatsApp.",
-    "minOrder": null
+    "deliveryNote": "El envío depende de tu zona. Si superas el monto de envío gratis, no pagas nada.",
+    "minOrder": 35,
+    "freeDeliveryFrom": 150,
+    "zones": [
+      {
+        "id": "centro",
+        "name": "Centro y alrededores",
+        "fee": 8
+      },
+      {
+        "id": "norte",
+        "name": "Zona norte",
+        "fee": 12
+      },
+      {
+        "id": "sur",
+        "name": "Zona sur",
+        "fee": 12
+      },
+      {
+        "id": "otra",
+        "name": "Otra zona (te confirmamos el costo)",
+        "fee": null
+      }
+    ]
   },
   "tracking": {
     "ga4": "",

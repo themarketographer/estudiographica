@@ -183,20 +183,38 @@ a{color:inherit}
 
 @media (prefers-reduced-motion:reduce){.card,.kpi,.login,.empty .eico,.live::before,.flow li.on::before,.kpi.alert .kic,.tool[aria-pressed="true"] .ic{animation:none}.toast{transition:opacity .2s;transform:none}.skel{animation:none}.card[data-s="nuevo"].fresh{animation:none}}
 
-/* Ticket de cocina: al imprimir solo sale el pedido elegido */
+/* Ticket de cocina: papel térmico de 80 mm. Al imprimir solo sale #ticket */
+#ticket{display:none}
 @media print{
-  body{background:#fff;color:#000}
-  .bar,.kpis,.tabs,.search,.export,.toast,.acts,.next,.sec,.login,.flow{display:none !important}
-  .wrap{padding:0}
-  .grid{display:block}
-  .card{display:none;border:0;box-shadow:none;background:#fff;color:#000;padding:0;animation:none}
-  .card.printing{display:grid}
-  .card *{color:#000 !important;background:none !important;border-color:#000 !important}
-  .total{font-size:28px}
+  @page{size:80mm auto;margin:0}
+  html,body{background:#fff !important;margin:0;padding:0}
+  body > *:not(#ticket){display:none !important}
+  #ticket{display:block;width:72mm;margin:0 auto;padding:4mm 0 8mm;color:#000;font:600 12pt/1.3 "Instrument Sans",system-ui,sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  #ticket *{color:#000;box-sizing:border-box}
+  #ticket .t-brand{text-align:center;font:800 20pt/1 "Bricolage Grotesque",system-ui,sans-serif;letter-spacing:-.01em}
+  #ticket .t-sub{text-align:center;font-size:9pt;font-weight:500;margin-top:1mm}
+  #ticket hr{border:0;border-top:.4mm dashed #000;margin:3mm 0}
+  #ticket .t-num{text-align:center;font:800 34pt/1 "Bricolage Grotesque",system-ui,sans-serif;letter-spacing:-.02em}
+  #ticket .t-num small{display:block;font:700 12pt/1.2 "Instrument Sans",system-ui,sans-serif;letter-spacing:.08em;margin-top:1mm}
+  #ticket .t-mode{margin:3mm 0 0;padding:2mm;border:.6mm solid #000;text-align:center;font:800 16pt/1 "Bricolage Grotesque",system-ui,sans-serif;text-transform:uppercase;letter-spacing:.04em}
+  #ticket .t-row{display:flex;justify-content:space-between;gap:3mm;font-size:10.5pt}
+  #ticket .t-row span:last-child{text-align:right;font-weight:700}
+  #ticket .t-who{font-size:12pt;font-weight:800}
+  #ticket .t-item{display:grid;grid-template-columns:11mm 1fr auto;gap:0 2mm;align-items:baseline;margin:0 0 2.5mm;break-inside:avoid}
+  #ticket .t-qty{font:800 18pt/1 "Bricolage Grotesque",system-ui,sans-serif}
+  #ticket .t-name{font-weight:800;font-size:12.5pt;line-height:1.15}
+  #ticket .t-amt{font-weight:700;font-size:11pt;white-space:nowrap}
+  #ticket .t-opt{grid-column:2 / 4;font-size:10.5pt;font-weight:600;line-height:1.25}
+  #ticket .t-note{grid-column:1 / 4;margin-top:1mm;padding:1.2mm 2mm;border:.4mm solid #000;font-size:10.5pt;font-weight:700}
+  #ticket .t-box{margin:2mm 0;padding:2mm;border:.4mm solid #000;font-size:11pt;font-weight:700}
+  #ticket .t-total{display:flex;justify-content:space-between;align-items:baseline;font:800 22pt/1 "Bricolage Grotesque",system-ui,sans-serif;margin-top:1mm}
+  #ticket .t-total small{font:700 10pt/1 "Instrument Sans",system-ui,sans-serif}
+  #ticket .t-foot{text-align:center;font-size:9pt;font-weight:500;margin-top:3mm}
 }
 </style>
 </head>
 <body>
+<div id="ticket" aria-hidden="true"></div>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
     <symbol id="i-plus" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></g></symbol>
     <symbol id="i-minus" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/></g></symbol>
@@ -401,6 +419,47 @@ a{color:inherit}
     if (node && tab !== 'todos' && !matchMedia('(prefers-reduced-motion: reduce)').matches) { node.classList.add('leaving'); setTimeout(apply, 200); } else apply();
   }
 
+  /* Ticket de cocina de 80 mm: lo primero que lee quien cocina es el número y si va a mesa, recojo o moto */
+  function printTicket(o) {
+    var c = o.customer || {}, sp = split(o.orderId), box = document.getElementById('ticket');
+    var when = new Date(o.createdAt);
+    var fecha = when.toLocaleDateString('es-BO', { timeZone: 'America/La_Paz', day: '2-digit', month: 'short', year: 'numeric' });
+    var hora = when.toLocaleTimeString('es-BO', { timeZone: 'America/La_Paz', hour: '2-digit', minute: '2-digit', hour12: false });
+    box.textContent = '';
+    var add = function (cls, txt, tag) { var n = el(tag || 'div', cls, txt); box.appendChild(n); return n; };
+    add('t-brand', 'MAGMA WINGS'); add('t-sub', 'Cochabamba');
+    add('', '', 'hr');
+    var num = add('t-num', '#' + sp[0]); num.appendChild(el('small', '', sp[1]));
+    add('t-mode', o.mode === 'delivery' ? 'Entrega a domicilio' : 'Recojo en local');
+    add('', '', 'hr');
+    var row = function (a, b) { var r = add('t-row'); r.appendChild(el('span', '', a)); r.appendChild(el('span', '', b)); };
+    row(fecha, hora);
+    row('Productos', String(o.count));
+    add('', '', 'hr');
+    add('t-who', c.name || 'Sin nombre');
+    if (c.phone) add('t-row', fmtPhone(c.phone));
+    if (o.mode === 'delivery' && c.address) add('t-box', (c.zoneName ? c.zoneName + ': ' : '') + c.address);
+    add('', '', 'hr');
+    o.lines.forEach(function (l) {
+      var it = add('t-item');
+      it.appendChild(el('span', 't-qty', l.qty + '×'));
+      var nm = el('span', 't-name', l.name + ' ' + l.portion); it.appendChild(nm);
+      it.appendChild(el('span', 't-amt', money(l.total)));
+      (l.choices || []).forEach(function (ch) { ch.options.forEach(function (op) { it.appendChild(el('span', 't-opt', (ch.group === 'salsa-extra' ? 'Extra: ' : '') + op.name)); }); });
+      if (l.note) it.appendChild(el('span', 't-note', 'NOTA: ' + l.note));
+    });
+    if (c.notes) add('t-box', 'NOTA DEL PEDIDO: ' + c.notes);
+    add('', '', 'hr');
+    if (o.mode === 'delivery' && o.subtotal != null) {
+      row('Productos', money(o.subtotal));
+      row('Envío', o.deliveryFee === null ? 'por confirmar' : o.deliveryFee === 0 ? 'gratis' : money(o.deliveryFee));
+    }
+    var t = add('t-total'); t.appendChild(el('span', '', 'TOTAL')); t.appendChild(el('span', '', money(o.total)));
+    if (o.mode === 'delivery' && o.deliveryFee === null) add('t-foot', 'El envío se confirma por WhatsApp');
+    add('t-foot', 'Gracias por pedir en Magma Wings');
+    window.print();
+  }
+
   function card(o, i) {
     var c = o.customer || {};
     var li = el('li', 'card' + (!first && !seen[o.key] && o.status === 'nuevo' ? ' fresh' : '')); li.dataset.s = o.status; li.dataset.key = o.key; li.style.animationDelay = Math.min(i, 8) * 40 + 'ms';
@@ -435,7 +494,7 @@ a{color:inherit}
     var meta = el('div', 'meta');
     if (c.phone) { var d1 = el('div'); d1.appendChild(icon('i-phone')); d1.appendChild(document.createTextNode(fmtPhone(c.phone))); meta.appendChild(d1); }
     if (c.email) { var d2 = el('div'); d2.appendChild(icon('i-mail')); d2.appendChild(document.createTextNode(c.email)); meta.appendChild(d2); }
-    if (c.address) { var d3 = el('div'); d3.appendChild(icon('i-pin')); d3.appendChild(document.createTextNode(c.address)); meta.appendChild(d3); }
+    if (c.address) { var d3 = el('div'); d3.appendChild(icon('i-pin')); d3.appendChild(document.createTextNode((c.zoneName ? c.zoneName + ': ' : '') + c.address)); meta.appendChild(d3); }
     wb.appendChild(meta); who.appendChild(wb); li.appendChild(who);
 
     /* Productos */
@@ -451,6 +510,10 @@ a{color:inherit}
       ul.appendChild(it);
     });
     li.appendChild(ul);
+    if (o.mode === 'delivery' && o.subtotal != null) {
+      var fe = el('p', 'callout'); fe.appendChild(icon('i-moto'));
+      fe.appendChild(document.createTextNode('Productos ' + money(o.subtotal) + ' · Envío ' + (o.deliveryFee === null ? 'por confirmar' : o.deliveryFee === 0 ? 'gratis' : money(o.deliveryFee)))); li.appendChild(fe);
+    }
     if (c.notes) { var co = el('p', 'callout'); co.appendChild(icon('i-note')); co.appendChild(document.createTextNode(c.notes)); li.appendChild(co); }
 
     /* Acciones */
@@ -464,7 +527,7 @@ a{color:inherit}
     cp.addEventListener('click', function () { (navigator.clipboard ? navigator.clipboard.writeText(o.message) : Promise.reject()).then(function () { cpt.nodeValue = 'Copiado'; setTimeout(function () { cpt.nodeValue = 'Copiar'; }, 1500); }, function () { cpt.nodeValue = 'No se pudo'; }); });
     acts.appendChild(cp);
     var pr = el('button', 'chipbtn'); pr.type = 'button'; pr.appendChild(icon('i-print')); pr.appendChild(document.createTextNode('Ticket'));
-    pr.addEventListener('click', function () { li.classList.add('printing'); window.print(); setTimeout(function () { li.classList.remove('printing'); }, 500); });
+    pr.addEventListener('click', function () { printTicket(o); });
     acts.appendChild(pr);
     li.appendChild(acts);
 
@@ -491,8 +554,8 @@ a{color:inherit}
     var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
   }
   function csvAll() {
-    var rows = [['Pedido', 'Fecha', 'Estado', 'Nombre', 'Apellido', 'Celular', 'Correo', 'Tipo', 'Dirección', 'Notas', 'Productos', 'Total (Bs)', 'Acepta ofertas']];
-    orders.forEach(function (o) { var c = o.customer; rows.push([o.orderId, o.createdAt, LABEL[o.status], c.firstName || c.name, c.lastName || '', c.phone ? '+' + c.phone : '', c.email || '', o.mode === 'delivery' ? 'Entrega' : 'Recojo', c.address, c.notes, o.lines.map(function (l) { return l.qty + 'x ' + l.name + ' ' + l.portion; }).join(' | '), o.total, c.consent ? 'Sí' : 'No']); });
+    var rows = [['Pedido', 'Fecha', 'Estado', 'Nombre', 'Apellido', 'Celular', 'Correo', 'Tipo', 'Zona', 'Dirección', 'Notas', 'Productos', 'Envío (Bs)', 'Total (Bs)', 'Acepta ofertas']];
+    orders.forEach(function (o) { var c = o.customer; rows.push([o.orderId, o.createdAt, LABEL[o.status], c.firstName || c.name, c.lastName || '', c.phone ? '+' + c.phone : '', c.email || '', o.mode === 'delivery' ? 'Entrega' : 'Recojo', c.zoneName || '', c.address, c.notes, o.lines.map(function (l) { return l.qty + 'x ' + l.name + ' ' + l.portion; }).join(' | '), o.deliveryFee == null ? '' : o.deliveryFee, o.total, c.consent ? 'Sí' : 'No']); });
     download('pedidos-magma.csv', rows);
   }
   /* Formato de Meta para "Lista de clientes": email, phone, fn, ln, country, value */

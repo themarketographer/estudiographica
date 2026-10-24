@@ -35,6 +35,15 @@ node_bundler = "esbuild"
   to = "/.netlify/functions/magma-orders"
   status = 200
 
+[[redirects]]
+  from = "/api/magma/track"
+  to = "/.netlify/functions/magma-track"
+  status = 200
+
+# Respaldo semanal de pedidos por correo (lunes 8:00 hora de Bolivia). Necesita MAGMA_BACKUP_EMAIL.
+[functions."magma-backup"]
+  schedule = "0 12 * * 1"
+
 [[headers]]
   for = "/menu/magma/fonts/*"
   [headers.values]

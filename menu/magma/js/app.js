@@ -1,7 +1,9 @@
 /* Menú de Magma Wings: catálogo, pedido y envío por WhatsApp.
    Datos:   /api/magma/menu (o menu.json si la API no responde)
    Pedido:  /api/magma/order (si falla, el mensaje se arma aquí con las mismas reglas)
-   Eventos: window.Magma.on('add_to_cart', fn) y document 'magma:add_to_cart'. Ver README.md
+   Eventos:   document.addEventListener('click', function (e) { var a = e.target.closest && e.target.closest('[data-ev]'); if (a) emit(a.getAttribute('data-ev'), {}); });
+
+  window.Magma.on('add_to_cart', fn) y document 'magma:add_to_cart'. Ver README.md
    Movimiento: js/motion.js (entradas, nav de vidrio, botones, paralaje). */
 (function () {
   'use strict';
@@ -617,8 +619,13 @@
       var t = totals();
       body.appendChild(h('div', { class: 'receipt' },
         h('div', { class: 'rrow' }, icon('i-receipt'), h('span', { text: 'Productos (' + t.count + ')' }), h('b', { text: money(t.total) })),
-        menu.service.delivery ? h('div', { class: 'rrow soft' }, icon('i-moto'), h('span', { text: 'Envío' }), h('em', { text: 'Te lo confirmamos' })) : null,
+        menu.service.delivery ? h('div', { class: 'rrow soft' }, icon('i-moto'), h('span', { text: 'Envío' }), h('em', { text: 'Según tu zona' })) : null,
         h('div', { class: 'rrow total' }, h('span', { text: 'Total' }), h('b', { class: 'display', text: money(t.total) }))));
+      var fr = menu.service.freeDeliveryFrom;
+      if (fr && menu.service.delivery) {
+        var left = fr - t.total;
+        body.appendChild(h('p', { class: 'hint free' + (left <= 0 ? ' ok' : '') }, icon(left <= 0 ? 'i-check' : 'i-moto'), left <= 0 ? 'Tu entrega es gratis en las zonas con tarifa.' : 'Te faltan ' + money(left) + ' para envío gratis.'));
+      }
       var min = menu.service.minOrder;
       var short = min && t.total < min;
       if (short) body.appendChild(h('p', { class: 'hint warn' }, icon('i-clock'), 'El pedido mínimo es de ' + money(min) + '. Te faltan ' + money(min - t.total) + '.'));
@@ -663,7 +670,20 @@
     var addr = h('textarea', { id: 'address', name: 'address', autocomplete: 'street-address', maxlength: '160', rows: '2', 'aria-describedby': 'e-address', placeholder: 'Calle, número y una referencia' });
     addr.value = saved.address || '';
     var notes = h('textarea', { id: 'notes', name: 'notes', maxlength: '240', rows: '2', placeholder: 'Más servilletas, tocar el timbre, lo que necesites' });
+    var zones = menu.service.zones || [];
+    var zoneSel = h('select', { id: 'zone', name: 'zone', 'aria-describedby': 'e-zone' }, h('option', { value: '', text: 'Elige tu zona' }), zones.map(function (z) { return h('option', { value: z.id, text: z.name + (z.fee === null ? '' : ' · ' + money(z.fee)) }); }));
+    zoneSel.value = saved.zone || '';
+    var fZone = zones.length ? h('div', { class: 'f', id: 'row-zone' }, h('label', { for: 'zone' }, 'Zona de entrega'), h('div', { class: 'inp sel' }, icon('i-moto'), zoneSel), h('p', { class: 'field-err', id: 'e-zone', role: 'alert', hidden: true })) : null;
     var fAddr = h('div', { class: 'f', id: 'row-address' }, h('label', { for: 'address' }, 'Dirección'), h('p', { class: 'hint' }, icon('i-moto'), menu.service.deliveryNote), h('div', { class: 'inp area' }, icon('i-pin'), addr), h('p', { class: 'field-err', id: 'e-address', role: 'alert', hidden: true }));
+    var rcpt = h('div', { class: 'receipt' });
+    var paint = function () {
+      var sub = totals().total, fee = P.deliveryFee(menu, { mode: mode, zone: zoneSel.value }, sub), total = sub + (fee.fee || 0);
+      rcpt.textContent = '';
+      rcpt.appendChild(h('div', { class: 'rrow' }, icon('i-receipt'), h('span', { text: 'Productos' }), h('b', { text: money(sub) })));
+      if (mode === 'delivery') rcpt.appendChild(h('div', { class: 'rrow soft' }, icon('i-moto'), h('span', { text: 'Envío' }), h('em', { class: fee.free ? 'free' : '', text: !zoneSel.value ? 'Elige tu zona' : fee.fee === null ? 'Te lo confirmamos' : fee.fee === 0 ? 'Gratis' : money(fee.fee) })));
+      rcpt.appendChild(h('div', { class: 'rrow total' }, h('span', { text: 'Total' }), h('b', { class: 'display', text: money(total) + (mode === 'delivery' && fee.fee === null && zoneSel.value ? ' + envío' : '') })));
+    };
+    zoneSel.addEventListener('change', function () { paint(); emit('zone_select', { zone: zoneSel.value }); });
     var seg = null;
     if (both) {
       var mk = function (val, label, ic) {
@@ -673,25 +693,29 @@
           mode = val;
           $$('.seg .opt').forEach(function (x) { x.classList.toggle('on', $('input', x).checked); });
           fAddr.hidden = mode !== 'delivery';
+          if (fZone) fZone.hidden = mode !== 'delivery';
+          paint();
         });
         return lab;
       };
       seg = h('div', { class: 'f' }, h('span', { class: 'lab', text: '¿Cómo lo recibes?' }), h('div', { class: 'seg' }, mk('pickup', 'Recojo en el local', 'i-store'), mk('delivery', 'Entrega', 'i-moto')));
     }
     fAddr.hidden = mode !== 'delivery';
+    if (fZone) fZone.hidden = mode !== 'delivery';
+    paint();
     var consent = h('input', { type: 'checkbox', id: 'consent', name: 'consent' });
     var consentRow = h('label', { class: 'consent', for: 'consent' }, consent, h('span', { class: 'box' }, icon('i-check')),
       h('span', { class: 'ctext' }, h('b', { text: 'Quiero recibir ofertas y novedades de ' + menu.brand.name }),
         h('small', {}, icon('i-shield'), 'Usamos tus datos para tu pedido y, si aceptas, para ofertas y anuncios. Puedes pedir que los borremos cuando quieras.')));
     var form = h('form', { class: 'form', id: 'orderForm', novalidate: true, onsubmit: function (e) { e.preventDefault(); sendOrder(function () {
       return { firstName: fFirst.querySelector('input').value, lastName: fLast.querySelector('input').value, phone: fPhone.querySelector('input').value, email: fEmail.querySelector('input').value,
-        consent: consent.checked, mode: mode, address: addr.value, notes: notes.value };
+        consent: consent.checked, mode: mode, zone: zoneSel.value, address: addr.value, notes: notes.value };
     }); } },
       h('div', { class: 'pair' }, fFirst, fLast), fPhone, fEmail,
-      seg, fAddr,
+      seg, fZone, fAddr,
       h('div', { class: 'f' }, h('label', { for: 'notes' }, 'Notas del pedido ', h('small', { text: '(opcional)' })), h('div', { class: 'inp area' }, icon('i-note'), notes)),
       consentRow,
-      h('div', { class: 'receipt' }, h('div', { class: 'rrow total' }, h('span', { text: 'Total productos' }), h('b', { class: 'display', text: money(totals().total) }))));
+      rcpt);
     form.addEventListener('input', function (e) {
       var row = e.target.closest && e.target.closest('.f');
       if (!row || !row.classList.contains('err')) return;
@@ -727,7 +751,7 @@
     if (sending) return;
     var c = P.cleanCustomer(menu, read());
     if (!c.ok) return fieldError(c.field, c.error);
-    store(CUST_KEY, { firstName: c.customer.firstName, lastName: c.customer.lastName, phone: c.customer.phone, email: c.customer.email, mode: c.customer.mode, address: c.customer.address });
+    store(CUST_KEY, { firstName: c.customer.firstName, lastName: c.customer.lastName, phone: c.customer.phone, email: c.customer.email, mode: c.customer.mode, zone: c.customer.zone, address: c.customer.address });
     var payload = { lines: rawLines(), customer: c.customer, meta: { fbp: cookie('_fbp'), fbc: cookie('_fbc') || fbcFromUrl() } };
     emit('order_submit', { value: totals().total, items: items(lines), count: totals().count, mode: c.customer.mode });
     setSending(true);
@@ -783,6 +807,7 @@
       h('p', { class: 'done-t', text: 'Abrimos WhatsApp con tu pedido listo. Envía el mensaje y lo confirmamos contigo.' }),
       h('div', { class: 'stack' },
         h('a', { class: 'btn btn--wa btn--block', href: o.whatsappUrl, rel: 'noopener', onclick: function () { emit('whatsapp_click', { source: 'done', orderId: o.orderId }); } }, icon('i-wa'), 'Abrir WhatsApp'),
+        !String(o.orderId).indexOf('#T') ? null : h('a', { class: 'btn btn--ghost btn--block', href: 'pedido/', onclick: function () { emit('track_open', { orderId: o.orderId }); } }, icon('i-clock'), 'Seguir mi pedido'),
         h('button', { class: 'btn btn--ghost btn--block', type: 'button', onclick: function () { copyText(o.message); } }, icon('i-copy'), 'Copiar mensaje'),
         h('button', { class: 'link center', type: 'button', onclick: restoreLast }, icon('i-edit'), 'Editar pedido')),
       h('pre', { class: 'preview', text: o.message })));

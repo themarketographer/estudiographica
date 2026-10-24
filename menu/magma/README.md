@@ -11,6 +11,8 @@ Todo el contenido vive en `menu.json`. Cambiar un precio, agregar una salsa o ma
 | `brand.whatsapp` | Número que recibe los pedidos, con código de país y sin `+` |
 | `hours` | `null`, o `{ "text": "Lun a dom, 12:00 a 22:00", "tz": "America/La_Paz", "days": { "0": [["12:00","22:00"]] } }`. Con `days` y `tz` aparece "Abierto ahora" |
 | `service.pickup` / `service.delivery` / `service.minOrder` | Recojo, entrega y pedido mínimo (`null` desactiva el mínimo) |
+| `service.zones` | Zonas de entrega: `{ id, name, fee }`. `fee: null` significa "se confirma por chat". Sin zonas, no se pide zona |
+| `service.freeDeliveryFrom` | Monto de productos desde el cual el envío es gratis en las zonas con tarifa (`null` lo desactiva) |
 | `products[]` | Cada producto trae `portions` (cantidad, unidad y precio), `groups` (qué opciones ofrece), `photo` y `photoPos` |
 | `optionGroups` | Salsa, papas y salsa extra. Cada opción puede sumar `price` |
 | `available: false` | En un producto o en una porción, la marca como agotada |
@@ -86,3 +88,23 @@ El pedido pide nombre, apellido, celular y correo (opcional; para exigirlo pon `
 ## Números de pedido
 
 El primer pedido de cada día es el `#01`, el segundo el `#02`, y así. Después del número va la fecha: `#07-24OCT` es el séptimo pedido del 24 de octubre (hora de Bolivia). Cada día vuelve a empezar en `#01`. Si el servidor no responde y el pedido sale sin guardarse, el número lleva la hora en vez de la cuenta (`#T1432-24OCT`).
+
+## Envío por zona
+
+El cliente que elige entrega escoge su zona y ve el costo antes de enviar. El servidor calcula el envío igual que el total de productos (nunca confía en el navegador). Si los productos superan `freeDeliveryFrom`, el envío sale gratis en las zonas con tarifa. Una zona con `fee: null` deja el envío por confirmar y el mensaje de WhatsApp lo dice.
+
+## Seguimiento del pedido para el cliente
+
+**/menu/magma/pedido/**. El cliente escribe el número (`07-24OCT`) y los últimos 4 dígitos de su celular, y ve en qué estado va su pedido (recibido, en la freidora, listo o en camino, entregado). La página se abre sola con el último pedido hecho desde ese mismo teléfono y se actualiza cada 15 segundos. La API es `GET /api/magma/track?n=07-24OCT&p=0828` y solo devuelve el estado, nunca datos personales. Un pedido que no se pudo guardar (`#T1432-24OCT`) no tiene seguimiento.
+
+## Avisos y respaldo (variables en Netlify)
+
+| Variable | Para qué |
+|---|---|
+| `MAGMA_TELEGRAM_BOT_TOKEN` y `MAGMA_TELEGRAM_CHAT_ID` | Cada pedido nuevo llega al celular de quien atiende, por Telegram. Se crea el bot con @BotFather. Solo avisa en producción |
+| `MAGMA_BACKUP_EMAIL` | Cada lunes a las 8:00 (Bolivia) llega un CSV con los pedidos de la última semana. Usa `RESEND_API_KEY`. Opcional `MAGMA_BACKUP_FROM` |
+| `ORDER_WEBHOOK_URL` | Reenvío del pedido a Make, Zapier u otro servicio |
+
+## Publicidad de Estudio Graphica
+
+El banner del final del menú vive en `index.html` (`<aside class="eg">`) con su estilo en `css/magma.css`. Lleva `utm_source=magma-menu` y emite el evento `eg_banner_click`.
