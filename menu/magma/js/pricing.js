@@ -195,7 +195,7 @@
     var notes = text(raw.notes, 240);
     var zone = findZone(menu, String(raw.zone || ''));
     var methods = (menu.payment && menu.payment.methods) || ['cash'];
-    var payMethod = methods.indexOf(raw.payMethod) > -1 ? raw.payMethod : methods[0];
+    var payMethod = methods.indexOf(raw.payMethod) > -1 ? raw.payMethod : (methods.length === 1 ? methods[0] : '');
     if (!firstName) return { ok: false, error: 'Falta tu nombre.', field: 'firstName' };
     if (!lastName) return { ok: false, error: 'Falta tu apellido.', field: 'lastName' };
     if (!validPhone(phone)) return { ok: false, error: 'Escribe tu celular, por ejemplo 76980828.', field: 'phone' };
@@ -203,6 +203,7 @@
     if (mode === 'delivery' && !svc.delivery) return { ok: false, error: 'Por ahora solo hay recojo en el local.', field: 'mode' };
     if (mode === 'pickup' && svc.pickup === false) return { ok: false, error: 'Por ahora solo hay entrega a domicilio.', field: 'mode' };
     if (mode === 'delivery' && !address) return { ok: false, error: 'Falta la dirección o una referencia para la entrega.', field: 'address' };
+    if (!payMethod) return { ok: false, error: 'Elige cómo vas a pagar.', field: 'payMethod' };
     if (mode === 'delivery' && svc.zones && svc.zones.length && !zone) return { ok: false, error: 'Elige tu zona de entrega.', field: 'zone' };
     return { ok: true, customer: {
       firstName: firstName, lastName: lastName, name: firstName + ' ' + lastName,
@@ -224,7 +225,7 @@
     out.push('*Celular:* ' + fmtPhone(c.phone));
     if (c.email) out.push('*Correo:* ' + c.email);
     out.push('*Entrega:* ' + (c.mode === 'delivery' ? 'a domicilio' : 'recojo en el local'));
-    out.push('*Pago:* ' + (c.payMethod === 'qr' ? 'QR (subo el comprobante en el seguimiento)' : 'efectivo'));
+    out.push('*Pago:* ' + (c.payMethod === 'qr' ? (/^#T/.test(order.orderId) ? 'QR (te envío el comprobante por aquí)' : 'QR (comprobante subido)') : 'efectivo'));
     if (c.address) out.push('*Dirección:* ' + c.address);
     out.push('');
     out.push('*MI PEDIDO*');

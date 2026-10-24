@@ -4,14 +4,26 @@
 // comparte entre todos los deploys y una prueba no debe mezclarse con pedidos reales.
 const STATUSES = ['nuevo', 'preparando', 'listo', 'entregado', 'cancelado'];
 
-function storeName() {
-  return process.env.CONTEXT === 'production' ? 'magma-orders' : 'magma-orders-test';
+// Netlify no entrega la variable CONTEXT dentro de las funciones, así que producción se reconoce por el dominio
+// con el que llegó la visita. Se puede cambiar con MAGMA_PROD_HOSTS (dominios separados por coma).
+// Las funciones programadas no traen dominio: llaman a forceProd() (solo corren en la versión publicada).
+let forced = false;
+function forceProd() { forced = true; }
+function isProd(event) {
+  if (forced || process.env.CONTEXT === 'production') return true;
+  const h = (event && event.headers) || {};
+  const host = String(h['x-forwarded-host'] || h.host || '').toLowerCase().split(',')[0].trim().replace(/:\d+$/, '');
+  const hosts = (process.env.MAGMA_PROD_HOSTS || 'estudiographica.com,www.estudiographica.com,estudiographica.netlify.app').split(',').map((x) => x.trim().toLowerCase());
+  return hosts.indexOf(host) > -1;
+}
+function storeName(event) {
+  return isProd(event) ? 'magma-orders' : 'magma-orders-test';
 }
 
 function open(event) {
   const { getStore, connectLambda } = require('@netlify/blobs');
   if (event) connectLambda(event);
-  return getStore({ name: storeName() });
+  return getStore({ name: storeName(event) });
 }
 
 // Cada pedido tiene una clave por fecha y número del día: "2026-10-24/007". El número visible es #07-24OCT.
@@ -112,7 +124,7 @@ async function listSince(event, sinceKey) {
 function openProofs(event) {
   const { getStore, connectLambda } = require('@netlify/blobs');
   if (event) connectLambda(event);
-  return getStore({ name: storeName() === 'magma-orders' ? 'magma-proofs' : 'magma-proofs-test' });
+  return getStore({ name: isProd(event) ? 'magma-proofs' : 'magma-proofs-test' });
 }
 async function saveProof(event, key, proof) {
   await openProofs(event).setJSON(key, proof);
@@ -130,4 +142,4 @@ async function setPayment(event, key, status, extra) {
   return rec;
 }
 
-module.exports = { touch, changedSince, listDays, saveProof, getProof, setPayment, getOrder, listSince, saveRecord, STATUSES, storeName, keyFor, saveNumbered, listOrders, setStatus };
+module.exports = { isProd, forceProd, touch, changedSince, listDays, saveProof, getProof, setPayment, getOrder, listSince, saveRecord, STATUSES, storeName, keyFor, saveNumbered, listOrders, setStatus };

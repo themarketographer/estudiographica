@@ -254,7 +254,7 @@
     lines = out;
     store(CART_KEY, { v: 2, lines: lines.map(P.toRaw) });
     renderBar();
-    if ($('#cartDlg').open && cartView !== 'done') renderCart();
+    if ($('#cartDlg').open && ['cart', 'details', 'pay'].indexOf(cartView) > -1) renderCart();
   }
   function rawLines() { return lines.map(P.toRaw); }
   function totals() {
@@ -580,14 +580,14 @@
   /* ---------- hoja del pedido ---------- */
 
   function openCart() {
-    cartView = 'cart';
+    if (cartView !== 'qr') cartView = 'cart';
     renderCart();
     openSheet($('#cartDlg'), $('#cartBar'));
     emit('cart_open', { value: totals().total, items: items(lines), count: totals().count });
   }
   function renderSteps() {
-    var order = ['cart', 'details', 'done'], labels = ['Pedido', 'Tus datos', 'Listo'];
-    var at = order.indexOf(cartView);
+    var order = ['cart', 'details', 'pay', 'done'], labels = ['Pedido', 'Datos', 'Pago', 'Listo'];
+    var at = order.indexOf(cartView === 'qr' ? 'pay' : cartView);
     var ol = $('#cartSteps');
     ol.textContent = '';
     labels.forEach(function (l, i) {
@@ -614,10 +614,10 @@
   function renderCart() {
     var body = $('#cartBody'), foot = $('#cartFoot'), title = $('#cartTitle'), back = $('#cartBack');
     body.textContent = ''; foot.textContent = '';
-    back.hidden = cartView !== 'details';
+    back.hidden = cartView !== 'details' && cartView !== 'pay';
     $('#cartSteps').hidden = !(lines.length || cartView === 'done');
     renderSteps();
-    var order = ['cart', 'details', 'done'];
+    var order = ['cart', 'details', 'pay', 'qr', 'done'];
     var dir = order.indexOf(cartView) >= order.indexOf(lastView) ? 'fwd' : 'back';
     if (cartView !== lastView) {
       [body, foot].forEach(function (n) { n.classList.remove('view-fwd', 'view-back'); void n.offsetWidth; n.classList.add('view-' + dir); });
@@ -660,6 +660,12 @@
     } else if (cartView === 'details') {
       title.textContent = 'Tus datos';
       renderDetails(body, foot);
+    } else if (cartView === 'pay') {
+      title.textContent = 'Pago';
+      renderPay(body, foot);
+    } else if (cartView === 'qr') {
+      title.textContent = 'Paga con QR';
+      renderQr(body, foot);
     } else if (cartView === 'done') {
       title.textContent = 'Pedido listo';
       renderDone(body, foot);
@@ -671,6 +677,7 @@
     var kids = [h('div', { class: 'empty-ico' }, icon('i-bag')), h('h3', { class: 'display', text: 'Tu pedido está vacío' }), h('p', { text: 'Las alitas no se piden solas.' })];
     kids.push(h('button', { class: 'btn', type: 'button', onclick: function () { closeSheet($('#cartDlg')); } }, icon('i-flame'), 'Ver el menú'));
     if (lastOrder) kids.push(h('button', { class: 'link center', type: 'button', onclick: restoreLast }, icon('i-receipt'), 'Repetir mi último pedido (' + lastOrder.orderId + ')'));
+    if (lastOrder && lastOrder.customer && lastOrder.customer.payMethod === 'qr' && !lastOrder.proof && String(lastOrder.orderId).indexOf('#T') !== 0 && Date.now() - lastOrder.at < 6 * 3600000) kids.unshift(h('a', { class: 'btn', href: 'pedido/' }, icon('i-qr'), 'Subir comprobante de ' + lastOrder.orderId));
     body.appendChild(h('div', { class: 'empty' }, kids));
     motionRefresh();
   }
@@ -711,22 +718,6 @@
       rcpt.appendChild(h('div', { class: 'rrow total' }, h('span', { text: 'Total' }), h('b', { class: 'display', text: money(total) + (mode === 'delivery' && fee.fee === null && zoneSel.value ? ' + envío' : '') })));
     };
     zoneSel.addEventListener('change', function () { paint(); emit('zone_select', { zone: zoneSel.value }); });
-    var methods = (menu.payment && menu.payment.methods) || ['cash'];
-    var payMethod = methods.indexOf(saved.payMethod) > -1 ? saved.payMethod : methods[0];
-    var paySeg = null;
-    var payHint = h('p', { class: 'hint' }, icon('i-shield'), h('span', { text: '' }));
-    var paintPay = function () { $('span', payHint).textContent = payMethod === 'qr' ? (menu.payment.qr.note || '') : (menu.payment.cashNote || ''); };
-    if (methods.length > 1) {
-      var mkp = function (val, label, ic) {
-        var input = h('input', { type: 'radio', name: 'payMethod', value: val, checked: payMethod === val });
-        var lab = h('label', { class: 'opt mode' + (payMethod === val ? ' on' : '') }, input, icon(ic), h('span', { class: 'nm', text: label }));
-        input.addEventListener('change', function () { payMethod = val; paintPay(); $$('.seg.payseg .opt').forEach(function (x) { x.classList.toggle('on', $('input', x).checked); }); emit('payment_select', { method: val }); });
-        return lab;
-      };
-      paySeg = h('div', { class: 'f' }, h('span', { class: 'lab', text: '¿Cómo pagas?' }), h('div', { class: 'seg payseg' }, mkp('cash', 'Efectivo', 'i-cash'), mkp('qr', 'QR', 'i-qr')),
-        payHint);
-    }
-    paintPay();
     var seg = null;
     if (both) {
       var mk = function (val, label, ic) {
@@ -750,12 +741,12 @@
     var consentRow = h('label', { class: 'consent', for: 'consent' }, consent, h('span', { class: 'box' }, icon('i-check')),
       h('span', { class: 'ctext' }, h('b', { text: 'Quiero recibir ofertas de ' + menu.brand.name }),
         h('small', {}, icon('i-shield'), 'Usamos tus datos para tu pedido y para enviarte ofertas y anuncios. Desmarca la casilla si no quieres recibirlas. Puedes pedir que borremos tus datos cuando quieras.')));
-    var form = h('form', { class: 'form', id: 'orderForm', novalidate: true, onsubmit: function (e) { e.preventDefault(); sendOrder(function () {
+    var form = h('form', { class: 'form', id: 'orderForm', novalidate: true, onsubmit: function (e) { e.preventDefault(); goPay(function () {
       return { firstName: fFirst.querySelector('input').value, lastName: fLast.querySelector('input').value, phone: fPhone.querySelector('input').value, email: fEmail.querySelector('input').value,
-        consent: consent.checked, mode: mode, zone: zoneSel.value, payMethod: payMethod, address: addr.value, notes: notes.value };
+        consent: consent.checked, mode: mode, zone: zoneSel.value, address: addr.value, notes: notes.value };
     }); } },
       h('div', { class: 'pair' }, fFirst, fLast), fPhone, fEmail,
-      seg, fZone, fAddr, paySeg,
+      seg, fZone, fAddr,
       h('div', { class: 'f' }, h('label', { for: 'notes' }, 'Notas del pedido ', h('small', { text: '(opcional)' })), h('div', { class: 'inp area' }, icon('i-note'), notes)),
       consentRow,
       rcpt);
@@ -767,7 +758,7 @@
       if (er) er.hidden = true;
     });
     body.appendChild(form);
-    foot.appendChild(h('button', { class: 'btn btn--wa btn--block', type: 'submit', id: 'sendBtn', form: 'orderForm' }, icon('i-wa'), h('span', { text: 'Enviar por WhatsApp' })));
+    foot.appendChild(h('button', { class: 'btn btn--block', type: 'submit', id: 'sendBtn', form: 'orderForm' }, h('span', { text: payMethods().length > 1 ? 'Continuar al pago' : 'Enviar por WhatsApp' }), icon('i-arrow')));
   }
 
   function fieldError(field, msg) {
@@ -786,22 +777,92 @@
     var b = $('#sendBtn');
     if (!b) return;
     b.classList.toggle('is-loading', on);
-    if (on) b.setAttribute('aria-busy', 'true'); else b.removeAttribute('aria-busy');
-    $('span', b).textContent = on ? 'Enviando…' : 'Enviar por WhatsApp';
+    var sp = $('span', b);
+    if (on) { b.setAttribute('aria-busy', 'true'); b.dataset.label = sp.textContent; sp.textContent = 'Enviando…'; }
+    else { b.removeAttribute('aria-busy'); if (b.dataset.label) sp.textContent = b.dataset.label; }
   }
 
-  function sendOrder(read) {
-    if (sending) return;
-    var c = P.cleanCustomer(menu, read());
+  /* ---------- pago ---------- */
+
+  var draft = null, payChoice = '';
+  function payMethods() { return (menu.payment && menu.payment.methods) || ['cash']; }
+
+  /* Paso 2 a paso 3: se valida lo básico y se pasa a elegir cómo pagar. */
+  function goPay(read) {
+    var raw = read();
+    var c = P.cleanCustomer(menu, Object.assign({}, raw, { payMethod: payMethods()[0] }));
     if (!c.ok) return fieldError(c.field, c.error);
-    store(CUST_KEY, { firstName: c.customer.firstName, lastName: c.customer.lastName, phone: c.customer.phone, email: c.customer.email, consent: c.customer.consent, mode: c.customer.mode, zone: c.customer.zone, payMethod: c.customer.payMethod, address: c.customer.address });
+    store(CUST_KEY, { firstName: c.customer.firstName, lastName: c.customer.lastName, phone: c.customer.phone, email: c.customer.email, consent: c.customer.consent, mode: c.customer.mode, zone: c.customer.zone, address: c.customer.address });
+    draft = raw; payChoice = '';
+    if (payMethods().length === 1) return sendOrder(Object.assign({}, raw, { payMethod: payMethods()[0] }));
+    cartView = 'pay'; renderCart();
+    emit('payment_step', { value: totals().total });
+  }
+
+  function renderPay(body, foot) {
+    var sub = totals().total, fee = P.deliveryFee(menu, { mode: draft.mode, zone: draft.zone }, sub), total = sub + (fee.fee || 0);
+    body.appendChild(h('div', { class: 'pay-sum' }, icon('i-receipt'), h('span', { text: 'Total a pagar' }), h('b', { class: 'display', text: money(total) }),
+      draft.mode === 'delivery' && fee.fee === null ? h('small', { text: 'más envío, te lo confirmamos' }) : null));
+    body.appendChild(h('p', { class: 'pay-q', id: 'payQ', text: 'Elige cómo vas a pagar' }));
+    var btn = h('button', { class: 'btn btn--block', type: 'button', id: 'sendBtn', disabled: true, onclick: function () { sendOrder(Object.assign({}, draft, { payMethod: payChoice })); } }, h('span', { text: 'Elige cómo pagar' }), icon('i-arrow'));
+    var paint = function () {
+      var qr = payChoice === 'qr';
+      btn.disabled = !payChoice;
+      $('span', btn).textContent = !payChoice ? 'Elige cómo pagar' : (qr ? 'Continuar con el QR' : 'Enviar por WhatsApp');
+      btn.classList.toggle('btn--wa', payChoice === 'cash');
+    };
+    var info = { cash: ['i-cash', 'Efectivo', menu.payment.cashNote || 'Pagas al recibir o recoger tu pedido.'], qr: ['i-qr', 'QR', 'Pagas ahora y subes tu comprobante. Sin comprobante, el pedido no se envía al local.'] };
+    var box = h('div', { class: 'payopts', role: 'radiogroup', 'aria-labelledby': 'payQ' }, payMethods().map(function (m) {
+      var input = h('input', { type: 'radio', name: 'payMethod', value: m, checked: false });
+      var lab = h('label', { class: 'opt pm' }, input, h('span', { class: 'pm-ic' }, icon(info[m][0])), h('span', { class: 'nm' }, info[m][1], h('small', { text: info[m][2] })));
+      input.addEventListener('change', function () {
+        payChoice = m; $$('.payopts .opt').forEach(function (x) { x.classList.toggle('on', $('input', x).checked); });
+        $('#payQ').classList.remove('err'); paint(); emit('payment_select', { method: m });
+      });
+      return lab;
+    }));
+    body.appendChild(box);
+    foot.appendChild(btn);
+  }
+
+  /* Pedido por QR: ya tiene número, pero no se envía al local hasta que suba el comprobante. */
+  function renderQr(body, foot) {
+    var o = lastOrder;
+    body.appendChild(h('div', { class: 'qr-head' }, icon('i-receipt'), h('b', { class: 'display', text: o.orderId }), h('span', { text: money(o.total) })));
+    body.appendChild(h('p', { class: 'qr-lead', text: 'Paga con el QR y sube la foto de tu comprobante. Sin comprobante, tu pedido no se envía al local.' }));
+    var payBox = h('div', { id: 'payBox' });
+    body.appendChild(payBox);
+    var locked = h('button', { class: 'btn btn--block', type: 'button', disabled: true }, icon('i-lock'), h('span', { text: 'Sube tu comprobante para enviar' }));
+    foot.appendChild(locked);
+    var unlock = function () {
+      foot.textContent = '';
+      lastOrder.proof = true; store(LAST_KEY, lastOrder);
+      foot.appendChild(h('a', { class: 'btn btn--wa btn--block', href: o.whatsappUrl, rel: 'noopener', onclick: function () {
+        emit('whatsapp_click', { source: 'qr', orderId: o.orderId });
+        setTimeout(function () { if (cartView === 'qr') { cartView = 'done'; renderCart(); } }, 400);
+      } }, icon('i-wa'), h('span', { text: 'Enviar pedido por WhatsApp' })));
+      toast('Comprobante recibido. Ya puedes enviar tu pedido.');
+      var wa = $('a.btn--wa', foot); if (wa) wa.classList.add('pulse');
+    };
+    if (window.MagmaProof) window.MagmaProof.mount(payBox, { n: String(o.orderId).replace(/^#/, ''), p: String(o.customer.phone || '').slice(-4), amount: o.total, qr: menu.payment.qr, status: 'pendiente', noHead: true, onStatus: function (st) { emit('payment_proof', { orderId: o.orderId, status: st }); unlock(); } });
+    /* El QR y el botón de subir quedan a la vista sin que el cliente tenga que buscarlos. */
+    setTimeout(function () { var pb = $('#payBox'); if (pb) pb.scrollIntoView({ block: 'start', behavior: reduceMotion.matches ? 'auto' : 'smooth' }); }, 350);
+  }
+
+  function sendOrder(rawCustomer) {
+    if (sending) return;
+    var c = P.cleanCustomer(menu, rawCustomer);
+    if (!c.ok) {
+      if (c.field === 'payMethod') { var q = $('#payQ'); if (q) q.classList.add('err'); return toast(c.error); }
+      cartView = 'details'; renderCart(); return fieldError(c.field, c.error);
+    }
     var payload = { lines: rawLines(), customer: c.customer, meta: { fbp: cookie('_fbp'), fbc: cookie('_fbc') || fbcFromUrl() } };
-    emit('order_submit', { value: totals().total, items: items(lines), count: totals().count, mode: c.customer.mode });
+    emit('order_submit', { value: totals().total, items: items(lines), count: totals().count, mode: c.customer.mode, payment: c.customer.payMethod });
     setSending(true);
     fetchTimeout('/api/magma/order', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }, 6000)
       .then(function (res) {
         if (res.status === 422) {
-          return res.json().then(function (d) { setSending(false); fieldError(d.field, d.error || 'Revisa tu pedido.'); emit('order_error', { reason: d.error }); });
+          return res.json().then(function (d) { setSending(false); if (d.field && d.field !== 'payMethod') { cartView = 'details'; renderCart(); fieldError(d.field, d.error || 'Revisa tu pedido.'); } else toast(d.error || 'Revisa tu pedido.'); emit('order_error', { reason: d.error }); });
         }
         if (!res.ok) throw new Error('http ' + res.status);
         return res.json().then(function (d) {
@@ -821,12 +882,13 @@
 
   function finishOrder(d, customer, fallback) {
     var snapshot = { at: Date.now(), orderId: d.orderId, lines: rawLines(), customer: customer, message: d.message, whatsappUrl: d.whatsappUrl, total: d.total };
-    var ev = { value: d.total, items: items(lines), count: totals().count, orderId: d.orderId, mode: customer.mode, fallback: !!fallback };
+    var ev = { value: d.total, items: items(lines), count: totals().count, orderId: d.orderId, mode: customer.mode, fallback: !!fallback, payment: customer.payMethod };
+    var qr = customer.payMethod === 'qr' && String(d.orderId).indexOf('#T') !== 0;
     lastOrder = snapshot;
     store(LAST_KEY, snapshot);
+    cartView = qr ? 'qr' : 'done';
     clearCart();
     setSending(false);
-    cartView = 'done';
     renderCart();
     /* Coincidencia avanzada: solo con permiso del cliente, el píxel recibe sus datos (Meta los convierte en hash). */
     if (customer.consent && typeof window.fbq === 'function' && menu.tracking && menu.tracking.metaPixel) {
@@ -840,26 +902,24 @@
     var o = lastOrder;
     var tick = h('div', { class: 'tick' }, icon('i-check'));
     var sparks = h('div', { class: 'sparks', 'aria-hidden': 'true' });
-    for (var i = 0; i < 10; i++) { var s = document.createElement('i'); s.style.setProperty('--a', (i * 36) + 'deg'); s.style.setProperty('--r', (54 + (i % 3) * 14) + 'px'); sparks.appendChild(s); }
-    var lines2 = (o.lines || []).reduce(function (n, l) { return n + (l.qty || 0); }, 0);
+    for (var i = 0; i < 10; i++) { var s = document.createElement('i'); s.style.setProperty('--a', (i * 36) + 'deg'); s.style.setProperty('--r', (40 + (i % 3) * 10) + 'px'); sparks.appendChild(s); }
+    var n = (o.lines || []).reduce(function (k, l) { return k + (l.qty || 0); }, 0);
+    var qr = o.customer && o.customer.payMethod === 'qr';
+    var unsaved = String(o.orderId).indexOf('#T') === 0;
     body.appendChild(h('div', { class: 'done' },
       h('div', { class: 'tick-wrap' }, sparks, tick),
       h('p', { class: 'done-k', text: 'Tu pedido es el' }),
       h('h3', { class: 'display', text: o.orderId }),
-      h('p', { class: 'done-sum' }, icon('i-receipt'), lines2 + (lines2 === 1 ? ' producto' : ' productos') + ' · ' + money(o.total)),
-      h('p', { class: 'done-t', text: o.customer && o.customer.payMethod === 'qr' ? 'Paga con el QR, sube tu comprobante y luego envía el pedido por WhatsApp.' : 'Abrimos WhatsApp con tu pedido listo. Envía el mensaje y lo confirmamos contigo.' }),
-      h('div', { id: 'payBox' }),
+      h('p', { class: 'done-sum' }, icon('i-receipt'), n + (n === 1 ? ' producto' : ' productos') + ' · ' + money(o.total)),
+      h('p', { class: 'done-t', text: qr && !unsaved ? 'Enviamos tu comprobante. En cuanto confirmemos tu pago, empezamos a prepararlo.' : 'Abrimos WhatsApp con tu pedido listo. Envía el mensaje y lo confirmamos contigo.' }),
+      qr && unsaved ? h('div', { id: 'payBox' }) : null,
       h('div', { class: 'stack' },
         h('a', { class: 'btn btn--wa btn--block', href: o.whatsappUrl, rel: 'noopener', onclick: function () { emit('whatsapp_click', { source: 'done', orderId: o.orderId }); } }, icon('i-wa'), 'Abrir WhatsApp'),
-        !String(o.orderId).indexOf('#T') ? null : h('a', { class: 'btn btn--ghost btn--block', href: 'pedido/', onclick: function () { emit('track_open', { orderId: o.orderId }); } }, icon('i-clock'), 'Seguir mi pedido'),
+        unsaved ? null : h('a', { class: 'btn btn--ghost btn--block', href: 'pedido/', onclick: function () { emit('track_open', { orderId: o.orderId }); } }, icon('i-clock'), 'Seguir mi pedido'),
         h('button', { class: 'btn btn--ghost btn--block', type: 'button', onclick: function () { copyText(o.message); } }, icon('i-copy'), 'Copiar mensaje'),
-        h('button', { class: 'link center', type: 'button', onclick: restoreLast }, icon('i-edit'), 'Editar pedido')),
-      h('pre', { class: 'preview', text: o.message })));
+        unsaved ? null : null)));
     foot.appendChild(h('button', { class: 'btn btn--ghost btn--block', type: 'button', onclick: function () { closeSheet($('#cartDlg')); } }, icon('i-x'), 'Cerrar'));
-    if (o.customer && o.customer.payMethod === 'qr' && window.MagmaProof) {
-      var saved = String(o.orderId).indexOf('#T') !== 0;
-      window.MagmaProof.mount($('#payBox'), { n: String(o.orderId).replace(/^#/, ''), p: String(o.customer.phone || '').slice(-4), amount: o.total, qr: menu.payment.qr, status: 'pendiente', noUpload: !saved, onStatus: function (s) { emit('payment_proof', { orderId: o.orderId, status: s }); } });
-    }
+    if (qr && unsaved && window.MagmaProof) window.MagmaProof.mount($('#payBox'), { amount: o.total, qr: menu.payment.qr, status: 'pendiente', noUpload: true });
   }
   function copyText(t) {
     var done = function () { toast('Mensaje copiado'); };
@@ -972,7 +1032,7 @@
     wireSheet($('#cartDlg'));
     $('#cartBar').addEventListener('click', openCart);
     $('#navCart').addEventListener('click', openCart);
-    $('#cartBack').addEventListener('click', function () { cartView = 'cart'; renderCart(); });
+    $('#cartBack').addEventListener('click', function () { cartView = cartView === 'pay' ? 'details' : 'cart'; renderCart(); });
     motionRefresh();
     loadTracking(m.tracking);
     emit('menu_view', { products: m.products.length });

@@ -42,14 +42,14 @@ exports.handler = async function (event) {
       // Consulta liviana: solo lo que cambió desde la última vez.
       if (q.since) {
         const r = await Store.changedSince(event, Number(q.since) || 0);
-        return reply(200, { ok: true, store: Store.storeName(), now: r.now, orders: r.orders });
+        return reply(200, { ok: true, store: Store.storeName(event), now: r.now, orders: r.orders });
       }
       // Carga completa: hoy y ayer por defecto. "days" amplía (máximo 31).
       const days = Math.min(31, Math.max(1, parseInt(q.days, 10) || 2));
       const keys = [];
       for (let i = 0; i < days; i++) keys.push(Pricing.boliviaDate(new Date(Date.now() - i * 86400000)).key);
       const orders = await Store.listDays(event, keys);
-      return reply(200, { ok: true, store: Store.storeName(), now: Date.now(), days, orders });
+      return reply(200, { ok: true, store: Store.storeName(event), now: Date.now(), days, orders });
     }
     if (event.httpMethod === 'POST') {
       let body;
@@ -65,7 +65,7 @@ exports.handler = async function (event) {
       // Al entregar, el pedido pasa a ser una venta confirmada: se avisa a Meta una sola vez.
       let capi = 'skipped';
       if (body.status === 'entregado' && !rec.purchaseSent) {
-        const r = await Meta.sendEvent('Purchase', rec, 'https://' + ((event.headers || {}).host || 'estudiographica.com') + '/menu/magma/');
+        const r = await Meta.sendEvent('Purchase', rec, 'https://' + ((event.headers || {}).host || 'estudiographica.com') + '/menu/magma/', Store.isProd(event));
         capi = r.status;
         if (r.status === 'sent') { rec.purchaseSent = true; await Store.saveRecord(event, rec); }
       }

@@ -3,6 +3,7 @@
 // La página reduce la foto antes de enviarla; aquí se vuelve a revisar el tipo y el tamaño.
 const Lookup = require('./lib-magma/lookup.js');
 const Store = require('./lib-magma/store.js');
+const Notify = require('./lib-magma/notify.js');
 
 const MAX_BODY = 1500000;
 const IMG_RE = /^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/;
@@ -30,5 +31,6 @@ exports.handler = async function (event) {
     console.error('magma-proof:', e && e.message);
     return reply(500, { ok: false, error: 'No pudimos guardar el comprobante. Envíalo por WhatsApp.' });
   }
+  if (rec.payment.status !== 'comprobante') await Notify.proof(rec, Store.isProd(event));
   return reply(200, { ok: true, status: 'comprobante' });
 };
