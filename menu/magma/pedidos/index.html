@@ -299,7 +299,7 @@ a{color:inherit}
 
 <div class="wrap">
   <div class="bar">
-    <img src="../images/logo-alpha.png" alt="Magma Wings" width="531" height="208">
+    <img src="../images/logo-alpha.webp" alt="Magma Wings" width="531" height="208">
     <h1 class="display">Pedidos</h1>
     <span class="live" id="live" hidden>En vivo</span>
     <button class="tool" id="sound" type="button" aria-label="Sonido de pedidos nuevos" aria-pressed="false" hidden><svg class="ic" aria-hidden="true"><use href="#i-bell"/></svg><span>Sonido</span></button>
@@ -324,6 +324,7 @@ a{color:inherit}
     <div class="search"><svg class="ic" aria-hidden="true"><use href="#i-search"/></svg><label class="sr" for="q">Buscar pedido</label><input id="q" type="search" placeholder="Buscar por nombre, celular o número" autocomplete="off"></div>
     <p id="store" style="color:var(--muted);font-size:14px;margin-bottom:12px"></p>
     <ul class="grid" id="list" aria-live="polite"></ul>
+    <p style="text-align:center;margin:18px 0 0"><button class="chipbtn" id="more" type="button" style="background:transparent;color:var(--cream);border-color:var(--line-2)"><svg class="ic" aria-hidden="true"><use href="#i-clock"/></svg>Cargar pedidos anteriores (14 días)</button></p>
     <div class="export">
       <h2 class="display">Exportar</h2>
       <div class="acts">
@@ -402,19 +403,37 @@ a{color:inherit}
   }
 
   function setLive(ok) { var l = $('#live'); l.hidden = false; l.classList.toggle('off', !ok); l.textContent = ok ? 'En vivo · actualizado ahora' : 'Sin conexión, reintentando'; }
-  function load() {
-    return api('GET').then(function (d) {
+  /* Lectura barata: la primera vez trae hoy y ayer; después solo pregunta qué cambió (una consulta liviana).
+     Así el panel puede quedarse abierto todo el día sin releer cada pedido en cada vuelta. */
+  var lastNow = 0, loadedDays = 0, idle = 0;
+  function merge(list) {
+    var changed = 0, fresh = 0;
+    list.forEach(function (o) {
+      var i = -1; for (var k = 0; k < orders.length; k++) if (orders[k].key === o.key) { i = k; break; }
+      if (i < 0) { orders.push(o); changed++; if (lastNow && o.status === 'nuevo') fresh++; }
+      else if (JSON.stringify(orders[i]) !== JSON.stringify(o)) { orders[i] = o; changed++; }
+    });
+    orders.sort(function (a, b) { return String(b.createdAt).localeCompare(String(a.createdAt)); });
+    return { changed: changed, fresh: fresh };
+  }
+  function load(days) {
+    var full = !!days || !lastNow;
+    var qs = full ? '?days=' + (days || 2) : '?since=' + Math.max(0, lastNow - 90000);
+    return api('GET', null, qs).then(function (d) {
       if (d.status === 401 || d.status === 503) throw new Error(d.error || 'No se pudo entrar.');
       if (!d.ok) throw new Error(d.error || 'Error al leer los pedidos.');
-      orders = d.orders; loadedAt = Date.now(); setLive(true);
+      var r = merge(d.orders); lastNow = d.now || Date.now(); loadedAt = Date.now(); setLive(true);
+      if (full) loadedDays = Math.max(loadedDays, d.days || 2);
+      idle = r.changed ? 0 : idle + 1;
       /* Un cambio de estado tarda hasta ~1 min en verse desde cualquier lugar: mientras tanto manda el que acabas de poner. */
       orders.forEach(function (o) { var p = pending[o.key]; if (p && Date.now() - p.at < 90000) o.status = p.status; });
       $('#store').textContent = d.store === 'magma-orders' ? '' : 'Estás viendo pedidos de prueba (' + d.store + ').';
       var nuevos = orders.filter(function (o) { return o.status === 'nuevo'; });
       document.title = (nuevos.length ? '(' + nuevos.length + ') ' : '') + 'Pedidos Magma Wings';
-      if (lastNew !== null && nuevos.length > lastNew) { if (soundOn) beep(); toast('Llegó un pedido nuevo'); }
+      if (!full && r.fresh) { if (soundOn) beep(); toast('Llegó un pedido nuevo'); }
       lastNew = nuevos.length;
-      renderAll();
+      if (full || r.changed || $('#detail').open) renderAll();
+      $('#more').parentNode.hidden = loadedDays >= 14;
     }).catch(function (e) { if (!$('#panel').hidden) setLive(false); throw e; });
   }
 
@@ -694,6 +713,7 @@ a{color:inherit}
 
   /* ---------- Resumen de ventas ---------- */
   function openSummary() {
+    if (loadedDays < 8) { toast('Cargando los últimos días…'); load(8).then(openSummary).catch(function (e) { toast(e.message); }); return; }
     var live = orders.filter(function (o) { return o.status !== 'cancelado'; });
     var dlg = $('#summary'), body = $('#sBody'); body.textContent = '';
     var day = function (d) { return d.toLocaleDateString('es-BO', { timeZone: 'America/La_Paz', year: 'numeric', month: '2-digit', day: '2-digit' }); };
@@ -751,11 +771,13 @@ a{color:inherit}
     $('#login').hidden = true; $('#panel').hidden = false;
     ['#sound', '#sumBtn', '#refresh', '#logout'].forEach(function (s) { $(s).hidden = false; });
     clearInterval(timer); clearInterval(tick);
-    timer = setInterval(function () { if (!document.hidden) load().catch(function () {}); }, 20000);
-    tick = setInterval(function () { if (!document.hidden && !$('#panel').hidden) { render(); var s = Math.round((Date.now() - loadedAt) / 1000); if (s > 45) setLive(false); } }, 60000);
+    /* Cada 30 s mientras haya movimiento; si pasan 6 consultas sin cambios, cada 90 s. Con la pestaña oculta no consulta. */
+    var n = 0;
+    timer = setInterval(function () { if (document.hidden) return; n++; if (idle >= 6 && n % 3) return; load().catch(function () {}); }, 30000);
+    tick = setInterval(function () { if (!document.hidden && !$('#panel').hidden) { render(); var s = Math.round((Date.now() - loadedAt) / 1000); if (s > 150) setLive(false); } }, 60000);
   }
   function leave(msg) {
-    token = ''; put(KEY, ''); clearInterval(timer); clearInterval(tick); lastNew = null; first = true;
+    token = ''; put(KEY, ''); clearInterval(timer); clearInterval(tick); lastNew = null; first = true; orders = []; lastNow = 0; loadedDays = 0; idle = 0;
     $('#login').hidden = false; $('#panel').hidden = true; $('#live').hidden = true;
     ['#sound', '#sumBtn', '#refresh', '#logout'].forEach(function (s) { $(s).hidden = true; });
     var e = $('#err'); e.textContent = msg || ''; e.hidden = !msg;
@@ -766,7 +788,9 @@ a{color:inherit}
     ev.preventDefault(); token = $('#tk').value.trim();
     load().then(function () { put(KEY, token); enter(); }).catch(function (e) { leave(e.message); });
   });
-  $('#refresh').addEventListener('click', function () { load().then(function () { toast('Actualizado'); }).catch(function (e) { leave(e.message); }); });
+  document.addEventListener('visibilitychange', function () { if (!document.hidden && token && !$('#panel').hidden && Date.now() - loadedAt > 20000) load().catch(function () {}); });
+  $('#more').addEventListener('click', function () { var b = this; b.disabled = true; load(14).then(function () { toast('Pedidos de los últimos 14 días cargados'); }).catch(function (e) { toast(e.message); }).then(function () { b.disabled = false; }); });
+  $('#refresh').addEventListener('click', function () { load(loadedDays || 2).then(function () { toast('Actualizado'); }).catch(function (e) { leave(e.message); }); });
   $('#logout').addEventListener('click', function () { leave(''); });
   $('#csv').addEventListener('click', csvAll);
   $('#sumBtn').addEventListener('click', openSummary);

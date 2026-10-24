@@ -61,7 +61,7 @@
     <symbol id="i-phone" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="6.500" y="2.500" width="11" height="19" rx="2.500"/><path d="M11 18.500h2"/></g></symbol>
 </defs></svg>
 <main class="tk" id="tk">
-  <div class="tk-top"><img src="../images/logo-alpha.png" alt="Magma Wings" width="531" height="208"><a href="../"><svg class="ic" aria-hidden="true"><use href="#i-back"/></svg>Volver al menú</a></div>
+  <div class="tk-top"><img src="../images/logo-alpha.webp" alt="Magma Wings" width="531" height="208"><a href="../"><svg class="ic" aria-hidden="true"><use href="#i-back"/></svg>Volver al menú</a></div>
   <h1 class="display">Sigue tu pedido</h1>
   <p class="lead">Escribe el número de tu pedido y los últimos 4 dígitos del celular con el que pediste.</p>
   <form class="tk-form" id="f" novalidate>
@@ -124,7 +124,7 @@
       eta.appendChild(document.createTextNode(d.status === 'listo' ? (d.mode === 'delivery' ? 'Tu pedido va en camino.' : 'Ya puedes pasar a recogerlo.') : left > 2 ? (d.mode === 'delivery' ? 'Llega en unos ' : 'Estará listo en unos ') + left + ' min' : 'Está por salir, gracias por esperar.'));
       card.appendChild(eta);
     }
-    var live = el('div', 'tk-live'); live.appendChild(el('i')); live.appendChild(document.createTextNode(d.status === 'entregado' ? 'Pedido cerrado' : 'Se actualiza solo cada 15 segundos')); card.appendChild(live);
+    var live = el('div', 'tk-live'); live.appendChild(el('i')); live.appendChild(document.createTextNode(d.status === 'entregado' ? 'Pedido cerrado' : 'Se actualiza solo cada medio minuto')); card.appendChild(live);
     var acts = el('div', 'tk-actions');
     var a = el('a', 'btn btn--wa'); a.href = 'https://wa.me/' + cfg.wa + '?text=' + encodeURIComponent('Hola, consulto por mi pedido ' + d.orderId); a.target = '_blank'; a.rel = 'noopener';
     a.appendChild(svg('i-wa')); a.appendChild(document.createTextNode('Escribir al local')); acts.appendChild(a); card.appendChild(acts);
@@ -145,7 +145,16 @@
         showErr(''); cur = { n: n, p: p }; draw(x.d);
         $('#f').hidden = true; document.querySelector('.lead').hidden = true;
         clearInterval(timer);
-        if (x.d.status !== 'entregado' && x.d.status !== 'cancelado') timer = setInterval(function () { if (!document.hidden) check(cur.n, cur.p, true); }, 15000);
+        if (x.d.status !== 'entregado' && x.d.status !== 'cancelado') {
+          /* Cada 30 s los primeros 10 minutos, después cada 60 s, y se detiene a los 40 minutos. Con la pestaña oculta no consulta. */
+          var t0 = Date.now(), last = '';
+          timer = setInterval(function () {
+            var age = Date.now() - t0;
+            if (age > 40 * 60000) { clearInterval(timer); $('.tk-live').textContent = 'Toca actualizar para ver el estado.'; return; }
+            if (document.hidden || (age > 10 * 60000 && Math.round(age / 30000) % 2)) return;
+            check(cur.n, cur.p, true);
+          }, 30000);
+        }
       })
       .catch(function () { if (!quiet) showErr('Sin conexión. Intenta otra vez en un momento.'); });
   }

@@ -1,5 +1,5 @@
 /* Menú de Magma Wings: catálogo, pedido y envío por WhatsApp.
-   Datos:   /api/magma/menu (o menu.json si la API no responde)
+   Datos:   menu.json estático (o /api/magma/menu si no carga)
    Pedido:  /api/magma/order (si falla, el mensaje se arma aquí con las mismas reglas)
    Eventos:   document.addEventListener('click', function (e) { var a = e.target.closest && e.target.closest('[data-ev]'); if (a) emit(a.getAttribute('data-ev'), {}); });
 
@@ -437,38 +437,55 @@
     $('#itemTitle').textContent = st.product.title;
     var body = $('#itemBody');
     body.textContent = '';
-    body.appendChild(h('p', { class: 'lead-s', text: st.product.sub + '.' }));
+    body.appendChild(h('p', { class: 'lead-s' }, icon('i-' + (st.product.icon || 'flame')), st.product.sub));
     body.appendChild(groupEl('portion'));
     (st.product.groups || []).forEach(function (gid) { body.appendChild(groupEl(gid)); });
     var note = h('textarea', { id: 'itemNote', maxlength: '120', rows: '2', placeholder: 'Bien cocidas, sin picante extra, lo que necesites' });
     note.value = st.note;
     note.addEventListener('input', function () { st.note = note.value; });
-    body.appendChild(h('div', { class: 'f item-note' }, h('label', { for: 'itemNote' }, 'Nota ', h('small', { text: '(opcional)' })), note));
+    var wrap = h('div', { class: 'f item-note' + (st.note ? ' open' : '') });
+    var toggle = h('button', { class: 'note-toggle', type: 'button', 'aria-expanded': st.note ? 'true' : 'false', onclick: function () {
+      var on = wrap.classList.toggle('open'); toggle.setAttribute('aria-expanded', on ? 'true' : 'false');
+      if (on) note.focus({ preventScroll: false });
+    } }, icon('i-note'), h('span', { text: 'Nota para la cocina' }), h('small', { text: '(opcional)' }), icon('i-plus'));
+    wrap.appendChild(toggle);
+    wrap.appendChild(h('div', { class: 'note-box' }, note));
+    body.appendChild(wrap);
     renderItemFoot();
     syncOptions();
   }
+  function clusterOf(n, ic) {
+    var cols = n <= 4 ? n : (n === 8 ? 4 : (n <= 6 ? 3 : 6));
+    var size = n <= 6 ? 18 : (n <= 12 ? 15 : 12);
+    var box = h('span', { class: 'cluster', 'aria-hidden': 'true', style: '--c:' + cols + ';--s:' + size + 'px' });
+    for (var i = 0; i < n; i++) box.appendChild(icon(ic));
+    return box;
+  }
   function groupEl(gid) {
     var isPortion = gid === 'portion';
-    var g = isPortion ? { label: 'Porción', hint: 'Elige 1', type: 'single' } : menu.optionGroups[gid];
+    var g = isPortion ? { label: 'Porción', hint: 'Elige 1', type: 'single', icon: 'bag' } : menu.optionGroups[gid];
     var multi = g.type === 'multi';
     var opts = isPortion ? portionOptions(itemState.product) : P.groupOptions(menu, g);
-    var box = h('div', { class: 'opts' });
+    var pics = isPortion ? 'i-' + (itemState.product.icon || 'flame') : null;
+    var gic = isPortion ? pics : 'i-' + (g.icon || 'drop');
+    var box = h('div', { class: 'opts ' + (isPortion ? 'tiles' : 'chips') });
     opts.forEach(function (o) {
       var input = h('input', { type: multi ? 'checkbox' : 'radio', name: 'g-' + gid, value: o.id, checked: (itemState.sel[gid] || []).indexOf(o.id) > -1, disabled: o.off });
       var price = o.abs ? money(o.price) : (o.price ? '+' + o.price + ' ' + menu.brand.currency : (o.default ? 'Incluido' : ''));
-      var check = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-      check.setAttribute('viewBox', '0 0 24 24');
-      check.setAttribute('aria-hidden', 'true');
-      var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-      path.setAttribute('d', 'M5 12.5l4.5 4.5L19 7.5');
-      path.setAttribute('fill', 'none'); path.setAttribute('stroke', 'currentColor'); path.setAttribute('stroke-width', '3');
-      path.setAttribute('stroke-linecap', 'round'); path.setAttribute('stroke-linejoin', 'round');
-      check.appendChild(path);
-      var label = h('label', { class: 'opt' + (multi ? ' multi' : '') + (o.off ? ' off' : '') },
-        input,
-        h('span', { class: 'mark-c' }, check),
-        h('span', { class: 'nm' }, o.name, o.desc ? h('small', { text: o.desc }) : null),
-        price ? h('span', { class: 'pr', text: o.off ? 'Agotado' : price }) : null);
+      var label;
+      if (isPortion) {
+        var po = itemState.product.portions.filter(function (x) { return x.id === o.id; })[0];
+        label = h('label', { class: 'opt tile' + (o.off ? ' off' : '') }, input,
+          clusterOf(po.qty, pics),
+          h('span', { class: 'big display', text: String(po.qty) }),
+          h('span', { class: 'unit', text: po.unit }),
+          h('span', { class: 'pr', text: o.off ? 'Agotado' : price }));
+      } else {
+        label = h('label', { class: 'opt chip' + (multi ? ' multi' : '') + (o.off ? ' off' : '') }, input,
+          h('span', { class: 'chip-ic' }, icon(gic)),
+          h('span', { class: 'nm' }, o.name, o.desc ? h('small', { text: o.desc }) : null),
+          price ? h('span', { class: 'pr', text: o.off ? 'Agotado' : price }) : null);
+      }
       input.addEventListener('change', function () {
         var cur = itemState.sel[gid] || [];
         if (multi) cur = input.checked ? cur.concat([o.id]) : cur.filter(function (x) { return x !== o.id; });
@@ -480,7 +497,17 @@
       });
       box.appendChild(label);
     });
-    return h('fieldset', { class: 'group', 'data-g': gid }, h('legend', {}, g.label, h('small', { text: g.hint || '' })), box, h('p', { class: 'field-err', role: 'alert', hidden: true }));
+    var legend;
+    var fold = gid === 'salsa-extra';
+    var open = !fold || (itemState.sel[gid] || []).length > 0;
+    if (fold) {
+      legend = h('legend', {}, h('button', { class: 'fold', type: 'button', 'aria-expanded': open ? 'true' : 'false', onclick: function () {
+        var fs = this.closest('.group'), on = fs.classList.toggle('folded'); this.setAttribute('aria-expanded', on ? 'false' : 'true');
+      } }, h('span', { class: 'lg' }, icon(gic), g.label), h('small', { text: g.hint || '' }), icon('i-plus')));
+    } else {
+      legend = h('legend', {}, h('span', { class: 'lg' }, icon(gic), g.label), h('small', { text: g.hint || '' }));
+    }
+    return h('fieldset', { class: 'group' + (fold && !open ? ' folded' : ''), 'data-g': gid }, legend, box, h('p', { class: 'field-err', role: 'alert', hidden: true }));
   }
   function syncOptions() {
     $$('#itemBody .group').forEach(function (fs) {
@@ -525,7 +552,7 @@
     var minus = h('button', { type: 'button', 'aria-label': 'Menos', onclick: function () { if (st.qty > 1) { st.qty--; renderItemFoot(); } } }, icon('i-minus'));
     var plus = h('button', { type: 'button', 'aria-label': 'Más', onclick: function () { if (st.qty < P.MAX_QTY) { st.qty++; renderItemFoot(); } } }, icon('i-plus'));
     foot.appendChild(h('div', { class: 'stepper' }, minus, out, plus));
-    foot.appendChild(h('button', { class: 'btn', type: 'button', onclick: submitItem, text: (st.editKey ? 'Guardar' : 'Agregar') + ' · ' + money(unitOf(st) * st.qty) }));
+    foot.appendChild(h('button', { class: 'btn', type: 'button', onclick: submitItem }, icon(st.editKey ? 'i-check' : 'i-bag'), h('span', { text: (st.editKey ? 'Guardar' : 'Agregar') + ' · ' + money(unitOf(st) * st.qty) })));
     motionRefresh();
   }
   function submitItem() {
@@ -919,10 +946,10 @@
 
   /* ---------- arranque ---------- */
 
+  /* El menú sale del archivo estático (lo sirve la CDN, sin ejecutar ninguna función). La API queda de respaldo. */
   function getMenu() {
-    return fetchTimeout('/api/magma/menu', { headers: { Accept: 'application/json' } }, 3500)
-      .then(function (r) { if (!r.ok) throw new Error('http ' + r.status); return r.json(); })
-      .catch(function () { return fetchTimeout('menu.json', {}, 6000).then(function (r) { if (!r.ok) throw new Error('http ' + r.status); return r.json(); }); });
+    return fetchTimeout('menu.json', {}, 6000).then(function (r) { if (!r.ok) throw new Error('http ' + r.status); return r.json(); })
+      .catch(function () { return fetchTimeout('/api/magma/menu', { headers: { Accept: 'application/json' } }, 6000).then(function (r) { if (!r.ok) throw new Error('http ' + r.status); return r.json(); }); });
   }
 
   function fail() {

@@ -123,3 +123,16 @@ Cada pedido aparece en una tarjeta blanca resumida (número, estado, cliente, pr
 ## Casilla de ofertas
 
 Viene marcada de fábrica ("Quiero recibir ofertas de Magma Wings") y el cliente la puede desmarcar. Si la desmarca, se recuerda en su dispositivo. Solo los que dejan la casilla marcada entran a la audiencia de Meta.
+
+## Créditos de Netlify (cómo está pensado para mucho tráfico)
+
+Lo que más gasta en un sitio con anuncios son las ejecuciones de funciones y el ancho de banda. Por eso:
+
+- **El menú no ejecuta ninguna función al abrirse.** Lee `menu.json` como archivo estático desde la CDN. La API `/api/magma/menu` queda solo como respaldo y para quien quiera leer el menú desde otro sitio.
+- **Caché larga en lo pesado.** Imágenes 7 días, fuentes 1 año, JS, CSS 10 minutos y `menu.json` 1 minuto (ver `netlify.toml`). Si cambias una foto con el mismo nombre, puede tardar hasta 7 días en verse en quienes ya visitaron; mejor súbela con otro nombre.
+- **Logo en WebP** (22 KB en vez de 55 KB por visita).
+- **Un pedido cuesta pocas operaciones**: una función, la lectura de la lista del día para dar el número, la escritura del pedido y una marca de cambio. El comprobante QR suma una escritura más.
+- **El panel no relee los pedidos en cada vuelta.** Al abrir trae hoy y ayer. Después pregunta cada 30 segundos solo qué cambió (una marca por cambio) y lee únicamente esos pedidos. Si pasan 6 consultas sin novedades, baja a una cada 90 segundos. Con la pestaña oculta no consulta. "Cargar pedidos anteriores" y "Resumen" traen más días solo cuando se piden.
+- **El seguimiento** consulta cada 30 segundos los primeros 10 minutos, después cada 60, y se detiene a los 40 minutos.
+- **Marcas de cambio:** viven en el almacén de pedidos con la forma `ev/<hora>/<ms>-<azar>`. Son diminutas y no hace falta borrarlas.
+- **Deploys.** Cada publicación a producción gasta créditos de build. Conviene juntar los cambios en una sola publicación y, si no se usan, desactivar los deploys de ramas y de previews en Netlify (Site configuration, Build and deploy, Branches and deploy contexts).
