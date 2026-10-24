@@ -94,7 +94,7 @@ h1{font:800 clamp(34px,6vw,48px)/1 var(--display);font-stretch:75%;letter-spacin
   var STATUS = ['nuevo', 'preparando', 'listo', 'entregado', 'cancelado'];
   var LABEL = { nuevo: 'Nuevo', preparando: 'Preparando', listo: 'Listo', entregado: 'Entregado', cancelado: 'Cancelado' };
   var $ = function (s) { return document.querySelector(s); };
-  var token = '', orders = [], filter = 'todos', timer = 0, knownNew = null;
+  var token = '', orders = [], filter = 'todos', timer = 0, pending = {};
 
   function get(k) { try { return localStorage.getItem(k) || ''; } catch (e) { return ''; } }
   function set(k, v) { try { if (v) localStorage.setItem(k, v); else localStorage.removeItem(k); } catch (e) {} }
@@ -117,6 +117,8 @@ h1{font:800 clamp(34px,6vw,48px)/1 var(--display);font-stretch:75%;letter-spacin
       if (d.status === 401 || d.status === 503) throw new Error(d.error || 'No se pudo entrar.');
       if (!d.ok) throw new Error(d.error || 'Error al leer los pedidos.');
       orders = d.orders;
+      /* Los cambios de estado tardan hasta ~1 min en verse desde cualquier lugar: mientras tanto se muestra el que acabas de poner. */
+      orders.forEach(function (o) { var p = pending[o.key]; if (p && Date.now() - p.at < 90000) o.status = p.status; });
       $('#store').textContent = d.store === 'magma-orders' ? '' : 'Estás viendo pedidos de prueba (' + d.store + ').';
       var nuevos = orders.filter(function (o) { return o.status === 'nuevo'; }).length;
       document.title = (nuevos ? '(' + nuevos + ') ' : '') + 'Pedidos Magma Wings';
@@ -169,8 +171,8 @@ h1{font:800 clamp(34px,6vw,48px)/1 var(--display);font-stretch:75%;letter-spacin
     STATUS.forEach(function (s) {
       var b = el('button', '', LABEL[s]); b.type = 'button'; b.setAttribute('aria-pressed', o.status === s ? 'true' : 'false');
       b.addEventListener('click', function () {
-        var prev = o.status; o.status = s; render();
-        api('POST', { key: o.key, status: s }).then(function (d) { if (!d.ok) throw new Error(d.error); }).catch(function (e) { o.status = prev; render(); alert('No se pudo cambiar el estado: ' + e.message); });
+        var prev = o.status; o.status = s; pending[o.key] = { status: s, at: Date.now() }; render();
+        api('POST', { key: o.key, status: s }).then(function (d) { if (!d.ok) throw new Error(d.error); }).catch(function (e) { delete pending[o.key]; o.status = prev; render(); alert('No se pudo cambiar el estado: ' + e.message); });
       });
       st.appendChild(b);
     });

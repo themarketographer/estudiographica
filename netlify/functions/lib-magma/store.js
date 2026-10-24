@@ -11,7 +11,7 @@ function storeName() {
 function open(event) {
   const { getStore, connectLambda } = require('@netlify/blobs');
   if (event) connectLambda(event);
-  return getStore({ name: storeName(), consistency: 'strong' });
+  return getStore({ name: storeName() });
 }
 
 // La clave empieza con la fecha ISO para que el orden alfabético sea el cronológico.
