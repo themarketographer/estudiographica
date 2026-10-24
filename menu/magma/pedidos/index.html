@@ -384,10 +384,10 @@ a{color:inherit}
 
   function msgFor(o) {
     var c = o.customer, n = c.firstName || c.name, id = o.orderId;
-    if (o.status === 'listo') return o.mode === 'delivery' ? 'Hola ' + n + ', tu pedido ' + id + ' de Magma Wings ya salió a tu dirección. 🛵' : 'Hola ' + n + ', tu pedido ' + id + ' de Magma Wings está listo para recoger. 🍗';
-    if (o.status === 'preparando') return 'Hola ' + n + ', recibimos tu pedido ' + id + ' de Magma Wings y ya lo estamos preparando. 🔥';
-    if (o.status === 'entregado') return 'Hola ' + n + ', gracias por pedir en Magma Wings. ¿Cómo estuvo tu pedido ' + id + '? 🙌';
-    return 'Hola ' + n + ', recibimos tu pedido ' + id + ' de Magma Wings. 🙌' + (o.mode === 'delivery' ? ' El envío tiene un costo que te confirmo ahora.' : '');
+    if (o.status === 'listo') return o.mode === 'delivery' ? 'Hola ' + n + ', tu pedido ' + id + ' de Magma Wings ya salió a tu dirección.' : 'Hola ' + n + ', tu pedido ' + id + ' de Magma Wings está listo para recoger.';
+    if (o.status === 'preparando') return 'Hola ' + n + ', recibimos tu pedido ' + id + ' de Magma Wings y ya lo estamos preparando.';
+    if (o.status === 'entregado') return 'Hola ' + n + ', gracias por pedir en Magma Wings. ¿Cómo estuvo tu pedido ' + id + '?';
+    return 'Hola ' + n + ', recibimos tu pedido ' + id + ' de Magma Wings.' + (o.mode === 'delivery' ? ' El envío tiene un costo que te confirmo ahora.' : '');
   }
 
   function change(o, s) {

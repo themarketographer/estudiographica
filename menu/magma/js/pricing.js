@@ -192,34 +192,36 @@
     } };
   }
 
+  /* Sin emojis: los de 4 bytes (🔥, 📱...) llegan rotos a WhatsApp Web en algunos navegadores al pasar por la redirección de wa.me.
+     El orden, las negritas y las sangrías hacen el trabajo de ordenar. */
   function buildMessage(menu, order) {
     var cur = menu.brand.currency;
     var c = order.customer;
     var out = [];
-    out.push('🔥 *Pedido ' + order.orderId + '*');
-    out.push(menu.brand.name + ' · Cochabamba');
+    out.push('*PEDIDO ' + order.orderId + '*');
+    out.push(menu.brand.name + ', Cochabamba');
     out.push('');
-    out.push('👤 *' + c.name + '*');
-    out.push('📱 ' + fmtPhone(c.phone));
-    if (c.email) out.push('✉️ ' + c.email);
-    out.push(c.mode === 'delivery' ? '🛵 Entrega a domicilio' : '🏪 Recojo en el local');
-    if (c.address) out.push('📍 ' + c.address);
+    out.push('*Cliente:* ' + c.name);
+    out.push('*Celular:* ' + fmtPhone(c.phone));
+    if (c.email) out.push('*Correo:* ' + c.email);
+    out.push('*Entrega:* ' + (c.mode === 'delivery' ? 'a domicilio' : 'recojo en el local'));
+    if (c.address) out.push('*Dirección:* ' + c.address);
     out.push('');
-    out.push('🍗 *Mi pedido*');
+    out.push('*MI PEDIDO*');
     order.lines.forEach(function (l) {
       out.push('• ' + l.qty + ' × ' + l.name + ' ' + l.portionLabel + ' · ' + money(l.total, cur) + (l.qty > 1 ? ' (' + money(l.unitPrice, cur) + ' c/u)' : ''));
       l.choices.forEach(function (ch) {
         var names = ch.options.map(function (o) { return o.name + (o.price ? ' (+' + o.price + ')' : ''); }).join(', ');
-        out.push('   ▸ ' + ch.label + ': ' + names);
+        out.push('      ' + ch.label + ': ' + names);
       });
-      if (l.note) out.push('   ▸ Nota: ' + l.note);
+      if (l.note) out.push('      Nota: ' + l.note);
     });
     out.push('');
-    out.push('💰 *Total: ' + money(order.total, cur) + '*' + (c.mode === 'delivery' ? ' + envío' : ''));
-    if (c.mode === 'delivery') out.push('🛵 El costo de envío me lo confirman por aquí.');
-    if (c.notes) { out.push(''); out.push('📝 ' + c.notes); }
+    out.push('*TOTAL: ' + money(order.total, cur) + '*' + (c.mode === 'delivery' ? ' más envío' : ''));
+    if (c.mode === 'delivery') out.push('El costo de envío me lo confirman por aquí.');
+    if (c.notes) { out.push(''); out.push('*Notas:* ' + c.notes); }
     out.push('');
-    out.push('Gracias, quedo atento a la confirmación 🙌');
+    out.push('Gracias, quedo atento a la confirmación.');
     return out.join('\n');
   }
 
