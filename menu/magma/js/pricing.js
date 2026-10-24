@@ -19,13 +19,7 @@
   }
 
   function findProduct(menu, id) {
-    for (var i = 0; i < menu.categories.length; i++) {
-      var c = menu.categories[i];
-      if (c.kind !== 'products') continue;
-      for (var j = 0; j < c.products.length; j++) {
-        if (c.products[j].id === id) return { product: c.products[j], category: c };
-      }
-    }
+    for (var i = 0; i < menu.products.length; i++) if (menu.products[i].id === id) return menu.products[i];
     return null;
   }
 
@@ -42,26 +36,30 @@
       .slice(0, max);
   }
 
-  /* raw: { id, sel: { groupId: [optionId] }, qty }  ->  { ok, line } | { ok:false, error } */
+  /* raw: { id, portion, sel: { groupId: [optionId] }, qty, note }  ->  { ok, line } | { ok:false, error } */
   function resolveLine(menu, raw) {
     if (!raw || typeof raw !== 'object') return { ok: false, error: 'Línea inválida.' };
-    var hit = findProduct(menu, raw.id);
-    if (!hit) return { ok: false, error: 'Un producto del pedido ya no está en el menú.' };
-    var product = hit.product;
-    if (product.available === false) return { ok: false, error: product.name + ' está agotado.' };
+    var product = findProduct(menu, raw.id);
+    if (!product) return { ok: false, error: 'Un producto del pedido ya no está en el menú.' };
+    if (product.available === false) return { ok: false, error: product.title + ' está agotado.' };
+
+    var portion = null;
+    for (var q = 0; q < product.portions.length; q++) if (product.portions[q].id === raw.portion) portion = product.portions[q];
+    if (!portion) return { ok: false, error: 'Elige la porción de ' + product.title + '.', missing: 'portion' };
+    if (portion.available === false) return { ok: false, error: portion.qty + ' ' + portion.unit + ' de ' + product.title + ' está agotado.' };
 
     var qty = Number(raw.qty);
-    if (!Number.isInteger(qty) || qty < 1 || qty > MAX_QTY) return { ok: false, error: 'Cantidad inválida en ' + product.name + '.' };
+    if (!Number.isInteger(qty) || qty < 1 || qty > MAX_QTY) return { ok: false, error: 'Cantidad inválida en ' + product.title + '.' };
 
     var sel = raw.sel && typeof raw.sel === 'object' ? raw.sel : {};
     var allowed = product.groups || [];
     for (var k in sel) {
       if (Object.prototype.hasOwnProperty.call(sel, k) && allowed.indexOf(k) === -1) {
-        return { ok: false, error: 'Opción desconocida en ' + product.name + '.' };
+        return { ok: false, error: 'Opción desconocida en ' + product.title + '.' };
       }
     }
 
-    var unit = product.price;
+    var unit = portion.price;
     var choices = [];
     var keyParts = [];
     for (var g = 0; g < allowed.length; g++) {
@@ -73,11 +71,11 @@
       var chosen = [];
       for (var p = 0; p < picked.length; p++) {
         var oid = picked[p];
-        if (seen[oid]) return { ok: false, error: 'Opción repetida en ' + product.name + '.' };
+        if (seen[oid]) return { ok: false, error: 'Opción repetida en ' + product.title + '.' };
         seen[oid] = true;
         var found = null;
         for (var o = 0; o < opts.length; o++) if (opts[o].id === oid) { found = opts[o]; break; }
-        if (!found) return { ok: false, error: 'Opción desconocida en ' + product.name + '.' };
+        if (!found) return { ok: false, error: 'Opción desconocida en ' + product.title + '.' };
         chosen.push(found);
       }
       var max = group.type === 'multi' ? (group.max || opts.length) : 1;
@@ -89,17 +87,19 @@
         keyParts.push(gid + ':' + chosen.map(function (x) { return x.id; }).sort().join(','));
       }
     }
+    var note = text(raw.note, 120);
 
     return {
       ok: true,
       line: {
-        key: product.id + '|' + keyParts.join(';'),
+        key: product.id + '|' + portion.id + '|' + keyParts.join(';') + '|' + note,
         id: product.id,
-        name: product.name,
-        unit: product.unit,
-        baseQty: product.qty,
-        categoryId: hit.category.id,
+        portion: portion.id,
+        name: product.title,
+        portionLabel: portion.qty + ' ' + portion.unit,
+        categoryId: product.id,
         choices: choices,
+        note: note,
         qty: qty,
         unitPrice: unit,
         total: unit * qty
@@ -111,7 +111,7 @@
   function toRaw(line) {
     var sel = {};
     line.choices.forEach(function (c) { sel[c.group] = c.options.map(function (o) { return o.id; }); });
-    return { id: line.id, sel: sel, qty: line.qty };
+    return { id: line.id, portion: line.portion, sel: sel, qty: line.qty, note: line.note || '' };
   }
 
   /* Junta líneas idénticas y calcula el total. rawLines puede venir del navegador o del servidor. */
@@ -135,6 +135,8 @@
     }
     var total = lines.reduce(function (s, l) { return s + l.total; }, 0);
     var count = lines.reduce(function (s, l) { return s + l.qty; }, 0);
+    var min = menu.service && menu.service.minOrder;
+    if (min && total < min) return { ok: false, error: 'El pedido mínimo es de ' + money(min, menu.brand.currency) + '.' };
     return { ok: true, lines: lines, total: total, count: count };
   }
 
@@ -166,11 +168,12 @@
     if (order.customer.address) out.push('Dirección: ' + order.customer.address);
     out.push('');
     order.lines.forEach(function (l) {
-      out.push(l.qty + 'x ' + l.name + ' (' + money(l.unitPrice, cur) + ' c/u)');
+      out.push(l.qty + 'x ' + l.name + ' · ' + l.portionLabel + ' (' + money(l.unitPrice, cur) + ' c/u)');
       l.choices.forEach(function (c) {
         var names = c.options.map(function (o) { return o.name + (o.price ? ' +' + o.price : ''); }).join(', ');
         out.push('   ' + c.label + ': ' + names);
       });
+      if (l.note) out.push('   Nota: ' + l.note);
     });
     out.push('');
     out.push('*Total productos: ' + money(order.total, cur) + '*');
