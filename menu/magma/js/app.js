@@ -1,7 +1,9 @@
 /* Menú de Magma Wings: catálogo, pedido y envío por WhatsApp.
    Datos:   /api/magma/menu (o menu.json si la API no responde)
    Pedido:  /api/magma/order (si falla, el mensaje se arma aquí con las mismas reglas)
-   Eventos: window.Magma.on('add_to_cart', fn) y document 'magma:add_to_cart'. Ver README.md
+   Eventos:   document.addEventListener('click', function (e) { var a = e.target.closest && e.target.closest('[data-ev]'); if (a) emit(a.getAttribute('data-ev'), {}); });
+
+  window.Magma.on('add_to_cart', fn) y document 'magma:add_to_cart'. Ver README.md
    Movimiento: js/motion.js (entradas, nav de vidrio, botones, paralaje). */
 (function () {
   'use strict';

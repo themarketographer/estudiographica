@@ -190,6 +190,19 @@ p{text-wrap:pretty}
 .fly{position:fixed;inset:auto;left:0;top:0;margin:0;padding:0;border:0;width:22px;height:22px;border-radius:50%;background:radial-gradient(circle,#ffe2a6,var(--lava) 60%);box-shadow:0 0 18px 6px rgba(244,148,12,.55);pointer-events:none;overflow:visible}
 
 /* ---------- Dock del pedido (vidrio) ---------- */
+
+/* Banner de Estudio Graphica al final del menú */
+.eg{position:relative;background:#0b0705;border-top:1px solid var(--line);padding:var(--s4) var(--s4) calc(var(--s4) + env(safe-area-inset-bottom,0px))}
+.eg-in{display:flex;align-items:center;gap:var(--s3);max-width:560px;margin:0 auto;padding:var(--s3) var(--s4);border:1px solid var(--line-strong);border-radius:16px;color:var(--cream);text-decoration:none;transition:transform .16s var(--ease-out),border-color .16s ease,background-color .16s ease}
+.eg-in:hover{border-color:var(--cream);background:rgba(255,255,255,.04)}
+.eg-in:active{transform:scale(.98)}
+.eg-logo{width:34px;height:auto;flex:none}
+.eg-txt{display:grid;gap:2px;min-width:0;text-align:left}
+.eg-txt b{font:700 14px/1.25 var(--body)}
+.eg-txt small{font:500 12px/1.3 var(--body);color:var(--muted)}
+.eg .ic{width:20px;height:20px;flex:none;color:var(--lava);margin-left:auto}
+.eg-ad{display:block;text-align:center;margin-top:var(--s2);font:500 10px/1 var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);opacity:.7}
+@media (hover:none){.eg-in:hover{background:none;border-color:var(--line-strong)}}
 .dock{position:fixed;left:50%;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:60;width:min(520px,calc(100% - 28px));display:flex;align-items:center;gap:var(--s4);padding:8px 22px 8px 8px;border-radius:999px;background:rgba(244,148,12,.86);color:var(--ember-dark);-webkit-backdrop-filter:blur(18px) saturate(180%);backdrop-filter:blur(18px) saturate(180%);border:1px solid rgba(255,255,255,.4);box-shadow:0 18px 40px -14px rgba(0,0,0,.65),inset 0 1px 0 rgba(255,255,255,.55);--ring:var(--cream);
   transform:translate(-50%,calc(100% + 32px));transition:transform .5s var(--ease-drawer),visibility 0s .5s}
 .dock.on{transform:translate(-50%,0);transition:transform .5s var(--ease-drawer),visibility 0s}
