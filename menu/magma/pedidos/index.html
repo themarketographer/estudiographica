@@ -34,6 +34,7 @@ a{color:inherit}
 .tool:active{transform:scale(.96)}
 .tool[aria-pressed="true"]{background:var(--cream);color:var(--bg);border-color:var(--cream)}
 @media (hover:hover){.tool:hover{border-color:var(--line-2)}}
+@media (max-width:560px){.tool span{display:none}.tool{padding:0 14px}.bar{gap:8px}.bar h1{font-size:30px}}
 
 /* Entrar */
 .login{max-width:420px;margin:12vh auto 0;background:var(--surface);border:1.5px solid var(--line);border-radius:24px;padding:28px}
@@ -147,8 +148,8 @@ a{color:inherit}
   <div class="bar">
     <img src="../images/logo-alpha.png" alt="Magma Wings" width="531" height="208">
     <h1 class="display">Pedidos</h1>
-    <button class="tool" id="sound" type="button" aria-pressed="false" hidden><svg class="ic" aria-hidden="true"><use href="#i-bell"/></svg><span>Sonido</span></button>
-    <button class="tool" id="refresh" type="button" hidden><svg class="ic" aria-hidden="true"><use href="#i-refresh"/></svg><span>Actualizar</span></button>
+    <button class="tool" id="sound" type="button" aria-label="Sonido de pedidos nuevos" aria-pressed="false" hidden><svg class="ic" aria-hidden="true"><use href="#i-bell"/></svg><span>Sonido</span></button>
+    <button class="tool" id="refresh" type="button" aria-label="Actualizar" hidden><svg class="ic" aria-hidden="true"><use href="#i-refresh"/></svg><span>Actualizar</span></button>
     <button class="tool" id="logout" type="button" hidden>Salir</button>
   </div>
 
