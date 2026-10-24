@@ -7,6 +7,7 @@ const menu = require('../../menu/magma/menu.json');
 const Pricing = require('../../menu/magma/js/pricing.js');
 const Store = require('./lib-magma/store.js');
 const Meta = require('./lib-magma/meta.js');
+const Notify = require('./lib-magma/notify.js');
 
 const FB_RE = /^fb\.\d\.\d+\.[\w-]{1,100}$/;
 
@@ -48,7 +49,7 @@ exports.handler = async function (event) {
   // El número del día (#01, #02...) se reserva al guardar. Si no se puede guardar, queda un número por hora (#T1432-24OCT).
   const make = (o, n, key) => ({
     key, orderId: o.orderId, number: n, createdAt, status: 'nuevo', mode: o.customer.mode, customer: o.customer,
-    total: o.total, count: o.count, currency: menu.brand.currency,
+    subtotal: o.subtotal, deliveryFee: o.deliveryFee, total: o.total, count: o.count, currency: menu.brand.currency,
     lines: o.lines.map((l) => ({ name: l.name, portion: l.portionLabel, qty: l.qty, unitPrice: l.unitPrice, total: l.total, choices: l.choices, note: l.note })),
     message: o.message, context: process.env.CONTEXT || 'dev', meta
   });
@@ -58,6 +59,7 @@ exports.handler = async function (event) {
   const order = { orderId: record.orderId, customer: record.customer, total: record.total, count: record.count, lines: record.lines, message: record.message, whatsappUrl: Pricing.whatsappUrl(menu, record.message) };
   const sourceUrl = 'https://' + (h.host || 'estudiographica.com') + '/menu/magma/';
   const capi = await Meta.sendEvent('Lead', record, sourceUrl);
+  const notified = save.ok ? await Notify.newOrder(record) : { skipped: 'sin guardar' };
   const hook = process.env.ORDER_WEBHOOK_URL;
   if (hook) {
     try {
@@ -95,6 +97,7 @@ exports.handler = async function (event) {
     number: record.number || null,
     // En previews y pruebas se devuelve el motivo para poder diagnosticar; en producción no.
     saveError: save.ok || process.env.CONTEXT === 'production' ? undefined : save.error,
-    capi: process.env.CONTEXT === 'production' ? undefined : capi.status
+    capi: process.env.CONTEXT === 'production' ? undefined : capi.status,
+    notify: process.env.CONTEXT === 'production' ? undefined : notified
   });
 };

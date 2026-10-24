@@ -57,4 +57,17 @@ async function saveRecord(event, rec) {
   await open(event).setJSON(rec.key, rec);
 }
 
-module.exports = { saveRecord, STATUSES, storeName, keyFor, saveNumbered, listOrders, setStatus };
+async function getOrder(event, key) {
+  return open(event).get(key, { type: 'json' }).catch(() => null);
+}
+
+// Pedidos creados desde una fecha (clave "YYYY-MM-DD"), para el respaldo semanal.
+async function listSince(event, sinceKey) {
+  const store = open(event);
+  const { blobs } = await store.list();
+  const keys = blobs.map((b) => b.key).filter((k) => k.slice(0, 10) >= sinceKey).sort();
+  const rows = await Promise.all(keys.map((k) => store.get(k, { type: 'json' }).catch(() => null)));
+  return rows.filter(Boolean);
+}
+
+module.exports = { getOrder, listSince, saveRecord, STATUSES, storeName, keyFor, saveNumbered, listOrders, setStatus };

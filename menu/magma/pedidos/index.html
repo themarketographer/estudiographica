@@ -438,7 +438,7 @@ a{color:inherit}
     add('', '', 'hr');
     add('t-who', c.name || 'Sin nombre');
     if (c.phone) add('t-row', fmtPhone(c.phone));
-    if (o.mode === 'delivery' && c.address) add('t-box', c.address);
+    if (o.mode === 'delivery' && c.address) add('t-box', (c.zoneName ? c.zoneName + ': ' : '') + c.address);
     add('', '', 'hr');
     o.lines.forEach(function (l) {
       var it = add('t-item');
@@ -450,8 +450,12 @@ a{color:inherit}
     });
     if (c.notes) add('t-box', 'NOTA DEL PEDIDO: ' + c.notes);
     add('', '', 'hr');
+    if (o.mode === 'delivery' && o.subtotal != null) {
+      row('Productos', money(o.subtotal));
+      row('Envío', o.deliveryFee === null ? 'por confirmar' : o.deliveryFee === 0 ? 'gratis' : money(o.deliveryFee));
+    }
     var t = add('t-total'); t.appendChild(el('span', '', 'TOTAL')); t.appendChild(el('span', '', money(o.total)));
-    if (o.mode === 'delivery') add('t-foot', 'El envío se confirma por WhatsApp');
+    if (o.mode === 'delivery' && o.deliveryFee === null) add('t-foot', 'El envío se confirma por WhatsApp');
     add('t-foot', 'Gracias por pedir en Magma Wings');
     window.print();
   }
@@ -490,7 +494,7 @@ a{color:inherit}
     var meta = el('div', 'meta');
     if (c.phone) { var d1 = el('div'); d1.appendChild(icon('i-phone')); d1.appendChild(document.createTextNode(fmtPhone(c.phone))); meta.appendChild(d1); }
     if (c.email) { var d2 = el('div'); d2.appendChild(icon('i-mail')); d2.appendChild(document.createTextNode(c.email)); meta.appendChild(d2); }
-    if (c.address) { var d3 = el('div'); d3.appendChild(icon('i-pin')); d3.appendChild(document.createTextNode(c.address)); meta.appendChild(d3); }
+    if (c.address) { var d3 = el('div'); d3.appendChild(icon('i-pin')); d3.appendChild(document.createTextNode((c.zoneName ? c.zoneName + ': ' : '') + c.address)); meta.appendChild(d3); }
     wb.appendChild(meta); who.appendChild(wb); li.appendChild(who);
 
     /* Productos */
@@ -506,6 +510,10 @@ a{color:inherit}
       ul.appendChild(it);
     });
     li.appendChild(ul);
+    if (o.mode === 'delivery' && o.subtotal != null) {
+      var fe = el('p', 'callout'); fe.appendChild(icon('i-moto'));
+      fe.appendChild(document.createTextNode('Productos ' + money(o.subtotal) + ' · Envío ' + (o.deliveryFee === null ? 'por confirmar' : o.deliveryFee === 0 ? 'gratis' : money(o.deliveryFee)))); li.appendChild(fe);
+    }
     if (c.notes) { var co = el('p', 'callout'); co.appendChild(icon('i-note')); co.appendChild(document.createTextNode(c.notes)); li.appendChild(co); }
 
     /* Acciones */
@@ -546,8 +554,8 @@ a{color:inherit}
     var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
   }
   function csvAll() {
-    var rows = [['Pedido', 'Fecha', 'Estado', 'Nombre', 'Apellido', 'Celular', 'Correo', 'Tipo', 'Dirección', 'Notas', 'Productos', 'Total (Bs)', 'Acepta ofertas']];
-    orders.forEach(function (o) { var c = o.customer; rows.push([o.orderId, o.createdAt, LABEL[o.status], c.firstName || c.name, c.lastName || '', c.phone ? '+' + c.phone : '', c.email || '', o.mode === 'delivery' ? 'Entrega' : 'Recojo', c.address, c.notes, o.lines.map(function (l) { return l.qty + 'x ' + l.name + ' ' + l.portion; }).join(' | '), o.total, c.consent ? 'Sí' : 'No']); });
+    var rows = [['Pedido', 'Fecha', 'Estado', 'Nombre', 'Apellido', 'Celular', 'Correo', 'Tipo', 'Zona', 'Dirección', 'Notas', 'Productos', 'Envío (Bs)', 'Total (Bs)', 'Acepta ofertas']];
+    orders.forEach(function (o) { var c = o.customer; rows.push([o.orderId, o.createdAt, LABEL[o.status], c.firstName || c.name, c.lastName || '', c.phone ? '+' + c.phone : '', c.email || '', o.mode === 'delivery' ? 'Entrega' : 'Recojo', c.zoneName || '', c.address, c.notes, o.lines.map(function (l) { return l.qty + 'x ' + l.name + ' ' + l.portion; }).join(' | '), o.deliveryFee == null ? '' : o.deliveryFee, o.total, c.consent ? 'Sí' : 'No']); });
     download('pedidos-magma.csv', rows);
   }
   /* Formato de Meta para "Lista de clientes": email, phone, fn, ln, country, value */

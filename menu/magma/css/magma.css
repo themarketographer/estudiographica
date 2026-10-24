@@ -392,6 +392,12 @@ dialog.sheet{--muted:#efe0cf}
 .inp.area > .ic{top:27px}
 .f .inp input:not([type=checkbox]):not([type=radio]),.f .inp textarea{min-height:54px;padding-left:48px}
 .f .inp.area textarea{padding-top:15px;line-height:24px}
+.f .inp.sel select{width:100%;min-height:54px;padding:14px 44px 14px 48px;background:var(--ember-dark) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f4940c' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 14px center/20px;border:1.5px solid var(--line-strong);border-radius:14px;font-size:16px;line-height:24px;color:var(--cream);appearance:none;-webkit-appearance:none;transition:border-color .16s ease,box-shadow .2s ease}
+.f .inp.sel select:focus{outline:none;border-color:var(--lava);box-shadow:0 0 0 3px rgba(244,148,12,.28)}
+.f.err .inp.sel select{border-color:var(--danger)}
+.hint.free{margin-top:var(--s4)}
+.hint.free.ok{color:#8fe3a0}.hint.free.ok .ic{color:#8fe3a0}
+.rrow em.free{color:#8fe3a0;font-weight:700}
 .pair .f label{white-space:nowrap}
 .seg .opt.mode{flex-direction:column;align-items:center;gap:var(--s2);padding:var(--s4) var(--s3);min-height:92px;justify-content:center}
 .seg .opt.mode .ic{width:30px;height:30px;margin-inline:auto;align-self:center;color:var(--lava);transition:transform .35s var(--ease)}
