@@ -27,7 +27,7 @@
     box.textContent = '';
     var st = o.status || 'pendiente';
     var card = el('div', 'pay pay--' + st);
-    var head = el('div', 'pay-head'); head.appendChild(ico(st === 'verificado' ? 'i-check' : 'i-receipt'));
+    var head = el('div', 'pay-head'); head.appendChild(ico(st === 'verificado' ? 'i-check' : 'i-receipt')); if (o.noHead) head.hidden = true;
     var titles = { pendiente: 'Paga con QR', comprobante: 'Comprobante recibido', verificado: 'Pago confirmado', rechazado: 'Revisa tu comprobante' };
     head.appendChild(el('b', '', titles[st] || titles.pendiente)); card.appendChild(head);
 

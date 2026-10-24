@@ -19,7 +19,7 @@ function texto(r) {
   return out.join('\n');
 }
 
-async function newOrder(record, prod) {
+async function post(texto, prod) {
   const token = process.env.MAGMA_TELEGRAM_BOT_TOKEN;
   const chat = process.env.MAGMA_TELEGRAM_CHAT_ID;
   if (!token || !chat) return { skipped: 'sin configurar' };
@@ -30,7 +30,7 @@ async function newOrder(record, prod) {
     const res = await fetch('https://api.telegram.org/bot' + token + '/sendMessage', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ chat_id: chat, text: texto(record), disable_web_page_preview: true }),
+      body: JSON.stringify({ chat_id: chat, text: texto, disable_web_page_preview: true }),
       signal: ctrl.signal
     });
     clearTimeout(timer);
@@ -41,4 +41,13 @@ async function newOrder(record, prod) {
   }
 }
 
-module.exports = { newOrder, texto };
+// Un pedido por QR avisa recién cuando llega el comprobante: antes no hay nada que preparar.
+async function newOrder(record, prod) {
+  if (record.payment && record.payment.method === 'qr') return { skipped: 'espera comprobante' };
+  return post(texto(record), prod);
+}
+async function proof(record, prod) {
+  return post('Comprobante recibido ' + record.orderId + ' · ' + money(record.total) + '\n' + ((record.customer || {}).name || '') + ' · +' + ((record.customer || {}).phone || '') + '\nRevísalo en el panel y confirma el pago.\n\n' + texto(record), prod);
+}
+
+module.exports = { newOrder, proof, texto };

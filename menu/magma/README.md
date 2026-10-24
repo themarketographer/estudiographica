@@ -136,3 +136,7 @@ Lo que más gasta en un sitio con anuncios son las ejecuciones de funciones y el
 - **El seguimiento** consulta cada 30 segundos los primeros 10 minutos, después cada 60, y se detiene a los 40 minutos.
 - **Marcas de cambio:** viven en el almacén de pedidos con la forma `ev/<hora>/<ms>-<azar>`. Son diminutas y no hace falta borrarlas.
 - **Deploys.** Cada publicación a producción gasta créditos de build. Conviene juntar los cambios en una sola publicación y, si no se usan, desactivar los deploys de ramas y de previews en Netlify (Site configuration, Build and deploy, Branches and deploy contexts).
+
+## Flujo de pago en el menú
+
+El pedido tiene 4 pasos: Pedido, Datos, Pago y Listo. En **Pago** el cliente debe elegir Efectivo o QR; ninguna opción viene marcada. Con efectivo se envía por WhatsApp. Con QR se crea el pedido (ya con su número), se muestra el QR con el monto exacto y el botón de WhatsApp queda bloqueado hasta que suba el comprobante. En el panel, un pedido por QR no pasa a cocina hasta que el pago esté confirmado ("Esperando el pago", "Revisar comprobante"), y el aviso sonoro y el de Telegram llegan cuando entra el comprobante, no cuando se crea el pedido. Si el cliente cierra la ventana antes de subirlo, puede terminar desde el seguimiento (`/menu/magma/pedido/`).

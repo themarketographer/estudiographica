@@ -117,6 +117,7 @@ a{color:inherit}
 .cacts{display:flex;gap:8px}
 .cacts .primary{flex:1;min-height:50px;font-size:16px;border-radius:14px;box-shadow:none}
 .card .primary{background:var(--lava);color:#181818}
+.primary:disabled{background:#e3e0d4 !important;color:#6b665a !important;cursor:not-allowed;filter:none}
 .card .next[data-s="preparando"]{background:#ffd23f}.card .next[data-s="listo"]{background:#25d366}
 .det{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:50px;padding:0 16px;border-radius:14px;border:2px solid #181818;color:#181818;font-weight:700;font-size:15.5px;line-height:1;transition:transform .2s var(--out),background-color .2s}
 .det .ic{width:20px;height:20px}
@@ -263,6 +264,7 @@ a{color:inherit}
     <symbol id="i-cash" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6.500" width="18" height="11" rx="2.500"/><circle cx="12" cy="12" r="2.600"/><path d="M6.500 12h.01M17.500 12h.01"/></g></symbol>
     <symbol id="i-chart" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20V11M12 20V4M19 20v-6"/></g></symbol>
     <symbol id="i-star" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.500l2.600 5.400 5.900.8-4.300 4.100 1 5.800L12 16.800l-5.200 2.800 1-5.800L3.500 9.700l5.900-.8L12 3.500z"/></g></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10.500" width="14" height="10" rx="2.500"/><path d="M8 10.500V8a4 4 0 0 1 8 0v2.500"/></g></symbol>
     <symbol id="i-plus" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></g></symbol>
     <symbol id="i-minus" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/></g></symbol>
     <symbol id="i-x" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></g></symbol>
@@ -410,8 +412,13 @@ a{color:inherit}
     var changed = 0, fresh = 0;
     list.forEach(function (o) {
       var i = -1; for (var k = 0; k < orders.length; k++) if (orders[k].key === o.key) { i = k; break; }
-      if (i < 0) { orders.push(o); changed++; if (lastNow && o.status === 'nuevo') fresh++; }
-      else if (JSON.stringify(orders[i]) !== JSON.stringify(o)) { orders[i] = o; changed++; }
+      var waits = o.payment && o.payment.method === 'qr' && o.payment.status === 'pendiente';
+      if (i < 0) { orders.push(o); changed++; if (lastNow && o.status === 'nuevo' && !waits) fresh++; }
+      else if (JSON.stringify(orders[i]) !== JSON.stringify(o)) {
+        /* Un pedido por QR suena recién cuando llega el comprobante. */
+        if (lastNow && o.status === 'nuevo' && o.payment && o.payment.status === 'comprobante' && (!orders[i].payment || orders[i].payment.status !== 'comprobante')) fresh++;
+        orders[i] = o; changed++;
+      }
     });
     orders.sort(function (a, b) { return String(b.createdAt).localeCompare(String(a.createdAt)); });
     return { changed: changed, fresh: fresh };
@@ -558,6 +565,17 @@ a{color:inherit}
     var ph = (o.customer || {}).phone; if (!ph) return 0;
     return orders.filter(function (x) { return x.customer && x.customer.phone === ph && x.status !== 'cancelado'; }).length;
   }
+  /* Un pedido por QR no pasa a cocina hasta que el pago esté confirmado. */
+  function primaryFor(o, inDetail) {
+    var nx = NEXT[o.status]; if (!nx) return null;
+    var pay = payInfo(o);
+    if (o.status === 'nuevo' && pay.qr && pay.st !== 'verificado') {
+      if (pay.st === 'comprobante') return { label: 'Revisar comprobante', ic: 'i-qr', go: function () { if (inDetail) { var b = document.querySelector('#dBody .paybox'); if (b) b.scrollIntoView({ block: 'center', behavior: 'smooth' }); } else openDetail(o.key); } };
+      if (pay.st === 'rechazado') return { label: 'Pago rechazado', ic: 'i-x', disabled: true };
+      return { label: 'Esperando el pago', ic: 'i-lock', disabled: true };
+    }
+    return { label: nx[1], ic: nx[2], go: function () { change(o, nx[0]); } };
+  }
   function chip(ic, text, cls) { var c = el('span', 'chip' + (cls ? ' ' + cls : '')); c.appendChild(icon(ic)); c.appendChild(document.createTextNode(text)); return c; }
 
   function setPayment(o, st) {
@@ -594,9 +612,10 @@ a{color:inherit}
     li.appendChild(chips);
 
     var acts = el('div', 'cacts' + (NEXT[o.status] ? '' : ' solo'));
-    if (NEXT[o.status]) {
-      var nx = el('button', 'primary next'); nx.type = 'button'; nx.dataset.s = o.status; nx.appendChild(icon(NEXT[o.status][2])); nx.appendChild(document.createTextNode(NEXT[o.status][1]));
-      nx.addEventListener('click', function () { change(o, NEXT[o.status][0]); });
+    var pf = primaryFor(o, false);
+    if (pf) {
+      var nx = el('button', 'primary next'); nx.type = 'button'; nx.dataset.s = o.status; nx.disabled = !!pf.disabled; nx.appendChild(icon(pf.ic)); nx.appendChild(document.createTextNode(pf.label));
+      if (pf.go) nx.addEventListener('click', pf.go);
       acts.appendChild(nx);
     }
     var dt = el('button', 'det'); dt.type = 'button'; dt.appendChild(icon('i-list')); dt.appendChild(document.createTextNode('Detalles'));
@@ -664,7 +683,10 @@ a{color:inherit}
     var s3 = sec('Pago', pay.ic); var pb = el('div', 'paybox' + (pay.k === 'alert' ? ' alert' : ''));
     var pr = el('div', 'chips'); pr.appendChild(chip(pay.ic, pay.t, pay.k)); pb.appendChild(pr);
     if (pay.qr) {
-      if (pay.st === 'pendiente') pb.appendChild(el('p', '', 'El cliente todavía no subió el comprobante. Puedes pedírselo por WhatsApp.'));
+      if (pay.st === 'pendiente') {
+        pb.appendChild(el('p', '', 'El cliente todavía no subió el comprobante. Puedes pedírselo por WhatsApp, o confirmar el pago si ya lo recibiste por otro medio.'));
+        var okp = el('button', 'chipbtn ok'); okp.type = 'button'; okp.appendChild(icon('i-check')); okp.appendChild(document.createTextNode('Confirmar pago')); okp.addEventListener('click', function () { setPayment(o, 'verificado'); }); pb.appendChild(okp);
+      }
       else {
         var img = el('img', 'proof'); img.alt = 'Comprobante de pago'; img.hidden = true; pb.appendChild(img);
         var loadProof = function () {
@@ -693,9 +715,10 @@ a{color:inherit}
     var prb = el('button', 'chipbtn'); prb.type = 'button'; prb.appendChild(icon('i-print')); prb.appendChild(document.createTextNode('Ticket')); prb.addEventListener('click', function () { printTicket(o); }); acts.appendChild(prb);
     s4.appendChild(acts); body.appendChild(s4);
 
-    if (NEXT[o.status]) {
-      var nx = el('button', 'primary next'); nx.type = 'button'; nx.dataset.s = o.status; nx.appendChild(icon(NEXT[o.status][2])); nx.appendChild(document.createTextNode(NEXT[o.status][1]));
-      nx.addEventListener('click', function () { change(o, NEXT[o.status][0]); });
+    var pf = primaryFor(o, true);
+    if (pf) {
+      var nx = el('button', 'primary next'); nx.type = 'button'; nx.dataset.s = o.status; nx.disabled = !!pf.disabled; nx.appendChild(icon(pf.ic)); nx.appendChild(document.createTextNode(pf.label));
+      if (pf.go) nx.addEventListener('click', pf.go);
       foot.appendChild(nx);
     }
     var sc = el('div', 'sec');
