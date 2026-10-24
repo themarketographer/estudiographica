@@ -710,7 +710,7 @@
       }));
       main.appendChild(h('section', { class: 'prod ' + p.tone + (i % 2 ? ' flip' : ''), id: p.id, 'data-tone': p.tone === 'org' ? 'light' : 'dark', 'aria-labelledby': p.id + '-h' },
         h('div', { class: 'prod-grid' },
-          h('div', { class: 'photo shine' }, h('img', { src: p.photo, alt: p.alt, decoding: 'async', loading: i ? 'lazy' : null, 'data-img-par': '0.07', style: 'object-position:' + (p.photoPos || '50% 50%') })),
+          h('div', { class: 'photo shine' }, h('img', { src: p.photo, srcset: p.photoSm ? p.photoSm + ' 720w, ' + p.photo + ' 1400w' : null, sizes: '(min-width: 900px) 50vw, 100vw', width: '1400', height: '1050', alt: p.alt, decoding: 'async', loading: i ? 'lazy' : null, 'data-img-par': '0.07', style: 'object-position:' + (p.photoPos || '50% 50%') })),
           h('div', { class: 'txt' },
             h('h2', { class: 'rv', id: p.id + '-h', text: p.title }),
             h('p', { class: 'sub rv', style: '--d:100ms', text: p.sub }),
