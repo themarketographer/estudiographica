@@ -181,7 +181,7 @@
       "title": "Alitas",
       "sub": "Con 1 salsa a elección",
       "tone": "dark",
-      "photo": "images/alitas.webp",
+      "photo": "images/alitas-2.webp",
       "alt": "Alitas con dos salsas y papas fritas sobre plato rojo",
       "portions": [
         {
@@ -210,7 +210,7 @@
       ],
       "photoPos": "50% 58%",
       "showSauces": true,
-      "photoSm": "images/alitas-sm.webp",
+      "photoSm": "images/alitas-2-sm.webp",
       "icon": "flame"
     },
     {
@@ -218,7 +218,7 @@
       "title": "Pollo frito",
       "sub": "Crocante por fuera, jugoso por dentro",
       "tone": "org",
-      "photo": "images/pollo.webp",
+      "photo": "images/pollo-2.webp",
       "alt": "Pollo frito con papas en gajos, plátano y dos salsas sobre tabla de madera",
       "portions": [
         {
@@ -245,7 +245,7 @@
         "salsa-extra"
       ],
       "photoPos": "50% 58%",
-      "photoSm": "images/pollo-sm.webp",
+      "photoSm": "images/pollo-2-sm.webp",
       "icon": "drum"
     }
   ],
