@@ -48,7 +48,7 @@ exports.handler = async function (event) {
     context: process.env.CONTEXT || 'dev'
   };
   // Si no se puede guardar, el cliente igual puede pedir por WhatsApp.
-  const saved = await Store.saveOrder(event, record);
+  const save = await Store.saveOrder(event, record);
   const hook = process.env.ORDER_WEBHOOK_URL;
   if (hook) {
     try {
@@ -82,6 +82,8 @@ exports.handler = async function (event) {
     count: order.count,
     message: order.message,
     whatsappUrl: order.whatsappUrl,
-    saved
+    saved: save.ok,
+    // En previews y pruebas se devuelve el motivo para poder diagnosticar; en producción no.
+    saveError: save.ok || process.env.CONTEXT === 'production' ? undefined : save.error
   });
 };

@@ -22,10 +22,10 @@ function keyFor(createdAt, orderId) {
 async function saveOrder(event, record) {
   try {
     await open(event).setJSON(record.key, record);
-    return true;
+    return { ok: true };
   } catch (e) {
     console.error('magma store save:', e && e.message);
-    return false;
+    return { ok: false, error: String((e && e.message) || e).slice(0, 200) };
   }
 }
 
