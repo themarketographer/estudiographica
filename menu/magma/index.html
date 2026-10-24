@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Menú Magma Wings</title>
+<meta name="description" content="Menú de Magma Wings en Cochabamba: alitas, pollo frito, papas y salsas.">
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;600;700&family=Squada+One&display=swap">
+<style>
+/* Layout: franjas apiladas que alternan oscuro, naranja, oscuro y rojo. Foto con borde de serrucho (la M del logo) a un lado en escritorio y arriba en móvil. */
+:root{
+  --ember-dark:#260c0d; --lava:#f4940c; --lava-hi:#ffb43a; --cream:#fdf0dc; --muted:#d2b8a2; --ember:#bd1d1f; --wa:#25d366;
+  --display:"Squada One","Impact","Arial Narrow",sans-serif; --body:"Barlow","Helvetica Neue",Arial,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{background:var(--ember-dark);color:var(--cream);font:400 17px/1.5 var(--body);overflow-x:hidden}
+.in{max-width:1100px;margin-inline:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.top{background:var(--lava);color:var(--ember-dark);padding-block:16px 14px}
+.top .in{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.top img{height:64px;border-radius:10px;display:block}
+.top h1{font:400 clamp(56px,12vw,104px)/1 var(--display);letter-spacing:1px;text-wrap:balance}
+.top p{font:700 14px var(--body);letter-spacing:3px;text-transform:uppercase;margin-left:auto}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--ember-dark);border-bottom:2px solid var(--lava)}
+nav .in{display:flex;gap:8px;overflow-x:auto;padding-block:10px}
+nav a{flex:none;color:var(--cream);text-decoration:none;font:700 14px var(--body);letter-spacing:2px;text-transform:uppercase;border:2px solid var(--cream);border-radius:999px;padding:6px 14px}
+nav a:hover,nav a:focus-visible{background:var(--lava);border-color:var(--lava);color:var(--ember-dark);outline:none}
+.sec{position:relative;scroll-margin-top:64px}
+.sec.dark{background:var(--ember-dark)}.sec.org{background:var(--lava);color:var(--ember-dark)}.sec.red{background:var(--ember)}
+.sec .in{display:grid;grid-template-columns:1fr;align-items:stretch}
+.photo{height:260px;order:-1;margin-inline:calc(-1 * max(16px,env(safe-area-inset-left,0px)));overflow:hidden;
+  clip-path:polygon(0 0,100% 0,100% calc(100% - 22px),95% 100%,90% calc(100% - 22px),85% 100%,80% calc(100% - 22px),75% 100%,70% calc(100% - 22px),65% 100%,60% calc(100% - 22px),55% 100%,50% calc(100% - 22px),45% 100%,40% calc(100% - 22px),35% 100%,30% calc(100% - 22px),25% 100%,20% calc(100% - 22px),15% 100%,10% calc(100% - 22px),5% 100%,0 calc(100% - 22px))}
+.photo img{width:100%;height:100%;object-fit:cover;display:block}
+.txt{padding-block:24px 36px}
+h2{font:400 clamp(52px,10vw,84px)/.95 var(--display);letter-spacing:1px;text-wrap:balance}
+.dark h2{color:var(--lava)}.org h2{color:var(--ember-dark)}.red h2{color:var(--cream)}
+.sub{font:700 15px var(--body);letter-spacing:3px;text-transform:uppercase;margin:6px 0 18px}
+.chips{display:flex;flex-wrap:wrap;gap:12px}
+.chip{background:var(--lava);color:var(--ember-dark);border-radius:12px;padding:10px 16px;min-width:104px;text-align:center}
+.org .chip{background:var(--ember-dark);color:var(--lava)}
+.chip b{display:block;font:400 34px/1 var(--display)}
+.chip span{display:block;font:700 13px var(--body);letter-spacing:2px;text-transform:uppercase}
+.chip em{display:block;font:400 38px/1.1 var(--display);font-style:normal;margin-top:2px;font-variant-numeric:tabular-nums}
+.dark .chip em{color:var(--ember-dark)}.org .chip em{color:var(--cream)}
+.chip em small{font:700 15px var(--body)}
+.list{list-style:none;padding:0;display:grid;gap:6px;font:600 21px/1.3 var(--body)}
+.list li b{color:var(--lava)}
+.sauces{display:flex;flex-wrap:wrap;gap:8px;list-style:none;padding:0}
+.sauces li{border:2px solid var(--cream);border-radius:999px;padding:5px 16px;font:700 17px var(--body);letter-spacing:1px;text-transform:uppercase}
+.note{margin-top:16px;font:600 17px var(--body)}
+.cta{background:var(--ember-dark);text-align:center;padding-block:44px 48px}
+.cta h3{font:400 clamp(36px,7vw,52px)/1.05 var(--display);color:var(--lava);letter-spacing:1px;text-wrap:balance}
+.cta p{color:var(--muted);margin:10px 0 22px}
+.btn{display:inline-block;background:var(--lava);color:var(--ember-dark);font:700 18px var(--body);letter-spacing:2px;text-transform:uppercase;text-decoration:none;border-radius:10px;padding:15px 28px;box-shadow:0 0 28px rgba(244,148,12,.4);transition:transform .16s cubic-bezier(.16,1,.3,1)}
+.btn:hover,.btn:focus-visible{transform:translateY(-2px);background:var(--lava-hi);outline:3px solid var(--cream);outline-offset:3px}
+.num{display:block;margin-top:14px;color:var(--cream);font:600 20px var(--body);user-select:all}
+.draft{margin-top:26px;color:var(--muted);font-size:14px;opacity:.85}
+@media (min-width:820px){
+  .sec .in{grid-template-columns:1fr 1fr;min-height:340px}
+  .photo{order:0;height:auto;margin:0;margin-right:calc(-1 * max(16px,env(safe-area-inset-right,0px)))}
+  .sec.flip .photo{order:-1;margin-right:0;margin-left:calc(-1 * max(16px,env(safe-area-inset-left,0px)))}
+  .photo{clip-path:polygon(40px 0,0 6.25%,40px 12.5%,0 18.75%,40px 25%,0 31.25%,40px 37.5%,0 43.75%,40px 50%,0 56.25%,40px 62.5%,0 68.75%,40px 75%,0 81.25%,40px 87.5%,0 93.75%,40px 100%,100% 100%,100% 0)}
+  .sec.flip .photo{clip-path:polygon(0 0,0 100%,calc(100% - 40px) 100%,100% 93.75%,calc(100% - 40px) 87.5%,100% 81.25%,calc(100% - 40px) 75%,100% 68.75%,calc(100% - 40px) 62.5%,100% 56.25%,calc(100% - 40px) 50%,100% 43.75%,calc(100% - 40px) 37.5%,100% 31.25%,calc(100% - 40px) 25%,100% 18.75%,calc(100% - 40px) 12.5%,100% 6.25%,calc(100% - 40px) 0)}
+  .txt{align-self:center;padding-block:40px}
+  .sec:not(.flip) .txt{padding-right:40px}.sec.flip .txt{padding-left:40px}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.btn{transition:none}}
+</style>
+
+</head>
+<body>
+<header class="top"><div class="in"><img src="images/logo.png" alt="Magma Wings"><h1>Menú</h1><p>Aplasta tus límites</p></div></header>
+<nav aria-label="Secciones del menú"><div class="in" id="nav"></div></nav>
+<main id="menu"></main>
+<footer class="cta"><div class="in">
+  <h3>¿Cuál es tu récord?</h3><p>Pide por WhatsApp y te avisamos cuando salga.</p>
+  <a class="btn" id="wa" href="https://wa.me/59176980828" rel="noopener">Pedir por WhatsApp</a>
+  <span class="num">+591 76980828</span>
+  <p style="margin-top:22px">Calle Juan Capriles, entre Calle Potosí y Av. Pando, Cochabamba</p>
+  <p class="draft" id="draft">Nombres y precios temporales</p>
+</div></footer>
+
+<script>
+/* Edita aquí el menú. Cada sección usa un tipo: "chips" (cantidades con precio), "list" (lista simple) o "sauces". */
+const MENU=[
+ {id:"alitas",title:"Alitas",sub:"Con 1 salsa a elección",tone:"dark",photo:"images/alitas.jpg",alt:"Alitas con papas fritas y dip verde sobre plato rojo",type:"chips",unit:"unidades",items:[[6,35],[12,65],[18,90]]},
+ {id:"pollo",title:"Pollo frito",sub:"Crocante por fuera, jugoso por dentro",tone:"org",photo:"images/pollo.jpg",alt:"Presa de pollo frito con papas y plátano sobre tabla",type:"chips",unit:"presas",items:[[2,30],[4,55],[8,100]]},
+ {id:"papas",title:"Papas",sub:"Elige las tuyas",tone:"dark",photo:"images/papas.jpg",alt:"Pollo empanizado con papas en gajos y dips",type:"list",items:[["Fritas","cortadas a mano"],["En gajos","con cáscara"],["Con plátano","frito"],["Cambio de papas","+5 Bs"]]},
+ {id:"salsas",title:"Salsas",sub:"Siete formas de pedir perdón",tone:"red",photo:"images/salsas.jpg",alt:"Alitas con dos salsas y papas fritas sobre plato rojo",type:"sauces",items:["BBQ Lava","Búfalo","Miel picante","Ajo parmesano","Ranch","Mango habanero","Magma extrema"],note:"Salsa extra: 5 Bs"}
+];
+const SHOW_DRAFT_NOTE=true;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+let html="",nav="";
+MENU.forEach((s,i)=>{
+  let body="";
+  if(s.type==="chips") body='<div class="chips">'+s.items.map(([q,p])=>`<div class="chip"><b>${q}</b><span>${esc(s.unit)}</span><em>${p}<small> Bs</small></em></div>`).join("")+'</div>';
+  if(s.type==="list") body='<ul class="list">'+s.items.map(([a,b])=>`<li><b>${esc(a)}</b> ${esc(b)}</li>`).join("")+'</ul>';
+  if(s.type==="sauces") body='<ul class="sauces">'+s.items.map(x=>`<li>${esc(x)}</li>`).join("")+'</ul>'+(s.note?`<p class="note">${esc(s.note)}</p>`:"");
+  html+=`<section class="sec ${s.tone}${i%2?" flip":""}" id="${s.id}"><div class="in"><div class="photo"><img src="${s.photo}" alt="${esc(s.alt)}" ${i?'loading="lazy"':""}></div><div class="txt"><h2>${esc(s.title)}</h2><div class="sub">${esc(s.sub)}</div>${body}</div></div></section>`;
+  nav+=`<a href="#${s.id}">${esc(s.title)}</a>`;
+});
+document.getElementById("menu").innerHTML=html;
+document.getElementById("nav").innerHTML=nav;
+if(!SHOW_DRAFT_NOTE)document.getElementById("draft").hidden=true;
+</script>
+
+</body>
+</html>
