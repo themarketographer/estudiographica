@@ -20,7 +20,7 @@ function csv(rows) {
 exports.handler = async function (event) {
   const to = process.env.MAGMA_BACKUP_EMAIL;
   const apiKey = process.env.RESEND_API_KEY;
-  if (process.env.CONTEXT !== 'production') return { statusCode: 200, body: 'solo producción' };
+  Store.forceProd(); // las funciones programadas solo corren en la versión publicada
   if (!to || !apiKey) { console.log('[magma-backup] falta MAGMA_BACKUP_EMAIL o RESEND_API_KEY'); return { statusCode: 200, body: 'sin configurar' }; }
   const since = Pricing.boliviaDate(new Date(Date.now() - 8 * 86400000)).key;
   const rows = await Store.listSince(event, since);

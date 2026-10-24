@@ -19,11 +19,11 @@ function texto(r) {
   return out.join('\n');
 }
 
-async function newOrder(record) {
+async function newOrder(record, prod) {
   const token = process.env.MAGMA_TELEGRAM_BOT_TOKEN;
   const chat = process.env.MAGMA_TELEGRAM_CHAT_ID;
   if (!token || !chat) return { skipped: 'sin configurar' };
-  if (process.env.CONTEXT !== 'production' && !process.env.MAGMA_NOTIFY_TEST) return { skipped: 'no es producción' };
+  if (!prod && !process.env.MAGMA_NOTIFY_TEST) return { skipped: 'no es producción' };
   try {
     const ctrl = new AbortController();
     const timer = setTimeout(() => ctrl.abort(), 2500);

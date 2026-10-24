@@ -26,10 +26,12 @@ function userData(rec) {
   return u;
 }
 
-async function sendEvent(eventName, rec, sourceUrl) {
+async function sendEvent(eventName, rec, sourceUrl, prod) {
   const pixel = process.env.MAGMA_META_PIXEL_ID;
   const token = process.env.MAGMA_META_ACCESS_TOKEN;
   if (!pixel || !token) return { status: 'skipped' };
+  // Las pruebas y previews no deben ensuciar las conversiones reales: sin código de prueba, solo producción envía.
+  if (!prod && !process.env.MAGMA_META_TEST_CODE) return { status: 'skipped-no-prod' };
   const body = {
     data: [{
       event_name: eventName,

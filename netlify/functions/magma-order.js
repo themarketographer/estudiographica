@@ -51,7 +51,7 @@ exports.handler = async function (event) {
     key, orderId: o.orderId, number: n, createdAt, status: 'nuevo', mode: o.customer.mode, customer: o.customer,
     subtotal: o.subtotal, deliveryFee: o.deliveryFee, payment: { method: o.customer.payMethod || 'cash', status: 'pendiente' }, total: o.total, count: o.count, currency: menu.brand.currency,
     lines: o.lines.map((l) => ({ name: l.name, portion: l.portionLabel, qty: l.qty, unitPrice: l.unitPrice, total: l.total, choices: l.choices, note: l.note })),
-    message: o.message, context: process.env.CONTEXT || 'dev', meta
+    message: o.message, context: Store.isProd(event) ? 'production' : 'preview', meta
   });
   const save = await Store.saveNumbered(event, day.key, (n, key) =>
     make(Pricing.validateOrder(menu, payload, { orderId: Pricing.orderNumber(n, now) }).order, n, key));
@@ -59,8 +59,8 @@ exports.handler = async function (event) {
   const record = save.ok ? save.rec : make(check.order, 0, 'sin-guardar/' + createdAt);
   const order = { orderId: record.orderId, customer: record.customer, total: record.total, count: record.count, lines: record.lines, message: record.message, whatsappUrl: Pricing.whatsappUrl(menu, record.message) };
   const sourceUrl = 'https://' + (h.host || 'estudiographica.com') + '/menu/magma/';
-  const capi = await Meta.sendEvent('Lead', record, sourceUrl);
-  const notified = save.ok ? await Notify.newOrder(record) : { skipped: 'sin guardar' };
+  const capi = await Meta.sendEvent('Lead', record, sourceUrl, Store.isProd(event));
+  const notified = save.ok ? await Notify.newOrder(record, Store.isProd(event)) : { skipped: 'sin guardar' };
   const hook = process.env.ORDER_WEBHOOK_URL;
   if (hook) {
     try {
@@ -97,8 +97,8 @@ exports.handler = async function (event) {
     saved: save.ok,
     number: record.number || null,
     // En previews y pruebas se devuelve el motivo para poder diagnosticar; en producción no.
-    saveError: save.ok || process.env.CONTEXT === 'production' ? undefined : save.error,
-    capi: process.env.CONTEXT === 'production' ? undefined : capi.status,
-    notify: process.env.CONTEXT === 'production' ? undefined : notified
+    saveError: save.ok || Store.isProd(event) ? undefined : save.error,
+    capi: Store.isProd(event) ? undefined : capi.status,
+    notify: Store.isProd(event) ? undefined : notified
   });
 };
