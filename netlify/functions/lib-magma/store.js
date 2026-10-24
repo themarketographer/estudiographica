@@ -26,7 +26,7 @@ async function saveNumbered(event, dateKey, build) {
     for (let i = 0; i < 12; i++, n++) {
       const rec = build(n, keyFor(dateKey, n));
       const r = await store.setJSON(rec.key, rec, { onlyIfNew: true });
-      if (r.modified !== false) return { ok: true, rec };
+      if (!r || r.modified !== false) return { ok: true, rec };
     }
     return { ok: false, error: 'No se pudo asignar número de pedido.' };
   } catch (e) {
