@@ -10,6 +10,7 @@
   var CART_KEY = 'magma.cart.v2';
   var CUST_KEY = 'magma.customer.v1';
   var LAST_KEY = 'magma.last.v2';
+  var PREF_KEY = 'magma.prefs.v1';
   var LAST_TTL = 1000 * 60 * 60 * 12;
 
   var menu = null;
@@ -310,6 +311,22 @@
     bar.classList.toggle('on', on);
     if (on) bar.removeAttribute('inert'); else bar.setAttribute('inert', '');
     document.body.classList.toggle('has-cart', on);
+    var nc = $('#navCount');
+    nc.textContent = t.count;
+    nc.hidden = !on;
+    $('#navCart').setAttribute('aria-label', on ? 'Ver pedido, ' + t.count + (t.count === 1 ? ' producto' : ' productos') : 'Ver pedido');
+    renderBadges();
+  }
+  function renderBadges() {
+    $$('.row').forEach(function (row) {
+      var n = 0;
+      lines.forEach(function (l) { if (l.id === row.getAttribute('data-pid') && l.portion === row.getAttribute('data-portion')) n += l.qty; });
+      var inc = $('.inc', row);
+      if (!inc) return;
+      inc.textContent = n + ' en tu pedido';
+      inc.hidden = !n;
+      row.classList.toggle('has', n > 0);
+    });
   }
 
   function summaryOf(l) {
@@ -346,6 +363,12 @@
     (product.groups || []).forEach(function (gid) {
       var opts = P.groupOptions(menu, menu.optionGroups[gid]);
       st.sel[gid] = opts.filter(function (o) { return o.default; }).map(function (o) { return o.id; });
+    });
+    var prefs = load(PREF_KEY) || {};
+    ['salsa', 'papas'].forEach(function (g) {
+      if (!prefs[g] || (product.groups || []).indexOf(g) < 0) return;
+      var ok = P.groupOptions(menu, menu.optionGroups[g]).some(function (o) { return o.id === prefs[g]; });
+      if (ok) st.sel[g] = [prefs[g]];
     });
     if (edit) {
       Object.keys(edit.sel).forEach(function (g) { st.sel[g] = edit.sel[g].slice(); });
@@ -468,6 +491,10 @@
       commit(list.concat([raw]));
       emit('edit_cart_item', { id: st.product.id });
     } else addToCart(raw);
+    var pf = load(PREF_KEY) || {};
+    ['salsa', 'papas'].forEach(function (g) { if (sel[g] && sel[g][0]) pf[g] = sel[g][0]; });
+    store(PREF_KEY, pf);
+    if (navigator.vibrate && !reduceMotion.matches) { try { navigator.vibrate(12); } catch (e) {} }
     closeSheet($('#itemDlg'));
   }
 
@@ -677,25 +704,30 @@
         var gone = p.available === false || po.available === false;
         return h('li', {}, h('button', { class: 'row shine', type: 'button', 'data-pid': p.id, 'data-portion': po.id, disabled: gone, 'aria-label': p.title + ' ' + po.qty + ' ' + po.unit + ', ' + money(po.price) + (gone ? ', agotado' : '. Elegir salsa y agregar') },
           h('span', { class: 'q', text: String(po.qty) }),
-          h('span', { class: 'u', text: po.unit }),
+          h('span', { class: 'u' }, po.unit, h('em', { class: 'inc', hidden: true })),
           h('span', { class: 'p' }, String(po.price), h('small', { text: menu.brand.currency })),
           gone ? h('span', { class: 'gone', text: 'Agotado' }) : h('span', { class: 'add', 'aria-hidden': 'true' }, icon('i-plus'))));
       }));
       main.appendChild(h('section', { class: 'prod ' + p.tone + (i % 2 ? ' flip' : ''), id: p.id, 'data-tone': p.tone === 'org' ? 'light' : 'dark', 'aria-labelledby': p.id + '-h' },
         h('div', { class: 'prod-grid' },
-          h('div', { class: 'photo shine' }, h('img', { src: p.photo, alt: p.alt, decoding: 'async', loading: i ? 'lazy' : null, 'data-img-par': '0.12' })),
+          h('div', { class: 'photo shine' }, h('img', { src: p.photo, alt: p.alt, decoding: 'async', loading: i ? 'lazy' : null, 'data-img-par': '0.07', style: 'object-position:' + (p.photoPos || '50% 50%') })),
           h('div', { class: 'txt' },
             h('h2', { class: 'rv', id: p.id + '-h', text: p.title }),
-            h('div', { class: 'sub rv', style: '--d:100ms', text: p.sub }),
-            rows))));
+            h('p', { class: 'sub rv', style: '--d:100ms', text: p.sub }),
+            rows,
+            p.showSauces ? h('div', { class: 'sauces rv', style: '--d:300ms' },
+              h('p', { class: 'sauces-h', text: menu.sauces.length + ' salsas para elegir' }),
+              h('ul', {}, menu.sauces.map(function (s) { return h('li', { text: s.name }); }))) : null,
+            h('p', { class: 'note rv', style: '--d:350ms', text: 'Eliges papas y salsas al armar tu pedido.' })))));
     });
     main.removeAttribute('aria-busy');
+    renderBadges();
     main.addEventListener('click', function (e) {
       var row = e.target.closest && e.target.closest('.row');
       if (row && !row.disabled) openItem(row.getAttribute('data-pid'), row.getAttribute('data-portion'), null, row);
     });
     document.addEventListener('click', function (e) {
-      var a = e.target.closest && e.target.closest('.nav-links a, .hero .cta-row a');
+      var a = e.target.closest && e.target.closest('.nav-links a');
       if (!a) return;
       var id = (a.getAttribute('href') || '').slice(1);
       if (window.MagmaMotion) window.MagmaMotion.lockSpy(700);
@@ -724,16 +756,15 @@
 
   function renderFooter() {
     var b = menu.brand;
-    var hello = 'https://wa.me/' + b.whatsapp + '?text=' + encodeURIComponent('Hola ' + b.name + ', tengo una consulta.');
-    $('#wa').href = hello;
-    $('#navWa').href = hello;
-    $$('#wa, #navWa').forEach(function (a) { a.addEventListener('click', function () { emit('whatsapp_click', { source: a.id === 'wa' ? 'footer' : 'nav' }); }); });
-    $('#waNum').textContent = b.whatsappDisplay || ('+' + b.whatsapp);
+    var wa = $('#wa');
+    wa.href = 'https://wa.me/' + b.whatsapp + '?text=' + encodeURIComponent('Hola ' + b.name + ', tengo una consulta.');
+    wa.textContent = b.whatsappDisplay || ('+' + b.whatsapp);
+    wa.addEventListener('click', function () { emit('whatsapp_click', { source: 'footer' }); });
     var a = $('#addr');
     a.textContent = b.address;
     a.href = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(b.name + ' ' + b.address);
     var st = openStatus();
-    if (st && st.text) { var hr = $('#hours'); hr.textContent = st.text; hr.hidden = false; }
+    if (st && st.text) { $('#hours').textContent = st.text; $('#hoursRow').hidden = false; }
     if (st && st.open !== null) {
       var s = $('#status');
       s.textContent = st.open ? 'Abierto ahora' : 'Cerrado ahora. Puedes dejar tu pedido y lo vemos al abrir.';
@@ -770,6 +801,7 @@
     wireSheet($('#itemDlg'));
     wireSheet($('#cartDlg'));
     $('#cartBar').addEventListener('click', openCart);
+    $('#navCart').addEventListener('click', openCart);
     $('#cartBack').addEventListener('click', function () { cartView = 'cart'; renderCart(); });
     motionRefresh();
     loadTracking(m.tracking);

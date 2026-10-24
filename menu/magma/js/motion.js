@@ -140,8 +140,8 @@
     imgs.forEach(function (e) {
       var box = e.parentElement.getBoundingClientRect();
       if (box.bottom < 0 || box.top > vh) return;
-      var k = parseFloat(e.getAttribute('data-img-par')) || 0.12, p = (box.top + box.height / 2 - vh / 2) / vh;
-      e.style.transform = 'translate3d(0,' + (-clamp(p, -1, 1) * k * box.height * 0.5).toFixed(1) + 'px,0) scale(1.14)';
+      var k = parseFloat(e.getAttribute('data-img-par')) || 0.07, p = (box.top + box.height / 2 - vh / 2) / vh;
+      e.style.transform = 'translate3d(0,' + (-clamp(p, -1, 1) * k * box.height * 0.5).toFixed(1) + 'px,0) scale(1.08)';
     });
   }
 

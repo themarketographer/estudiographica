@@ -9,10 +9,11 @@ Todo el contenido vive en `menu.json`. Cambiar un precio, agregar una salsa o ma
 | Campo | Para qué sirve |
 |---|---|
 | `brand.whatsapp` | Número que recibe los pedidos, con código de país y sin `+` |
-| `brand.hours` | Horario en texto. Con `null` no se muestra |
-| `service.pickup` / `service.delivery` | Activa o desactiva recojo y entrega |
-| `categories[].products[]` | Productos con `price`, `qty`, `unit` y `groups` (qué opciones se ofrecen) |
+| `hours` | `null`, o `{ "text": "Lun a dom, 12:00 a 22:00", "tz": "America/La_Paz", "days": { "0": [["12:00","22:00"]] } }`. Con `days` y `tz` aparece "Abierto ahora" |
+| `service.pickup` / `service.delivery` / `service.minOrder` | Recojo, entrega y pedido mínimo (`null` desactiva el mínimo) |
+| `products[]` | Cada producto trae `portions` (cantidad, unidad y precio), `groups` (qué opciones ofrece), `photo` y `photoPos` |
 | `optionGroups` | Salsa, papas y salsa extra. Cada opción puede sumar `price` |
+| `available: false` | En un producto o en una porción, la marca como agotada |
 | `draftNote` | Aviso "Nombres y precios temporales". Con `null` desaparece |
 | `tracking.ga4` / `tracking.metaPixel` | IDs propios del negocio. Vacíos, no se carga ningún script externo |
 
@@ -27,7 +28,7 @@ Cuerpo del POST:
 
 ```json
 {
-  "lines": [{ "id": "alitas-12", "sel": { "salsa": ["bufalo"], "papas": ["gajos"], "salsa-extra": ["ranch"] }, "qty": 2 }],
+  "lines": [{ "id": "alitas", "portion": "12", "sel": { "salsa": ["bufalo"], "papas": ["gajos"], "salsa-extra": ["ranch"] }, "qty": 2 }],
   "customer": { "name": "Ana", "mode": "delivery", "address": "Av. Pando 123", "notes": "" }
 }
 ```
@@ -45,14 +46,18 @@ Magma.on('add_to_cart', e => console.log(e.items, e.value));
 document.addEventListener('magma:order_sent', e => console.log(e.detail.orderId));
 ```
 
-`menu_view`, `category_select`, `item_view`, `add_to_cart`, `update_cart`, `remove_from_cart`, `undo_remove`, `edit_cart_item`, `cart_open`, `cart_close`, `checkout_start`, `order_submit`, `order_sent`, `order_fallback`, `order_error`, `order_edit`, `whatsapp_click`.
+`menu_view`, `category_select`, `item_view`, `add_to_cart`, `update_cart`, `remove_from_cart`, `undo_remove`, `edit_cart_item`, `cart_open`, `cart_close`, `checkout_start`, `order_submit`, `order_sent`, `order_fallback`, `order_error`, `order_edit`, `edit_cart_item`, `whatsapp_click`.
 
 Con GA4 o Meta Pixel configurados se mapean a eventos estándar: `view_item`, `add_to_cart`, `remove_from_cart`, `view_cart`, `begin_checkout` y `generate_lead` en GA4; `ViewContent`, `AddToCart`, `InitiateCheckout` y `Lead` en Meta. La moneda se reporta como `BOB`.
 
-Control del carrito desde otros scripts: `Magma.cart.add(id, sel, qty)`, `Magma.cart.clear()`, `Magma.cart.total()`, `Magma.open()`.
+Control del carrito desde otros scripts: `Magma.cart.add(id, portion, sel, qty, note)`, `Magma.cart.clear()`, `Magma.cart.total()`, `Magma.open()`.
 
 ## Para publicar
 
 1. Reemplaza `draftNote` por `null` cuando los precios sean definitivos.
 2. Pon los IDs de GA4 y Meta Pixel del negocio en `tracking`. Los de Estudio Graphica no corresponden aquí.
 3. Quita `<meta name="robots" content="noindex">` de `index.html` si el menú debe aparecer en Google.
+
+## Movimiento y tipografía
+
+`js/motion.js` adapta el sistema de movimiento de Estudio Graphica (entradas con blur, título por palabras, botones con relleno, nav de vidrio, foco de luz, paralaje). Tipografía: Bricolage Grotesque (títulos y cifras) e Instrument Sans (texto), alojadas en `fonts/`.

@@ -22,13 +22,34 @@
   },
   "draftNote": "Nombres y precios temporales",
   "sauces": [
-    { "id": "bbq-lava", "name": "BBQ Lava" },
-    { "id": "bufalo", "name": "Búfalo" },
-    { "id": "miel-picante", "name": "Miel picante" },
-    { "id": "ajo-parmesano", "name": "Ajo parmesano" },
-    { "id": "ranch", "name": "Ranch" },
-    { "id": "mango-habanero", "name": "Mango habanero" },
-    { "id": "magma-extrema", "name": "Magma extrema" }
+    {
+      "id": "bbq-lava",
+      "name": "BBQ Lava"
+    },
+    {
+      "id": "bufalo",
+      "name": "Búfalo"
+    },
+    {
+      "id": "miel-picante",
+      "name": "Miel picante"
+    },
+    {
+      "id": "ajo-parmesano",
+      "name": "Ajo parmesano"
+    },
+    {
+      "id": "ranch",
+      "name": "Ranch"
+    },
+    {
+      "id": "mango-habanero",
+      "name": "Mango habanero"
+    },
+    {
+      "id": "magma-extrema",
+      "name": "Magma extrema"
+    }
   ],
   "optionGroups": {
     "salsa": {
@@ -44,9 +65,25 @@
       "type": "single",
       "required": true,
       "options": [
-        { "id": "fritas", "name": "Fritas", "desc": "cortadas a mano", "price": 0, "default": true },
-        { "id": "gajos", "name": "En gajos", "desc": "con cáscara", "price": 5 },
-        { "id": "platano", "name": "Con plátano", "desc": "frito", "price": 5 }
+        {
+          "id": "fritas",
+          "name": "Fritas",
+          "desc": "cortadas a mano",
+          "price": 0,
+          "default": true
+        },
+        {
+          "id": "gajos",
+          "name": "En gajos",
+          "desc": "con cáscara",
+          "price": 5
+        },
+        {
+          "id": "platano",
+          "name": "Con plátano",
+          "desc": "frito",
+          "price": 5
+        }
       ]
     },
     "salsa-extra": {
@@ -68,11 +105,32 @@
       "photo": "images/alitas.jpg",
       "alt": "Alitas con papas fritas y dip verde sobre plato rojo",
       "portions": [
-        { "id": "6", "qty": 6, "unit": "unidades", "price": 35 },
-        { "id": "12", "qty": 12, "unit": "unidades", "price": 65 },
-        { "id": "18", "qty": 18, "unit": "unidades", "price": 90 }
+        {
+          "id": "6",
+          "qty": 6,
+          "unit": "unidades",
+          "price": 35
+        },
+        {
+          "id": "12",
+          "qty": 12,
+          "unit": "unidades",
+          "price": 65
+        },
+        {
+          "id": "18",
+          "qty": 18,
+          "unit": "unidades",
+          "price": 90
+        }
       ],
-      "groups": ["salsa", "papas", "salsa-extra"]
+      "groups": [
+        "salsa",
+        "papas",
+        "salsa-extra"
+      ],
+      "photoPos": "50% 42%",
+      "showSauces": true
     },
     {
       "id": "pollo",
@@ -82,11 +140,30 @@
       "photo": "images/pollo.jpg",
       "alt": "Presa de pollo frito con papas y plátano sobre tabla",
       "portions": [
-        { "id": "2", "qty": 2, "unit": "presas", "price": 30 },
-        { "id": "4", "qty": 4, "unit": "presas", "price": 55 },
-        { "id": "8", "qty": 8, "unit": "presas", "price": 100 }
+        {
+          "id": "2",
+          "qty": 2,
+          "unit": "presas",
+          "price": 30
+        },
+        {
+          "id": "4",
+          "qty": 4,
+          "unit": "presas",
+          "price": 55
+        },
+        {
+          "id": "8",
+          "qty": 8,
+          "unit": "presas",
+          "price": 100
+        }
       ],
-      "groups": ["papas", "salsa-extra"]
+      "groups": [
+        "papas",
+        "salsa-extra"
+      ],
+      "photoPos": "50% 50%"
     }
   ]
 }

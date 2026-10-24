@@ -7,8 +7,8 @@
 <meta name="description" content="Menú de Magma Wings en Cochabamba: alitas, pollo frito, papas y salsas. Arma tu pedido y envíalo por WhatsApp.">
 <meta name="robots" content="noindex">
 <meta name="theme-color" content="#260c0d">
-<link rel="preload" href="fonts/squada-one-400.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="fonts/barlow-600.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/bricolage-grotesque.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/instrument-sans.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="css/magma.css">
 </head>
 <body>
@@ -30,26 +30,21 @@
 </svg>
 
 <nav class="nav" id="nav" aria-label="Menú">
-  <a class="brand" href="#top" aria-label="Magma Wings, ir al inicio"><img src="images/logo.png" alt="" width="36" height="36"></a>
-  <div class="nav-links">
+  <a class="brand" href="#top" aria-label="Magma Wings, ir al inicio"><img src="images/logo-alpha.png" alt="Magma Wings" width="531" height="208"></a>
+  <div class="nav-links" role="tablist" aria-label="Categorías">
     <a href="#alitas">Alitas</a>
     <a href="#pollo">Pollo frito</a>
   </div>
-  <a class="nav-wa" id="navWa" href="#" rel="noopener" aria-label="Escribir por WhatsApp"><svg class="ic" aria-hidden="true"><use href="#i-wa"/></svg><span>WhatsApp</span></a>
+  <button class="nav-cart" id="navCart" type="button" aria-label="Ver pedido"><svg class="ic" aria-hidden="true"><use href="#i-bag"/></svg><b id="navCount" hidden>0</b></button>
 </nav>
 
-<header class="hero grain" id="top" data-spot data-tone="dark">
+<header class="intro grain" id="top" data-spot data-tone="dark">
   <span class="orb orb-a" aria-hidden="true"></span>
-  <span class="orb orb-b" aria-hidden="true"></span>
   <span class="spot" aria-hidden="true"></span>
   <div class="wrap">
-    <h1 data-words id="tagline">Aplasta tus <span class="mark">límites</span></h1>
-    <p class="lead rv" style="--d:300ms">Alitas y pollo frito. Elige tu porción y tu salsa, y manda el pedido por WhatsApp.</p>
-    <div class="cta-row rv" style="--d:420ms">
-      <a class="btn" href="#alitas">Pedir alitas<svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a>
-      <a class="btn btn--ghost" href="#pollo">Pedir pollo frito</a>
-    </div>
-    <p class="status rv" id="status" style="--d:520ms" hidden></p>
+    <h1 data-words id="tagline">Nuestro <span class="mark">menú</span></h1>
+    <p class="lead rv" style="--d:250ms">Elige tu porción y tu salsa. El pedido se envía por WhatsApp.</p>
+    <p class="status rv" id="status" style="--d:350ms" hidden></p>
   </div>
 </header>
 
@@ -57,14 +52,9 @@
 
 <footer class="foot">
   <div class="wrap">
-    <h2 class="rv">¿Cuál es tu récord?</h2>
-    <p class="rv">Si tienes dudas antes de pedir, escríbenos directo. Respondemos por WhatsApp.</p>
-    <div class="cta-row rv">
-      <a class="btn btn--wa" id="wa" href="#" rel="noopener"><svg class="ic" aria-hidden="true"><use href="#i-wa"/></svg>Escribir por WhatsApp</a>
-    </div>
-    <span class="num" id="waNum"></span>
-    <p class="addr"><svg class="ic" aria-hidden="true"><use href="#i-pin"/></svg><a id="addr" href="#" rel="noopener" target="_blank"></a></p>
-    <p class="hours" id="hours" hidden></p>
+    <p class="foot-help">¿Dudas con tu pedido? Escríbenos al <a id="wa" href="#" rel="noopener"></a>.</p>
+    <p class="foot-meta"><svg class="ic" aria-hidden="true"><use href="#i-pin"/></svg><a id="addr" href="#" rel="noopener" target="_blank"></a></p>
+    <p class="foot-meta" id="hoursRow" hidden><span id="hours"></span></p>
     <p class="draft" id="draft" hidden></p>
   </div>
 </footer>
