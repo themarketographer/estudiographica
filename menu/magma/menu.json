@@ -1,0 +1,117 @@
+{
+  "version": 1,
+  "brand": {
+    "name": "Magma Wings",
+    "tagline": "Aplasta tus límites",
+    "currency": "Bs",
+    "whatsapp": "59176980828",
+    "whatsappDisplay": "+591 76980828",
+    "address": "Calle Juan Capriles, entre Calle Potosí y Av. Pando, Cochabamba",
+    "hours": null,
+    "orderPrefix": "MW"
+  },
+  "service": {
+    "pickup": true,
+    "delivery": true,
+    "deliveryNote": "El costo de envío te lo confirmamos por WhatsApp."
+  },
+  "tracking": {
+    "ga4": "",
+    "metaPixel": ""
+  },
+  "draftNote": "Nombres y precios temporales",
+  "sauces": [
+    { "id": "bbq-lava", "name": "BBQ Lava" },
+    { "id": "bufalo", "name": "Búfalo" },
+    { "id": "miel-picante", "name": "Miel picante" },
+    { "id": "ajo-parmesano", "name": "Ajo parmesano" },
+    { "id": "ranch", "name": "Ranch" },
+    { "id": "mango-habanero", "name": "Mango habanero" },
+    { "id": "magma-extrema", "name": "Magma extrema" }
+  ],
+  "optionGroups": {
+    "salsa": {
+      "label": "Tu salsa",
+      "hint": "Elige 1",
+      "type": "single",
+      "required": true,
+      "source": "sauces"
+    },
+    "papas": {
+      "label": "Papas",
+      "hint": "Fritas incluidas",
+      "type": "single",
+      "required": true,
+      "options": [
+        { "id": "fritas", "name": "Fritas", "desc": "cortadas a mano", "price": 0, "default": true },
+        { "id": "gajos", "name": "En gajos", "desc": "con cáscara", "price": 5 },
+        { "id": "platano", "name": "Con plátano", "desc": "frito", "price": 5 }
+      ]
+    },
+    "salsa-extra": {
+      "label": "Salsa extra",
+      "hint": "5 Bs cada una, hasta 3",
+      "type": "multi",
+      "required": false,
+      "max": 3,
+      "source": "sauces",
+      "price": 5
+    }
+  },
+  "categories": [
+    {
+      "id": "alitas",
+      "title": "Alitas",
+      "sub": "Con 1 salsa a elección",
+      "tone": "dark",
+      "photo": "images/alitas.jpg",
+      "alt": "Alitas con papas fritas y dip verde sobre plato rojo",
+      "kind": "products",
+      "products": [
+        { "id": "alitas-6", "name": "Alitas x6", "qty": 6, "unit": "unidades", "price": 35, "groups": ["salsa", "papas", "salsa-extra"] },
+        { "id": "alitas-12", "name": "Alitas x12", "qty": 12, "unit": "unidades", "price": 65, "groups": ["salsa", "papas", "salsa-extra"] },
+        { "id": "alitas-18", "name": "Alitas x18", "qty": 18, "unit": "unidades", "price": 90, "groups": ["salsa", "papas", "salsa-extra"] }
+      ]
+    },
+    {
+      "id": "pollo",
+      "title": "Pollo frito",
+      "sub": "Crocante por fuera, jugoso por dentro",
+      "tone": "org",
+      "photo": "images/pollo.jpg",
+      "alt": "Presa de pollo frito con papas y plátano sobre tabla",
+      "kind": "products",
+      "products": [
+        { "id": "pollo-2", "name": "Pollo frito x2", "qty": 2, "unit": "presas", "price": 30, "groups": ["papas", "salsa-extra"] },
+        { "id": "pollo-4", "name": "Pollo frito x4", "qty": 4, "unit": "presas", "price": 55, "groups": ["papas", "salsa-extra"] },
+        { "id": "pollo-8", "name": "Pollo frito x8", "qty": 8, "unit": "presas", "price": 100, "groups": ["papas", "salsa-extra"] }
+      ]
+    },
+    {
+      "id": "papas",
+      "title": "Papas",
+      "sub": "Elige las tuyas",
+      "tone": "dark",
+      "photo": "images/papas.jpg",
+      "alt": "Pollo empanizado con papas en gajos y dips",
+      "kind": "info",
+      "items": [
+        { "name": "Fritas", "desc": "cortadas a mano" },
+        { "name": "En gajos", "desc": "con cáscara" },
+        { "name": "Con plátano", "desc": "frito" },
+        { "name": "Cambio de papas", "desc": "+5 Bs" }
+      ],
+      "note": "Eliges las papas al armar tu alita o tu pollo."
+    },
+    {
+      "id": "salsas",
+      "title": "Salsas",
+      "sub": "Siete formas de pedir perdón",
+      "tone": "red",
+      "photo": "images/salsas.jpg",
+      "alt": "Alitas con dos salsas y papas fritas sobre plato rojo",
+      "kind": "sauces",
+      "note": "Salsa extra: 5 Bs"
+    }
+  ]
+}
