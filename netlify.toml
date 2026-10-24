@@ -36,6 +36,11 @@ node_bundler = "esbuild"
   status = 200
 
 [[redirects]]
+  from = "/api/magma/proof"
+  to = "/.netlify/functions/magma-proof"
+  status = 200
+
+[[redirects]]
   from = "/api/magma/track"
   to = "/.netlify/functions/magma-track"
   status = 200

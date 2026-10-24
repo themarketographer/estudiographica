@@ -684,6 +684,22 @@
       rcpt.appendChild(h('div', { class: 'rrow total' }, h('span', { text: 'Total' }), h('b', { class: 'display', text: money(total) + (mode === 'delivery' && fee.fee === null && zoneSel.value ? ' + envío' : '') })));
     };
     zoneSel.addEventListener('change', function () { paint(); emit('zone_select', { zone: zoneSel.value }); });
+    var methods = (menu.payment && menu.payment.methods) || ['cash'];
+    var payMethod = methods.indexOf(saved.payMethod) > -1 ? saved.payMethod : methods[0];
+    var paySeg = null;
+    var payHint = h('p', { class: 'hint' }, icon('i-shield'), h('span', { text: '' }));
+    var paintPay = function () { $('span', payHint).textContent = payMethod === 'qr' ? (menu.payment.qr.note || '') : (menu.payment.cashNote || ''); };
+    if (methods.length > 1) {
+      var mkp = function (val, label, ic) {
+        var input = h('input', { type: 'radio', name: 'payMethod', value: val, checked: payMethod === val });
+        var lab = h('label', { class: 'opt mode' + (payMethod === val ? ' on' : '') }, input, icon(ic), h('span', { class: 'nm', text: label }));
+        input.addEventListener('change', function () { payMethod = val; paintPay(); $$('.seg.payseg .opt').forEach(function (x) { x.classList.toggle('on', $('input', x).checked); }); emit('payment_select', { method: val }); });
+        return lab;
+      };
+      paySeg = h('div', { class: 'f' }, h('span', { class: 'lab', text: '¿Cómo pagas?' }), h('div', { class: 'seg payseg' }, mkp('cash', 'Efectivo', 'i-cash'), mkp('qr', 'QR', 'i-qr')),
+        payHint);
+    }
+    paintPay();
     var seg = null;
     if (both) {
       var mk = function (val, label, ic) {
@@ -703,16 +719,16 @@
     fAddr.hidden = mode !== 'delivery';
     if (fZone) fZone.hidden = mode !== 'delivery';
     paint();
-    var consent = h('input', { type: 'checkbox', id: 'consent', name: 'consent' });
+    var consent = h('input', { type: 'checkbox', id: 'consent', name: 'consent', checked: saved.consent !== false });
     var consentRow = h('label', { class: 'consent', for: 'consent' }, consent, h('span', { class: 'box' }, icon('i-check')),
-      h('span', { class: 'ctext' }, h('b', { text: 'Quiero recibir ofertas y novedades de ' + menu.brand.name }),
-        h('small', {}, icon('i-shield'), 'Usamos tus datos para tu pedido y, si aceptas, para ofertas y anuncios. Puedes pedir que los borremos cuando quieras.')));
+      h('span', { class: 'ctext' }, h('b', { text: 'Quiero recibir ofertas de ' + menu.brand.name }),
+        h('small', {}, icon('i-shield'), 'Usamos tus datos para tu pedido y para enviarte ofertas y anuncios. Desmarca la casilla si no quieres recibirlas. Puedes pedir que borremos tus datos cuando quieras.')));
     var form = h('form', { class: 'form', id: 'orderForm', novalidate: true, onsubmit: function (e) { e.preventDefault(); sendOrder(function () {
       return { firstName: fFirst.querySelector('input').value, lastName: fLast.querySelector('input').value, phone: fPhone.querySelector('input').value, email: fEmail.querySelector('input').value,
-        consent: consent.checked, mode: mode, zone: zoneSel.value, address: addr.value, notes: notes.value };
+        consent: consent.checked, mode: mode, zone: zoneSel.value, payMethod: payMethod, address: addr.value, notes: notes.value };
     }); } },
       h('div', { class: 'pair' }, fFirst, fLast), fPhone, fEmail,
-      seg, fZone, fAddr,
+      seg, fZone, fAddr, paySeg,
       h('div', { class: 'f' }, h('label', { for: 'notes' }, 'Notas del pedido ', h('small', { text: '(opcional)' })), h('div', { class: 'inp area' }, icon('i-note'), notes)),
       consentRow,
       rcpt);
@@ -751,7 +767,7 @@
     if (sending) return;
     var c = P.cleanCustomer(menu, read());
     if (!c.ok) return fieldError(c.field, c.error);
-    store(CUST_KEY, { firstName: c.customer.firstName, lastName: c.customer.lastName, phone: c.customer.phone, email: c.customer.email, mode: c.customer.mode, zone: c.customer.zone, address: c.customer.address });
+    store(CUST_KEY, { firstName: c.customer.firstName, lastName: c.customer.lastName, phone: c.customer.phone, email: c.customer.email, consent: c.customer.consent, mode: c.customer.mode, zone: c.customer.zone, payMethod: c.customer.payMethod, address: c.customer.address });
     var payload = { lines: rawLines(), customer: c.customer, meta: { fbp: cookie('_fbp'), fbc: cookie('_fbc') || fbcFromUrl() } };
     emit('order_submit', { value: totals().total, items: items(lines), count: totals().count, mode: c.customer.mode });
     setSending(true);
@@ -790,7 +806,7 @@
       try { window.fbq('init', menu.tracking.metaPixel, { em: customer.email || undefined, ph: customer.phone, fn: customer.firstName.toLowerCase(), ln: customer.lastName.toLowerCase(), country: 'bo' }); } catch (e) {}
     }
     emit('order_sent', ev);
-    setTimeout(function () { if (cartView === 'done') window.location.href = d.whatsappUrl; }, reduceMotion.matches ? 0 : 900);
+    if (customer.payMethod !== 'qr') setTimeout(function () { if (cartView === 'done') window.location.href = d.whatsappUrl; }, reduceMotion.matches ? 0 : 900);
   }
 
   function renderDone(body, foot) {
@@ -804,7 +820,8 @@
       h('p', { class: 'done-k', text: 'Tu pedido es el' }),
       h('h3', { class: 'display', text: o.orderId }),
       h('p', { class: 'done-sum' }, icon('i-receipt'), lines2 + (lines2 === 1 ? ' producto' : ' productos') + ' · ' + money(o.total)),
-      h('p', { class: 'done-t', text: 'Abrimos WhatsApp con tu pedido listo. Envía el mensaje y lo confirmamos contigo.' }),
+      h('p', { class: 'done-t', text: o.customer && o.customer.payMethod === 'qr' ? 'Paga con el QR, sube tu comprobante y luego envía el pedido por WhatsApp.' : 'Abrimos WhatsApp con tu pedido listo. Envía el mensaje y lo confirmamos contigo.' }),
+      h('div', { id: 'payBox' }),
       h('div', { class: 'stack' },
         h('a', { class: 'btn btn--wa btn--block', href: o.whatsappUrl, rel: 'noopener', onclick: function () { emit('whatsapp_click', { source: 'done', orderId: o.orderId }); } }, icon('i-wa'), 'Abrir WhatsApp'),
         !String(o.orderId).indexOf('#T') ? null : h('a', { class: 'btn btn--ghost btn--block', href: 'pedido/', onclick: function () { emit('track_open', { orderId: o.orderId }); } }, icon('i-clock'), 'Seguir mi pedido'),
@@ -812,6 +829,10 @@
         h('button', { class: 'link center', type: 'button', onclick: restoreLast }, icon('i-edit'), 'Editar pedido')),
       h('pre', { class: 'preview', text: o.message })));
     foot.appendChild(h('button', { class: 'btn btn--ghost btn--block', type: 'button', onclick: function () { closeSheet($('#cartDlg')); } }, icon('i-x'), 'Cerrar'));
+    if (o.customer && o.customer.payMethod === 'qr' && window.MagmaProof) {
+      var saved = String(o.orderId).indexOf('#T') !== 0;
+      window.MagmaProof.mount($('#payBox'), { n: String(o.orderId).replace(/^#/, ''), p: String(o.customer.phone || '').slice(-4), amount: o.total, qr: menu.payment.qr, status: 'pendiente', noUpload: !saved, onStatus: function (s) { emit('payment_proof', { orderId: o.orderId, status: s }); } });
+    }
   }
   function copyText(t) {
     var done = function () { toast('Mensaje copiado'); };

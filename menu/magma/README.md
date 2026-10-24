@@ -10,6 +10,8 @@ Todo el contenido vive en `menu.json`. Cambiar un precio, agregar una salsa o ma
 |---|---|
 | `brand.whatsapp` | Número que recibe los pedidos, con código de país y sin `+` |
 | `brand.trackUrl` | Dirección de la página de seguimiento. Se agrega al final del mensaje de WhatsApp con el número del pedido. Vacío, no se agrega |
+| `payment` | Formas de pago: `methods` (`cash`, `qr`), `cashNote` y `qr` (`image`, `holder`, `note`). Con una sola forma, el cliente no elige. Para quitar el QR, deja `["cash"]` |
+| `service.prepMin` y `zones[].travelMin` | Minutos de preparación y de viaje. El seguimiento los suma para decir "llega en unos X min" |
 | `hours` | `null`, o `{ "text": "Lun a dom, 12:00 a 22:00", "tz": "America/La_Paz", "days": { "0": [["12:00","22:00"]] } }`. Con `days` y `tz` aparece "Abierto ahora" |
 | `service.pickup` / `service.delivery` / `service.minOrder` | Recojo, entrega y pedido mínimo (`null` desactiva el mínimo) |
 | `service.zones` | Zonas de entrega: `{ id, name, fee }`. `fee: null` significa "se confirma por chat". Sin zonas, no se pide zona |
@@ -109,3 +111,15 @@ El cliente que elige entrega escoge su zona y ve el costo antes de enviar. El se
 ## Publicidad de Estudio Graphica
 
 El banner del final del menú vive en `index.html` (`<aside class="eg">`) con su estilo en `css/magma.css`. Lleva `utm_source=magma-menu` y emite el evento `eg_banner_click`.
+
+## Pago por QR con comprobante
+
+Si el cliente elige QR, al terminar el pedido ve el QR del negocio con el monto exacto y sube la foto de su comprobante (se reduce en el navegador a menos de 1 MB). También puede subirlo después desde la página de seguimiento. En el panel, el pedido muestra "Verificar comprobante"; al abrir **Detalles** se ve la imagen y se confirma o rechaza el pago. Si se rechaza, el botón "Escribirle" ya trae el mensaje para pedir otro comprobante. Los comprobantes se guardan en un almacén aparte (`magma-proofs`; `magma-proofs-test` en previews). Para usar el QR real, reemplaza `images/qr-ejemplo.svg` por el del negocio (PNG, JPG o SVG) y actualiza `payment.qr` en `menu.json`.
+
+## Panel de pedidos
+
+Cada pedido aparece en una tarjeta blanca resumida (número, estado, cliente, productos, pago y el botón de la siguiente acción). **Detalles** abre una ventana con todo: avance, cliente, productos con salsas y notas, desglose del total, pago con comprobante, acciones y cancelar. **Resumen** muestra las ventas de los últimos 7 días, lo más pedido, salsas favoritas, zonas, forma de pago y clientes que repiten. El panel marca como cliente frecuente a quien ya hizo otro pedido.
+
+## Casilla de ofertas
+
+Viene marcada de fábrica ("Quiero recibir ofertas de Magma Wings") y el cliente la puede desmarcar. Si la desmarca, se recuerda en su dispositivo. Solo los que dejan la casilla marcada entran a la audiencia de Meta.

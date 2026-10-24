@@ -49,7 +49,7 @@ exports.handler = async function (event) {
   // El número del día (#01, #02...) se reserva al guardar. Si no se puede guardar, queda un número por hora (#T1432-24OCT).
   const make = (o, n, key) => ({
     key, orderId: o.orderId, number: n, createdAt, status: 'nuevo', mode: o.customer.mode, customer: o.customer,
-    subtotal: o.subtotal, deliveryFee: o.deliveryFee, total: o.total, count: o.count, currency: menu.brand.currency,
+    subtotal: o.subtotal, deliveryFee: o.deliveryFee, payment: { method: o.customer.payMethod || 'cash', status: 'pendiente' }, total: o.total, count: o.count, currency: menu.brand.currency,
     lines: o.lines.map((l) => ({ name: l.name, portion: l.portionLabel, qty: l.qty, unitPrice: l.unitPrice, total: l.total, choices: l.choices, note: l.note })),
     message: o.message, context: process.env.CONTEXT || 'dev', meta
   });

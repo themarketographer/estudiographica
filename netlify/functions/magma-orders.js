@@ -1,6 +1,8 @@
 // Panel de pedidos de Magma Wings (solo para el dueño).
 //   GET  /api/magma/orders                    lista los últimos pedidos
 //   POST /api/magma/orders { key, status }    cambia el estado de un pedido
+//   POST /api/magma/orders { key, payment }   verifica o rechaza el pago (verificado | rechazado | pendiente)
+//   GET  /api/magma/orders?proof=<key>        imagen del comprobante de pago
 // Pide la cabecera  Authorization: Bearer <MAGMA_ADMIN_TOKEN>  (variable de entorno en Netlify).
 const crypto = require('crypto');
 const Store = require('./lib-magma/store.js');
@@ -28,12 +30,23 @@ exports.handler = async function (event) {
 
   try {
     if (event.httpMethod === 'GET') {
-      const orders = await Store.listOrders(event, 150);
+      const pk = (event.queryStringParameters || {}).proof;
+      if (pk) {
+        const pr = await Store.getProof(event, pk);
+        if (!pr) return reply(404, { ok: false, error: 'Este pedido no tiene comprobante.' });
+        return reply(200, { ok: true, image: pr.image, at: pr.at });
+      }
+      const orders = await Store.listOrders(event, 300);
       return reply(200, { ok: true, store: Store.storeName(), orders });
     }
     if (event.httpMethod === 'POST') {
       let body;
       try { body = JSON.parse(event.body || '{}'); } catch (e) { return reply(400, { ok: false, error: 'Pedido ilegible.' }); }
+      if (typeof body.key === 'string' && typeof body.payment === 'string') {
+        if (['pendiente', 'comprobante', 'verificado', 'rechazado'].indexOf(body.payment) === -1) return reply(422, { ok: false, error: 'Estado de pago inválido.' });
+        const pr = await Store.setPayment(event, body.key, body.payment);
+        return pr ? reply(200, { ok: true, order: pr }) : reply(404, { ok: false, error: 'No existe ese pedido.' });
+      }
       if (typeof body.key !== 'string' || Store.STATUSES.indexOf(body.status) === -1) return reply(422, { ok: false, error: 'Estado inválido.' });
       const rec = await Store.setStatus(event, body.key, body.status);
       if (!rec) return reply(404, { ok: false, error: 'No existe ese pedido.' });

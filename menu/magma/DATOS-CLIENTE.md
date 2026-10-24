@@ -33,7 +33,8 @@ Todo lo que hoy aparece como "temporal" se reemplaza con esta lista. Marca lo qu
 
 ## 5. Cobro
 - [ ] Formas de pago aceptadas (efectivo, QR, transferencia, tarjeta)
-- [ ] Si usa QR o transferencia: cuenta o imagen del QR, y a qué hora se confirma el pago
+- [ ] QR de cobro real (imagen en buena resolución), a nombre de quién sale y de qué banco. Hoy hay un QR de ejemplo que no sirve para cobrar
+- [ ] Quién verifica los comprobantes y en qué horario
 
 ## 6. Operación de los pedidos
 - [ ] Quién atiende el panel de pedidos y desde qué dispositivo (celular, tablet, PC)

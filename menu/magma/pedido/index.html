@@ -39,11 +39,14 @@
 .tk-err{color:var(--danger);font:600 15px/1.4 var(--body);margin:0}
 .tk-actions{display:grid;gap:var(--s3);margin-top:var(--s5)}
 .tk.cancel .tk-num{color:var(--danger)}
+.tk-eta{display:flex;align-items:center;gap:8px;margin:var(--s4) 0 0;font:700 17px/1.3 var(--body)}
+.tk-eta .ic{width:20px;height:20px;color:var(--lava)}
 @media (prefers-reduced-motion:reduce){.tk-steps li.cur .dot{animation:none}}
 </style>
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+    <symbol id="i-up" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V4m0 0L8 8m4-4l4 4M5 20h14"/></g></symbol>
     <symbol id="i-check" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></g></symbol>
     <symbol id="i-flame" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.500c.8 3.200 5 5.300 5 10a5 5 0 0 1-10 0c0-1.900.9-3.300 2-4.400.2 1.300.9 2.100 1.900 2.500C10.500 7.800 11 5 12 2.500z"/></g></symbol>
     <symbol id="i-bag" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1 12H6L5 8zM9 8V6a3 3 0 0 1 6 0v2"/></g></symbol>
@@ -69,6 +72,7 @@
   </form>
   <section id="res" hidden aria-live="polite"></section>
 </main>
+<script src="../js/proof.js"></script>
 <script>
 (function () {
   'use strict';
@@ -81,8 +85,12 @@
     entregado: ['Pedido entregado', 'Gracias por pedir en Magma Wings.'],
     cancelado: ['Este pedido se canceló', 'Si fue un error, escríbenos por WhatsApp y lo resolvemos.']
   };
-  var cfg = { wa: '59176980828' };
-  fetch('../menu.json').then(function (r) { return r.json(); }).then(function (m) { cfg.wa = m.brand.whatsapp; }).catch(function () {});
+  var cfg = { wa: '59176980828', prep: 20, zones: {}, qr: null };
+  fetch('../menu.json').then(function (r) { return r.json(); }).then(function (m) {
+    cfg.wa = m.brand.whatsapp; cfg.prep = m.service.prepMin || 20; cfg.qr = m.payment && m.payment.qr;
+    (m.service.zones || []).forEach(function (z) { cfg.zones[z.id] = z.travelMin || 0; });
+    if (cur) check(cur.n, cur.p, true);
+  }).catch(function () {});
   var timer = null, cur = null;
 
   function svg(id) { var s = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); s.setAttribute('class', 'ic'); s.setAttribute('aria-hidden', 'true'); var u = document.createElementNS('http://www.w3.org/2000/svg', 'use'); u.setAttribute('href', '#' + id); s.appendChild(u); return s; }
@@ -109,11 +117,24 @@
       });
       card.appendChild(ol);
     }
+    if (d.status === 'nuevo' || d.status === 'preparando' || d.status === 'listo') {
+      var total = cfg.prep + (d.mode === 'delivery' ? (cfg.zones[d.zone] || 0) : 0);
+      var left = Math.round((new Date(d.createdAt).getTime() + total * 60000 - Date.now()) / 60000);
+      var eta = el('p', 'tk-eta'); eta.appendChild(svg('i-clock'));
+      eta.appendChild(document.createTextNode(d.status === 'listo' ? (d.mode === 'delivery' ? 'Tu pedido va en camino.' : 'Ya puedes pasar a recogerlo.') : left > 2 ? (d.mode === 'delivery' ? 'Llega en unos ' : 'Estará listo en unos ') + left + ' min' : 'Está por salir, gracias por esperar.'));
+      card.appendChild(eta);
+    }
     var live = el('div', 'tk-live'); live.appendChild(el('i')); live.appendChild(document.createTextNode(d.status === 'entregado' ? 'Pedido cerrado' : 'Se actualiza solo cada 15 segundos')); card.appendChild(live);
     var acts = el('div', 'tk-actions');
     var a = el('a', 'btn btn--wa'); a.href = 'https://wa.me/' + cfg.wa + '?text=' + encodeURIComponent('Hola, consulto por mi pedido ' + d.orderId); a.target = '_blank'; a.rel = 'noopener';
     a.appendChild(svg('i-wa')); a.appendChild(document.createTextNode('Escribir al local')); acts.appendChild(a); card.appendChild(acts);
     box.appendChild(card);
+    if (d.payment && d.payment.method === 'qr' && !cancel && window.MagmaProof) {
+      var pb = el('div'); box.appendChild(pb);
+      window.MagmaProof.mount(pb, { n: d.orderId.replace(/^#/, ''), p: cur.p, amount: d.total, qr: cfg.qr, base: '../', status: d.payment.status, onStatus: function () { check(cur.n, cur.p, true); } });
+    } else if (d.payment && d.payment.method !== 'qr' && !cancel && d.status !== 'entregado') {
+      var cb = el('p', 'tk-sub', 'Pagas en efectivo al ' + (d.mode === 'delivery' ? 'recibir tu pedido.' : 'recoger tu pedido.')); cb.style.marginTop = '16px'; box.appendChild(cb);
+    }
   }
 
   function check(n, p, quiet) {

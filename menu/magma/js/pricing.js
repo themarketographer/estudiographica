@@ -194,6 +194,8 @@
     var address = text(raw.address, 160);
     var notes = text(raw.notes, 240);
     var zone = findZone(menu, String(raw.zone || ''));
+    var methods = (menu.payment && menu.payment.methods) || ['cash'];
+    var payMethod = methods.indexOf(raw.payMethod) > -1 ? raw.payMethod : methods[0];
     if (!firstName) return { ok: false, error: 'Falta tu nombre.', field: 'firstName' };
     if (!lastName) return { ok: false, error: 'Falta tu apellido.', field: 'lastName' };
     if (!validPhone(phone)) return { ok: false, error: 'Escribe tu celular, por ejemplo 76980828.', field: 'phone' };
@@ -205,7 +207,7 @@
     return { ok: true, customer: {
       firstName: firstName, lastName: lastName, name: firstName + ' ' + lastName,
       email: email, phone: phone, consent: raw.consent === true,
-      mode: mode, address: mode === 'delivery' ? address : '', zone: mode === 'delivery' && zone ? zone.id : '', zoneName: mode === 'delivery' && zone ? zone.name : '', notes: notes
+      mode: mode, address: mode === 'delivery' ? address : '', payMethod: payMethod, zone: mode === 'delivery' && zone ? zone.id : '', zoneName: mode === 'delivery' && zone ? zone.name : '', notes: notes
     } };
   }
 
@@ -222,6 +224,7 @@
     out.push('*Celular:* ' + fmtPhone(c.phone));
     if (c.email) out.push('*Correo:* ' + c.email);
     out.push('*Entrega:* ' + (c.mode === 'delivery' ? 'a domicilio' : 'recojo en el local'));
+    out.push('*Pago:* ' + (c.payMethod === 'qr' ? 'QR (subo el comprobante en el seguimiento)' : 'efectivo'));
     if (c.address) out.push('*Dirección:* ' + c.address);
     out.push('');
     out.push('*MI PEDIDO*');
