@@ -1,5 +1,5 @@
 /* Menú de Magma Wings: catálogo, pedido y envío por WhatsApp.
-   Datos:   /api/magma/menu (o menu.json si la API no responde)
+   Datos:   menu.json estático (o /api/magma/menu si no carga)
    Pedido:  /api/magma/order (si falla, el mensaje se arma aquí con las mismas reglas)
    Eventos:   document.addEventListener('click', function (e) { var a = e.target.closest && e.target.closest('[data-ev]'); if (a) emit(a.getAttribute('data-ev'), {}); });
 
@@ -919,10 +919,10 @@
 
   /* ---------- arranque ---------- */
 
+  /* El menú sale del archivo estático (lo sirve la CDN, sin ejecutar ninguna función). La API queda de respaldo. */
   function getMenu() {
-    return fetchTimeout('/api/magma/menu', { headers: { Accept: 'application/json' } }, 3500)
-      .then(function (r) { if (!r.ok) throw new Error('http ' + r.status); return r.json(); })
-      .catch(function () { return fetchTimeout('menu.json', {}, 6000).then(function (r) { if (!r.ok) throw new Error('http ' + r.status); return r.json(); }); });
+    return fetchTimeout('menu.json', {}, 6000).then(function (r) { if (!r.ok) throw new Error('http ' + r.status); return r.json(); })
+      .catch(function () { return fetchTimeout('/api/magma/menu', { headers: { Accept: 'application/json' } }, 6000).then(function (r) { if (!r.ok) throw new Error('http ' + r.status); return r.json(); }); });
   }
 
   function fail() {

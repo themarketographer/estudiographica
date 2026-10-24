@@ -53,3 +53,25 @@ node_bundler = "esbuild"
   for = "/menu/magma/fonts/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
+
+# Menu de Magma: caché para soportar mucho tráfico sin gastar créditos. Las fotos y las fuentes casi no cambian;
+# el código y los datos se refrescan en minutos. Ver menu/magma/README.md, sección "Créditos de Netlify".
+[[headers]]
+  for = "/menu/magma/images/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+[[headers]]
+  for = "/menu/magma/js/*"
+  [headers.values]
+    Cache-Control = "public, max-age=600"
+
+[[headers]]
+  for = "/menu/magma/css/*"
+  [headers.values]
+    Cache-Control = "public, max-age=600"
+
+[[headers]]
+  for = "/menu/magma/menu.json"
+  [headers.values]
+    Cache-Control = "public, max-age=60, stale-while-revalidate=300"

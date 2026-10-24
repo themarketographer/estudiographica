@@ -1,11 +1,13 @@
 // Panel de pedidos de Magma Wings (solo para el dueño).
-//   GET  /api/magma/orders                    lista los últimos pedidos
+//   GET  /api/magma/orders?days=2             pedidos de los últimos N días (por defecto hoy y ayer)
+//   GET  /api/magma/orders?since=<ms>         solo los pedidos que cambiaron desde ese momento (consulta liviana)
 //   POST /api/magma/orders { key, status }    cambia el estado de un pedido
 //   POST /api/magma/orders { key, payment }   verifica o rechaza el pago (verificado | rechazado | pendiente)
 //   GET  /api/magma/orders?proof=<key>        imagen del comprobante de pago
 // Pide la cabecera  Authorization: Bearer <MAGMA_ADMIN_TOKEN>  (variable de entorno en Netlify).
 const crypto = require('crypto');
 const Store = require('./lib-magma/store.js');
+const Pricing = require('../../menu/magma/js/pricing.js');
 const Meta = require('./lib-magma/meta.js');
 
 function reply(statusCode, body) {
@@ -36,8 +38,18 @@ exports.handler = async function (event) {
         if (!pr) return reply(404, { ok: false, error: 'Este pedido no tiene comprobante.' });
         return reply(200, { ok: true, image: pr.image, at: pr.at });
       }
-      const orders = await Store.listOrders(event, 300);
-      return reply(200, { ok: true, store: Store.storeName(), orders });
+      const q = event.queryStringParameters || {};
+      // Consulta liviana: solo lo que cambió desde la última vez.
+      if (q.since) {
+        const r = await Store.changedSince(event, Number(q.since) || 0);
+        return reply(200, { ok: true, store: Store.storeName(), now: r.now, orders: r.orders });
+      }
+      // Carga completa: hoy y ayer por defecto. "days" amplía (máximo 31).
+      const days = Math.min(31, Math.max(1, parseInt(q.days, 10) || 2));
+      const keys = [];
+      for (let i = 0; i < days; i++) keys.push(Pricing.boliviaDate(new Date(Date.now() - i * 86400000)).key);
+      const orders = await Store.listDays(event, keys);
+      return reply(200, { ok: true, store: Store.storeName(), now: Date.now(), days, orders });
     }
     if (event.httpMethod === 'POST') {
       let body;

@@ -55,6 +55,7 @@ exports.handler = async function (event) {
   });
   const save = await Store.saveNumbered(event, day.key, (n, key) =>
     make(Pricing.validateOrder(menu, payload, { orderId: Pricing.orderNumber(n, now) }).order, n, key));
+  if (save.ok) await Store.touch(event, save.rec.key);
   const record = save.ok ? save.rec : make(check.order, 0, 'sin-guardar/' + createdAt);
   const order = { orderId: record.orderId, customer: record.customer, total: record.total, count: record.count, lines: record.lines, message: record.message, whatsappUrl: Pricing.whatsappUrl(menu, record.message) };
   const sourceUrl = 'https://' + (h.host || 'estudiographica.com') + '/menu/magma/';
