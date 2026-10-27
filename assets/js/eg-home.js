@@ -73,8 +73,8 @@
     },
     heroSlides: function (d) {
       return (d.heroFotos || []).map(function (f, i) {
-        return '<img src="' + esc(egOpt(f.imagen, 900)) + '" alt="' + esc(f.alt) + '" width="760" height="950"' +
-          (i === 0 ? ' fetchpriority="high"' : ' loading="lazy"') + ' decoding="async">';
+        return '<img src="' + esc(egOpt(f.imagen, 720)) + '" alt="' + esc(f.alt) + '" width="760" height="950"' +
+          (i === 0 ? ' fetchpriority="high"' : ' fetchpriority="low" loading="lazy"') + ' decoding="async">';
       }).join('');
     },
     heroDots: function (d) { return (d.heroFotos || []).map(function () { return '<i></i>'; }).join(''); },
