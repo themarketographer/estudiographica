@@ -2,10 +2,10 @@
 const crypto = require('crypto');
 
 function authorized(event) {
-  const expected = process.env.ZONA0_ADMIN_TOKEN || '';
+  const expected = String(process.env.ZONA0_ADMIN_TOKEN || '').trim();
   if (!expected) return false;
   const h = event.headers || {};
-  const got = String(h.authorization || h.Authorization || '').replace(/^Bearer\s+/i, '');
+  const got = String(h.authorization || h.Authorization || '').replace(/^Bearer\s+/i, '').trim();
   const a = Buffer.from(got), b = Buffer.from(expected);
   return a.length === b.length && crypto.timingSafeEqual(a, b);
 }
@@ -14,10 +14,10 @@ function authorized(event) {
 // Devuelve 'admin', 'kitchen' o false. La clave del personal también abre la cocina.
 function role(event) {
   if (authorized(event)) return 'admin';
-  const expected = process.env.ZONA0_KITCHEN_TOKEN || '';
+  const expected = String(process.env.ZONA0_KITCHEN_TOKEN || '').trim();
   if (!expected) return false;
   const h = event.headers || {};
-  const got = String(h.authorization || h.Authorization || '').replace(/^Bearer\s+/i, '');
+  const got = String(h.authorization || h.Authorization || '').replace(/^Bearer\s+/i, '').trim();
   const a = Buffer.from(got), b = Buffer.from(expected);
   return a.length === b.length && crypto.timingSafeEqual(a, b) ? 'kitchen' : false;
 }
