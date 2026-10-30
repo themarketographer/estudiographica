@@ -202,11 +202,11 @@ async function importRecords(event, recs) {
 
 // Productos nuevos o temporales y productos agotados: un solo documento "cfg/menu".
 async function getMenuExtra(event) {
-  try { const c = await open(event).get('cfg/menu', { type: 'json' }); return c && typeof c === 'object' ? { custom: c.custom || [], off: c.off || [] } : { custom: [], off: [] }; }
-  catch (e) { return { custom: [], off: [] }; }
+  try { const c = await open(event).get('cfg/menu', { type: 'json' }); return c && typeof c === 'object' ? { custom: c.custom || [], off: c.off || [], over: c.over || {}, hide: c.hide || [] } : { custom: [], off: [], over: {}, hide: [] }; }
+  catch (e) { return { custom: [], off: [], over: {}, hide: [] }; }
 }
 async function setMenuExtra(event, extra) {
-  await open(event).setJSON('cfg/menu', { custom: extra.custom, off: extra.off, at: new Date().toISOString() });
+  await open(event).setJSON('cfg/menu', { custom: extra.custom, off: extra.off, over: extra.over || {}, hide: extra.hide || [], at: new Date().toISOString() });
   return extra;
 }
 

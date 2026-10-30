@@ -41,8 +41,17 @@
       var p = { id: c.id, title: c.title, sub: c.sub || '', category: c.category, price: c.price, groups: [], custom: true, until: c.until || '' };
       menu.products.push(p); have[c.id] = 1;
     });
-    var off = extra.off || [];
-    menu.products.forEach(function (p) { if (off.indexOf(p.id) > -1) p.available = false; });
+    var off = extra.off || [], over = extra.over || {}, hide = extra.hide || [];
+    menu.products.forEach(function (p) {
+      var o = over[p.id];
+      if (o && !p.custom) {
+        if (o.price > 0 && o.price !== p.price) { p.basePrice = p.price; p.price = o.price; }
+        if (o.title) { p.baseTitle = p.title; p.title = o.title; }
+        if (typeof o.sub === 'string') p.sub = o.sub;
+      }
+      if (off.indexOf(p.id) > -1) p.available = false;
+      if (hide.indexOf(p.id) > -1) p.hidden = true;
+    });
     return menu;
   }
 
@@ -70,6 +79,7 @@
     if (raw.free) return resolveFree(raw, opts);
     var product = findProduct(menu, raw.id);
     if (!product) return { ok: false, error: 'Un producto del pedido ya no está en el menú.' };
+    if (product.hidden) return { ok: false, error: 'Un producto del pedido ya no está en el menú.' };
     if (product.available === false) return { ok: false, error: product.title + ' está agotado.' };
     var qty = Number(raw.qty);
     if (!Number.isInteger(qty) || qty < 1 || qty > MAX_QTY) return { ok: false, error: 'Cantidad inválida en ' + product.title + '.' };

@@ -358,7 +358,7 @@
   function posGrid() {
     var g = $('#posGrid'), top = g.scrollTop; g.textContent = '';
     if (pc.cat === '__free') { posFree(g); return; }
-    menu.products.filter(function (p) { return p.category === pc.cat; }).forEach(function (p) {
+    menu.products.filter(function (p) { return p.category === pc.cat && !p.hidden; }).forEach(function (p) {
       var out = p.available === false, opts = p.groups && p.groups.length, q = cartQty(p);
       var t = el('div', 'ptile' + (out ? ' out' : '') + (q ? ' has' : '')), b = el('button', 'pmain'); b.type = 'button'; b.setAttribute('data-press', ''); b.disabled = out; b.appendChild(el('b', '', p.title));
       var sp = el('span', 'num', out ? 'Agotado' : money(p.price)); if (opts && !out) sp.appendChild(el('i', '', 'opciones')); b.appendChild(sp);
@@ -628,7 +628,7 @@
     extra: function () { return extra; },
     setExtra: function (x) { extra = x; menu.products = JSON.parse(baseJson).products; P.applyExtras(menu, extra, today()); if (pc.cat && $('#pos').open) posGrid(); }
   };
-  var extra = { custom: [], off: [] }, baseJson = '{"products":[]}';
+  var extra = { custom: [], off: [], over: {}, hide: [] }, baseJson = '{"products":[]}';
   S.press();
   fetch('../menu.json').then(function (r) { return r.text(); }).then(function (t) {
     baseJson = t; var m = JSON.parse(t);

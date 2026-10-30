@@ -2,6 +2,8 @@
 //   GET  /api/zona0/menu                          público: { extra:{ custom:[...], off:[ids] }, today }
 //   POST (clave del personal) { add:{ title, sub?, category, price, until? } }   agrega un producto
 //        { update:id, patch:{ title?, sub?, price?, until? } }                  edita un producto agregado
+//        { over:id, patch:{ price?, title?, sub?, reset? } }                  cambia precio o nombre de un producto del menú base
+//        { hide:id, value:true|false }                                        quita o restaura un producto del menú base
 //        { remove:id }                                                         quita un producto agregado
 //        { off:id, value:true|false }                                          marca cualquier producto como agotado o disponible
 const Store = require('./lib-zona0/store.js');
@@ -47,6 +49,22 @@ exports.handler = async function (event) {
       if (p.sub != null) c.sub = clean(p.sub, 90);
       if (p.price != null) { const pr = Math.round(Number(p.price) * 100) / 100; if (!(pr > 0) || pr > 2000) return reply(422, { ok: false, error: 'Revisa el precio.' }); c.price = pr; }
       if (p.until != null) c.until = isDay(p.until) ? p.until : '';
+    } else if (typeof b.over === 'string') {
+      const bp = base.products.find((x) => x.id === b.over);
+      if (!bp) return reply(404, { ok: false, error: 'No existe ese producto.' });
+      const p = b.patch || {};
+      if (p.reset) { delete extra.over[bp.id]; }
+      else {
+        const o = extra.over[bp.id] || {};
+        if (p.price != null) { const pr = Math.round(Number(p.price) * 100) / 100; if (!(pr > 0) || pr > 2000) return reply(422, { ok: false, error: 'Revisa el precio.' }); if (pr === bp.price) delete o.price; else o.price = pr; }
+        if (p.title != null) { const t = clean(p.title, 60); if (t.length < 2) return reply(422, { ok: false, error: 'Escribe el nombre.' }); if (t === bp.title) delete o.title; else o.title = t; }
+        if (p.sub != null) { const t = clean(p.sub, 90); if (t === bp.sub) delete o.sub; else o.sub = t; }
+        if (Object.keys(o).length) extra.over[bp.id] = o; else delete extra.over[bp.id];
+      }
+    } else if (typeof b.hide === 'string') {
+      if (!base.products.some((x) => x.id === b.hide)) return reply(404, { ok: false, error: 'No existe ese producto.' });
+      extra.hide = extra.hide.filter((x) => x !== b.hide);
+      if (b.value !== false) extra.hide.push(b.hide);
     } else if (typeof b.remove === 'string') {
       extra.custom = extra.custom.filter((x) => x.id !== b.remove);
       extra.off = extra.off.filter((x) => x !== b.remove);
