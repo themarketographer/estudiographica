@@ -20,7 +20,10 @@
   function buzz(ms) { try { if (navigator.vibrate) navigator.vibrate(ms); } catch (e) {} }
 
   /* ---------- Carga ---------- */
-  fetch('menu.json').then(function (r) { return r.json(); }).then(function (m) { menu = m; boot(); }).catch(function () {
+  fetch('menu.json').then(function (r) { return r.json(); }).then(function (m) {
+    return fetch('/api/zona0/menu', { cache: 'no-store' }).then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; })
+      .then(function (x) { menu = m; if (x && x.extra) P.applyExtras(menu, x.extra, x.today); boot(); });
+  }).catch(function () {
     $('#menu').textContent = ''; $('#menu').appendChild(el('p', 'empty', 'No pudimos cargar el menú. Revisa tu conexión e intenta de nuevo.'));
   });
 

@@ -200,6 +200,16 @@ async function importRecords(event, recs) {
   return { added, skipped };
 }
 
+// Productos nuevos o temporales y productos agotados: un solo documento "cfg/menu".
+async function getMenuExtra(event) {
+  try { const c = await open(event).get('cfg/menu', { type: 'json' }); return c && typeof c === 'object' ? { custom: c.custom || [], off: c.off || [] } : { custom: [], off: [] }; }
+  catch (e) { return { custom: [], off: [] }; }
+}
+async function setMenuExtra(event, extra) {
+  await open(event).setJSON('cfg/menu', { custom: extra.custom, off: extra.off, at: new Date().toISOString() });
+  return extra;
+}
+
 // Interruptor "recibiendo pedidos". Por defecto abierto.
 async function isOpen(event) {
   try {
@@ -212,4 +222,4 @@ async function setOpen(event, open_) {
   return !!open_;
 }
 
-module.exports = { isProd, storeName, STATUSES, keyFor, saveNumbered, touch, changedSince, listDays, getOrder, setStatus, setPayment, isOpen, setOpen, setLineDone, settle, lineKinds, lineDone, ledgerAdd, ledgerRange, ledgerVoid, importRecords, settleParts };
+module.exports = { isProd, storeName, STATUSES, keyFor, saveNumbered, touch, changedSince, listDays, getOrder, setStatus, setPayment, isOpen, setOpen, setLineDone, settle, lineKinds, lineDone, ledgerAdd, ledgerRange, ledgerVoid, importRecords, settleParts, getMenuExtra, setMenuExtra };

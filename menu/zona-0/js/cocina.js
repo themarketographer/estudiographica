@@ -6,7 +6,7 @@
   var $$ = function (s, r) { return [].slice.call((r || document).querySelectorAll(s)); };
   function el(tag, cls, text) { var n = document.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; }
   function ls(k, v) { try { if (v === undefined) return localStorage.getItem(k) || ''; if (v === null || v === '') localStorage.removeItem(k); else localStorage.setItem(k, v); } catch (e) {} return ''; }
-  var KEY = 'z0.kt', token = '', orders = {}, lastNow = 0, idle = 0, n = 0, timer = 0, tick = 0, first = true, soundOn = false, audio = null, toastT = 0, queue = {}, selMode = false, sel = {};
+  var KEY = 'z0.kt', token = '', orders = {}, lastNow = 0, idle = 0, n = 0, timer = 0, tick = 0, first = true, soundOn = false, audio = null, toastT = 0, queue = {}, selMode = false, sel = {}, doneAt = {}, HOLD = 120000, holdT = 0;
   var CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 9.5 17 19 7.5"/></svg>';
 
   function toast(m) { var t = $('#toast'); t.textContent = m; t.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(function () { t.classList.remove('on'); }, 3000); }
@@ -70,18 +70,26 @@
     ['comida', 'bebida'].forEach(function (st) {
       var col = $('.kcol[data-st="' + st + '"]'), act = $('[data-active]', col), dn = $('[data-done]', col); act.textContent = ''; dn.textContent = '';
       var na = 0, nd = 0, doneCards = [];
-      list.forEach(function (o) { if (!o.lines.some(function (l) { return l.kinds.indexOf(st) > -1; })) return; var r = card(o, st); if (r.done) { doneCards.push(r.node); nd++; } else { act.appendChild(r.node); na++; } });
+      list.forEach(function (o) {
+        if (!o.lines.some(function (l) { return l.kinds.indexOf(st) > -1; })) return;
+        var r = card(o, st), id = st + o.key;
+        if (!r.done) { delete doneAt[id]; act.appendChild(r.node); na++; return; }
+        if (!(id in doneAt)) doneAt[id] = first ? 0 : Date.now();
+        if (Date.now() - doneAt[id] < HOLD) { r.node.classList.add('fin'); act.appendChild(r.node); nd++; }
+        else { doneCards.push(r.node); nd++; }
+      });
       doneCards.slice(-6).reverse().forEach(function (nd2) { dn.appendChild(nd2); });
       $('[data-n]', col).textContent = String(na); $('[data-dn]', col).textContent = String(nd);
     });
     var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (!reduce) $$('.kcard').forEach(function (c) {
       var was = before[c.closest('.kcol').dataset.st + c.dataset.key];
-      if (was) { var now = c.getBoundingClientRect(), dy = was.top - now.top; if (Math.abs(dy) > 2) c.animate([{ transform: 'translateY(' + dy + 'px)' }, { transform: 'none' }], { duration: 550, easing: 'cubic-bezier(.16,1,.3,1)' }); }
+      if (was) { /* sin animar: las tarjetas que ya estaban no se mueven */ }
       else c.animate([{ opacity: 0, transform: 'translateY(18px) scale(.97)' }, { opacity: 1, transform: 'none' }], { duration: 600, easing: 'cubic-bezier(.16,1,.3,1)' });
     });
     Object.keys(orders).forEach(function (k) { delete orders[k]._new; });
     selBar();
+    clearTimeout(holdT); var soon = Object.keys(doneAt).map(function (k) { return doneAt[k] + HOLD - Date.now(); }).filter(function (m) { return m > 0; }); if (soon.length && !selMode) holdT = setTimeout(render, Math.min.apply(null, soon) + 300);
   }
 
   /* Marcar un plato: se ve al instante; las marcas de un mismo pedido viajan una tras otra para no pisarse. */

@@ -1,7 +1,7 @@
 // Pedidos de Zona 0: POST /api/zona0/order
 // Lo usan dos cosas: el celular del cliente (público) y el panel de la computadora (con la clave del personal).
 // Recalcula todo con los precios del menú: nunca confía en el total que manda el navegador.
-const menu = require('../../menu/zona-0/menu.json');
+const baseMenu = require('../../menu/zona-0/menu.json');
 const Pricing = require('../../menu/zona-0/js/pricing.js');
 const Store = require('./lib-zona0/store.js');
 const Notify = require('./lib-zona0/notify.js');
@@ -33,6 +33,7 @@ exports.handler = async function (event) {
   let payload;
   try { payload = JSON.parse(event.body || '{}'); } catch (e) { return reply(400, { ok: false, error: 'No pudimos leer el pedido.' }); }
 
+  const menu = Pricing.applyExtras(JSON.parse(JSON.stringify(baseMenu)), await Store.getMenuExtra(event), Pricing.boliviaDate(new Date()).key);
   const check = Pricing.validateOrder(menu, payload, { staff });
   if (!check.ok) return reply(422, { ok: false, error: check.error, field: check.field || null });
 

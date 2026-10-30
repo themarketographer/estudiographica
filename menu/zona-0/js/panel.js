@@ -311,8 +311,8 @@
   function posGrid() {
     var g = $('#posGrid'); g.textContent = '';
     menu.products.filter(function (p) { return p.category === pc.cat; }).forEach(function (p) {
-      var b = el('button', 'ptile'); b.type = 'button'; b.setAttribute('data-press', ''); b.appendChild(el('b', '', p.title));
-      var s = el('span', 'num', money(p.price)); if (p.groups && p.groups.length) s.appendChild(el('i', '', 'opciones')); b.appendChild(s);
+      var b = el('button', 'ptile' + (p.available === false ? ' out' : '')); b.type = 'button'; b.setAttribute('data-press', ''); b.appendChild(el('b', '', p.title)); if (p.available === false) b.disabled = true;
+      var s = el('span', 'num', p.available === false ? 'Agotado' : money(p.price)); if (p.groups && p.groups.length && p.available !== false) s.appendChild(el('i', '', 'opciones')); b.appendChild(s);
       b.addEventListener('click', function () { if (p.groups && p.groups.length) posOptions(p); else posAdd({ id: p.id, sel: {}, qty: 1, note: '' }); });
       g.appendChild(b);
     });
@@ -537,10 +537,17 @@
   window.Z0Panel = {
     P: P, S: S, $: $, $$: $$, el: el, ls: ls, money: money, toast: toast, hm: hm, today: today, list: list, token: function () { return token; }, menu: function () { return menu; },
     printTicket: printTicket, lineDoneAll: lineDoneAll, tab: function () { return tab; }, onChange: function (f) { listeners.push(f); },
-    ensureDays: function (n) { return loadedDays >= n ? Promise.resolve() : load(n); }, leave: leave
+    ensureDays: function (n) { return loadedDays >= n ? Promise.resolve() : load(n); }, leave: leave,
+    extra: function () { return extra; },
+    setExtra: function (x) { extra = x; menu.products = JSON.parse(baseJson).products; P.applyExtras(menu, extra, today()); if (pc.cat && $('#pos').open) posGrid(); }
   };
+  var extra = { custom: [], off: [] }, baseJson = '{"products":[]}';
   S.press();
-  fetch('../menu.json').then(function (r) { return r.json(); }).then(function (m) {
+  fetch('../menu.json').then(function (r) { return r.text(); }).then(function (t) {
+    baseJson = t; var m = JSON.parse(t);
+    return fetch('/api/zona0/menu', { cache: 'no-store' }).then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; })
+      .then(function (x) { if (x && x.extra) { extra = x.extra; P.applyExtras(m, extra, x.today); } return m; });
+  }).then(function (m) {
     menu = m;
     var z = $('#pZone'); z.textContent = ''; var o0 = el('option', '', 'Elige zona'); o0.value = ''; z.appendChild(o0);
     m.service.zones.forEach(function (zn) { var o = el('option', '', zn.name + ' · ' + zn.fee + ' Bs'); o.value = zn.id; z.appendChild(o); });

@@ -103,6 +103,11 @@ node_bundler = "esbuild"
   status = 200
 
 [[redirects]]
+  from = "/api/zona0/menu"
+  to = "/.netlify/functions/zona0-menu"
+  status = 200
+
+[[redirects]]
   from = "/api/zona0/import"
   to = "/.netlify/functions/zona0-import"
   status = 200

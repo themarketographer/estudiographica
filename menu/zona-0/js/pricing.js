@@ -31,6 +31,21 @@
     return null;
   }
 
+  /* Productos nuevos o temporales que el personal agrega desde el panel, y productos marcados como agotados.
+     extra: { custom:[{id,title,sub,category,price,until}], off:[id] }  Devuelve el mismo menú, ya mezclado. */
+  function applyExtras(menu, extra, today) {
+    if (!extra) return menu;
+    var have = {}; menu.products.forEach(function (p) { have[p.id] = 1; });
+    (extra.custom || []).forEach(function (c) {
+      if (!c || have[c.id] || (c.until && today && c.until < today)) return;
+      var p = { id: c.id, title: c.title, sub: c.sub || '', category: c.category, price: c.price, groups: [], custom: true, until: c.until || '' };
+      menu.products.push(p); have[c.id] = 1;
+    });
+    var off = extra.off || [];
+    menu.products.forEach(function (p) { if (off.indexOf(p.id) > -1) p.available = false; });
+    return menu;
+  }
+
   /* raw: { id, sel: { grupo: [opcion] }, qty, note }  ->  { ok, line } | { ok:false, error } */
   function resolveLine(menu, raw) {
     if (!raw || typeof raw !== 'object') return { ok: false, error: 'Línea inválida.' };
@@ -180,7 +195,7 @@
 
   return {
     MAX_QTY: MAX_QTY, MODES: MODES, PAY_METHODS: PAY_METHODS,
-    money: money, findProduct: findProduct, resolveLine: resolveLine, resolveOrder: resolveOrder, toRaw: toRaw,
+    money: money, applyExtras: applyExtras, findProduct: findProduct, resolveLine: resolveLine, resolveOrder: resolveOrder, toRaw: toRaw,
     boliviaDate: boliviaDate, orderNumber: orderNumber, normalizePhone: normalizePhone, validPhone: validPhone, fmtPhone: fmtPhone,
     findZone: findZone, deliveryFee: deliveryFee, cleanCustomer: cleanCustomer, validateOrder: validateOrder
   };
