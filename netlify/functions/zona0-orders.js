@@ -19,10 +19,10 @@ exports.handler = async function (event) {
         const [r, open] = await Promise.all([Store.changedSince(event, Number(q.since) || 0), Store.isOpen(event)]);
         return reply(200, { ok: true, now: r.now, open, orders: r.orders });
       }
-      const days = Math.min(31, Math.max(1, parseInt(q.days, 10) || 2));
+      const days = Math.min(120, Math.max(1, parseInt(q.days, 10) || 2));
       const keys = [];
       for (let i = 0; i < days; i++) keys.push(Pricing.boliviaDate(new Date(Date.now() - i * 86400000)).key);
-      const [orders, open] = await Promise.all([Store.listDays(event, keys), Store.isOpen(event)]);
+      const [orders, open] = await Promise.all([Store.listDays(event, keys, days > 31 ? 1500 : 600), Store.isOpen(event)]);
       return reply(200, { ok: true, store: Store.storeName(event), now: Date.now(), days, open, orders });
     }
     if (event.httpMethod === 'POST') {

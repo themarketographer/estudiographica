@@ -64,10 +64,10 @@ async function changedSince(event, since) {
   return { now, orders: rows.filter(Boolean) };
 }
 
-async function listDays(event, dayKeys) {
+async function listDays(event, dayKeys, cap) {
   const store = open(event);
   const lists = await Promise.all(dayKeys.map((d) => store.list({ prefix: d + '/' }).then((r) => r.blobs).catch(() => [])));
-  const keys = [].concat.apply([], lists.map((bl) => bl.map((b) => b.key))).slice(-600);
+  const keys = [].concat.apply([], lists.map((bl) => bl.map((b) => b.key))).slice(-(cap || 600));
   const rows = await Promise.all(keys.map((k) => store.get(k, { type: 'json' }).catch(() => null)));
   return rows.filter(Boolean).sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
 }
@@ -158,6 +158,17 @@ async function ledgerVoid(event, id, by, reason) {
   return rec;
 }
 
+// Importación de historial (sistema anterior). Es idempotente: una clave que ya existe no se pisa.
+async function importRecords(event, recs) {
+  const store = open(event);
+  let added = 0, skipped = 0;
+  for (const rec of recs) {
+    const r = await store.setJSON(rec.key || rec.id, rec, { onlyIfNew: true });
+    if (r && r.modified === false) skipped++; else added++;
+  }
+  return { added, skipped };
+}
+
 // Interruptor "recibiendo pedidos". Por defecto abierto.
 async function isOpen(event) {
   try {
@@ -170,4 +181,4 @@ async function setOpen(event, open_) {
   return !!open_;
 }
 
-module.exports = { isProd, storeName, STATUSES, keyFor, saveNumbered, touch, changedSince, listDays, getOrder, setStatus, setPayment, isOpen, setOpen, setLineDone, settle, lineKinds, lineDone, ledgerAdd, ledgerRange, ledgerVoid };
+module.exports = { isProd, storeName, STATUSES, keyFor, saveNumbered, touch, changedSince, listDays, getOrder, setStatus, setPayment, isOpen, setOpen, setLineDone, settle, lineKinds, lineDone, ledgerAdd, ledgerRange, ledgerVoid, importRecords };

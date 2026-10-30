@@ -13,6 +13,10 @@
   function diff(a, b) { return Math.round((Date.parse(a + 'T12:00:00Z') - Date.parse(b + 'T12:00:00Z')) / 86400000); }
   function label(key, long) { return new Date(key + 'T12:00:00Z').toLocaleDateString('es-BO', { weekday: long ? 'long' : 'short', day: 'numeric', month: 'short', timeZone: 'UTC' }); }
   function hmOf(iso) { return new Date(iso).toLocaleTimeString('es-BO', { hour: '2-digit', minute: '2-digit', timeZone: 'America/La_Paz' }); }
+  function parts(o) { var p = o.payment || {}; return p.parts && p.parts.length ? p.parts : [{ method: p.method || 'efectivo', amount: o.total }]; }
+  function methLabel(o) { return parts(o).map(function (q) { return METHOD[q.method] || q.method; }).join(' + '); }
+  function addByMethod(acc, o) { parts(o).forEach(function (q) { acc[q.method] = (acc[q.method] || 0) + q.amount; }); }
+  function cashOf(o) { return parts(o).reduce(function (s, q) { return s + (q.method === 'efectivo' ? q.amount : 0); }, 0); }
   function dayOf(iso) { return P.boliviaDate(new Date(iso)).key; }
   function cap(s) { return s ? s[0].toUpperCase() + s.slice(1) : s; }
   function api(path, method, body) {
@@ -55,11 +59,27 @@
       .filter(function (x) { return x.day >= from && x.day <= to; }).sort(function (a, b) { return String(b.at).localeCompare(String(a.at)); });
   }
   function summary(o) { return (o.lines || []).map(function (l) { return l.qty + '× ' + l.name; }).join(', '); }
-  function who(o) { var c = o.customer || {}; return o.mode === 'mesa' ? 'Mesa ' + (c.mesa || 's/n') : (MODE[o.mode] || '') + (c.name && c.name !== 'Mostrador' && c.name !== 'Delivery' ? ' · ' + c.name : ''); }
+  function who(o) { var c = o.customer || {}; return o.mode === 'mesa' ? 'Mesa ' + (c.mesa || 's/n') + (o.mozo ? ' · ' + o.mozo : '') : (MODE[o.mode] || '') + (c.name && c.name !== 'Mostrador' && c.name !== 'Delivery' ? ' · ' + c.name : ''); }
+  function importHistory(file) {
+    var rd = new FileReader();
+    rd.onload = function () {
+      var d; try { d = JSON.parse(rd.result); } catch (e) { toast('Ese archivo no se puede leer.'); return; }
+      var all = [].concat.apply([], Object.keys(d.days || {}).map(function (k) { return d.days[k]; })), led = d.ledger || [], added = 0, skipped = 0, i = 0, j = 0;
+      var oc = Math.ceil(all.length / 50), lc = Math.ceil(led.length / 250), steps = Math.max(oc, lc), n = 0;
+      toast('Importando ' + all.length + ' pedidos y ' + led.length + ' gastos...');
+      (function next() {
+        if (n >= steps) { toast('Listo: ' + added + ' registros nuevos, ' + skipped + ' que ya estaban.'); Z.ensureDays(120); vs.day = todayKey(); return; }
+        var body = { orders: all.slice(n * 50, n * 50 + 50), ledger: led.slice(n * 250, n * 250 + 250) };
+        api('import', 'POST', body).then(function (r) { added += r.orders.added + r.ledger.added; skipped += r.orders.skipped + r.ledger.skipped; n++; next(); })
+          .catch(function (e) { toast('Se detuvo en el tramo ' + (n + 1) + ': ' + e.message + '. Puedes repetir, no se duplica.'); });
+      })();
+    };
+    rd.readAsText(file);
+  }
   var vs = { day: '' };
   function renderVentas() {
     var box = $('#v-ventas'); if (!vs.day) vs.day = todayKey();
-    var back = Math.min(31, Math.max(0, diff(todayKey(), vs.day))); if (back >= 2) Z.ensureDays(back + 1);
+    var back = Math.min(120, Math.max(0, diff(todayKey(), vs.day))); if (back >= 2) Z.ensureDays(back + 1);
     box.textContent = '';
     var inp = el('input', 'dateinp'); inp.type = 'date'; inp.value = vs.day; inp.max = todayKey(); inp.addEventListener('change', function () { if (inp.value) { vs.day = inp.value; renderVentas(); } });
     var nav = el('div', 'daynav');
@@ -67,14 +87,14 @@
     var next = btn('', 'tool dark ico', function () { if (vs.day < todayKey()) { vs.day = shift(vs.day, 1); renderVentas(); } }, 'arrow'); next.setAttribute('aria-label', 'Día siguiente'); next.disabled = vs.day >= todayKey();
     nav.appendChild(prev); nav.appendChild(inp); nav.appendChild(next); nav.appendChild(btn('Hoy', 'tool dark', function () { vs.day = todayKey(); renderVentas(); }));
     var rows = paidSales(vs.day, vs.day);
-    box.appendChild(head('Ventas del día', [nav, btn('Descargar CSV', 'tool dark', function () { csvDownload('ventas-zona0-' + vs.day + '.csv', [['hora', 'pedido', 'tipo', 'productos', 'medio', 'total']].concat(rows.map(function (x) { return [hmOf(x.at), x.o.orderId, who(x.o), summary(x.o), x.o.payment.method, x.o.total]; }))); }, 'download')]));
+    box.appendChild(head('Ventas del día', [nav, btn('Importar historial', 'tool dark', function () { var f = document.createElement('input'); f.type = 'file'; f.accept = '.json,application/json'; f.addEventListener('change', function () { if (f.files[0]) importHistory(f.files[0]); }); f.click(); }, 'download'), btn('Descargar CSV', 'tool dark', function () { csvDownload('ventas-zona0-' + vs.day + '.csv', [['hora', 'pedido', 'tipo', 'productos', 'medio', 'total']].concat(rows.map(function (x) { return [hmOf(x.at), x.o.orderId, who(x.o), summary(x.o), methLabel(x.o), x.o.total]; }))); }, 'download')]));
     box.appendChild(el('p', 'daylab', cap(label(vs.day, true))));
     var total = rows.reduce(function (s, x) { return s + x.o.total; }, 0), byM = {};
-    rows.forEach(function (x) { var m = x.o.payment.method || 'efectivo'; byM[m] = (byM[m] || 0) + x.o.total; });
+    rows.forEach(function (x) { addByMethod(byM, x.o); });
     var kp = el('section', 'kpis k3'); kpi(kp, [['Vendido', money(total), true], ['Cobros', String(rows.length)], ['Cobro promedio', rows.length ? money(Math.round(total / rows.length * 10) / 10) : '0 Bs']]); box.appendChild(kp);
     var meth = el('div', 'chips'); ['efectivo', 'qr', 'tarjeta'].forEach(function (m) { var c = el('span', 'mchip'); c.appendChild(el('small', '', METHOD[m])); c.appendChild(el('b', 'num', money(byM[m] || 0))); meth.appendChild(c); }); box.appendChild(meth);
     var grid = el('div', 'two-col');
-    var cells = rows.map(function (x) { var pr = el('button', 'mini', 'Ticket'); pr.type = 'button'; pr.addEventListener('click', function () { Z.printTicket(x.o); }); return { cells: [hmOf(x.at), x.o.orderId, who(x.o), summary(x.o), METHOD[x.o.payment.method] || '', money(x.o.total), pr] }; });
+    var cells = rows.map(function (x) { var pr = el('button', 'mini', 'Ticket'); pr.type = 'button'; pr.addEventListener('click', function () { Z.printTicket(x.o); }); return { cells: [hmOf(x.at), x.o.orderId, who(x.o), summary(x.o), methLabel(x.o), money(x.o.total), pr] }; });
     grid.appendChild(table([['Hora'], ['Pedido'], ['Tipo'], ['Productos', 'wide'], ['Medio'], ['Total', 'r'], ['']], cells));
     var prod = {}; rows.forEach(function (x) { (x.o.lines || []).forEach(function (l) { prod[l.name] = (prod[l.name] || 0) + l.qty; }); });
     var top = Object.keys(prod).map(function (k) { return [k, prod[k]]; }).sort(function (a, b) { return b[1] - a[1]; }).slice(0, 10);
@@ -95,7 +115,7 @@
   }
   function loadLibro(force) {
     var r = range(), k = r[0] + '|' + r[1];
-    var need = Math.min(31, diff(todayKey(), r[0]) + 1); Z.ensureDays(need);
+    var need = Math.min(120, diff(todayKey(), r[0]) + 1); Z.ensureDays(need);
     if (!force && lb.key === k) return renderLibro();
     lb.busy = true; renderLibro();
     api('ledger?from=' + r[0] + '&to=' + r[1], 'GET').then(function (d) { lb.entries = d.entries; lb.cats = d.categories || DEF_CATS; lb.key = k; })
@@ -106,7 +126,7 @@
     var r = range(), sales = paidSales(r[0], r[1]), en = lb.entries.filter(function (e) { return !e.voided; });
     var inc = en.filter(function (e) { return e.type === 'ingreso'; }), exp = en.filter(function (e) { return e.type === 'egreso'; });
     var sum = function (a) { return a.reduce(function (s, x) { return s + (x.amount != null ? x.amount : x.o.total); }, 0); };
-    var cash = sum(sales.filter(function (x) { return (x.o.payment.method || 'efectivo') === 'efectivo'; })) + sum(inc.filter(function (e) { return e.method === 'efectivo'; })) - sum(exp.filter(function (e) { return e.method === 'efectivo'; }));
+    var cash = sales.reduce(function (t, x) { return t + cashOf(x.o); }, 0) + sum(inc.filter(function (e) { return e.method === 'efectivo'; })) - sum(exp.filter(function (e) { return e.method === 'efectivo'; }));
     return { r: r, sales: sales, inc: inc, exp: exp, vSales: sum(sales), vInc: sum(inc), vExp: sum(exp), cash: cash };
   }
   function renderLibro() {
@@ -143,7 +163,7 @@
     var g3 = el('div', 'three-col');
     var byCat = {}, byWho = {}, byM = {};
     F.exp.forEach(function (e) { byCat[e.category] = (byCat[e.category] || 0) + e.amount; byWho[e.responsible] = (byWho[e.responsible] || 0) + e.amount; });
-    F.sales.forEach(function (x) { var m = x.o.payment.method || 'efectivo'; byM[m] = (byM[m] || 0) + x.o.total; });
+    F.sales.forEach(function (x) { addByMethod(byM, x.o); });
     var srt = function (o) { return Object.keys(o).map(function (k) { return [k, o[k]]; }).sort(function (a, b) { return b[1] - a[1]; }); };
     g3.appendChild(bars('Gastos por categoría', srt(byCat), F.vExp, 'b')); g3.appendChild(bars('Gastos por responsable', srt(byWho), F.vExp, 'b'));
     g3.appendChild(bars('Ventas por medio de pago', srt(byM).map(function (r) { return [METHOD[r[0]] || r[0], r[1]]; }), F.vSales, 'a')); box.appendChild(g3);
@@ -151,7 +171,7 @@
   }
   function libroIngresos(box, F) {
     var rows = [];
-    F.sales.forEach(function (x) { rows.push({ at: x.at, cells: [label(x.day) + ' ' + hmOf(x.at), 'Venta ' + x.o.orderId + ' · ' + who(x.o), 'Venta', METHOD[x.o.payment.method] || '', 'Automático', money(x.o.total)] }); });
+    F.sales.forEach(function (x) { rows.push({ at: x.at, cells: [label(x.day) + ' ' + hmOf(x.at), 'Venta ' + x.o.orderId + ' · ' + who(x.o), 'Venta', methLabel(x.o), x.o.mozo || 'Automático', money(x.o.total)] }); });
     F.inc.forEach(function (e) { rows.push({ at: e.createdAt, cells: [label(e.day) + ' ' + hmOf(e.createdAt), e.concept, e.category, METHOD[e.method] || '', e.responsible, money(e.amount)] }); });
     rows.sort(function (a, b) { return String(b.at).localeCompare(String(a.at)); });
     box.appendChild(table([['Fecha y hora'], ['Concepto', 'wide'], ['Categoría'], ['Medio'], ['Responsable'], ['Monto', 'r']], rows, ['', 'Total ingresos', '', '', '', money(F.vSales + F.vInc)]));
