@@ -1,0 +1,15 @@
+{
+  "name": "Zona 0 Panel",
+  "short_name": "Zona 0 Panel",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#181818",
+  "theme_color": "#181818",
+  "lang": "es",
+  "icons": [
+    { "src": "../img/app/panel-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "../img/app/panel-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "../img/app/panel-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
