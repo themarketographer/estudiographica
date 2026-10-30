@@ -206,7 +206,8 @@
     t.appendChild(document.createElement('hr'));
     if (o.orderId) { t.appendChild(el('p', 'big num', '#' + n[0])); t.appendChild(el('p', 'c', n[1] + ' · ' + hm(o.createdAt))); } else { t.appendChild(el('p', 'big num', 'MESA ' + (cu.mesa || ''))); t.appendChild(el('p', 'c', 'Cuenta · ' + hm(o.createdAt))); }
     t.appendChild(document.createElement('hr'));
-    t.appendChild(el('p', '', (o.mode === 'mesa' ? 'MESA ' + (cu.mesa || '') : MODE[o.mode].toUpperCase()) + (cu.name && o.mode !== 'mesa' ? ' · ' + cu.name : '')));
+    var isMesa = o.mode === 'mesa' || !!cu.mesa, nm = cu.name && !/^mesa\s*\d*$/i.test(String(cu.name).trim()) && !isMesa ? ' · ' + cu.name : '';
+    t.appendChild(el('p', '', (isMesa ? 'MESA ' + (cu.mesa || '') : (MODE[o.mode] || '').toUpperCase()) + nm));
     if (o.mozo) t.appendChild(el('p', '', 'Atendió: ' + o.mozo));
     if (cu.phone) t.appendChild(el('p', '', P.fmtPhone(cu.phone)));
     if (o.mode === 'delivery') t.appendChild(el('p', '', (cu.zoneName ? cu.zoneName + '. ' : '') + (cu.address || '')));

@@ -159,7 +159,7 @@ body{background:var(--paper);min-height:100dvh}
 .st.nuevo{background:var(--y)}.st.preparando{background:var(--ink);color:var(--y)}.st.listo{background:#d8f1e2;color:#0f5f33}.st.cancelado{background:#fbe6e2;color:var(--err)}
 
 /* Ticket para papel de 80 x 210 mm con 4 mm de margen. Se usa igual en la vista previa y al imprimir. */
-.tkt{--ts:1;width:calc(72mm / var(--ts));zoom:var(--ts);color:#000;background:#fff;font:600 12pt/1.3 system-ui,sans-serif;overflow-wrap:anywhere;word-break:break-word}
+.tkt{--ts:1;width:calc(66mm / var(--ts));zoom:var(--ts);color:#000;background:#fff;font:600 12pt/1.3 system-ui,sans-serif;overflow-wrap:anywhere;word-break:break-word}
 .tkt h1{font-size:20pt;text-align:center;letter-spacing:-.03em}
 .tkt .c{text-align:center}
 .tkt hr{border:0;border-top:1.5px dashed #000;margin:3mm 0}
