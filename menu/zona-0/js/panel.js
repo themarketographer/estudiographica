@@ -313,14 +313,23 @@
   $('#prtPlus').addEventListener('click', function () { prt.auto = false; prt.scale = Math.min(1.5, Math.round((prt.scale + 0.05) * 100) / 100); prtPaint(); });
   $('#prtAuto').addEventListener('change', function () { prt.auto = this.checked; prtPaint(); });
   $('#prtLogo').addEventListener('change', function () { prt.logo = this.checked; prtPaint(); });
-  /* Imprimir: igual que la versión que sí imprimió en la MJ809. Se cierra la ventana del ticket ANTES de imprimir
-     (con una ventana modal abierta, Chrome manda la hoja en blanco a este driver) y no se impone tamaño de hoja. */
+  /* Imprimir: en una ventana aparte y limpia, solo con el ticket y los mismos estilos de la versión que sí imprimió
+     en la MJ809 (sin ventana modal encima, sin estilos del panel, sin zoom ni tamaño de hoja forzado). */
+  var PRINT_CSS = '@page{size:80mm auto;margin:0}html,body{margin:0;padding:0;background:#fff}' +
+    '#ticket{display:block;width:66mm;margin:0 auto;padding:4mm 0 8mm;color:#000;font:600 12pt/1.3 system-ui,"Segoe UI",Arial,sans-serif;overflow-wrap:anywhere}' +
+    '#ticket h1{font-size:20pt;text-align:center;letter-spacing:-.03em;margin:0}#ticket p{margin:0}#ticket .c{text-align:center}' +
+    '#ticket hr{border:0;border-top:1.5px dashed #000;margin:3mm 0}#ticket .r{display:flex;justify-content:space-between;gap:8px}' +
+    '#ticket .rn{min-width:0;flex:1}#ticket .rp{white-space:nowrap}#ticket .tot{font-size:15pt}' +
+    '#ticket .big{font-size:26pt;font-weight:800;text-align:center;line-height:1}#ticket small{font-weight:500;font-size:10pt;display:block;padding-left:5mm}';
   $('#prtGo').addEventListener('click', function () {
-    var t = $('#ticket'); buildTicket(prt.o, t, prt.logo); t.style.setProperty('--ts', String(prt.scale));
-    var st = document.getElementById('pageSize'); if (!st) { st = document.createElement('style'); st.id = 'pageSize'; document.head.appendChild(st); }
-    st.textContent = '@media print{@page{margin:0}#ticket{margin:0 auto!important;padding:4mm 0 8mm!important}}';
+    var tmp = document.createElement('div'); buildTicket(prt.o, tmp, false);
+    var w = window.open('', 'z0ticket', 'width=420,height=720');
+    if (!w) { $('#prtTxtMsg').textContent = 'Chrome bloqueó la ventana de impresión. Permite ventanas emergentes para estudiographica.com.'; return; }
+    w.document.open();
+    w.document.write('<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Ticket</title><style>' + PRINT_CSS + '</style></head><body><div id="ticket">' + tmp.innerHTML + '</div></body></html>');
+    w.document.close();
     $('#prt').close();
-    setTimeout(function () { window.print(); }, 150);
+    setTimeout(function () { w.focus(); w.print(); setTimeout(function () { try { w.close(); } catch (e) {} }, 500); }, 300);
   });
   $('#prtTxt').addEventListener('click', function () {
     var t = ticketText(prt.o, 40), msg = $('#prtTxtMsg');
