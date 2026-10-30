@@ -115,12 +115,12 @@ node_bundler = "esbuild"
 [[headers]]
   for = "/menu/zona-0/js/*"
   [headers.values]
-    Cache-Control = "public, max-age=600"
+    Cache-Control = "public, max-age=0, must-revalidate"
 
 [[headers]]
   for = "/menu/zona-0/css/*"
   [headers.values]
-    Cache-Control = "public, max-age=600"
+    Cache-Control = "public, max-age=0, must-revalidate"
 
 [[headers]]
   for = "/menu/zona-0/menu.json"

@@ -270,7 +270,7 @@
     return new Blob([out], { type: 'application/pdf' });
   }
   /* Imagen del ticket (576 px = 72 mm a 203 ppp, blanco y negro puro) para imprimirla desde Paint, Fotos o cualquier visor. */
-  function ticketPng(o, done) {
+  function ticketPng(o) {
     var W = 40, lines = ticketText(o, W).replace(/\r/g, '').replace(/\n+$/, '').split('\n'), PX = 576, PAD = 24, FS = 22, LH = 30;
     var big = { 0: 36, 3: 40 }, h = PAD * 2, i;
     for (i = 0; i < lines.length; i++) h += big[i] ? big[i] + 14 : LH;
@@ -283,7 +283,7 @@
     });
     var d = g.getImageData(0, 0, PX, h), px = d.data;
     for (i = 0; i < px.length; i += 4) { var v = px[i] < 150 ? 0 : 255; px[i] = px[i + 1] = px[i + 2] = v; px[i + 3] = 255; }
-    g.putImageData(d, 0, 0); cv.toBlob(done, 'image/png');
+    g.putImageData(d, 0, 0); return cv.toDataURL('image/png');
   }
   /* Ticket para papel de 80 x 210 mm con 4 mm de margen. Se ve antes de imprimir y se puede achicar o agrandar. */
   var PAPER_H = 210, MARGIN = 4, PX_MM = 96 / 25.4;
@@ -337,12 +337,9 @@
   });
   $('#prtImg').addEventListener('click', function () {
     var o = prt.o;
-    ticketPng(o, function (blob) {
-      var a = document.createElement('a'), u = URL.createObjectURL(blob);
-      a.href = u; a.download = 'ticket-' + (o.orderId || ('mesa-' + ((o.customer || {}).mesa || ''))) + '.png'; document.body.appendChild(a); a.click(); a.remove();
-      setTimeout(function () { URL.revokeObjectURL(u); }, 4000);
-      $('#prtTxtMsg').textContent = 'Imagen descargada. Ábrela con Paint, imprime con Ctrl+P y elige papel 80 x 210.';
-    });
+    var a = document.createElement('a');
+    a.href = ticketPng(o); a.download = 'ticket-' + (o.orderId || ('mesa-' + ((o.customer || {}).mesa || ''))) + '.png'; document.body.appendChild(a); a.click(); a.remove();
+    $('#prtTxtMsg').textContent = 'Imagen descargada. Ábrela con Paint, imprime con Ctrl+P y elige papel 80 x 210.';
   });
   $('#reprint').addEventListener('click', function () {
     var o = lastTicket || histRows().filter(function (x) { return x.status !== 'cancelado'; })[0];
