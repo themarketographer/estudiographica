@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Zona 0 · Pedidos</title>
+<meta name="description" content="Pide en Zona 0, la cafetería para ciclistas. Mesa, para llevar o delivery, con seguimiento en vivo.">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#181818">
+<link rel="icon" href="/favicon-32x32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preload" href="/fonts/izmir-bold.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body class="on-paper">
+
+<header class="top" id="top">
+  <a class="brandmark" href="./" aria-label="Zona 0, inicio">
+    <svg class="wheel" viewBox="0 0 24 24" aria-hidden="true"><g class="spin" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9.5"/><path d="M12 2.5v7.5M12 14v7.5M2.5 12H10M14 12h7.5M5.3 5.3l5.3 5.3M13.4 13.4l5.3 5.3M18.7 5.3l-5.3 5.3M10.6 13.4l-5.3 5.3" stroke-width="1.3"/></g></svg>
+    <span>Zona 0</span>
+  </a>
+  <button class="mine" id="mine" type="button" data-press hidden><span class="dot"></span><span id="mineText">Mi pedido</span></button>
+</header>
+
+<section class="hero on-ink" aria-labelledby="h1">
+  <svg class="wheel hero-wheel" id="heroWheel" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width=".28" stroke-linecap="round"><circle cx="12" cy="12" r="11.5"/><circle cx="12" cy="12" r="9.8" opacity=".55"/><circle cx="12" cy="12" r="1.3"/><path d="M12 .5v10.2M12 13.3v10.2M.5 12h10.2M13.3 12h10.2M3.9 3.9l7.2 7.2M12.9 12.9l7.2 7.2M20.1 3.9l-7.2 7.2M11.1 12.9l-7.2 7.2M7 1.8l4.5 9M12.5 13.2l4.5 9M17 1.8l-4.5 9M11.5 13.2 7 22.2M1.8 7l9 4.5M13.2 12.5l9 4.5M22.2 7l-9 4.5M10.8 12.5 1.8 17" opacity=".7"/></g></svg>
+  <div class="hero-in">
+    <p class="eyebrow intro" style="--d:0ms">Cafetería para ciclistas · Cochabamba</p>
+    <h1 id="h1" data-words>Recarga antes de rodar.</h1>
+    <p class="lead intro" style="--d:420ms">Café de verdad, comida que rinde kilómetros y un lugar donde la bici se queda a la vista. Pide desde tu celular y te avisamos cuando esté listo.</p>
+    <div class="pills intro" style="--d:560ms">
+      <span class="pill" id="openPill"><i class="led"></i><span id="openText">Revisando horario</span></span>
+      <span class="pill"><svg class="ic"><use href="#i-clock"/></svg><span id="prepText">Listo en unos minutos</span></span>
+    </div>
+  </div>
+</section>
+
+<nav class="cats" id="cats" aria-label="Categorías"><div class="cats-in" id="catsIn"></div></nav>
+
+<main id="menu" class="menu" aria-live="polite">
+  <div class="skel-list" id="skel"><i></i><i></i><i></i><i></i></div>
+</main>
+
+<footer class="foot on-ink">
+  <svg class="wheel" viewBox="0 0 24 24" aria-hidden="true" style="width:34px;height:34px"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="9.5"/><circle cx="12" cy="12" r="1.5"/><path d="M12 2.5v8M12 13.5v8M2.5 12h8M13.5 12h8M5.3 5.3l5.5 5.5M13.2 13.2l5.5 5.5M18.7 5.3l-5.5 5.5M10.8 13.2l-5.5 5.5"/></g></svg>
+  <p class="foot-t" id="footAddr"></p>
+  <p class="foot-s" id="footHours"></p>
+  <p class="foot-s">Sistema de pedidos creado por <a href="https://estudiographica.com" target="_blank" rel="noopener">Estudio Graphica</a> · versión 1</p>
+</footer>
+
+<div class="cartbar" id="cartbar" hidden>
+  <button type="button" class="cartbtn" id="cartOpen" data-press aria-label="Ver mi pedido">
+    <span class="cnt num" id="cartCount">0</span>
+    <span class="cl">Ver mi pedido</span>
+    <span class="tot num" id="cartTotal">0 Bs</span>
+  </button>
+</div>
+
+<div class="scrim" id="scrim" hidden></div>
+
+<!-- Producto -->
+<section class="sheet" id="psheet" role="dialog" aria-modal="true" aria-labelledby="pTitle" hidden>
+  <div class="grab" id="pGrab"><i></i></div>
+  <div class="sbody" id="pBody">
+    <h2 id="pTitle"></h2>
+    <p class="sub" id="pSub"></p>
+    <div id="pGroups"></div>
+    <label class="field" style="margin-top:18px"><span>Nota para cocina <i>(opcional)</i></span><input id="pNote" maxlength="120" placeholder="Por ejemplo: sin azúcar"></label>
+  </div>
+  <div class="sfoot">
+    <div class="qty" id="pQty"><button type="button" data-press id="pMinus" aria-label="Menos"><svg class="ic"><use href="#i-minus"/></svg></button><b class="num" id="pN">1</b><button type="button" data-press id="pPlus" aria-label="Más"><svg class="ic"><use href="#i-plus"/></svg></button></div>
+    <button class="btn" id="pAdd" type="button" data-press><span>Agregar</span><span class="num" id="pPrice"></span></button>
+  </div>
+</section>
+
+<!-- Carrito y datos -->
+<section class="sheet tall" id="csheet" role="dialog" aria-modal="true" aria-labelledby="cTitle" hidden>
+  <div class="grab" id="cGrab"><i></i></div>
+  <div class="panes" id="panes">
+    <div class="pane" id="paneCart">
+      <div class="sbody">
+        <h2 id="cTitle">Tu pedido</h2>
+        <ul class="lines" id="lines"></ul>
+        <p class="empty" id="cEmpty" hidden>Todavía no agregaste nada.</p>
+      </div>
+      <div class="sfoot col">
+        <div class="sum"><span>Subtotal</span><b class="num" id="cSub"></b></div>
+        <button class="btn btn--block" id="toForm" type="button" data-press><span>Continuar</span><svg class="ic"><use href="#i-arrow"/></svg></button>
+      </div>
+    </div>
+    <form class="pane" id="paneForm" novalidate>
+      <div class="sbody">
+        <button type="button" class="back" id="backCart" data-press><svg class="ic" style="rotate:180deg"><use href="#i-arrow"/></svg>Volver</button>
+        <h2>Tus datos</h2>
+        <div class="seg" id="modeSeg" role="group" aria-label="Cómo quieres tu pedido"><i class="thumb"></i>
+          <button type="button" data-mode="mesa" data-press><svg class="ic"><use href="#i-table"/></svg>Mesa</button>
+          <button type="button" data-mode="recojo" data-press><svg class="ic"><use href="#i-bag"/></svg>Llevar</button>
+          <button type="button" data-mode="delivery" data-press><svg class="ic"><use href="#i-bike"/></svg>Delivery</button>
+        </div>
+        <div class="grid">
+          <label class="field" data-f="name"><span>Tu nombre</span><input id="fName" autocomplete="given-name" maxlength="50" enterkeyhint="next"><em class="msg" hidden></em></label>
+          <label class="field" data-f="phone"><span>Tu celular <i>(para seguir tu pedido)</i></span><input id="fPhone" type="tel" inputmode="tel" autocomplete="tel" maxlength="16" placeholder="76980828" enterkeyhint="next"><em class="msg" hidden></em></label>
+          <label class="field" data-f="mesa" id="gMesa"><span>Número de mesa</span><input id="fMesa" maxlength="10" inputmode="numeric"><em class="msg" hidden></em></label>
+          <label class="field" data-f="zone" id="gZone"><span>Zona de entrega</span><select id="fZone"></select><em class="msg" hidden></em></label>
+          <label class="field" data-f="address" id="gAddr"><span>Dirección o referencia</span><input id="fAddr" maxlength="160" autocomplete="street-address"><em class="msg" hidden></em></label>
+          <label class="field"><span>Notas del pedido <i>(opcional)</i></span><input id="fNotes" maxlength="240"></label>
+        </div>
+        <p class="pay"><svg class="ic"><use href="#i-wallet"/></svg>Pagas en efectivo al recibir o recoger tu pedido.</p>
+        <p class="formerr" id="formErr" hidden></p>
+      </div>
+      <div class="sfoot col">
+        <div class="sum" id="rowSub"><span id="sumL1">Productos</span><b class="num" id="fSub"></b></div>
+        <div class="sum" id="rowFee" hidden><span>Envío</span><b class="num" id="fFee"></b></div>
+        <div class="sum big"><span>Total</span><b class="num" id="fTot"></b></div>
+        <button class="btn btn--block" id="send" type="submit" data-press>Hacer mi pedido</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- Seguimiento -->
+<section class="track on-ink" id="track" role="dialog" aria-modal="true" aria-labelledby="tNum" hidden>
+  <button class="tclose" id="tClose" type="button" data-press aria-label="Cerrar"><svg class="ic"><use href="#i-x"/></svg></button>
+  <div class="tin">
+    <p class="eyebrow">Tu pedido</p>
+    <h2 class="tnum num" id="tNum"></h2>
+    <p class="tmsg" id="tMsg"></p>
+    <ol class="steps" id="steps">
+      <li data-s="nuevo"><i></i><b>Recibido</b><span>Ya está en la pantalla de cocina</span></li>
+      <li data-s="preparando"><i></i><b>En preparación</b><span>Lo estamos haciendo ahora</span></li>
+      <li data-s="listo"><i></i><b id="lblListo">Listo</b><span id="subListo">Te espera</span></li>
+      <li data-s="entregado"><i></i><b>Entregado</b><span>Buen provecho y buena ruta</span></li>
+    </ol>
+    <p class="tfine" id="tFine"></p>
+    <button class="btn btn--block" id="tMore" type="button" data-press>Pedir algo más</button>
+  </div>
+</section>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="js/icons.js"></script>
+<script src="js/spring.js"></script>
+<script src="js/pricing.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

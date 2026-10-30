@@ -1,0 +1,95 @@
+/* Zona 0 · base compartida (cliente y panel). Tokens del sistema de diseño de Estudio Graphica:
+   amarillo, tinta y papel, fuente Izmir, curva de salida suave, vidrio y radios de pastilla. */
+@font-face{font-family:"Izmir";font-style:normal;font-weight:300;font-display:swap;src:url("/fonts/izmir-light.woff2") format("woff2"),url("/fonts/izmir-light.otf") format("opentype")}
+@font-face{font-family:"Izmir";font-style:normal;font-weight:400 500;font-display:swap;src:url("/fonts/izmir-regular.woff2") format("woff2"),url("/fonts/izmir-regular.otf") format("opentype")}
+@font-face{font-family:"Izmir";font-style:normal;font-weight:600 700;font-display:swap;src:url("/fonts/izmir-bold.woff2") format("woff2"),url("/fonts/izmir-bold.otf") format("opentype")}
+@font-face{font-family:"Izmir";font-style:normal;font-weight:800 900;font-display:swap;src:url("/fonts/izmir-extrabold.woff2") format("woff2"),url("/fonts/izmir-extrabold.otf") format("opentype")}
+
+:root{
+  --y:#ffdd5a; --y-soft:#fff0ad; --y-deep:#e9c23a;
+  --ink:#181818; --ink-2:#232220; --ink-3:#2f2d29;
+  --paper:#f8f8f8; --card:#fff; --muted:#5f5b50; --hair:#e3e0d4;
+  --ok:#1f8a4c; --err:#b3392b;
+  --f:"Izmir",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --ease:cubic-bezier(.16,1,.3,1);
+  --r-pill:999px; --r-card:22px; --r-field:14px; --r-sheet:30px;
+  --safe-b:env(safe-area-inset-bottom,0px); --safe-t:env(safe-area-inset-top,0px);
+  color-scheme:light;
+}
+*,*::before,*::after{box-sizing:border-box}
+*{margin:0}
+html{-webkit-text-size-adjust:100%;scrollbar-color:#b9b39b var(--paper)}
+body{background:var(--paper);color:var(--ink);font:400 17px/1.5 var(--f);letter-spacing:-.01em;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:clip;accent-color:var(--ink);-webkit-tap-highlight-color:transparent}
+::selection{background:var(--y);color:var(--ink)}
+img,svg{display:block;max-width:100%}
+a{color:inherit}
+.brandmark{text-decoration:none}
+button,input,select,textarea{font:inherit;color:inherit;letter-spacing:inherit}
+button{cursor:pointer;background:none;border:0;touch-action:manipulation}
+h1,h2,h3{font-weight:700;letter-spacing:-.035em;line-height:1.06;text-wrap:balance}
+p{text-wrap:pretty}
+[hidden]{display:none!important}
+:focus-visible{outline:3px solid var(--y-deep);outline-offset:3px;border-radius:8px}
+.on-ink :focus-visible{outline-color:var(--y)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.ic{width:22px;height:22px;flex:none}
+.num{font-variant-numeric:tabular-nums lining-nums}
+
+/* Respuesta inmediata al tocar */
+[data-press]{transition:transform .35s var(--ease),background-color .25s,color .25s,box-shadow .3s}
+[data-press].is-pressed{transform:scale(.95);transition-duration:.09s}
+
+/* Botones */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:54px;padding:0 26px;border-radius:var(--r-pill);background:var(--y);color:var(--ink);font-weight:700;font-size:17px;line-height:1;border:2px solid var(--y);text-decoration:none;position:relative;overflow:hidden;isolation:isolate}
+.btn::before{content:"";position:absolute;inset:-2px;z-index:-1;background:var(--ink);transform:translateY(101%);border-radius:50% 50% 0 0/60% 60% 0 0;transition:transform .55s var(--ease),border-radius .55s var(--ease)}
+@media (hover:hover){.btn:hover::before{transform:none;border-radius:0}.btn:hover{color:var(--y)}}
+.btn--ink{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.btn--ink::before{background:var(--y)}
+@media (hover:hover){.btn--ink:hover{color:var(--ink)}}
+.btn--ghost{background:transparent;border:1.5px solid currentColor;color:inherit}
+.btn--ghost::before{background:currentColor}
+.btn--block{display:flex;width:100%}
+.btn--sm{min-height:44px;padding:0 20px;font-size:15px}
+.btn[disabled]{opacity:.45;pointer-events:none}
+.btn.is-loading{pointer-events:none;padding-right:52px}
+.btn.is-loading::after{content:"";position:absolute;right:20px;top:50%;width:16px;height:16px;margin-top:-8px;border-radius:50%;border:2.5px solid currentColor;border-top-color:transparent;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Campos */
+.field{display:grid;gap:7px}
+.field>span{font-size:14px;font-weight:600}
+.field>span i{font-style:normal;font-weight:400;color:var(--muted)}
+.field input,.field select,.field textarea{width:100%;min-height:52px;background:var(--card);border:1.5px solid var(--hair);border-radius:var(--r-field);padding:0 16px;font-size:17px;transition:border-color .2s,box-shadow .25s}
+.field textarea{padding:13px 16px;min-height:76px;resize:vertical}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--ink);box-shadow:0 0 0 4px rgba(255,221,90,.55)}
+.field.has-err input,.field.has-err select{border-color:var(--err);animation:shake .4s var(--ease)}
+.field .msg{color:var(--err);font-size:14px;font-weight:500}
+@keyframes shake{20%{translate:-6px 0}45%{translate:5px 0}70%{translate:-3px 0}100%{translate:0 0}}
+
+/* Control segmentado */
+.seg{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:4px;padding:4px;border-radius:var(--r-pill);background:var(--hair);position:relative}
+.seg button{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;gap:8px;min-height:46px;border-radius:var(--r-pill);font-weight:600;font-size:15px;color:var(--muted)}
+.seg button[aria-pressed="true"]{color:var(--ink)}
+.seg .thumb{position:absolute;z-index:0;top:4px;bottom:4px;left:0;width:0;border-radius:var(--r-pill);background:var(--y);box-shadow:0 6px 16px -8px rgba(24,24,24,.5)}
+
+/* Aviso flotante */
+.toast{position:fixed;left:50%;bottom:calc(24px + var(--safe-b));translate:-50% 0;z-index:200;max-width:min(92vw,460px);display:flex;align-items:center;gap:14px;padding:14px 20px;border-radius:var(--r-pill);background:rgba(24,24,24,.9);color:var(--paper);font-weight:500;font-size:15px;-webkit-backdrop-filter:blur(18px) saturate(1.6);backdrop-filter:blur(18px) saturate(1.6);box-shadow:0 18px 40px -16px rgba(0,0,0,.6);opacity:0;transform:translateY(16px) scale(.96);transition:opacity .35s var(--ease),transform .5s var(--ease);pointer-events:none}
+.toast.on{opacity:1;transform:none;pointer-events:auto}
+.toast button{color:var(--y);font-weight:700;text-decoration:underline;text-underline-offset:4px}
+
+/* Marca: la rueda hace de cero */
+.wheel{color:var(--y)}
+.wheel .spin{transform-origin:50% 50%;animation:spin 18s linear infinite}
+.brandmark{display:inline-flex;align-items:center;gap:10px;font-weight:800;letter-spacing:-.04em;font-size:22px;line-height:1}
+.brandmark svg{width:30px;height:30px}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
+  .wheel .spin{animation:none}
+}
+@media (prefers-reduced-transparency:reduce){
+  .toast{background:var(--ink);-webkit-backdrop-filter:none;backdrop-filter:none}
+}
+@media (prefers-contrast:more){
+  :root{--hair:#8d8873;--muted:#3d3a32}
+}

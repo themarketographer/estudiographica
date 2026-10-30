@@ -1,0 +1,62 @@
+{
+  "version": 1,
+  "brand": {
+    "name": "Zona 0",
+    "tagline": "Recarga antes de rodar",
+    "currency": "Bs",
+    "address": "Cochabamba, Bolivia",
+    "orderPrefix": "Z0"
+  },
+  "hours": { "text": "Todos los días, 06:30 a 20:00", "tz": "America/La_Paz", "open": "06:30", "close": "20:00" },
+  "service": {
+    "modes": ["mesa", "recojo", "delivery"],
+    "minOrder": 0,
+    "freeDeliveryFrom": 120,
+    "prepMin": 12,
+    "zones": [
+      { "id": "cerca", "name": "Cerca (hasta 2 km)", "fee": 8, "travelMin": 15 },
+      { "id": "media", "name": "Media (2 a 5 km)", "fee": 14, "travelMin": 25 }
+    ]
+  },
+  "categories": [
+    { "id": "cafe", "name": "Café", "icon": "cup" },
+    { "id": "rodar", "name": "Para rodar", "icon": "bolt" },
+    { "id": "hidrata", "name": "Hidratación", "icon": "drop" },
+    { "id": "dulce", "name": "Dulce", "icon": "cookie" }
+  ],
+  "optionGroups": {
+    "leche": { "label": "Leche", "hint": "Elige 1", "type": "single", "required": true, "options": [
+      { "id": "entera", "name": "Entera", "price": 0, "default": true },
+      { "id": "deslactosada", "name": "Deslactosada", "price": 0 },
+      { "id": "avena", "name": "Avena", "price": 4 }
+    ] },
+    "shot": { "label": "Más energía", "hint": "Opcional", "type": "multi", "required": false, "max": 2, "options": [
+      { "id": "shot", "name": "Shot extra", "price": 5 }
+    ] },
+    "sabor": { "label": "Sabor", "hint": "Elige 1", "type": "single", "required": true, "options": [
+      { "id": "naranja", "name": "Naranja", "price": 0, "default": true },
+      { "id": "frutilla", "name": "Frutilla", "price": 0 },
+      { "id": "maracuya", "name": "Maracuyá", "price": 0 }
+    ] },
+    "extras-comida": { "label": "Extras", "hint": "Hasta 2", "type": "multi", "required": false, "max": 2, "options": [
+      { "id": "palta", "name": "Palta", "price": 6 },
+      { "id": "huevo", "name": "Huevo", "price": 4 }
+    ] }
+  },
+  "products": [
+    { "id": "espresso", "title": "Espresso", "sub": "Corto, intenso, directo", "category": "cafe", "price": 10, "groups": [] },
+    { "id": "americano", "title": "Americano", "sub": "Espresso largo con agua caliente", "category": "cafe", "price": 12, "groups": [] },
+    { "id": "cappuccino", "title": "Cappuccino", "sub": "Espresso, leche y espuma", "category": "cafe", "price": 16, "groups": ["leche", "shot"] },
+    { "id": "latte", "title": "Latte", "sub": "Suave y cremoso", "category": "cafe", "price": 18, "groups": ["leche", "shot"] },
+    { "id": "coldbrew", "title": "Cold brew", "sub": "Infusión en frío por 12 horas", "category": "cafe", "price": 20, "groups": [] },
+    { "id": "tostada", "title": "Tostada de palta y huevo", "sub": "Pan de masa madre, palta y huevo", "category": "rodar", "price": 28, "groups": ["extras-comida"] },
+    { "id": "sandwich", "title": "Sándwich de pollo y queso", "sub": "Para el tramo largo", "category": "rodar", "price": 32, "groups": ["extras-comida"] },
+    { "id": "bowl", "title": "Bowl de granola y fruta", "sub": "Yogur, granola y fruta de estación", "category": "rodar", "price": 26, "groups": [] },
+    { "id": "banana", "title": "Banana con maní", "sub": "El clásico antes de pedalear", "category": "rodar", "price": 14, "groups": [] },
+    { "id": "jugo", "title": "Jugo natural", "sub": "Exprimido al momento", "category": "hidrata", "price": 14, "groups": ["sabor"] },
+    { "id": "isotonico", "title": "Isotónico casero", "sub": "Limón, sal y miel", "category": "hidrata", "price": 12, "groups": [] },
+    { "id": "agua", "title": "Agua", "sub": "500 ml", "category": "hidrata", "price": 6, "groups": [] },
+    { "id": "brownie", "title": "Brownie", "sub": "Chocolate amargo", "category": "dulce", "price": 12, "groups": [] },
+    { "id": "barra", "title": "Barra energética", "sub": "Avena, dátiles y semillas", "category": "dulce", "price": 10, "groups": [] }
+  ]
+}

@@ -75,3 +75,34 @@ node_bundler = "esbuild"
   for = "/menu/magma/menu.json"
   [headers.values]
     Cache-Control = "public, max-age=60, stale-while-revalidate=300"
+
+# Zona 0 (cafetería para ciclistas): pedidos desde el celular y panel del local. Ver menu/zona-0/README.md.
+[[redirects]]
+  from = "/api/zona0/order"
+  to = "/.netlify/functions/zona0-order"
+  status = 200
+
+[[redirects]]
+  from = "/api/zona0/orders"
+  to = "/.netlify/functions/zona0-orders"
+  status = 200
+
+[[redirects]]
+  from = "/api/zona0/track"
+  to = "/.netlify/functions/zona0-track"
+  status = 200
+
+[[headers]]
+  for = "/menu/zona-0/js/*"
+  [headers.values]
+    Cache-Control = "public, max-age=600"
+
+[[headers]]
+  for = "/menu/zona-0/css/*"
+  [headers.values]
+    Cache-Control = "public, max-age=600"
+
+[[headers]]
+  for = "/menu/zona-0/menu.json"
+  [headers.values]
+    Cache-Control = "public, max-age=60, stale-while-revalidate=300"

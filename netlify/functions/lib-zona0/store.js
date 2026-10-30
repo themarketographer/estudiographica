@@ -1,0 +1,113 @@
+// Almacén de pedidos de Zona 0 en Netlify Blobs.
+// Los pedidos reales (dominio de producción) van a "zona0-orders". Cualquier otro deploy (previews, ramas)
+// escribe en "zona0-orders-test", porque un store de sitio se comparte entre todos los deploys.
+const STATUSES = ['nuevo', 'preparando', 'listo', 'entregado', 'cancelado'];
+
+function isProd(event) {
+  if (process.env.CONTEXT === 'production') return true;
+  const h = (event && event.headers) || {};
+  const host = String(h['x-forwarded-host'] || h.host || '').toLowerCase().split(',')[0].trim().replace(/:\d+$/, '');
+  const hosts = (process.env.ZONA0_PROD_HOSTS || 'estudiographica.com,www.estudiographica.com,estudiographica.netlify.app').split(',').map((x) => x.trim().toLowerCase());
+  return hosts.indexOf(host) > -1;
+}
+function storeName(event) { return isProd(event) ? 'zona0-orders' : 'zona0-orders-test'; }
+
+function open(event) {
+  const { getStore, connectLambda } = require('@netlify/blobs');
+  if (event) connectLambda(event);
+  return getStore({ name: storeName(event) });
+}
+
+function keyFor(dateKey, n) { return dateKey + '/' + String(n).padStart(3, '0'); }
+
+// Reserva el número del día con "onlyIfNew": dos pedidos simultáneos nunca se quedan con el mismo número.
+async function saveNumbered(event, dateKey, build) {
+  try {
+    const store = open(event);
+    const { blobs } = await store.list({ prefix: dateKey + '/' });
+    let n = blobs.length + 1;
+    for (let i = 0; i < 12; i++, n++) {
+      const rec = build(n, keyFor(dateKey, n));
+      const r = await store.setJSON(rec.key, rec, { onlyIfNew: true });
+      if (!r || r.modified !== false) return { ok: true, rec };
+    }
+    return { ok: false, error: 'No se pudo asignar número de pedido.' };
+  } catch (e) {
+    console.error('zona0 store save:', e && e.message);
+    return { ok: false, error: String((e && e.message) || e).slice(0, 200) };
+  }
+}
+
+// Registro de cambios: cada pedido nuevo o modificado deja una marca diminuta "ev/<hora>/<ms>-<azar>".
+// El panel pregunta solo por las marcas recientes y lee únicamente los pedidos que cambiaron.
+function hourKey(ms) { return new Date(ms).toISOString().slice(0, 13); }
+async function touch(event, key) {
+  try {
+    const now = Date.now();
+    await open(event).setJSON('ev/' + hourKey(now) + '/' + now + '-' + Math.random().toString(36).slice(2, 6), { k: key });
+  } catch (e) { console.error('zona0 touch:', e && e.message); }
+}
+
+async function changedSince(event, since) {
+  const store = open(event);
+  const now = Date.now();
+  const floor = Math.max(since, now - 36 * 3600 * 1000);
+  const hours = [];
+  for (let t = Math.floor(floor / 3600000) * 3600000; t <= now; t += 3600000) hours.push(hourKey(t));
+  const lists = await Promise.all(hours.map((h) => store.list({ prefix: 'ev/' + h + '/' }).then((r) => r.blobs).catch(() => [])));
+  const keys = [];
+  lists.forEach((bl) => bl.forEach((b) => { const ms = Number(b.key.split('/')[2].split('-')[0]); if (ms >= floor) keys.push(b.key); }));
+  const targets = new Set();
+  const evs = await Promise.all(keys.slice(-300).map((k) => store.get(k, { type: 'json' }).catch(() => null)));
+  evs.forEach((e) => { if (e && e.k) targets.add(e.k); });
+  const rows = await Promise.all(Array.from(targets).slice(0, 200).map((k) => store.get(k, { type: 'json' }).catch(() => null)));
+  return { now, orders: rows.filter(Boolean) };
+}
+
+async function listDays(event, dayKeys) {
+  const store = open(event);
+  const lists = await Promise.all(dayKeys.map((d) => store.list({ prefix: d + '/' }).then((r) => r.blobs).catch(() => [])));
+  const keys = [].concat.apply([], lists.map((bl) => bl.map((b) => b.key))).slice(-600);
+  const rows = await Promise.all(keys.map((k) => store.get(k, { type: 'json' }).catch(() => null)));
+  return rows.filter(Boolean).sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
+}
+
+async function getOrder(event, key) {
+  return open(event).get(key, { type: 'json' }).catch(() => null);
+}
+
+async function setStatus(event, key, status) {
+  const store = open(event);
+  const rec = await store.get(key, { type: 'json' });
+  if (!rec) return null;
+  rec.status = status;
+  rec.updatedAt = new Date().toISOString();
+  await store.setJSON(key, rec);
+  await touch(event, key);
+  return rec;
+}
+
+async function setPayment(event, key, status, method) {
+  const store = open(event);
+  const rec = await store.get(key, { type: 'json' });
+  if (!rec) return null;
+  rec.payment = Object.assign({}, rec.payment, { status }, method ? { method } : {}, { updatedAt: new Date().toISOString() });
+  rec.updatedAt = rec.payment.updatedAt;
+  await store.setJSON(key, rec);
+  await touch(event, key);
+  return rec;
+}
+
+// Interruptor "recibiendo pedidos". Por defecto abierto.
+async function isOpen(event) {
+  try {
+    const c = await open(event).get('cfg/open', { type: 'json' });
+    return !c || c.open !== false;
+  } catch (e) { return true; }
+}
+async function setOpen(event, open_) {
+  await open(event).setJSON('cfg/open', { open: !!open_, at: new Date().toISOString() });
+  return !!open_;
+}
+
+module.exports = { isProd, storeName, STATUSES, keyFor, saveNumbered, touch, changedSince, listDays, getOrder, setStatus, setPayment, isOpen, setOpen };
