@@ -63,7 +63,7 @@
       chips.appendChild(chip);
       var sec = el('section', 'cat'); sec.id = 'cat-' + c.id; sec.dataset.cat = c.id;
       var h = el('h2', '', c.name);
-      var items = menu.products.filter(function (p) { return p.category === c.id && !p.hidden; });
+      var items = menu.products.filter(function (p) { return p.category === c.id && !p.hidden && !p.staffOnly; });
       h.appendChild(el('small', '', items.length + (items.length === 1 ? ' opción' : ' opciones')));
       sec.appendChild(h);
       var ul = el('ul', 'rows');

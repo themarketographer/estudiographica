@@ -39,6 +39,7 @@
     (extra.custom || []).forEach(function (c) {
       if (!c || have[c.id] || (c.until && today && c.until < today)) return;
       var p = { id: c.id, title: c.title, sub: c.sub || '', category: c.category, price: c.price, groups: [], custom: true, until: c.until || '' };
+      if (c.kinds && c.kinds.length) p.kinds = c.kinds.slice(); if (c.staffOnly) p.staffOnly = true;
       menu.products.push(p); have[c.id] = 1;
     });
     var off = extra.off || [], over = extra.over || {}, hide = extra.hide || [];
@@ -48,6 +49,11 @@
         if (o.price > 0 && o.price !== p.price) { p.basePrice = p.price; p.price = o.price; }
         if (o.title) { p.baseTitle = p.title; p.title = o.title; }
         if (typeof o.sub === 'string') p.sub = o.sub;
+        if (o.category) { p.baseCategory = p.category; p.category = o.category; }
+        if (o.kinds && o.kinds.length) p.kinds = o.kinds.slice();
+        if (o.staffOnly) p.staffOnly = true;
+        if (o.until) { p.until = o.until; if (today && o.until < today) p.hidden = true; }
+        p.edited = true;
       }
       if (off.indexOf(p.id) > -1) p.available = false;
       if (hide.indexOf(p.id) > -1) p.hidden = true;
@@ -79,7 +85,7 @@
     if (raw.free) return resolveFree(raw, opts);
     var product = findProduct(menu, raw.id);
     if (!product) return { ok: false, error: 'Un producto del pedido ya no está en el menú.' };
-    if (product.hidden) return { ok: false, error: 'Un producto del pedido ya no está en el menú.' };
+    if (product.hidden || (product.staffOnly && !(opts && opts.staff))) return { ok: false, error: 'Un producto del pedido ya no está en el menú.' };
     if (product.available === false) return { ok: false, error: product.title + ' está agotado.' };
     var qty = Number(raw.qty);
     if (!Number.isInteger(qty) || qty < 1 || qty > MAX_QTY) return { ok: false, error: 'Cantidad inválida en ' + product.title + '.' };

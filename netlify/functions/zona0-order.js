@@ -60,7 +60,7 @@ exports.handler = async function (event) {
 
   const make = (n, key) => ({
     key, orderId: Pricing.orderNumber(n, now), number: n, createdAt, updatedAt: createdAt,
-    status: staff ? (o.lines.every((l) => l.free && l.kind === 'tienda') ? 'listo' : 'preparando') : 'nuevo', source: staff ? 'local' : 'app', mode: o.customer.mode, customer: o.customer,
+    status: staff ? (o.lines.every((l) => (l.free ? [l.kind] : kindsOf(l.id)).every((k) => k === 'tienda')) ? 'listo' : 'preparando') : 'nuevo', source: staff ? 'local' : 'app', mode: o.customer.mode, customer: o.customer,
     lines: o.lines.map((l) => ({ id: l.id, name: l.name, qty: l.qty, unitPrice: l.unitPrice, total: l.total, choices: l.choices, note: l.note, kinds: l.free ? [l.kind] : kindsOf(l.id), inc: l.free ? '' : incOf(l.id), done: [], free: l.free ? true : undefined })),
     subtotal: o.subtotal, deliveryFee: o.deliveryFee, total: o.total, count: o.count, currency: menu.brand.currency,
     payment: { method, status: paid ? 'pagado' : 'pendiente' },

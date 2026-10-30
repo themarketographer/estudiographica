@@ -13,6 +13,8 @@ const { authorized, reply } = require('./lib-zona0/auth.js');
 
 const clean = (v, n) => String(v == null ? '' : v).replace(/[\u0000-\u001f\u007f]+/g, ' ').replace(/\s+/g, ' ').trim().slice(0, n);
 const isDay = (d) => /^\d{4}-\d{2}-\d{2}$/.test(d || '') && !isNaN(Date.parse(d + 'T12:00:00Z'));
+const KINDS = ['comida', 'bebida', 'tienda'];
+const cleanKinds = (k) => { if (!Array.isArray(k)) return null; const r = k.filter((x, i) => KINDS.indexOf(x) > -1 && k.indexOf(x) === i).slice(0, 2); if (r.indexOf('tienda') > -1) return ['tienda']; return r.length ? r : null; };
 const slug = (t) => t.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 24) || 'prod';
 
 exports.handler = async function (event) {
@@ -40,7 +42,8 @@ exports.handler = async function (event) {
       if (until && until < today) return reply(422, { ok: false, error: 'La fecha final ya pasó.' });
       if (extra.custom.length >= 80) return reply(422, { ok: false, error: 'Ya hay demasiados productos agregados. Quita algunos.' });
       const id = 'x-' + slug(title) + '-' + Math.random().toString(36).slice(2, 6);
-      extra.custom.push({ id, title, sub: clean(b.add.sub, 90), category: b.add.category, price, until, createdAt: new Date().toISOString() });
+      const kinds = cleanKinds(b.add.kinds);
+      extra.custom.push({ id, title, sub: clean(b.add.sub, 90), category: b.add.category, price, until, kinds: kinds || undefined, staffOnly: b.add.staffOnly === true || undefined, createdAt: new Date().toISOString() });
     } else if (typeof b.update === 'string') {
       const c = extra.custom.find((x) => x.id === b.update);
       if (!c) return reply(404, { ok: false, error: 'No existe ese producto.' });
@@ -49,16 +52,23 @@ exports.handler = async function (event) {
       if (p.sub != null) c.sub = clean(p.sub, 90);
       if (p.price != null) { const pr = Math.round(Number(p.price) * 100) / 100; if (!(pr > 0) || pr > 2000) return reply(422, { ok: false, error: 'Revisa el precio.' }); c.price = pr; }
       if (p.until != null) c.until = isDay(p.until) ? p.until : '';
+      if (p.category != null) { if (cats.indexOf(p.category) === -1) return reply(422, { ok: false, error: 'Elige una categoría.' }); c.category = p.category; }
+      if (p.kinds != null) { const k = cleanKinds(p.kinds); if (k) c.kinds = k; else delete c.kinds; }
+      if (p.staffOnly != null) { if (p.staffOnly === true) c.staffOnly = true; else delete c.staffOnly; }
     } else if (typeof b.over === 'string') {
       const bp = base.products.find((x) => x.id === b.over);
       if (!bp) return reply(404, { ok: false, error: 'No existe ese producto.' });
       const p = b.patch || {};
-      if (p.reset) { delete extra.over[bp.id]; }
+      if (p.reset) { delete extra.over[bp.id]; extra.off = extra.off.filter((x) => x !== bp.id); }
       else {
         const o = extra.over[bp.id] || {};
         if (p.price != null) { const pr = Math.round(Number(p.price) * 100) / 100; if (!(pr > 0) || pr > 2000) return reply(422, { ok: false, error: 'Revisa el precio.' }); if (pr === bp.price) delete o.price; else o.price = pr; }
         if (p.title != null) { const t = clean(p.title, 60); if (t.length < 2) return reply(422, { ok: false, error: 'Escribe el nombre.' }); if (t === bp.title) delete o.title; else o.title = t; }
         if (p.sub != null) { const t = clean(p.sub, 90); if (t === bp.sub) delete o.sub; else o.sub = t; }
+        if (p.category != null) { if (cats.indexOf(p.category) === -1) return reply(422, { ok: false, error: 'Elige una categoría.' }); if (p.category === bp.category) delete o.category; else o.category = p.category; }
+        if (p.kinds != null) { const k = cleanKinds(p.kinds); if (k) o.kinds = k; else delete o.kinds; }
+        if (p.staffOnly != null) { if (p.staffOnly === true) o.staffOnly = true; else delete o.staffOnly; }
+        if (p.until != null) { if (isDay(p.until)) o.until = p.until; else delete o.until; }
         if (Object.keys(o).length) extra.over[bp.id] = o; else delete extra.over[bp.id];
       }
     } else if (typeof b.hide === 'string') {

@@ -218,102 +218,136 @@
   });
 
   /* ---------- Menú ---------- */
-  var mc = '', mq = '';
+  /* Se ve como la comanda: categorías arriba, productos agrupados en secciones con tarjetas simples.
+     Tocar una tarjeta abre todo lo editable (nombre, precio, agotado, quitar). El precio también se cambia ahí mismo. */
+  var mc = 'todo', mq = '';
+  var norm = function (t) { return String(t || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); };
   function renderMenu() {
-    var m = Z.menu(), box = $('#v-menu'); if (!m) return; box.textContent = ''; if (!mc) mc = 'todo';
-    var open = el('a', 'tool dark'); open.href = '../'; open.target = '_blank'; open.rel = 'noopener'; open.appendChild(Z0Icon('arrow')); open.appendChild(el('span', '', 'Abrir el menú del cliente'));
-    var add = btn('Agregar producto', 'tool', function () { prodDialog(null); }, 'list');
-    box.appendChild(head('Menú', [add, open]));
-    var catName = {}, catKind = {}, count = { todo: 0 }; m.categories.forEach(function (c) { catName[c.id] = c.name; catKind[c.id] = c.kind; count[c.id] = 0; });
-    m.products.forEach(function (p) { if (!p.hidden) { count.todo++; count[p.category]++; } });
-    var bar = el('div', 'mbar'), q = el('input', 'msearch'); q.type = 'search'; q.placeholder = 'Buscar producto'; q.value = mq; q.setAttribute('aria-label', 'Buscar producto');
-    q.addEventListener('input', function () { mq = q.value; var pos = q.selectionStart; renderMenu(); var n = $('#v-menu .msearch'); if (n) { n.focus(); n.setSelectionRange(pos, pos); } });
-    bar.appendChild(q); box.appendChild(bar);
-    var chips = el('div', 'pos-cats'); [{ id: 'todo', name: 'Todo', icon: 'list' }].concat(m.categories).forEach(function (c) { var b = el('button', 'chip'); b.type = 'button'; b.setAttribute('data-press', ''); b.setAttribute('aria-pressed', c.id === mc ? 'true' : 'false'); b.appendChild(Z0Icon(c.icon)); b.appendChild(document.createTextNode(c.name)); b.appendChild(el('small', 'cnt', String(count[c.id]))); b.addEventListener('click', function () { mc = c.id; renderMenu(); }); chips.appendChild(b); });
-    box.appendChild(chips);
-    var norm = function (t) { return String(t || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''); }, nq = norm(mq);
-    var list_ = m.products.filter(function (p) { return (mc === 'todo' || p.category === mc) && (!nq || norm(p.title + ' ' + p.sub).indexOf(nq) > -1); });
-    var shown = list_.filter(function (p) { return !p.hidden; }), gone = list_.filter(function (p) { return p.hidden; });
-    var grid = el('div', 'mgrid');
-    shown.forEach(function (p) { grid.appendChild(menuCard(m, p, catName, catKind)); });
-    if (!shown.length) box.appendChild(el('p', 'muted', nq ? 'Ningún producto coincide con la búsqueda.' : 'No hay productos en esta categoría.'));
-    box.appendChild(grid);
+    var m = Z.menu(), box = $('#v-menu'); if (!m) return; box.textContent = '';
+    var open = el('a', 'tool dark'); open.href = '../'; open.target = '_blank'; open.rel = 'noopener'; open.appendChild(Z0Icon('arrow')); open.appendChild(el('span', '', 'Ver menú del cliente'));
+    box.appendChild(head('Menú', [btn('Agregar producto', 'btn', function () { prodDialog(null, mc !== 'todo' ? mc : ''); }, 'plus'), open]));
+    var bar = el('div', 'mbar'), q = el('input', 'msearch'); q.type = 'search'; q.placeholder = 'Buscar producto…'; q.value = mq; q.setAttribute('aria-label', 'Buscar producto');
+    q.addEventListener('input', function () { mq = q.value; menuBody(); });
+    bar.appendChild(Z0Icon('list')); bar.appendChild(q); box.appendChild(bar);
+    var chips = el('div', 'pos-cats mchips'); box.appendChild(chips);
+    var body = el('div', 'mbody'); box.appendChild(body);
+    menuBody();
+  }
+  function menuBody() {
+    var m = Z.menu(), box = $('#v-menu'), body = box.querySelector('.mbody'), chips = box.querySelector('.mchips'); if (!body) return;
+    var nq = norm(mq), match = function (p) { return !nq || norm(p.title + ' ' + p.sub).indexOf(nq) > -1; };
+    var live = m.products.filter(function (p) { return !p.hidden; });
+    chips.textContent = '';
+    [{ id: 'todo', name: 'Todo', icon: 'list' }].concat(m.categories).forEach(function (c) {
+      var n = live.filter(function (p) { return (c.id === 'todo' || p.category === c.id) && match(p); }).length;
+      var b = el('button', 'chip'); b.type = 'button'; b.setAttribute('data-press', ''); b.setAttribute('aria-pressed', c.id === mc ? 'true' : 'false');
+      b.appendChild(Z0Icon(c.icon)); b.appendChild(document.createTextNode(c.name)); b.appendChild(el('small', 'cnt', String(n)));
+      b.addEventListener('click', function () { mc = c.id; menuBody(); }); chips.appendChild(b);
+    });
+    body.textContent = ''; var any = false;
+    m.categories.filter(function (c) { return mc === 'todo' || c.id === mc; }).forEach(function (c) {
+      var ps = live.filter(function (p) { return p.category === c.id && match(p); });
+      if (!ps.length && nq) return;
+      any = any || ps.length > 0;
+      var sec = el('section', 'msec'), h = el('div', 'msech'), t = el('h2'); t.appendChild(Z0Icon(c.icon)); t.appendChild(document.createTextNode(c.name)); t.appendChild(el('small', '', ps.length + (ps.length === 1 ? ' producto' : ' productos')));
+      h.appendChild(t); h.appendChild(btn('Agregar aquí', 'mini', function () { prodDialog(null, c.id); }, 'plus')); sec.appendChild(h);
+      var grid = el('div', 'mtiles'); ps.forEach(function (p) { grid.appendChild(menuTile(p)); }); sec.appendChild(grid);
+      if (!ps.length) grid.appendChild(el('p', 'muted', 'Sin productos en esta categoría.'));
+      body.appendChild(sec);
+    });
+    if (nq && !any) body.appendChild(el('p', 'muted mempty', 'Ningún producto coincide con "' + mq + '".'));
+    var gone = m.products.filter(function (p) { return p.hidden && (mc === 'todo' || p.category === mc) && match(p); });
     if (gone.length) {
-      var g2 = el('div', 'mgone'); g2.appendChild(el('h3', '', 'Quitados del menú (' + gone.length + ')'));
-      var gg = el('div', 'mgrid'); gone.forEach(function (p) { gg.appendChild(menuCard(m, p, catName, catKind)); }); g2.appendChild(gg); box.appendChild(g2);
+      var g2 = el('section', 'msec mgone'), h2 = el('div', 'msech'); h2.appendChild(el('h2', '', 'Quitados del menú')); g2.appendChild(h2);
+      var gg = el('div', 'mtiles'); gone.forEach(function (p) { gg.appendChild(menuTile(p)); }); g2.appendChild(gg); body.appendChild(g2);
     }
   }
-
-  function menuCard(m, p, catName, catKind) {
-    var c = el('article', 'mcard'), h = el('div', 'mh'); h.appendChild(el('b', '', p.title));
+  function menuTile(p) {
+    var t = el('article', 'mt' + (p.available === false ? ' off' : '') + (p.hidden ? ' gone' : ''));
+    var main = el('button', 'mtm'); main.type = 'button'; main.setAttribute('data-press', '');
+    main.appendChild(el('b', '', p.title)); if (p.sub) main.appendChild(el('span', 'mts', p.sub));
+    var st = el('span', 'mtt');
+    if (p.hidden) st.appendChild(el('i', 'out', 'Quitado'));
+    else if (p.available === false) st.appendChild(el('i', 'out', 'Agotado'));
+    if (p.custom) st.appendChild(el('i', 'new', p.until ? 'Hasta ' + label(p.until) : 'Nuevo'));
+    else if (p.until) st.appendChild(el('i', 'new', 'Hasta ' + label(p.until)));
+    if (p.staffOnly) st.appendChild(el('i', '', 'Solo en caja'));
+    if (p.kinds && p.kinds.indexOf('tienda') > -1) st.appendChild(el('i', '', 'No se prepara'));
+    if (p.basePrice) st.appendChild(el('i', 'chg', 'Antes ' + p.basePrice));
+    if ((p.groups || []).length) st.appendChild(el('i', '', 'Con opciones'));
+    if (st.childNodes.length) main.appendChild(st);
+    main.addEventListener('click', function () { if (p.hidden) { if (confirm('¿Volver a poner "' + p.title + '" en el menú?')) menuCall({ hide: p.id, value: false }); } else prodDialog(p); });
+    t.appendChild(main);
     var pr = el('label', 'mprice'); pr.appendChild(el('span', '', 'Bs'));
     var inp = el('input'); inp.type = 'number'; inp.inputMode = 'decimal'; inp.min = '0'; inp.step = '0.5'; inp.value = String(p.price); inp.disabled = !!p.hidden; inp.setAttribute('aria-label', 'Precio de ' + p.title);
-    var save = function () {
-      var v = Math.round(Number(inp.value) * 100) / 100;
-      if (!(v > 0)) { inp.value = String(p.price); return; }
-      if (v === p.price) return;
-      menuCall(p.custom ? { update: p.id, patch: { price: v } } : { over: p.id, patch: { price: v } }).catch(function () { inp.value = String(p.price); });
-    };
+    var save = function () { var v = Math.round(Number(inp.value) * 100) / 100; if (!(v > 0)) { inp.value = String(p.price); return; } if (v === p.price) return; menuCall(p.custom ? { update: p.id, patch: { price: v } } : { over: p.id, patch: { price: v } }).catch(function () { inp.value = String(p.price); }); };
     inp.addEventListener('change', save); inp.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); inp.blur(); } });
-    pr.appendChild(inp); h.appendChild(pr); c.appendChild(h);
-    if (p.sub) c.appendChild(el('p', '', p.sub));
-    var ks = p.kinds || [catKind[p.category] || 'comida'], tg = el('div', 'tags');
-    tg.appendChild(el('span', 'tag', catName[p.category])); ks.forEach(function (k) { tg.appendChild(el('span', 'tag ' + (k === 'bebida' ? 'drink' : 'food'), k === 'bebida' ? 'Bebida' : 'Comida')); });
-    (p.groups || []).forEach(function (gid) { var g = m.optionGroups[gid]; tg.appendChild(el('span', 'tag', g.label + ': ' + g.options.map(function (o) { return o.name + (o.price ? ' +' + o.price : ''); }).join(' / '))); });
-    if (p.custom) tg.appendChild(el('span', 'tag new', p.until ? 'Temporal hasta ' + label(p.until) : 'Nuevo'));
-    if (p.basePrice) tg.appendChild(el('span', 'tag chg', 'Antes Bs ' + p.basePrice));
-    if (p.available === false && !p.hidden) { tg.appendChild(el('span', 'tag out', 'Agotado')); c.classList.add('is-off'); }
-    if (p.hidden) c.classList.add('is-off');
-    c.appendChild(tg);
-    var act = el('div', 'macts');
-    if (p.hidden) act.appendChild(btn('Volver al menú', 'mini', function () { menuCall({ hide: p.id, value: false }); }));
-    else {
-      act.appendChild(btn(p.available === false ? 'Volver a vender' : 'Marcar agotado', 'mini', function () { menuCall({ off: p.id, value: p.available !== false }); }));
-      act.appendChild(btn('Editar', 'mini', function () { prodDialog(p); }));
-      if (p.basePrice) act.appendChild(btn('Precio original', 'mini', function () { menuCall({ over: p.id, patch: { price: p.basePrice } }); }));
-      act.appendChild(btn('Quitar', 'mini', function () {
-        if (!confirm('¿Quitar "' + p.title + '" del menú? Se puede volver a poner desde "Quitados del menú".')) return;
-        menuCall(p.custom ? { remove: p.id } : { hide: p.id, value: true });
-      }));
-    }
-    c.appendChild(act); return c;
+    pr.appendChild(inp); t.appendChild(pr);
+    return t;
   }
 
   function menuCall(body) {
-    return api('menu', 'POST', body).then(function (d) { Z.setExtra(d.extra); renderMenu(); toast('Menú actualizado.'); return d; })
+    return api('menu', 'POST', body).then(function (d) { Z.setExtra(d.extra); menuBody(); toast('Menú actualizado.'); return d; })
       .catch(function (e) { if (e.message !== 'auth') toast('No se pudo guardar: ' + e.message); throw e; });
   }
-  function prodDialog(p) {
+  /* Editar o agregar un producto: todo en una sola ventana. */
+  var KIND_OPTS = [['comida', 'Cocina'], ['bebida', 'Barra'], ['comida,bebida', 'Cocina y barra'], ['tienda', 'No se prepara']];
+  function prodDialog(p, preCat) {
     var m = Z.menu(), dlg = $('#prodDlg');
     if (!dlg) {
-      dlg = el('dialog', 'dlg ldg'); dlg.id = 'prodDlg';
-      dlg.innerHTML = '<form id="prodForm" novalidate><div class="pos-h"><h2 id="prodT"></h2><button class="x" type="button" data-press data-close aria-label="Cerrar"></button></div>' +
-        '<label class="field"><span>Nombre</span><input id="prName" maxlength="60" required></label>' +
-        '<label class="field"><span>Detalle <i>(opcional)</i></span><input id="prSub" maxlength="90" placeholder="Ejemplo: con leche de almendra"></label>' +
-        '<div class="two"><label class="field"><span>Precio (Bs)</span><input id="prPrice" type="number" inputmode="decimal" min="0" step="0.5" required></label>' +
-        '<label class="field"><span>Categoría</span><select id="prCat"></select></label></div>' +
-        '<label class="field"><span>Disponible hasta <i>(opcional, para productos temporales)</i></span><input id="prUntil" type="date"></label>' +
-        '<p class="muted" id="prHint"></p><p class="formerr" id="prErr" hidden></p>' +
-        '<button class="btn btn--block" id="prSave" type="submit" data-press>Guardar</button></form>';
+      dlg = el('dialog', 'dlg ldg pdlg'); dlg.id = 'prodDlg';
+      dlg.innerHTML = '<form id="prodForm" novalidate><div class="pos-h"><h2 id="prodT"></h2><button class="x" type="button" data-press aria-label="Cerrar"></button></div>' +
+        '<div class="pgrid">' +
+        '<label class="field pwide"><span>Nombre</span><input id="prName" maxlength="60" required autocomplete="off"></label>' +
+        '<label class="field pwide"><span>Descripción <i>(opcional, se ve en el menú)</i></span><input id="prSub" maxlength="90" placeholder="Ejemplo: con leche de almendra" autocomplete="off"></label>' +
+        '<label class="field"><span>Precio (Bs)</span><input id="prPrice" type="number" inputmode="decimal" min="0" step="0.5" required></label>' +
+        '<label class="field"><span>Categoría</span><select id="prCat"></select></label>' +
+        '<div class="field pwide"><span>Se prepara en</span><div class="seg" id="prKind" role="radiogroup"></div></div>' +
+        '<label class="field"><span>Disponible hasta <i>(opcional)</i></span><input id="prUntil" type="date"></label>' +
+        '<div class="field pchecks"><label class="chk"><input type="checkbox" id="prOff"><span>Agotado por ahora</span></label>' +
+        '<label class="chk"><input type="checkbox" id="prStaff"><span>Solo en caja (no sale en el menú del celular)</span></label></div>' +
+        '</div><p class="muted" id="prHint"></p><p class="formerr" id="prErr" hidden></p>' +
+        '<button class="btn btn--block" id="prSave" type="submit" data-press>Guardar</button>' +
+        '<div class="practs" id="prActs"></div></form>';
       document.body.appendChild(dlg);
       dlg.querySelector('.x').appendChild(Z0Icon('x'));
       dlg.querySelector('.x').addEventListener('click', function () { dlg.close(); });
     }
-    var cat = $('#prCat'); cat.textContent = ''; m.categories.forEach(function (c) { var o = el('option', '', c.name + (c.kind === 'bebida' ? ' (barra)' : ' (cocina)')); o.value = c.id; cat.appendChild(o); });
-    $('#prodT').textContent = p ? 'Editar producto' : 'Agregar producto';
-    $('#prName').value = p ? p.title : ''; $('#prSub').value = p ? p.sub : ''; $('#prPrice').value = p ? p.price : ''; cat.value = p ? p.category : (mc !== 'todo' ? mc : m.categories[0].id); cat.disabled = !!p; $('#prUntil').value = p ? p.until || '' : ''; $('#prUntil').closest('label').hidden = !!(p && !p.custom);
-    $('#prHint').textContent = 'Va a cocina o a barra según la categoría. Los productos agregados aquí no tienen opciones. Las opciones de los productos del menú base no se editan desde aquí.'; $('#prErr').hidden = true;
+    var catKindOf = function (id) { var c = m.categories.filter(function (x) { return x.id === id; })[0]; return c ? c.kind || 'comida' : 'comida'; };
+    var cat = $('#prCat'); cat.textContent = ''; m.categories.forEach(function (c) { var o = el('option', '', c.name); o.value = c.id; cat.appendChild(o); });
+    cat.value = p ? p.category : (preCat || (mc !== 'todo' ? mc : m.categories[0].id));
+    var kind = p && p.kinds && p.kinds.length ? p.kinds.join(',') : catKindOf(cat.value), kindTouched = !!(p && p.kinds && p.kinds.length);
+    var seg = $('#prKind'), paintKind = function () { seg.textContent = ''; KIND_OPTS.forEach(function (k) { var b = el('button', '', k[1]); b.type = 'button'; b.setAttribute('role', 'radio'); b.setAttribute('aria-checked', k[0] === kind ? 'true' : 'false'); b.addEventListener('click', function () { kind = k[0]; kindTouched = true; paintKind(); }); seg.appendChild(b); }); };
+    cat.onchange = function () { if (!kindTouched) { kind = catKindOf(cat.value); paintKind(); } };
+    paintKind();
+    $('#prodT').textContent = p ? 'Editar ' + p.title : 'Agregar producto';
+    $('#prName').value = p ? p.title : ''; $('#prSub').value = p ? p.sub || '' : ''; $('#prPrice').value = p ? p.price : '';
+    $('#prUntil').value = p ? p.until || '' : ''; $('#prOff').checked = !!(p && p.available === false); $('#prStaff').checked = !!(p && p.staffOnly);
+    $('#prHint').textContent = p && p.groups && p.groups.length ? 'Este producto tiene opciones (tamaños o extras). Esas opciones y sus recargos no se cambian aquí.' : '';
+    $('#prErr').hidden = true;
+    var acts = $('#prActs'); acts.textContent = '';
+    if (p) {
+      acts.appendChild(btn('Duplicar', 'tool dark', function () { var q = Object.assign({}, p, { title: p.title + ' (copia)' }); delete q.id; dlg.close(); prodDialog(null, p.category); $('#prName').value = q.title; $('#prSub').value = q.sub || ''; $('#prPrice').value = q.price; $('#prName').select(); }, 'plus'));
+      if (p.basePrice) acts.appendChild(btn('Precio original (' + p.basePrice + ' Bs)', 'tool dark', function () { menuCall({ over: p.id, patch: { price: p.basePrice } }).then(function () { dlg.close(); }); }));
+      if (!p.custom && p.edited) acts.appendChild(btn('Deshacer todos los cambios', 'tool dark', function () { if (confirm('¿Volver "' + p.title + '" a como estaba en el menú original?')) menuCall({ over: p.id, patch: { reset: true } }).then(function () { dlg.close(); }); }));
+      acts.appendChild(btn('Quitar del menú', 'tool dark danger', function () { if (!confirm('¿Quitar "' + p.title + '" del menú? Se puede volver a poner desde "Quitados del menú".')) return; menuCall(p.custom ? { remove: p.id } : { hide: p.id, value: true }).then(function () { dlg.close(); }); }));
+    }
     $('#prodForm').onsubmit = function (e) {
       e.preventDefault(); var er = $('#prErr'); er.hidden = true;
-      var f = { title: $('#prName').value, sub: $('#prSub').value, price: Number($('#prPrice').value), until: $('#prUntil').value };
-      if (f.title.trim().length < 2) { er.textContent = 'Escribe el nombre del producto.'; er.hidden = false; return; }
+      var f = { title: $('#prName').value.trim(), sub: $('#prSub').value.trim(), price: Number($('#prPrice').value), until: $('#prUntil').value, category: cat.value, kinds: kind.split(','), staffOnly: $('#prStaff').checked };
+      if (f.title.length < 2) { er.textContent = 'Escribe el nombre del producto.'; er.hidden = false; return; }
       if (!(f.price > 0)) { er.textContent = 'Escribe el precio.'; er.hidden = false; return; }
+      var off = $('#prOff').checked, wasOff = !!(p && p.available === false);
       $('#prSave').classList.add('is-loading');
-      menuCall(p ? (p.custom ? { update: p.id, patch: f } : { over: p.id, patch: { title: f.title, sub: f.sub, price: f.price } }) : { add: Object.assign({ category: cat.value }, f) })
-        .then(function () { dlg.close(); }).catch(function (x) { er.textContent = x.message; er.hidden = false; })
+      var call = p ? (p.custom ? { update: p.id, patch: f } : { over: p.id, patch: f }) : { add: f };
+      api('menu', 'POST', call).then(function (d) {
+        var id = p ? p.id : (d.extra.custom[d.extra.custom.length - 1] || {}).id;
+        return (off !== wasOff && id) ? api('menu', 'POST', { off: id, value: off }) : d;
+      }).then(function (d) { Z.setExtra(d.extra); menuBody(); toast(p ? 'Producto guardado.' : 'Producto agregado.'); dlg.close(); })
+        .catch(function (x) { if (x.message !== 'auth') { er.textContent = x.message; er.hidden = false; } })
         .then(function () { $('#prSave').classList.remove('is-loading'); });
     };
-    dlg.showModal();
+    dlg.showModal(); $('#prName').focus();
   }
 
   window.Z0Books = { show: function (t) { if (t === 'ventas') renderVentas(); else if (t === 'libro') loadLibro(); else if (t === 'menu') renderMenu(); } };
