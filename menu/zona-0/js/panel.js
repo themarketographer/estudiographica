@@ -439,10 +439,41 @@
   }
   /* Dividir cuenta */
   var SP_M = [['efectivo', 'Efectivo'], ['qr', 'QR'], ['tarjeta', 'Tarjeta']];
+  var spMode = 'monto', spUnits = [];
+  function spCollect() {
+    var us = [];
+    (pc.mode === 'mesa' ? openOrders(pc.mesa) : []).forEach(function (o) { (o.lines || []).forEach(function (l) { us.push({ n: l.name, c: l.qty, t: l.total }); }); });
+    pc.lines.forEach(function (x) { us.push({ n: x.line.name, c: x.line.qty, t: x.line.total }); });
+    spUnits = [];
+    us.forEach(function (l) {
+      var each = Math.floor(l.t / l.c * 100), rest = Math.round(l.t * 100) - each * l.c;
+      for (var i = 0; i < l.c; i++) spUnits.push({ name: l.n, cents: each + (i === l.c - 1 ? rest : 0), who: 0 });
+    });
+  }
+  function spItemsBuild() {
+    var n = Number(spN.value), box = $('#spItems'); box.textContent = '';
+    spUnits.forEach(function (u, i) {
+      var r = el('div', 'sp-item'), sel = el('select');
+      for (var k = 0; k < n; k++) { var o = el('option', '', 'Persona ' + (k + 1)); o.value = k; sel.appendChild(o); }
+      if (u.who >= n) u.who = 0; sel.value = u.who; sel.setAttribute('aria-label', 'Quién paga ' + u.name);
+      sel.addEventListener('change', function () { u.who = Number(sel.value); spFromItems(); });
+      r.appendChild(el('span', '', u.name)); r.appendChild(el('b', 'num', money(u.cents / 100))); r.appendChild(sel); box.appendChild(r);
+    });
+  }
+  function spFromItems() {
+    var tot = {}; spUnits.forEach(function (u) { tot[u.who] = (tot[u.who] || 0) + u.cents; });
+    spRows().forEach(function (r, i) { r.querySelector('input').value = tot[i] ? String(tot[i] / 100) : '0'; });
+    spCheck();
+  }
+  function spSetMode(m) {
+    spMode = m; segSet('#spMode', 'sm', m); $('#spItems').hidden = m !== 'prod'; $('#spEq').hidden = m === 'prod';
+    spBuild(Number(spN.value), m === 'monto');
+    if (m === 'prod') { spItemsBuild(); spFromItems(); }
+  }
   function spRows() { return $$('#spRows .sp-row'); }
-  function spRead() { return spRows().map(function (r) { return { method: r.querySelector('select').value, amount: Math.round((Number(r.querySelector('input').value) || 0) * 100) / 100 }; }); }
+  function spRead() { return spRows().map(function (r) { return { method: r.querySelector('select').value, amount: Math.round((Number(r.querySelector('input').value) || 0) * 100) / 100 }; }).filter(function (p) { return spMode !== 'prod' || p.amount > 0; }); }
   function spCheck() {
-    var got = Math.round(spRead().reduce(function (s, p) { return s + p.amount; }, 0) * 100), want = Math.round(pc.total * 100), d = want - got, ok = d === 0 && spRead().every(function (p) { return p.amount > 0; });
+    var got = Math.round(spRead().reduce(function (s, p) { return s + p.amount; }, 0) * 100), want = Math.round(pc.total * 100), d = want - got, ok = d === 0 && spRead().length > 0 && spRead().every(function (p) { return p.amount > 0; });
     $('#spDiff').textContent = d === 0 ? (ok ? 'La suma cuadra.' : 'Cada parte necesita un monto.') : d > 0 ? 'Faltan ' + money(d / 100) + ' por repartir.' : 'Se pasan ' + money(-d / 100) + ' del total.';
     $('#spDiff').className = 'sp-diff' + (ok ? ' ok' : ''); $('#spGo').disabled = !ok;
   }
@@ -463,9 +494,10 @@
   var spN = $('#spN'); for (var q = 2; q <= 8; q++) { var oq = el('option', '', String(q)); oq.value = q; spN.appendChild(oq); }
   $('#posSplit').addEventListener('click', function () {
     $('#spTot').textContent = 'Total de la mesa ' + pc.mesa + ': ' + money(pc.total) + '. Reparte entre personas, cada una con su medio de pago.';
-    spN.value = '2'; spBuild(2, true); $('#split').showModal();
+    spN.value = '2'; spCollect(); spSetMode('monto'); $('#split').showModal();
   });
-  spN.addEventListener('change', function () { spBuild(Number(spN.value), true); });
+  spN.addEventListener('change', function () { spSetMode(spMode); });
+  $('#spMode').addEventListener('click', function (e) { var b = e.target.closest('button'); if (b) spSetMode(b.dataset.sm); });
   $('#spEq').addEventListener('click', function () { spBuild(Number(spN.value), true); });
   $('#spForm').addEventListener('submit', function (e) { e.preventDefault(); if ($('#spGo').disabled) return; pc.parts = spRead(); $('#split').close(); doSend(true); });
   function printAccount(mesa, os) {

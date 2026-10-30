@@ -323,3 +323,8 @@ body{background:var(--paper);min-height:100dvh}
 .sp-diff{font-size:14px;font-weight:600;color:var(--danger,#b3261e)}
 .sp-diff.ok{color:var(--ok,#2e7d32)}
 #split .two{align-items:end}
+
+.sp-items{display:grid;gap:6px;max-height:34vh;overflow:auto;padding-right:4px}
+.sp-item{display:grid;grid-template-columns:1fr auto 130px;gap:8px;align-items:center}
+.sp-item select{min-height:42px;padding:0 10px;border-radius:var(--r-field);border:1.5px solid var(--hair);background:var(--card)}
+#split{max-height:92vh;overflow:auto}

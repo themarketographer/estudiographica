@@ -133,8 +133,13 @@
   <form id="spForm" novalidate>
     <div class="pos-h"><h2 id="spT">Dividir cuenta</h2><button class="x" type="button" data-press data-close aria-label="Cerrar"><svg class="ic"><use href="#i-x"/></svg></button></div>
     <p class="muted" id="spTot"></p>
+    <div class="seg sm" id="spMode" role="group" aria-label="Forma de dividir"><i class="thumb"></i>
+      <button type="button" data-sm="monto" data-press aria-pressed="true">Por montos</button>
+      <button type="button" data-sm="prod" data-press aria-pressed="false">Por productos</button>
+    </div>
     <div class="two"><label class="field"><span>Entre cuántas personas</span><select id="spN"></select></label>
       <button class="btn" id="spEq" type="button" data-press>Partes iguales</button></div>
+    <div id="spItems" class="sp-items" hidden></div>
     <div id="spRows" class="sp-rows"></div>
     <p class="sp-diff" id="spDiff" role="status"></p>
     <button class="btn btn--block" id="spGo" type="submit" data-press>Cobrar dividido</button>
