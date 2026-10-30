@@ -225,6 +225,32 @@
     if (cu.notes) { t.appendChild(document.createElement('hr')); t.appendChild(el('p', '', 'Notas: ' + cu.notes)); }
     t.appendChild(document.createElement('hr')); t.appendChild(el('p', 'c', 'Gracias por rodar con nosotros'));
   }
+  /* Ticket en texto plano (para pegar en el Bloc de notas e imprimir como cualquier documento) */
+  function ticketText(o, W) {
+    var cu = o.customer || {}, n = split(o.orderId), out = [], isMesa = o.mode === 'mesa' || !!cu.mesa;
+    var rule = new Array(W + 1).join('-'), ctr = function (t) { t = String(t); return new Array(Math.max(0, Math.floor((W - t.length) / 2)) + 1).join(' ') + t; };
+    var two = function (a, b) { a = String(a); b = String(b); var g = W - a.length - b.length; if (g < 1) { a = a.slice(0, Math.max(1, W - b.length - 1)); g = W - a.length - b.length; } return a + new Array(g + 1).join(' ') + b; };
+    var wrap = function (t, w) { var r = [], cur = ''; String(t).split(/\s+/).forEach(function (x) { if (!cur) cur = x; else if ((cur + ' ' + x).length <= w) cur += ' ' + x; else { r.push(cur); cur = x; } }); if (cur) r.push(cur); return r; };
+    out.push(ctr('ZONA 0'), ctr('Cafe Boutique'), rule);
+    if (o.orderId) { out.push(ctr('#' + n[0]), ctr((n[1] ? n[1] + ' - ' : '') + hm(o.createdAt))); } else { out.push(ctr('MESA ' + (cu.mesa || '')), ctr('Cuenta - ' + hm(o.createdAt))); }
+    out.push(rule, isMesa ? 'MESA ' + (cu.mesa || '') : (MODE[o.mode] || '').toUpperCase());
+    if (o.mozo) out.push('Atendio: ' + o.mozo);
+    if (cu.phone) out.push(P.fmtPhone(cu.phone));
+    if (o.mode === 'delivery') wrap((cu.zoneName ? cu.zoneName + '. ' : '') + (cu.address || ''), W).forEach(function (x) { out.push(x); });
+    out.push(rule);
+    (o.lines || []).forEach(function (l) {
+      var r = String(l.total), ls = wrap(l.qty + ' x ' + l.name, W - r.length - 1);
+      ls.forEach(function (t, i) { out.push(i ? t : two(t, r)); });
+      (l.choices || []).forEach(function (ch) { out.push('  ' + ch.label + ': ' + ch.options.map(function (x) { return x.name; }).join(', ')); });
+      if (l.note) out.push('  Nota: ' + l.note);
+    });
+    if (o.deliveryFee) out.push(two('Envio', o.deliveryFee));
+    if (o.discount) out.push(two('Descuento', '-' + o.discount));
+    out.push(rule, two('TOTAL', money(o.total)), ctr(payText(o)));
+    if (cu.notes) out.push(rule, 'Notas: ' + cu.notes);
+    out.push(rule, ctr('Gracias por rodar con nosotros'));
+    return out.join('\r\n').normalize('NFD').replace(/[\u0300-\u036f]/g, '') + '\r\n';
+  }
   /* Ticket para papel de 80 x 210 mm con 4 mm de margen. Se ve antes de imprimir y se puede achicar o agrandar. */
   var PAPER_H = 210, MARGIN = 4, PX_MM = 96 / 25.4;
   var prt = { o: null, auto: true, scale: 1, logo: false, compat: true };
@@ -263,6 +289,11 @@
     var st = document.getElementById('pageSize'); if (!st) { st = document.createElement('style'); st.id = 'pageSize'; document.head.appendChild(st); }
     st.textContent = prt.compat ? '@media print{@page{margin:0}#ticket{margin:0 auto!important;padding:' + MARGIN + 'mm 0}}' : '@media print{@page{size:72mm ' + H + 'mm;margin:0}#ticket{margin:0 auto!important;padding:' + MARGIN + 'mm 0}}';
     window.print();
+  });
+  $('#prtTxt').addEventListener('click', function () {
+    var t = ticketText(prt.o, 42), msg = $('#prtTxtMsg');
+    var done = function () { msg.textContent = 'Copiado. Abre el Bloc de notas, pega con Ctrl+V e imprime con Ctrl+P.'; };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(done, function () { msg.textContent = 'No se pudo copiar.'; }); else msg.textContent = 'Este navegador no permite copiar.';
   });
   $('#reprint').addEventListener('click', function () {
     var o = lastTicket || histRows().filter(function (x) { return x.status !== 'cancelado'; })[0];
