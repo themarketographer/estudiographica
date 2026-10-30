@@ -151,7 +151,7 @@
   }
   function libroIngresos(box, F) {
     var rows = [];
-    F.sales.forEach(function (x) { rows.push({ at: x.at, cells: [label(x.day) + ' ' + hmOf(x.at), 'Venta ' + x.o.orderId + ' · ' + who(x.o), 'Venta', METHOD[x.o.payment.method] || '', '—', money(x.o.total)] }); });
+    F.sales.forEach(function (x) { rows.push({ at: x.at, cells: [label(x.day) + ' ' + hmOf(x.at), 'Venta ' + x.o.orderId + ' · ' + who(x.o), 'Venta', METHOD[x.o.payment.method] || '', 'Automático', money(x.o.total)] }); });
     F.inc.forEach(function (e) { rows.push({ at: e.createdAt, cells: [label(e.day) + ' ' + hmOf(e.createdAt), e.concept, e.category, METHOD[e.method] || '', e.responsible, money(e.amount)] }); });
     rows.sort(function (a, b) { return String(b.at).localeCompare(String(a.at)); });
     box.appendChild(table([['Fecha y hora'], ['Concepto', 'wide'], ['Categoría'], ['Medio'], ['Responsable'], ['Monto', 'r']], rows, ['', 'Total ingresos', '', '', '', money(F.vSales + F.vInc)]));
