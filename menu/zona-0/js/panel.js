@@ -251,6 +251,24 @@
     out.push(rule, ctr('Gracias por rodar con nosotros'));
     return out.join('\r\n').normalize('NFD').replace(/[\u0300-\u036f]/g, '') + '\r\n';
   }
+  /* PDF del ticket (80 x 210 mm, letra monoespaciada) para imprimirlo desde Edge, Adobe o cualquier visor de PDF. Sin librerías. */
+  function ticketPdf(o) {
+    var W = 40, lines = ticketText(o, W).replace(/\r/g, '').replace(/\n+$/, '').split('\n');
+    var PW = 226.77, PH = 595.28, M = 11.34, fs = 8.5, lead = 11.5;
+    var maxLines = Math.floor((PH - M * 2) / lead); if (lines.length > maxLines) { lead = (PH - M * 2) / lines.length; fs = Math.max(5, lead - 3); }
+    var esc = function (t) { return t.replace(/[^\x20-\x7e]/g, '?').replace(/([\\()])/g, '\\$1'); };
+    var cw = fs * 0.6, left = Math.max(M, (PW - W * cw) / 2), y = PH - M - fs, c = 'BT /F1 ' + fs.toFixed(2) + ' Tf ' + lead.toFixed(2) + ' TL ' + left.toFixed(2) + ' ' + y.toFixed(2) + ' Td\n';
+    lines.forEach(function (l, i) { c += (i ? 'T* ' : '') + '(' + esc(l) + ') Tj\n'; }); c += 'ET';
+    var objs = ['<< /Type /Catalog /Pages 2 0 R >>', '<< /Type /Pages /Kids [3 0 R] /Count 1 >>',
+      '<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ' + PW + ' ' + PH + '] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>',
+      '<< /Length ' + c.length + ' >>\nstream\n' + c + '\nendstream', '<< /Type /Font /Subtype /Type1 /BaseFont /Courier-Bold /Encoding /WinAnsiEncoding >>'];
+    var out = '%PDF-1.4\n', xr = [];
+    objs.forEach(function (b, i) { xr.push(out.length); out += (i + 1) + ' 0 obj\n' + b + '\nendobj\n'; });
+    var x0 = out.length; out += 'xref\n0 ' + (objs.length + 1) + '\n0000000000 65535 f \n';
+    xr.forEach(function (n) { out += ('0000000000' + n).slice(-10) + ' 00000 n \n'; });
+    out += 'trailer\n<< /Size ' + (objs.length + 1) + ' /Root 1 0 R >>\nstartxref\n' + x0 + '\n%%EOF';
+    return new Blob([out], { type: 'application/pdf' });
+  }
   /* Ticket para papel de 80 x 210 mm con 4 mm de margen. Se ve antes de imprimir y se puede achicar o agrandar. */
   var PAPER_H = 210, MARGIN = 4, PX_MM = 96 / 25.4;
   var prt = { o: null, auto: true, scale: 1, logo: false, compat: true };
@@ -294,6 +312,12 @@
     var t = ticketText(prt.o, 40), msg = $('#prtTxtMsg');
     var done = function () { msg.textContent = 'Copiado. En el Bloc de notas: Ctrl+V para pegar, Ctrl+P para imprimir, papel 80 x 210.'; };
     if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(done, function () { msg.textContent = 'No se pudo copiar.'; }); else msg.textContent = 'Este navegador no permite copiar.';
+  });
+  $('#prtPdf').addEventListener('click', function () {
+    var a = document.createElement('a'), u = URL.createObjectURL(ticketPdf(prt.o));
+    a.href = u; a.download = 'ticket-' + (prt.o.orderId || ('mesa-' + ((prt.o.customer || {}).mesa || ''))) + '.pdf'; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function () { URL.revokeObjectURL(u); }, 4000);
+    $('#prtTxtMsg').textContent = 'PDF descargado. Ábrelo con Edge o Adobe Reader e imprime con Ctrl+P, papel 80 x 210.';
   });
   $('#reprint').addEventListener('click', function () {
     var o = lastTicket || histRows().filter(function (x) { return x.status !== 'cancelado'; })[0];
