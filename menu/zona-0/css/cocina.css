@@ -55,3 +55,13 @@ body{background:#121212;color:#f4f1e8;min-height:100dvh}
 .ktoast.on{opacity:1;transform:translate(-50%,0)}
 @media (max-width:900px){.kmain{grid-template-columns:1fr}}
 @media (prefers-reduced-motion:reduce){.kcard.new,.klive::before{animation:none}}
+
+.kline.sel{outline:3px solid #f5c542;background:#3a3320}
+.kline.sel .kbox{border-color:#f5c542}
+.kall{display:block;width:calc(100% - 20px);margin:0 10px 12px;min-height:52px;border-radius:14px;background:#4ade80;color:#0d1f14;font-weight:700;font-size:17px}
+.kall:active{transform:scale(.985)}
+.selbar{position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;gap:10px;padding:12px 16px calc(12px + env(safe-area-inset-bottom));background:#161616;border-top:1px solid #333}
+.selbar[hidden]{display:none}
+.kgo{flex:1;min-height:56px;border-radius:16px;background:#f5c542;color:#1d1700;font-weight:800;font-size:18px}
+.kgo:disabled{opacity:.45}
+body:has(.selbar:not([hidden])) .kmain{padding-bottom:90px}

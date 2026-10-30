@@ -6,7 +6,7 @@
   var $$ = function (s, r) { return [].slice.call((r || document).querySelectorAll(s)); };
   function el(tag, cls, text) { var n = document.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; }
   function ls(k, v) { try { if (v === undefined) return localStorage.getItem(k) || ''; if (v === null || v === '') localStorage.removeItem(k); else localStorage.setItem(k, v); } catch (e) {} return ''; }
-  var KEY = 'z0.kt', token = '', orders = {}, lastNow = 0, idle = 0, n = 0, timer = 0, tick = 0, first = true, soundOn = false, audio = null, toastT = 0, queue = {};
+  var KEY = 'z0.kt', token = '', orders = {}, lastNow = 0, idle = 0, n = 0, timer = 0, tick = 0, first = true, soundOn = false, audio = null, toastT = 0, queue = {}, selMode = false, sel = {};
   var CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 9.5 17 19 7.5"/></svg>';
 
   function toast(m) { var t = $('#toast'); t.textContent = m; t.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(function () { t.classList.remove('on'); }, 3000); }
@@ -48,9 +48,18 @@
       var box = el('span', 'kbox'); box.innerHTML = CHECK; b.appendChild(box);
       var t = el('span', 'kt'), nm = el('b'); nm.appendChild(el('i', 'num', x.l.qty + '×')); nm.appendChild(document.createTextNode(x.l.name)); t.appendChild(nm);
       var det = lineText(x.l); if (det) t.appendChild(el('small', '', det)); if (x.l.inc) t.appendChild(el('small', '', 'Incluye: ' + x.l.inc)); if (x.l.note) t.appendChild(el('small', 'note', 'Nota: ' + x.l.note));
-      b.appendChild(t); b.addEventListener('click', function () { toggle(o, x.i, st, !on); }); li.appendChild(b); ul.appendChild(li);
+      var sk = o.key + '|' + x.i + '|' + st;
+      if (selMode && sel[sk]) { b.classList.add('sel'); b.setAttribute('aria-pressed', 'true'); }
+      b.appendChild(t);
+      b.addEventListener('click', function () {
+        if (selMode && !on) { if (sel[sk]) delete sel[sk]; else sel[sk] = { o: o, i: x.i, st: st }; render(); return; }
+        toggle(o, x.i, st, !on);
+      });
+      li.appendChild(b); ul.appendChild(li);
     });
     c.appendChild(ul);
+    var pend = lines.filter(function (x) { return x.l.done.indexOf(st) === -1; });
+    if (!selMode && pend.length > 1) { var all = el('button', 'kall', 'Todo listo (' + pend.length + ')'); all.type = 'button'; all.addEventListener('click', function () { toggleMany(pend.map(function (x) { return { o: o, i: x.i, st: st, done: true }; })); }); c.appendChild(all); }
     if (cu.notes) c.appendChild(el('p', 'knote', 'Notas: ' + cu.notes));
     return { node: c, done: lines.every(function (x) { return x.l.done.indexOf(st) > -1; }) };
   }
@@ -72,16 +81,33 @@
       else c.animate([{ opacity: 0, transform: 'translateY(18px) scale(.97)' }, { opacity: 1, transform: 'none' }], { duration: 600, easing: 'cubic-bezier(.16,1,.3,1)' });
     });
     Object.keys(orders).forEach(function (k) { delete orders[k]._new; });
+    selBar();
   }
 
   /* Marcar un plato: se ve al instante; las marcas de un mismo pedido viajan una tras otra para no pisarse. */
-  function toggle(o, idx, st, done) {
-    var l = o.lines[idx], prev = l.done.slice();
-    l.done = done ? l.done.concat(st) : l.done.filter(function (x) { return x !== st; }); render();
-    queue[o.key] = (queue[o.key] || Promise.resolve()).then(function () { return api('POST', { key: o.key, line: idx, station: st, done: done }); })
-      .then(function (d) { if (d.order) orders[o.key] = d.order; else delete orders[o.key]; render(); })
-      .catch(function (e) { if (e.auth) { leave(e.message); return; } l.done = prev; render(); toast('No se pudo guardar. Revisa la conexión.'); });
+  function toggle(o, idx, st, done) { toggleMany([{ o: o, i: idx, st: st, done: done }]); }
+  function toggleMany(items) {
+    var prevs = items.map(function (it) { var l = it.o.lines[it.i], p = l.done.slice(); l.done = it.done ? l.done.concat(it.st) : l.done.filter(function (x) { return x !== it.st; }); return p; });
+    render();
+    items.forEach(function (it, n) {
+      var o = it.o, idx = it.i, st = it.st, done = it.done, l = o.lines[idx], prev = prevs[n];
+      queue[o.key] = (queue[o.key] || Promise.resolve()).then(function () { return api('POST', { key: o.key, line: idx, station: st, done: done }); })
+        .then(function (d) { if (d.order) orders[o.key] = d.order; else delete orders[o.key]; render(); })
+        .catch(function (e) { if (e.auth) { leave(e.message); return; } l.done = prev; render(); toast('No se pudo guardar. Revisa la conexión.'); });
+    });
   }
+  function selBar() {
+    var n = Object.keys(sel).length, bar = $('#selbar'); bar.hidden = !selMode;
+    $('#selGo').textContent = n ? 'Marcar ' + n + (n === 1 ? ' listo' : ' listos') : 'Toca los productos'; $('#selGo').disabled = !n;
+    $('#selBtn').setAttribute('aria-pressed', selMode ? 'true' : 'false'); $('#selBtn').textContent = selMode ? 'Salir de selección' : 'Seleccionar varios';
+  }
+  function selOff() { selMode = false; sel = {}; render(); }
+  $('#selBtn').addEventListener('click', function () { if (selMode) selOff(); else { selMode = true; sel = {}; render(); } });
+  $('#selCancel').addEventListener('click', selOff);
+  $('#selGo').addEventListener('click', function () {
+    var items = Object.keys(sel).map(function (k) { var v = sel[k]; return { o: orders[v.o.key] || v.o, i: v.i, st: v.st, done: true }; });
+    selMode = false; sel = {}; toggleMany(items);
+  });
 
   function enter() {
     $('#login').hidden = true; $('#app').hidden = false; $('#tools').hidden = false; n = 0; clearInterval(timer); clearInterval(tick);

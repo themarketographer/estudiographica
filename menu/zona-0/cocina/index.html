@@ -17,6 +17,7 @@
   <a class="brandmark" href="./" aria-label="Cocina de Zona 0"><img class="bm-bean" src="../img/bean.svg" alt="" width="17" height="28"><span class="bm-name">Zona 0</span><em>Cocina</em></a>
   <span class="klive" id="live" hidden>En vivo</span>
   <div class="ktools" id="tools" hidden>
+    <button class="ktool" id="selBtn" type="button" aria-pressed="false">Seleccionar varios</button>
     <button class="ktool" id="sound" type="button" aria-pressed="false">Sonido</button>
     <button class="ktool" id="logout" type="button">Salir</button>
   </div>
@@ -34,6 +35,7 @@
   <section class="kcol" data-st="comida" aria-label="Comidas"><h2><span>Comidas</span><b class="num" data-n>0</b></h2><div class="kstack" data-active></div><details class="kdone"><summary>Listas <b class="num" data-dn>0</b></summary><div class="kstack" data-done></div></details></section>
   <section class="kcol" data-st="bebida" aria-label="Bebidas"><h2><span>Bebidas</span><b class="num" data-n>0</b></h2><div class="kstack" data-active></div><details class="kdone"><summary>Listas <b class="num" data-dn>0</b></summary><div class="kstack" data-done></div></details></section>
 </main>
+<div class="selbar" id="selbar" hidden><button class="ktool" id="selCancel" type="button">Cancelar</button><button class="kgo" id="selGo" type="button" disabled>Toca los productos</button></div>
 <div class="ktoast" id="toast" role="status" aria-live="polite"></div>
 <script src="../js/cocina.js"></script>
 </body>
