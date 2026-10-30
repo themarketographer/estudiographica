@@ -269,6 +269,22 @@
     out += 'trailer\n<< /Size ' + (objs.length + 1) + ' /Root 1 0 R >>\nstartxref\n' + x0 + '\n%%EOF';
     return new Blob([out], { type: 'application/pdf' });
   }
+  /* Imagen del ticket (576 px = 72 mm a 203 ppp, blanco y negro puro) para imprimirla desde Paint, Fotos o cualquier visor. */
+  function ticketPng(o, done) {
+    var W = 40, lines = ticketText(o, W).replace(/\r/g, '').replace(/\n+$/, '').split('\n'), PX = 576, PAD = 24, FS = 22, LH = 30;
+    var big = { 0: 36, 3: 40 }, h = PAD * 2, i;
+    for (i = 0; i < lines.length; i++) h += big[i] ? big[i] + 14 : LH;
+    var cv = document.createElement('canvas'); cv.width = PX; cv.height = h; var g = cv.getContext('2d');
+    g.fillStyle = '#fff'; g.fillRect(0, 0, PX, h); g.fillStyle = '#000'; g.textBaseline = 'top';
+    var y = PAD, mono = '"Courier New", Consolas, monospace';
+    lines.forEach(function (l, k) {
+      if (big[k]) { g.font = 'bold ' + big[k] + 'px ' + mono; g.textAlign = 'center'; g.fillText(l.trim(), PX / 2, y); y += big[k] + 14; }
+      else { g.font = 'bold ' + FS + 'px ' + mono; g.textAlign = 'left'; g.fillText(l, PAD, y); y += LH; }
+    });
+    var d = g.getImageData(0, 0, PX, h), px = d.data;
+    for (i = 0; i < px.length; i += 4) { var v = px[i] < 150 ? 0 : 255; px[i] = px[i + 1] = px[i + 2] = v; px[i + 3] = 255; }
+    g.putImageData(d, 0, 0); cv.toBlob(done, 'image/png');
+  }
   /* Ticket para papel de 80 x 210 mm con 4 mm de margen. Se ve antes de imprimir y se puede achicar o agrandar. */
   var PAPER_H = 210, MARGIN = 4, PX_MM = 96 / 25.4;
   var prt = { o: null, auto: true, scale: 1, logo: false, compat: true };
@@ -318,6 +334,15 @@
     a.href = u; a.download = 'ticket-' + (prt.o.orderId || ('mesa-' + ((prt.o.customer || {}).mesa || ''))) + '.pdf'; document.body.appendChild(a); a.click(); a.remove();
     setTimeout(function () { URL.revokeObjectURL(u); }, 4000);
     $('#prtTxtMsg').textContent = 'PDF descargado. Ábrelo con Edge o Adobe Reader e imprime con Ctrl+P, papel 80 x 210.';
+  });
+  $('#prtImg').addEventListener('click', function () {
+    var o = prt.o;
+    ticketPng(o, function (blob) {
+      var a = document.createElement('a'), u = URL.createObjectURL(blob);
+      a.href = u; a.download = 'ticket-' + (o.orderId || ('mesa-' + ((o.customer || {}).mesa || ''))) + '.png'; document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function () { URL.revokeObjectURL(u); }, 4000);
+      $('#prtTxtMsg').textContent = 'Imagen descargada. Ábrela con Paint, imprime con Ctrl+P y elige papel 80 x 210.';
+    });
   });
   $('#reprint').addEventListener('click', function () {
     var o = lastTicket || histRows().filter(function (x) { return x.status !== 'cancelado'; })[0];
