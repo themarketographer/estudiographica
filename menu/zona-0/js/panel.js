@@ -269,20 +269,55 @@
     out += 'trailer\n<< /Size ' + (objs.length + 1) + ' /Root 1 0 R >>\nstartxref\n' + x0 + '\n%%EOF';
     return new Blob([out], { type: 'application/pdf' });
   }
-  /* Imagen del ticket (576 px = 72 mm a 203 ppp, blanco y negro puro) para imprimirla desde Paint, Fotos o cualquier visor. */
+  /* Imagen del ticket: 576 px de ancho (72 mm a 203 ppp), blanco y negro puro, letra grande. Se imprime desde Paint. */
+  var Z0P = P;
   function ticketPng(o) {
-    var W = 40, lines = ticketText(o, W).replace(/\r/g, '').replace(/\n+$/, '').split('\n'), PX = 576, PAD = 24, FS = 22, LH = 30;
-    var big = { 0: 36, 3: 40 }, h = PAD * 2, i;
-    for (i = 0; i < lines.length; i++) h += big[i] ? big[i] + 14 : LH;
-    var cv = document.createElement('canvas'); cv.width = PX; cv.height = h; var g = cv.getContext('2d');
-    g.fillStyle = '#fff'; g.fillRect(0, 0, PX, h); g.fillStyle = '#000'; g.textBaseline = 'top';
-    var y = PAD, mono = '"Courier New", Consolas, monospace';
-    lines.forEach(function (l, k) {
-      if (big[k]) { g.font = 'bold ' + big[k] + 'px ' + mono; g.textAlign = 'center'; g.fillText(l.trim(), PX / 2, y); y += big[k] + 14; }
-      else { g.font = 'bold ' + FS + 'px ' + mono; g.textAlign = 'left'; g.fillText(l, PAD, y); y += LH; }
-    });
-    var d = g.getImageData(0, 0, PX, h), px = d.data;
-    for (i = 0; i < px.length; i += 4) { var v = px[i] < 150 ? 0 : 255; px[i] = px[i + 1] = px[i + 2] = v; px[i + 3] = 255; }
+    var PX = 576, PD = 22, IW = PX - PD * 2, cu = o.customer || {}, n = split(o.orderId), isMesa = o.mode === 'mesa' || !!cu.mesa;
+    var F = '"Segoe UI", Arial, Helvetica, sans-serif';
+    var cv = document.createElement('canvas'), g = cv.getContext('2d'), y, draw;
+    var font = function (w, px) { g.font = w + ' ' + px + 'px ' + F; };
+    var wrap = function (t, w) { var r = [], cur = ''; String(t).split(/\s+/).forEach(function (x) { var c = cur ? cur + ' ' + x : x; if (g.measureText(c).width <= w || !cur) cur = c; else { r.push(cur); cur = x; } }); if (cur) r.push(cur); return r; };
+    var text = function (t, x, al) { if (draw) { g.textAlign = al || 'left'; g.fillText(t, x, y); } };
+    var line = function (t, w, px, al, gap) { font(w, px); wrap(t, IW).forEach(function (l) { text(l, al === 'center' ? PX / 2 : al === 'right' ? PX - PD : PD, al); y += Math.round(px * 1.25); }); y += gap || 0; };
+    var rule = function (dash) { if (draw) { g.fillRect(PD, y + 8, IW, 3); if (dash) { g.fillStyle = '#fff'; for (var x = PD + 12; x < PX - PD; x += 24) g.fillRect(x, y + 7, 10, 5); g.fillStyle = '#000'; } } y += 22; };
+    var two = function (l, r, w, px) { font(w, px); var rw = g.measureText(r).width, ls = wrap(l, IW - rw - 16); ls.forEach(function (t, i) { text(t, PD); if (!i) text(r, PX - PD, 'right'); y += Math.round(px * 1.25); }); };
+    var block = function (t, px) { font('800', px); var h = Math.round(px * 1.5); if (draw) { g.fillRect(PD, y, IW, h); g.fillStyle = '#fff'; g.textAlign = 'center'; g.fillText(t, PX / 2, y + (h - px) / 2 - px * 0.08); g.fillStyle = '#000'; } y += h + 10; };
+    var dt = new Date(o.createdAt || Date.now()), fecha = ('0' + dt.getDate()).slice(-2) + '/' + ('0' + (dt.getMonth() + 1)).slice(-2) + '/' + dt.getFullYear();
+    function layout() {
+      y = PD;
+      line('ZONA 0', '900', 66, 'center', 2);
+      g.letterSpacing = '7px'; line('CAFÉ BOUTIQUE', '700', 20, 'center', 6); g.letterSpacing = '0px';
+      rule(false);
+      block(o.orderId ? 'PEDIDO #' + n[0] : 'MESA ' + (cu.mesa || ''), 54);
+      line(fecha + '  ·  ' + hm(o.createdAt) + (o.orderId ? '' : '  ·  Cuenta'), '600', 22, 'center', 4);
+      var who = isMesa ? (o.orderId ? 'Mesa ' + (cu.mesa || '') : '') : (MODE[o.mode] || '') + (cu.name ? ' · ' + cu.name : '');
+      if (who) line(who, '800', 28, 'center', 0);
+      if (o.mozo) line('Atendió: ' + o.mozo, '600', 22, 'center', 0);
+      if (cu.phone) line(Z0P.fmtPhone(cu.phone), '600', 22, 'center', 0);
+      if (o.mode === 'delivery') line((cu.zoneName ? cu.zoneName + '. ' : '') + (cu.address || ''), '600', 22, 'center', 0);
+      y += 6; rule(true);
+      (o.lines || []).forEach(function (l) {
+        two(l.qty + ' × ' + l.name, String(l.total), '800', 30);
+        (l.choices || []).forEach(function (ch) { font('600', 22); wrap(ch.label + ': ' + ch.options.map(function (x) { return x.name; }).join(', '), IW - 30).forEach(function (t) { text(t, PD + 30); y += 28; }); });
+        if (l.note) { font('italic 600', 22); wrap('Nota: ' + l.note, IW - 30).forEach(function (t) { text(t, PD + 30); y += 28; }); }
+        y += 8;
+      });
+      rule(true);
+      if (o.deliveryFee) two('Envío', String(o.deliveryFee), '700', 26);
+      if (o.discount) two('Descuento', '-' + o.discount, '700', 26);
+      two('TOTAL', money(o.total), '900', 44); y += 6;
+      block(payText(o), 26);
+      if (cu.notes) line('Notas: ' + cu.notes, '600', 22, 'left', 4);
+      rule(false);
+      line('¡Gracias por rodar con nosotros!', '800', 26, 'center', 0);
+      line('@zona0_cafe_boutique', '600', 20, 'center', 0);
+      y += PD;
+    }
+    draw = false; font('600', 20); layout();
+    cv.width = PX; cv.height = y; g = cv.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, PX, y); g.fillStyle = '#000'; g.textBaseline = 'top';
+    draw = true; layout();
+    var d = g.getImageData(0, 0, PX, cv.height), px = d.data;
+    for (var i = 0; i < px.length; i += 4) { var v = px[i] < 140 ? 0 : 255; px[i] = px[i + 1] = px[i + 2] = v; px[i + 3] = 255; }
     g.putImageData(d, 0, 0); return cv.toDataURL('image/png');
   }
   /* Ticket para papel de 80 x 210 mm con 4 mm de margen. Se ve antes de imprimir y se puede achicar o agrandar. */
@@ -346,7 +381,7 @@
     var o = prt.o;
     var a = document.createElement('a');
     a.href = ticketPng(o); a.download = 'ticket-' + (o.orderId || ('mesa-' + ((o.customer || {}).mesa || ''))) + '.png'; document.body.appendChild(a); a.click(); a.remove();
-    $('#prtTxtMsg').textContent = 'Enviado. Si el ayudante está encendido, imprime solo en unos segundos. Si no, abre la imagen con Paint y Ctrl+P.'; $('#prt').close();
+    $('#prtTxtMsg').textContent = 'Descargado. Ábrelo con Paint, Ctrl+P, papel 80 x 210.';
   });
   $('#reprint').addEventListener('click', function () {
     var o = lastTicket || histRows().filter(function (x) { return x.status !== 'cancelado'; })[0];
