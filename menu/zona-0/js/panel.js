@@ -264,15 +264,6 @@
     st.textContent = prt.compat ? '@media print{@page{margin:0}#ticket{margin:0 auto!important;padding:' + MARGIN + 'mm 0}}' : '@media print{@page{size:72mm ' + H + 'mm;margin:0}#ticket{margin:0 auto!important;padding:' + MARGIN + 'mm 0}}';
     window.print();
   });
-  $('#prtUsb').addEventListener('click', function () {
-    var b = this, msg = $('#prtUsbMsg'); msg.classList.remove('bad'); msg.textContent = 'Enviando a la impresora...'; b.disabled = true;
-    var o = prt.o, cu = o.customer || {}, isMesa = o.mode === 'mesa' || !!cu.mesa;
-    var ctx = { hm: hm, fmtPhone: P.fmtPhone, money: function (n) { return money(n); }, payText: payText, split: split,
-      modeName: function () { var nm = cu.name && !/^mesa\s*\d*$/i.test(String(cu.name).trim()) && !isMesa ? ' - ' + cu.name : ''; return (isMesa ? 'MESA ' + (cu.mesa || '') : (MODE[o.mode] || '').toUpperCase()) + nm; } };
-    window.Z0Escpos.print(o, ctx).then(function () { msg.textContent = 'Enviado a la impresora.'; })
-      .catch(function (e) { msg.textContent = e.message || 'No se pudo imprimir.'; msg.classList.add('bad'); })
-      .then(function () { b.disabled = false; });
-  });
   $('#reprint').addEventListener('click', function () {
     var o = lastTicket || histRows().filter(function (x) { return x.status !== 'cancelado'; })[0];
     if (!o) { toast('Todavía no hay tickets para reimprimir.'); return; } printTicket(o);
