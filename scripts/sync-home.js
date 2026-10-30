@@ -53,6 +53,14 @@ const missing = Object.keys(out).filter((id) => !edits.some((x) => x.id === id))
 if (missing.length) console.warn('Sin contenedor en index.html:', missing.join(', '));
 edits.sort((a, b) => b.s - a.s).forEach((x) => { html = html.slice(0, x.s) + x.v + html.slice(x.e); });
 
+// 4a) Precarga de la primera foto del hero (la del LCP), en el <head>
+const firstImg = (html.match(/<div class="slides" id="slides"><img src="([^"]+)"/) || [])[1];
+if (firstImg) {
+  const tag = '<link rel="preload" as="image" href="' + firstImg + '" fetchpriority="high" data-eg-lcp />';
+  if (/<link rel="preload" as="image"[^>]*data-eg-lcp[^>]*>/.test(html)) html = html.replace(/<link rel="preload" as="image"[^>]*data-eg-lcp[^>]*>/, tag);
+  else html = html.replace('<link rel="preconnect" href="https://res.cloudinary.com" crossorigin />', '<link rel="preconnect" href="https://res.cloudinary.com" crossorigin />\n' + tag);
+}
+
 // 4) Huella y JSON-LD de preguntas frecuentes
 html = html.replace(/(<body[^>]*data-eg-hash=")[^"]*(")/, '$1' + hash + '$2');
 html = html.replace(/(<script type="application\/ld\+json" id="eg-faq-ld">)[\s\S]*?(<\/script>)/, (_, a, b) => a + JSON.stringify(EGHome.faqSchema(data)) + b);
