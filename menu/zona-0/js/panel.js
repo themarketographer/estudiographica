@@ -230,8 +230,8 @@
   try { var sv = JSON.parse(ls('z0.prt') || '{}'); if (sv.scale >= 0.5 && sv.scale <= 1.5) prt.scale = sv.scale; if (sv.auto === false) prt.auto = false; if (sv.logo === false) prt.logo = false; } catch (e) {}
   var lastTicket = null;
   function prtFit() {
-    var t = $('#prtTicket'); t.style.setProperty('--ts', '1'); var h = t.getBoundingClientRect().height / PX_MM, room = PAPER_H - MARGIN * 2 - 2;
-    return Math.max(0.5, Math.min(1.25, Math.floor(room / h * 20) / 20));
+    var t = $('#prtTicket'); t.style.setProperty('--ts', '1'); var h = t.getBoundingClientRect().height / PX_MM, room = PAPER_H - MARGIN * 2 - 8;
+    return Math.max(0.5, Math.min(1, Math.floor(room / h * 20) / 20));
   }
   function prtPaint() {
     var t = $('#prtTicket'); buildTicket(prt.o, t, prt.logo);

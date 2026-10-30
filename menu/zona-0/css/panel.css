@@ -173,9 +173,9 @@ body{background:var(--paper);min-height:100dvh}
 #ticket{display:none}
 @media print{
   @page{size:80mm 210mm;margin:4mm}
-  html,body{background:#fff!important;height:auto!important;overflow:visible!important}
+  html,body{background:#fff!important;height:auto!important;min-height:0!important;margin:0!important;padding:0!important;overflow:hidden!important}
   body>*:not(#ticket){display:none!important}
-  #ticket{display:block;margin:0}
+  #ticket{display:block;margin:0;break-after:avoid;page-break-after:avoid;break-before:avoid}
   #ticket,#ticket *{break-inside:avoid}
 }
 .prt{width:min(760px,96vw);padding:22px;max-height:94vh;overflow:auto}
