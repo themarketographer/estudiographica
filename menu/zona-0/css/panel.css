@@ -315,3 +315,11 @@ body{background:var(--paper);min-height:100dvh}
 .bar .brandmark{flex:none}
 .paylab{font-weight:600;font-size:14px;color:var(--muted)}
 @media (max-width:1750px){#sound span,#histBtn span{display:none}#sound,#histBtn{padding:0;width:44px;justify-content:center}}
+
+.sp-rows{display:grid;gap:8px}
+.sp-row{display:grid;grid-template-columns:1fr 110px 130px;gap:8px;align-items:center}
+.sp-row span{font-weight:600}
+.sp-row input,.sp-row select{min-height:46px;padding:0 12px;border-radius:var(--r-field);border:1.5px solid var(--hair);background:var(--card);width:100%}
+.sp-diff{font-size:14px;font-weight:600;color:var(--danger,#b3261e)}
+.sp-diff.ok{color:var(--ok,#2e7d32)}
+#split .two{align-items:end}

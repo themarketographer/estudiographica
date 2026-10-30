@@ -4,6 +4,7 @@
 //   POST /api/zona0/orders { key, status }                    cambia el estado
 //   POST /api/zona0/orders { key, payment:'pagado'|'pendiente', method? }  registra el cobro
 //   POST /api/zona0/orders { settle:[key,...], method }       cobra varios pedidos (cierra una mesa) y los marca entregados
+//   POST /api/zona0/orders { settle:[key,...], parts:[{method,amount}] }  cobra con la cuenta dividida (los montos suman el total)
 //   POST /api/zona0/orders { open: true|false }               abre o cierra la recepción de pedidos
 const Store = require('./lib-zona0/store.js');
 const Pricing = require('../../menu/zona-0/js/pricing.js');
@@ -31,6 +32,13 @@ exports.handler = async function (event) {
       if (typeof body.open === 'boolean') {
         await Store.setOpen(event, body.open);
         return reply(200, { ok: true, open: body.open });
+      }
+      if (Array.isArray(body.settle) && Array.isArray(body.parts)) {
+        const keys = body.settle.filter((k) => typeof k === 'string').slice(0, 30);
+        const parts = body.parts.slice(0, 12).map((p) => ({ method: Pricing.PAY_METHODS.indexOf(p && p.method) > -1 ? p.method : 'efectivo', amount: Math.round(Number(p && p.amount) * 100) / 100 }));
+        if (!parts.length || parts.some((p) => !(p.amount > 0))) return reply(422, { ok: false, error: 'Revisa los montos de cada parte.' });
+        const r = await Store.settleParts(event, keys, parts);
+        return r.error ? reply(422, { ok: false, error: r.error }) : reply(200, { ok: true, orders: r.orders });
       }
       if (Array.isArray(body.settle)) {
         const method = Pricing.PAY_METHODS.indexOf(body.method) > -1 ? body.method : 'efectivo';

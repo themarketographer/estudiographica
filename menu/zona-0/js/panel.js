@@ -288,9 +288,9 @@
   }
 
   /* ---------- Mesa, para llevar y delivery desde la computadora ---------- */
-  var pc = { cat: '', lines: [], mode: 'mesa', mesa: '', method: 'efectivo', uid: 1, opt: null };
+  var pc = { cat: '', lines: [], mode: 'mesa', mesa: '', method: 'efectivo', uid: 1, opt: null, parts: null };
   function openPos(mode, mesa) {
-    pc.lines = []; pc.mode = mode || 'recojo'; pc.mesa = mesa || ''; pc.method = 'efectivo'; $('#posForm').reset(); $('#posOpts').hidden = true; $('#posErr').hidden = true;
+    pc.lines = []; pc.mode = mode || 'recojo'; pc.mesa = mesa || ''; pc.method = 'efectivo'; pc.parts = null; $('#posForm').reset(); $('#posOpts').hidden = true; $('#posErr').hidden = true;
     if (!pc.cat) pc.cat = menu.categories[0].id;
     var isMesa = pc.mode === 'mesa';
     $('#posT').textContent = isMesa ? 'Mesa ' + pc.mesa : pc.mode === 'delivery' ? 'Delivery' : 'Para llevar';
@@ -391,7 +391,7 @@
     $('#posFeeRow').hidden = pc.mode !== 'delivery'; $('#posFee').textContent = fee ? money(fee) : 'Gratis';
     $('#posOldRow').hidden = !old; $('#posOld').textContent = money(old);
     $('#posTotL').textContent = isMesa ? 'Total de la mesa' : 'Total'; $('#posTot').textContent = money(sub + fee + old);
-    $('#posSend').disabled = !pc.lines.length; $('#posPay').disabled = (sub + old) === 0; $('#posPay').textContent = 'Cobrar ' + money(sub + old);
+    $('#posSend').disabled = !pc.lines.length; $('#posPay').disabled = (sub + old) === 0; $('#posSplit').hidden = !isMesa || (sub + old) === 0; pc.total = Math.round((sub + old) * 100) / 100; $('#posPay').textContent = 'Cobrar ' + money(sub + old);
   }
   $('#posSeg').addEventListener('click', function (e) { var b = e.target.closest('button'); if (!b) return; pc.mode = b.dataset.mode; $('#posT').textContent = pc.mode === 'delivery' ? 'Delivery' : 'Para llevar'; segSet('#posSeg', 'mode', pc.mode); posMode(); });
   $('#payMethod').addEventListener('click', function (e) { var b = e.target.closest('button'); if (!b) return; pc.method = b.dataset.m; segSet('#payMethod', 'm', pc.method); });
@@ -413,7 +413,7 @@
     var body = {
       lines: pc.lines.map(function (x) { return x.raw; }),
       customer: { mode: pc.mode, name: $('#pName').value, phone: $('#pPhone').value, mesa: isMesa ? pc.mesa : '', address: $('#pAddr').value, zone: $('#pZone').value, notes: $('#pNotes').value },
-      payment: { method: pc.method, paid: isMesa ? !!pay : $('#pPaid').checked }
+      payment: { method: pc.method, paid: isMesa ? (!!pay && !pc.parts) : $('#pPaid').checked }
     };
     if (pc.lines.length) { var chk = P.validateOrder(menu, body, { staff: true }); if (!chk.ok) { err.textContent = chk.error; err.hidden = false; return; } }
     var btns = [$('#posSend'), $('#posPay')]; btns.forEach(function (b) { b.disabled = true; }); (pay ? $('#posPay') : $('#posSend')).classList.add('is-loading');
@@ -424,18 +424,50 @@
       fresh = d.order; orders[fresh.key] = fresh; fresh._fresh = true;
     }) : Promise.resolve();
     step1.then(function () {
+      if (pay && pc.parts) return api('POST', { settle: oldOrders.concat(fresh ? [fresh] : []).map(function (o) { return o.key; }), parts: pc.parts }).then(function (d) { d.orders.forEach(function (o) { orders[o.key] = o; }); });
       if (pay && oldOrders.length) return api('POST', { settle: oldOrders.map(function (o) { return o.key; }), method: pc.method }).then(function (d) { d.orders.forEach(function (o) { orders[o.key] = o; }); });
     }).then(function () {
       $('#pos').close(); render();
       if (pay) {
         var all = oldOrders.concat(fresh ? [fresh] : []), tot = all.reduce(function (s, o) { return s + o.total; }, 0);
-        toast((isMesa ? 'Mesa ' + mesa + ' cobrada' : 'Cobrado') + ' · ' + money(tot) + ' · ' + pc.method, 'Imprimir cuenta', function () { printAccount(mesa, all.map(function (o) { return orders[o.key] || o; })); });
+        toast((isMesa ? 'Mesa ' + mesa + ' cobrada' : 'Cobrado') + ' · ' + money(tot) + ' · ' + (pc.parts ? 'dividida en ' + pc.parts.length : pc.method), 'Imprimir cuenta', function () { printAccount(mesa, all.map(function (o) { return orders[o.key] || o; })); });
       } else if (fresh) toast((isMesa ? 'Mesa ' + mesa + ': enviado a cocina. La cuenta sigue abierta.' : 'Pedido ' + fresh.orderId + ' registrado y en cocina'), 'Imprimir ticket', function () { printTicket(fresh); });
     }).catch(function (e) {
       if (e.message === 'auth') return;
       err.textContent = /Failed to fetch|NetworkError/.test(e.message) ? 'Sin conexión. Intenta otra vez.' : e.message; err.hidden = false;
     }).then(function () { $('#posSend').classList.remove('is-loading'); $('#posPay').classList.remove('is-loading'); posTotals(); });
   }
+  /* Dividir cuenta */
+  var SP_M = [['efectivo', 'Efectivo'], ['qr', 'QR'], ['tarjeta', 'Tarjeta']];
+  function spRows() { return $$('#spRows .sp-row'); }
+  function spRead() { return spRows().map(function (r) { return { method: r.querySelector('select').value, amount: Math.round((Number(r.querySelector('input').value) || 0) * 100) / 100 }; }); }
+  function spCheck() {
+    var got = Math.round(spRead().reduce(function (s, p) { return s + p.amount; }, 0) * 100), want = Math.round(pc.total * 100), d = want - got, ok = d === 0 && spRead().every(function (p) { return p.amount > 0; });
+    $('#spDiff').textContent = d === 0 ? (ok ? 'La suma cuadra.' : 'Cada parte necesita un monto.') : d > 0 ? 'Faltan ' + money(d / 100) + ' por repartir.' : 'Se pasan ' + money(-d / 100) + ' del total.';
+    $('#spDiff').className = 'sp-diff' + (ok ? ' ok' : ''); $('#spGo').disabled = !ok;
+  }
+  function spBuild(n, equal) {
+    var box = $('#spRows'); box.textContent = '';
+    var base = Math.floor(pc.total / n * 100) / 100, rest = Math.round((pc.total - base * n) * 100) / 100;
+    for (var i = 0; i < n; i++) {
+      var r = el('div', 'sp-row'), lab = el('span', '', 'Persona ' + (i + 1)), inp = el('input'), sel = el('select');
+      inp.type = 'number'; inp.inputMode = 'decimal'; inp.min = '0'; inp.step = '0.5'; inp.setAttribute('aria-label', 'Monto de la persona ' + (i + 1));
+      inp.value = equal ? String(Math.round((base + (i === n - 1 ? rest : 0)) * 100) / 100) : '';
+      SP_M.forEach(function (m) { var o = el('option', '', m[1]); o.value = m[0]; sel.appendChild(o); });
+      sel.setAttribute('aria-label', 'Medio de la persona ' + (i + 1));
+      inp.addEventListener('input', spCheck); sel.addEventListener('change', spCheck);
+      r.appendChild(lab); r.appendChild(inp); r.appendChild(sel); box.appendChild(r);
+    }
+    spCheck();
+  }
+  var spN = $('#spN'); for (var q = 2; q <= 8; q++) { var oq = el('option', '', String(q)); oq.value = q; spN.appendChild(oq); }
+  $('#posSplit').addEventListener('click', function () {
+    $('#spTot').textContent = 'Total de la mesa ' + pc.mesa + ': ' + money(pc.total) + '. Reparte entre personas, cada una con su medio de pago.';
+    spN.value = '2'; spBuild(2, true); $('#split').showModal();
+  });
+  spN.addEventListener('change', function () { spBuild(Number(spN.value), true); });
+  $('#spEq').addEventListener('click', function () { spBuild(Number(spN.value), true); });
+  $('#spForm').addEventListener('submit', function (e) { e.preventDefault(); if ($('#spGo').disabled) return; pc.parts = spRead(); $('#split').close(); doSend(true); });
   function printAccount(mesa, os) {
     var lines = []; os.forEach(function (o) { (o.lines || []).forEach(function (l) { lines.push(l); }); });
     var paid = os.length && os.every(function (o) { return o.payment && o.payment.status === 'pagado'; });

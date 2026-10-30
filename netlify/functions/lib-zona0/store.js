@@ -134,6 +134,37 @@ async function settle(event, key, method) {
   return rec;
 }
 
+// Cobra varios pedidos con una cuenta dividida: cada parte lleva su monto y su medio. Los montos deben sumar el total.
+// Las partes se reparten en orden sobre los pedidos, y cada pedido guarda las suyas.
+async function settleParts(event, keys, parts) {
+  const store = open(event);
+  const recs = [];
+  for (const k of keys) { const r = await store.get(k, { type: 'json' }); if (r && r.status !== 'cancelado') recs.push([k, r]); }
+  const total = Math.round(recs.reduce((s, x) => s + x[1].total, 0) * 100);
+  const sum = Math.round(parts.reduce((s, p) => s + p.amount, 0) * 100);
+  if (!recs.length || total !== sum) return { error: 'Los montos no suman el total de la cuenta.' };
+  const left = parts.map((p) => ({ method: p.method, c: Math.round(p.amount * 100) }));
+  const now = new Date().toISOString(), out = [];
+  let i = 0;
+  for (const [k, rec] of recs) {
+    let need = Math.round(rec.total * 100);
+    const mine = {};
+    while (need > 0 && i < left.length) {
+      const take = Math.min(need, left[i].c);
+      mine[left[i].method] = (mine[left[i].method] || 0) + take;
+      left[i].c -= take; need -= take;
+      if (left[i].c === 0) i++;
+    }
+    const arr = Object.keys(mine).map((m) => ({ method: m, amount: mine[m] / 100 }));
+    const main = arr.slice().sort((a, b) => b.amount - a.amount)[0];
+    rec.payment = Object.assign({}, rec.payment, { status: 'pagado', method: main ? main.method : 'efectivo', parts: arr, split: parts.length, updatedAt: now });
+    rec.status = 'entregado'; rec.updatedAt = now;
+    await store.setJSON(k, rec); await touch(event, k);
+    out.push(rec);
+  }
+  return { orders: out };
+}
+
 // Libro diario: una clave por movimiento, "led/<fecha>/<ms>-<azar>". Los movimientos anulados se conservan marcados.
 async function ledgerAdd(event, day, entry) {
   const id = 'led/' + day + '/' + Date.now() + '-' + Math.random().toString(36).slice(2, 6);
@@ -181,4 +212,4 @@ async function setOpen(event, open_) {
   return !!open_;
 }
 
-module.exports = { isProd, storeName, STATUSES, keyFor, saveNumbered, touch, changedSince, listDays, getOrder, setStatus, setPayment, isOpen, setOpen, setLineDone, settle, lineKinds, lineDone, ledgerAdd, ledgerRange, ledgerVoid, importRecords };
+module.exports = { isProd, storeName, STATUSES, keyFor, saveNumbered, touch, changedSince, listDays, getOrder, setStatus, setPayment, isOpen, setOpen, setLineDone, settle, lineKinds, lineDone, ledgerAdd, ledgerRange, ledgerVoid, importRecords, settleParts };
