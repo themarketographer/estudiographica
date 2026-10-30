@@ -287,8 +287,8 @@
   }
   /* Ticket para papel de 80 x 210 mm con 4 mm de margen. Se ve antes de imprimir y se puede achicar o agrandar. */
   var PAPER_H = 210, MARGIN = 4, PX_MM = 96 / 25.4;
-  var prt = { o: null, auto: true, scale: 1, logo: false, compat: true };
-  try { var sv = JSON.parse(ls('z0.prt') || '{}'); if (sv.scale >= 0.5 && sv.scale <= 1.5) prt.scale = sv.scale; if (sv.auto === false) prt.auto = false; if (sv.v === 4 && sv.logo === true) prt.logo = true; if (sv.v === 4 && sv.compat === false) prt.compat = false; } catch (e) {}
+  var prt = { o: null, auto: true, scale: 1, logo: false, compat: false };
+  try { var sv = JSON.parse(ls('z0.prt') || '{}'); if (sv.scale >= 0.5 && sv.scale <= 1.5) prt.scale = sv.scale; if (sv.auto === false) prt.auto = false; if (sv.v === 5 && sv.logo === true) prt.logo = true; if (sv.v === 5 && sv.compat === true) prt.compat = true; } catch (e) {}
   var lastTicket = null;
   function prtFit() {
     var t = $('#prtTicket'); t.style.setProperty('--ts', '1'); var h = t.getBoundingClientRect().height / PX_MM, room = PAPER_H - MARGIN * 2 - 8;
@@ -301,9 +301,9 @@
     var h = t.getBoundingClientRect().height / PX_MM, fits = h <= PAPER_H - MARGIN * 2; prt.h = h;
     $('#prtPct').textContent = Math.round(prt.scale * 100) + '%';
     $('#prtAuto').checked = prt.auto; $('#prtLogo').checked = prt.logo; $('#prtCompat').checked = prt.compat;
-    $('#prtInfo').textContent = prt.compat ? 'En la ventana de impresión elige el papel 80 x 3276 (el mismo de Excel) y Márgenes: Ninguno. El ticket mide ' + Math.round(h) + ' mm de alto.' : 'Papel 72 mm. El ticket mide ' + Math.round(h) + ' mm de alto' + (fits ? ' y entra completo.' : ' y NO entra: achícalo o activa el ajuste automático.');
+    $('#prtInfo').textContent = prt.compat ? 'Elige el papel que quieras en la ventana de impresión.' : 'Se imprime como imagen en papel 80 x 210. En la ventana de impresión elige ese papel, Márgenes: Ninguno.';
     $('#prtInfo').classList.toggle('bad', !fits);
-    ls('z0.prt', JSON.stringify({ auto: prt.auto, scale: prt.scale, logo: prt.logo, compat: prt.compat, v: 4 }));
+    ls('z0.prt', JSON.stringify({ auto: prt.auto, scale: prt.scale, logo: prt.logo, compat: prt.compat, v: 5 }));
   }
   function printTicket(o) {
     lastTicket = o; prt.o = o; $('#prtT').textContent = o.orderId ? 'Ticket ' + o.orderId : 'Cuenta de la mesa ' + ((o.customer || {}).mesa || '');
@@ -314,15 +314,16 @@
   $('#prtAuto').addEventListener('change', function () { prt.auto = this.checked; prtPaint(); });
   $('#prtLogo').addEventListener('change', function () { prt.logo = this.checked; prtPaint(); });
   $('#prtCompat').addEventListener('change', function () { prt.compat = this.checked; prtPaint(); });
+  /* Imprimir: el ticket va como UNA IMAGEN en blanco y negro, sin texto. Los drivers térmicos (como el de la MJ809) cambian las
+     letras del navegador por las fuentes internas de la impresora y no saben dibujarlas: sale papel en blanco. Una imagen la imprimen siempre.
+     Hoja 80 x 210 mm, la misma que funciona con el Bloc de notas. */
   $('#prtGo').addEventListener('click', function () {
-    var t = $('#ticket'); buildTicket(prt.o, t, prt.logo && !prt.compat); t.style.setProperty('--ts', String(prt.scale));
-    /* El alto de la hoja se ajusta al ticket (máximo 210 mm): las impresoras de rollo no avanzan papel de más. */
-    t.style.cssText += ';display:block;position:absolute;visibility:hidden;left:-9999px;top:0';
-    var real = t.getBoundingClientRect().height / PX_MM; t.style.display = t.style.position = t.style.visibility = t.style.left = t.style.top = '';
-    var H = Math.min(PAPER_H, Math.max(60, Math.ceil(real + MARGIN * 2 + 6)));
+    var t = $('#ticket'); t.textContent = ''; t.style.removeProperty('--ts');
+    var im = new Image(); im.alt = '';
     var st = document.getElementById('pageSize'); if (!st) { st = document.createElement('style'); st.id = 'pageSize'; document.head.appendChild(st); }
-    st.textContent = prt.compat ? '@media print{@page{margin:0}#ticket{margin:0 auto!important;padding:' + MARGIN + 'mm 0}}' : '@media print{@page{size:72mm ' + H + 'mm;margin:0}#ticket{margin:0 auto!important;padding:' + MARGIN + 'mm 0}}';
-    window.print();
+    st.textContent = '@media print{@page{' + (prt.compat ? '' : 'size:80mm 210mm;') + 'margin:0}#ticket{width:auto!important;zoom:1!important;margin:0!important;padding:3mm 0 0!important}#ticket img{display:block;width:70mm;max-height:200mm;object-fit:contain;object-position:top;margin:0 auto}}';
+    im.onload = function () { window.print(); };
+    t.appendChild(im); im.src = ticketPng(prt.o);
   });
   $('#prtTxt').addEventListener('click', function () {
     var t = ticketText(prt.o, 40), msg = $('#prtTxtMsg');
