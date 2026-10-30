@@ -181,7 +181,7 @@ body.is-stuck::before{opacity:1}
 .top .brandmark .avatar{width:30px;height:30px}
 .hero--cream{background:#f7ebdf;color:var(--ink);align-items:center;padding-top:calc(88px + var(--safe-t));padding-bottom:48px;min-height:0}
 .hero--cream::after{background:linear-gradient(180deg,transparent 70%,rgba(24,24,24,.04))}
-.hero-logo{display:block;width:min(78vw,380px);height:auto;margin:0 auto 18px;border-radius:28px}
+.hero--cream .lockup{margin-bottom:22px}
 .hero--cream .eyebrow{color:#8a6a1f;text-align:center}
 .hero--cream h1{text-align:center;font-size:clamp(40px,11vw,68px)}
 .hero--cream .lead{color:var(--muted);margin-inline:auto;text-align:center}

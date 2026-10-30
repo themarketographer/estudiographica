@@ -181,4 +181,4 @@ body{background:var(--paper);min-height:100dvh}
 
 .avatar{width:34px;height:34px;border-radius:10px;object-fit:cover;flex:none}
 .hero-note{display:none}
-@media print{#ticket .logo{display:block;width:30mm;height:30mm;margin:0 auto 2mm;filter:grayscale(1) contrast(1.35)}}
+@media print{#ticket .logo{display:block;width:auto;height:18mm;margin:0 auto 2mm;filter:grayscale(1) contrast(1.35)}}

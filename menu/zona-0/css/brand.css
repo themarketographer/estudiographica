@@ -1,0 +1,32 @@
+/* Marca de Zona 0 Café Boutique en tres piezas: grano (img/bean.svg), título en texto y pulso (SVG).
+   Tipografías parecidas al logo original: Cinzel (capitales romanas) y Great Vibes (cursiva caligráfica). */
+@font-face{font-family:"Cinzel";font-weight:600;font-display:swap;src:url(../fonts/cinzel-latin-600-normal.woff2) format("woff2")}
+@font-face{font-family:"Cinzel";font-weight:700;font-display:swap;src:url(../fonts/cinzel-latin-700-normal.woff2) format("woff2")}
+@font-face{font-family:"Great Vibes";font-weight:400;font-display:swap;src:url(../fonts/great-vibes-latin-400-normal.woff2) format("woff2")}
+:root{--gold-1:#f3dc8c;--gold-2:#c79a3c;--gold-3:#8a6420;--ecg:#a67c2e}
+.gold-text{background:linear-gradient(180deg,var(--gold-1) 0%,var(--gold-2) 52%,var(--gold-3) 100%);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+
+/* Versión grande: grano detrás, título en medio, pulso a los lados */
+.lockup{container-type:inline-size;position:relative;width:min(86vw,400px);aspect-ratio:1;margin-inline:auto;display:grid;place-items:center}
+.lockup .lk-bean{position:absolute;inset:0;margin:auto;height:100%;width:auto}
+.lockup .lk-row{position:relative;display:flex;align-items:center;justify-content:center;gap:1.4cqw;width:100%;margin-top:-4cqw}
+.lockup .lk-name{font-family:"Cinzel",Georgia,serif;font-weight:600;font-size:13.2cqw;line-height:1;letter-spacing:.015em;white-space:nowrap;filter:drop-shadow(0 .3cqw .2cqw rgba(0,0,0,.35))}
+.lockup .lk-script{position:absolute;left:0;right:0;top:57%;text-align:center;font-family:"Great Vibes","Apple Chancery",cursive;font-size:11.4cqw;line-height:1;white-space:nowrap;transform:rotate(-4deg);filter:drop-shadow(0 .3cqw .2cqw rgba(0,0,0,.4))}
+.lockup .ecg{flex:none;width:21cqw;height:auto;color:var(--ecg)}
+.lockup .ecg.r{transform:scaleX(-1)}
+
+/* Pulso: se dibuja desde el título hacia afuera */
+.ecg path{stroke-dasharray:1;stroke-dashoffset:0}
+.ecg circle{opacity:1}
+@media (prefers-reduced-motion:no-preference){
+  .ecg path{stroke-dashoffset:1;animation:ecgDraw 1.3s cubic-bezier(.3,.7,.2,1) .55s forwards}
+  .ecg circle{opacity:0;animation:ecgDot .4s ease 1.7s forwards}
+  .ecg.beat path{animation:ecgDraw 1.3s cubic-bezier(.3,.7,.2,1) .55s forwards}
+}
+@keyframes ecgDraw{to{stroke-dashoffset:0}}
+@keyframes ecgDot{to{opacity:1}}
+
+/* Versión chica de barra */
+.bm-bean{height:28px;width:auto;flex:none}
+.bm-name{font-family:"Cinzel",Georgia,serif;font-weight:700;font-size:19px;letter-spacing:.09em;text-transform:uppercase}
+.bar .bm-bean{filter:drop-shadow(0 0 5px rgba(236,208,120,.45))}

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-4 -4 268 448" width="268" height="448" role="img" aria-label="Grano de café">
+<defs>
+<linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8a6420"/><stop offset=".28" stop-color="#ecd078"/><stop offset=".55" stop-color="#a67c2e"/><stop offset=".8" stop-color="#f0dc8e"/><stop offset="1" stop-color="#85601d"/></linearGradient>
+<radialGradient id="b" cx=".35" cy=".3" r=".9"><stop offset="0" stop-color="#2b2924"/><stop offset=".6" stop-color="#151410"/><stop offset="1" stop-color="#0c0b09"/></radialGradient>
+<clipPath id="e"><ellipse cx="130" cy="220" rx="125.2" ry="217.2"/></clipPath>
+<clipPath id="l"><path d="M129 -10 L129 6 C117 110 145 170 127 226 S113 340 123 434 L123 450 L-20 450 L-20 -10 Z"/></clipPath>
+<clipPath id="r"><path d="M139 -10 L139 6 C127 110 155 170 137 226 S123 340 133 434 L133 450 L280 450 L280 -10 Z"/></clipPath>
+</defs>
+<g clip-path="url(#e)">
+<g clip-path="url(#l)"><rect x="-10" y="-10" width="280" height="460" fill="url(#b)"/><ellipse cx="130" cy="220" rx="122" ry="214" fill="none" stroke="url(#g)" stroke-width="6"/><path d="M129 -10 L129 6 C117 110 145 170 127 226 S113 340 123 434 L123 450" fill="none" stroke="url(#g)" stroke-width="3.5"/></g>
+<g clip-path="url(#r)"><rect x="-10" y="-10" width="280" height="460" fill="url(#b)"/><ellipse cx="130" cy="220" rx="122" ry="214" fill="none" stroke="url(#g)" stroke-width="6"/><path d="M139 -10 L139 6 C127 110 155 170 137 226 S123 340 133 434 L133 450" fill="none" stroke="url(#g)" stroke-width="3.5"/></g>
+</g></svg>

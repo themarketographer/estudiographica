@@ -10,19 +10,25 @@
 <link rel="icon" href="/favicon-32x32.png" sizes="32x32">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preload" href="/fonts/izmir-bold.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/cinzel-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/brand.css">
 <link rel="stylesheet" href="css/app.css">
 </head>
 <body class="on-paper">
 
 <header class="top" id="top">
-  <a class="brandmark" href="./" aria-label="Zona 0 Café Boutique, inicio"><img class="avatar" src="img/logo-192.png" alt="" width="34" height="34"><span>Zona 0</span></a>
+  <a class="brandmark" href="./" aria-label="Zona 0 Café Boutique, inicio"><img class="bm-bean" src="img/bean.svg" alt="" width="17" height="28"><span class="bm-name">Zona 0</span></a>
   <button class="mine" id="mine" type="button" data-press hidden><span class="dot"></span><span id="mineText">Mi pedido</span></button>
 </header>
 
 <section class="hero hero--cream" aria-labelledby="h1">
   <div class="hero-in">
-    <img class="hero-logo intro" src="img/logo.png" alt="Zona 0 Café Boutique" width="545" height="545" style="--d:0ms">
+    <div class="lockup intro" role="img" aria-label="Zona 0 Café Boutique" style="--d:0ms">
+      <img class="lk-bean" src="img/bean.svg" alt="" width="268" height="448">
+      <div class="lk-row" aria-hidden="true"><svg class="ecg" viewBox="0 0 220 60" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path pathLength="1" d="M4 30 H80 L88 24 L96 30 L106 4 L120 56 L130 30 H142 L148 25 L154 30 H216"/><circle cx="4" cy="30" r="3" fill="currentColor" stroke="none"/></svg><span class="lk-name gold-text">ZONA 0</span><svg class="ecg r" viewBox="0 0 220 60" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path pathLength="1" d="M4 30 H80 L88 24 L96 30 L106 4 L120 56 L130 30 H142 L148 25 L154 30 H216"/><circle cx="4" cy="30" r="3" fill="currentColor" stroke="none"/></svg></div>
+      <span class="lk-script gold-text" aria-hidden="true">Café Boutique</span>
+    </div>
     <p class="eyebrow intro" style="--d:0ms">Café boutique para ciclistas · Cochabamba</p>
     <h1 id="h1" data-words>Recarga antes de rodar.</h1>
     <p class="lead intro" style="--d:420ms">Café de verdad, comida que rinde kilómetros y un lugar donde la bici se queda a la vista. Pide desde tu celular y te avisamos cuando esté listo.</p>
@@ -40,7 +46,7 @@
 </main>
 
 <footer class="foot on-ink">
-  <img class="avatar big" src="img/logo-192.png" alt="" width="64" height="64">
+  <img class="bm-bean" src="img/bean.svg" alt="" width="17" height="28" style="height:44px;width:auto;margin:0 auto 10px">
   <p class="foot-t" id="footAddr"></p>
   <p class="foot-s" id="footHours"></p>
   <p class="foot-s">Sistema de pedidos creado por <a href="https://estudiographica.com" target="_blank" rel="noopener">Estudio Graphica</a> · versión 1</p>

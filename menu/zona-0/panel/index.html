@@ -9,12 +9,13 @@
 <link rel="icon" href="/favicon-32x32.png" sizes="32x32">
 <link rel="preload" href="/fonts/izmir-bold.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/brand.css">
 <link rel="stylesheet" href="../css/panel.css">
 </head>
 <body>
 
 <header class="bar on-ink">
-  <a class="brandmark" href="./" aria-label="Panel de Zona 0"><img class="avatar" src="../img/logo-192.png" alt="" width="34" height="34"><span>Zona 0</span><em>Panel</em></a>
+  <a class="brandmark" href="./" aria-label="Panel de Zona 0"><img class="bm-bean" src="../img/bean.svg" alt="" width="17" height="28"><span class="bm-name">Zona 0</span><em>Panel</em></a>
   <span class="live" id="live" hidden>En vivo</span>
   <div class="tools" id="tools" hidden>
     <button class="tool" id="sound" type="button" data-press aria-pressed="false"><svg class="ic"><use href="#i-mute"/></svg><span>Sonido</span></button>
@@ -26,7 +27,11 @@
 </header>
 
 <form class="login" id="login">
-  <img src="../img/logo-192.png" alt="Zona 0 Café Boutique" width="96" height="96" style="width:96px;height:96px;margin:0 auto 6px;border-radius:24px">
+  <div class="lockup" role="img" aria-label="Zona 0 Café Boutique" style="width:240px;margin-bottom:8px">
+    <img class="lk-bean" src="../img/bean.svg" alt="" width="268" height="448">
+    <div class="lk-row" aria-hidden="true"><svg class="ecg" viewBox="0 0 220 60" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path pathLength="1" d="M4 30 H80 L88 24 L96 30 L106 4 L120 56 L130 30 H142 L148 25 L154 30 H216"/><circle cx="4" cy="30" r="3" fill="currentColor" stroke="none"/></svg><span class="lk-name gold-text">ZONA 0</span><svg class="ecg r" viewBox="0 0 220 60" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path pathLength="1" d="M4 30 H80 L88 24 L96 30 L106 4 L120 56 L130 30 H142 L148 25 L154 30 H216"/><circle cx="4" cy="30" r="3" fill="currentColor" stroke="none"/></svg></div>
+    <span class="lk-script gold-text" aria-hidden="true">Café Boutique</span>
+  </div>
   <h1>Entrar al panel</h1>
   <p>Escribe la clave del local para ver los pedidos.</p>
   <label class="field"><span class="sr">Clave</span><input id="tk" type="password" autocomplete="current-password" placeholder="Clave del local" required></label>
