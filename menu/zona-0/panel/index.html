@@ -28,6 +28,7 @@
   <div class="tools" id="tools" hidden>
     <button class="tool" id="sound" type="button" data-press aria-pressed="false" title="Sonido de pedidos nuevos"><svg class="ic"><use href="#i-mute"/></svg><span>Sonido</span></button>
     <button class="tool sw" id="openSw" type="button" data-press aria-pressed="true" title="Cuando está apagado, los clientes no pueden pedir desde el celular"><i class="knob"></i><span>Recibiendo pedidos</span></button>
+    <button class="tool" id="reprint" type="button" data-press title="Reimprimir el último ticket"><svg class="ic"><use href="#i-print"/></svg><span>Reimprimir</span></button>
     <button class="tool" id="histBtn" type="button" data-press title="Historial de pedidos"><svg class="ic"><use href="#i-list"/></svg><span>Historial</span></button>
     <button class="tool ico" id="logout" type="button" data-press aria-label="Salir"><svg class="ic"><use href="#i-out"/></svg></button>
   </div>
@@ -104,6 +105,9 @@
         <label class="field"><span>Celular</span><input id="pPhone" type="tel" inputmode="tel" maxlength="16"></label>
       </div>
       <label class="field" id="pAddrG" hidden><span>Dirección o referencia</span><input id="pAddr" maxlength="160"></label>
+      <p class="formerr" id="posErr" hidden></p>
+    </div>
+    <div class="pos-t">
       <div class="payrow" id="payRow"><span class="paylab">Cobrar con</span>
         <div class="seg sm" id="payMethod" role="group" aria-label="Medio de pago"><i class="thumb"></i>
           <button type="button" data-m="efectivo" data-press aria-pressed="true">Efectivo</button>
@@ -112,9 +116,6 @@
         </div>
         <label class="chk" id="paidChk"><input type="checkbox" id="pPaid"><span>Ya cobrado</span></label>
       </div>
-      <p class="formerr" id="posErr" hidden></p>
-    </div>
-    <div class="pos-t">
       <div class="sum" id="posFeeRow" hidden><span>Envío</span><b class="num" id="posFee"></b></div>
       <div class="sum" id="posOldRow" hidden><span>Ya consumido</span><b class="num" id="posOld">0 Bs</b></div>
       <div class="sum big"><span id="posTotL">Total</span><b class="num" id="posTot">0 Bs</b></div>
@@ -170,7 +171,21 @@
   <div class="hist-scroll"><table class="tbl" id="tbl"><thead><tr><th>Pedido</th><th>Hora</th><th>Cliente</th><th>Tipo</th><th>Estado</th><th>Pago</th><th class="r">Total</th></tr></thead><tbody></tbody></table></div>
 </dialog>
 
-<div id="ticket" aria-hidden="true"></div>
+<dialog class="dlg prt" id="prt" aria-labelledby="prtT">
+  <div class="pos-h"><h2 id="prtT">Ticket</h2><button class="x" type="button" data-press data-close aria-label="Cerrar"><svg class="ic"><use href="#i-x"/></svg></button></div>
+  <div class="prt-body">
+    <div class="prt-paper"><div class="tkt" id="prtTicket"></div></div>
+    <div class="prt-side">
+      <p class="prt-info" id="prtInfo"></p>
+      <div class="prt-size"><span>Tamaño</span><div class="step"><button type="button" id="prtMinus" aria-label="Achicar"><svg class="ic"><use href="#i-minus"/></svg></button><b class="num" id="prtPct">100%</b><button type="button" id="prtPlus" aria-label="Agrandar"><svg class="ic"><use href="#i-plus"/></svg></button></div></div>
+      <label class="chk"><input type="checkbox" id="prtAuto"><span>Ajustar al papel automáticamente</span></label>
+      <label class="chk"><input type="checkbox" id="prtLogo"><span>Mostrar el logo</span></label>
+      <button class="btn btn--block" id="prtGo" type="button" data-press>Imprimir</button>
+    </div>
+  </div>
+</dialog>
+
+<div id="ticket" class="tkt" aria-hidden="true"></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script src="../js/icons.js"></script>

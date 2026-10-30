@@ -46,9 +46,28 @@
     return menu;
   }
 
+  /* Producto libre (solo personal): { free:{ title, price, kind:'comida'|'bebida'|'tienda' }, qty, note }.
+     Sirve para productos de las mini tiendas o cosas que no están en el menú. 'tienda' no pasa por cocina ni barra. */
+  var FREE_KINDS = ['comida', 'bebida', 'tienda'];
+  function resolveFree(raw, opts) {
+    if (!(opts && opts.staff)) return { ok: false, error: 'Un producto del pedido ya no está en el menú.' };
+    var f = raw.free, title = text(f && f.title, 60), price = Math.round(Number(f && f.price) * 100) / 100;
+    var kind = FREE_KINDS.indexOf(f && f.kind) > -1 ? f.kind : 'tienda';
+    var qty = Number(raw.qty);
+    if (title.length < 2) return { ok: false, error: 'Escribe el nombre del producto.' };
+    if (!(price > 0) || price > 5000) return { ok: false, error: 'Revisa el precio de ' + title + '.' };
+    if (!Number.isInteger(qty) || qty < 1 || qty > MAX_QTY) return { ok: false, error: 'Cantidad inválida en ' + title + '.' };
+    var note = text(raw.note, 120);
+    return { ok: true, line: {
+      key: 'free|' + title + '|' + price + '|' + kind + '|' + note,
+      id: 'free', name: title, choices: [], note: note, qty: qty, unitPrice: price, total: Math.round(price * qty * 100) / 100, free: true, kind: kind
+    } };
+  }
+
   /* raw: { id, sel: { grupo: [opcion] }, qty, note }  ->  { ok, line } | { ok:false, error } */
-  function resolveLine(menu, raw) {
+  function resolveLine(menu, raw, opts) {
     if (!raw || typeof raw !== 'object') return { ok: false, error: 'Línea inválida.' };
+    if (raw.free) return resolveFree(raw, opts);
     var product = findProduct(menu, raw.id);
     if (!product) return { ok: false, error: 'Un producto del pedido ya no está en el menú.' };
     if (product.available === false) return { ok: false, error: product.title + ' está agotado.' };
@@ -97,18 +116,18 @@
     return { id: line.id, sel: sel, qty: line.qty, note: line.note || '' };
   }
 
-  function resolveOrder(menu, rawLines) {
+  function resolveOrder(menu, rawLines, opts) {
     if (!Array.isArray(rawLines) || !rawLines.length) return { ok: false, error: 'El pedido está vacío.' };
     if (rawLines.length > MAX_LINES) return { ok: false, error: 'El pedido tiene demasiadas líneas.' };
     var byKey = {}, lines = [];
     for (var i = 0; i < rawLines.length; i++) {
-      var r = resolveLine(menu, rawLines[i]);
+      var r = resolveLine(menu, rawLines[i], opts);
       if (!r.ok) return r;
       var ex = byKey[r.line.key];
       if (ex) {
         ex.qty += r.line.qty;
         if (ex.qty > MAX_QTY) return { ok: false, error: 'Cantidad inválida en ' + ex.name + '.' };
-        ex.total = ex.unitPrice * ex.qty;
+        ex.total = Math.round(ex.unitPrice * ex.qty * 100) / 100;
       } else { byKey[r.line.key] = r.line; lines.push(r.line); }
     }
     var total = lines.reduce(function (s, l) { return s + l.total; }, 0);
@@ -185,7 +204,7 @@
   function validateOrder(menu, payload, opts) {
     var staff = !!(opts && opts.staff);
     if (!payload || typeof payload !== 'object') return { ok: false, error: 'Pedido inválido.' };
-    var r = resolveOrder(menu, payload.lines);
+    var r = resolveOrder(menu, payload.lines, opts);
     if (!r.ok) return r;
     var c = cleanCustomer(menu, payload.customer, staff);
     if (!c.ok) return c;

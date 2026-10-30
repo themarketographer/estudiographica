@@ -158,19 +158,35 @@ body{background:var(--paper);min-height:100dvh}
 .st{display:inline-block;padding:3px 10px;border-radius:var(--r-pill);background:var(--hair);font-size:13px;font-weight:700}
 .st.nuevo{background:var(--y)}.st.preparando{background:var(--ink);color:var(--y)}.st.listo{background:#d8f1e2;color:#0f5f33}.st.cancelado{background:#fbe6e2;color:var(--err)}
 
-/* Ticket de 80 mm: solo se ve al imprimir */
+/* Ticket para papel de 80 x 210 mm con 4 mm de margen. Se usa igual en la vista previa y al imprimir. */
+.tkt{--ts:1;width:calc(72mm / var(--ts));zoom:var(--ts);color:#000;background:#fff;font:600 12pt/1.3 system-ui,sans-serif;overflow-wrap:anywhere;word-break:break-word}
+.tkt h1{font-size:20pt;text-align:center;letter-spacing:-.03em}
+.tkt .c{text-align:center}
+.tkt hr{border:0;border-top:1.5px dashed #000;margin:3mm 0}
+.tkt .r{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.tkt .r .rn{min-width:0;flex:1}
+.tkt .r .rp{white-space:nowrap;flex:none}
+.tkt .tot{font-size:15pt}
+.tkt .big{font-size:26pt;font-weight:800;text-align:center;line-height:1}
+.tkt small{font-weight:500;font-size:10pt;display:block;padding-left:5mm}
+.tkt .logo{display:block;width:auto;height:18mm;margin:0 auto 2mm;filter:grayscale(1) contrast(1.35)}
 #ticket{display:none}
 @media print{
-  @page{size:80mm auto;margin:0}
+  @page{size:80mm 210mm;margin:4mm}
+  html,body{background:#fff!important;height:auto!important;overflow:visible!important}
   body>*:not(#ticket){display:none!important}
-  #ticket{display:block;width:72mm;margin:0 auto;padding:4mm 0 8mm;color:#000;font:600 12pt/1.3 system-ui,sans-serif}
-  #ticket h1{font-size:20pt;text-align:center;letter-spacing:-.03em}
-  #ticket .c{text-align:center}
-  #ticket hr{border:0;border-top:1.5px dashed #000;margin:3mm 0}
-  #ticket .r{display:flex;justify-content:space-between;gap:8px}
-  #ticket .big{font-size:26pt;font-weight:800;text-align:center;line-height:1}
-  #ticket small{font-weight:500;font-size:10pt;display:block;padding-left:5mm}
+  #ticket{display:block;margin:0}
+  #ticket,#ticket *{break-inside:avoid}
 }
+.prt{width:min(760px,96vw);padding:22px;max-height:94vh;overflow:auto}
+.prt-body{display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:start}
+.prt-paper{width:calc(80mm + 2px);padding:4mm;background:#fff;border:1px solid var(--hair);border-radius:6px;box-shadow:0 10px 30px -12px rgba(0,0,0,.3);max-height:70vh;overflow:auto}
+.prt-side{display:grid;gap:14px;align-content:start}
+.prt-info{font-size:14.5px;color:var(--muted)}
+.prt-info.bad{color:var(--err);font-weight:700}
+.prt-size{display:flex;align-items:center;justify-content:space-between;gap:12px;font-weight:600}
+.prt-size .step{height:44px}.prt-size .step button{width:46px;height:44px}.prt-size .step b{min-width:54px;font-size:17px}
+@media (max-width:700px){.prt-body{grid-template-columns:1fr}.prt-paper{justify-self:center}}
 
 @media (max-width:1100px){
   .board{grid-template-columns:1fr}
@@ -181,7 +197,6 @@ body{background:var(--paper);min-height:100dvh}
 
 .avatar{width:34px;height:34px;border-radius:10px;object-fit:cover;flex:none}
 .hero-note{display:none}
-@media print{#ticket .logo{display:block;width:auto;height:18mm;margin:0 auto 2mm;filter:grayscale(1) contrast(1.35)}}
 
 /* ===== Secciones del panel ===== */
 .tabs{display:flex;gap:4px;align-items:center;padding:4px;border-radius:var(--r-pill);background:rgba(255,255,255,.08);overflow-x:auto;scrollbar-width:none}
@@ -334,3 +349,22 @@ body{background:var(--paper);min-height:100dvh}
 .tag.new{background:#d8f0dd;color:#14532d}
 .tag.out{background:#f9d6d3;color:#7a1b12}
 .ptile.out{opacity:.45}
+
+/* Panel de cobro: un solo bloque que se desliza; el total y los botones de cobro quedan fijos abajo */
+.pos-r{overflow-y:auto;overflow-x:hidden}
+.pos-lines{max-height:none;overflow:visible;flex:none}
+.pos-f{flex:none;overflow:visible}
+.pos-t{position:sticky;bottom:-22px;margin-top:auto;margin-bottom:-22px;padding:12px 0 22px;background:var(--card);z-index:2}
+/* Productos con cantidad visible */
+.ptile{padding:0;gap:0;align-content:stretch;overflow:hidden}
+.ptile .pmain{display:grid;gap:4px;align-content:space-between;text-align:left;width:100%;min-height:76px;padding:14px 14px 8px;border-radius:20px 20px 0 0}
+.ptile .pmain b{font-size:17px;line-height:1.15;letter-spacing:-.025em}
+.ptile .pstep{display:flex;align-items:center;justify-content:space-between;margin:0 10px 10px;border-radius:var(--r-pill);background:var(--hair);height:40px}
+.ptile .pstep button{display:grid;place-items:center;width:44px;height:40px}
+.ptile .pstep button:disabled{opacity:.3}
+.ptile .pstep .ic{width:18px;height:18px}
+.ptile .pstep b{min-width:24px;text-align:center;font-size:16px}
+.ptile.has{border-color:var(--ink);background:var(--y-soft)}
+.ptile.has .pstep{background:var(--ink);color:var(--paper)}
+.ptile.pfree{padding:14px;border-style:dashed;align-content:space-between}
+.pfreeform{grid-column:1/-1;display:grid;gap:12px;max-width:520px}

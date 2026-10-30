@@ -101,7 +101,7 @@ async function setPayment(event, key, status, method) {
 // Cocina marca una estación (comida o bebida) de una línea como lista o la desmarca.
 // Cuando todas las estaciones de todas las líneas están listas, el pedido pasa solo a "listo".
 function lineKinds(l) { return Array.isArray(l.kinds) && l.kinds.length ? l.kinds : ['comida']; }
-function lineDone(l) { const d = Array.isArray(l.done) ? l.done : []; return lineKinds(l).every((k) => d.indexOf(k) > -1); }
+function lineDone(l) { const d = Array.isArray(l.done) ? l.done : []; return lineKinds(l).filter((k) => k === 'comida' || k === 'bebida').every((k) => d.indexOf(k) > -1); }
 async function setLineDone(event, key, idx, station, done) {
   const store = open(event);
   const rec = await store.get(key, { type: 'json' });

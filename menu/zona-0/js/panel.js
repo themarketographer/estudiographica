@@ -192,29 +192,73 @@
   });
 
   /* ---------- Ticket de 80 mm ---------- */
-  function printTicket(o) {
-    var t = $('#ticket'); t.textContent = ''; var cu = o.customer || {}, n = split(o.orderId);
-    var lg = el('img', 'logo'); lg.src = '../img/bean.svg'; lg.alt = ''; t.appendChild(lg); t.appendChild(el('h1', '', 'Zona 0')); t.appendChild(el('p', 'c', 'Café Boutique'));
+  function payText(o) {
+    var p = o.payment || {};
+    if (p.status !== 'pagado') return 'POR COBRAR';
+    var ps = p.parts && p.parts.length ? p.parts : [{ method: p.method || 'efectivo', amount: o.total }];
+    var nm = { efectivo: 'Efectivo', qr: 'QR', tarjeta: 'Tarjeta', transferencia: 'Transferencia' };
+    return ps.length > 1 ? 'COBRADO: ' + ps.map(function (q) { return nm[q.method] + ' ' + q.amount; }).join(' + ') : 'COBRADO: ' + (nm[ps[0].method] || ps[0].method);
+  }
+  function buildTicket(o, t, withLogo) {
+    t.textContent = ''; var cu = o.customer || {}, n = split(o.orderId);
+    if (withLogo) { var lg = el('img', 'logo'); lg.src = '../img/bean.svg'; lg.alt = ''; t.appendChild(lg); }
+    t.appendChild(el('h1', '', 'Zona 0')); t.appendChild(el('p', 'c', 'Café Boutique'));
     t.appendChild(document.createElement('hr'));
     if (o.orderId) { t.appendChild(el('p', 'big num', '#' + n[0])); t.appendChild(el('p', 'c', n[1] + ' · ' + hm(o.createdAt))); } else { t.appendChild(el('p', 'big num', 'MESA ' + (cu.mesa || ''))); t.appendChild(el('p', 'c', 'Cuenta · ' + hm(o.createdAt))); }
     t.appendChild(document.createElement('hr'));
-    t.appendChild(el('p', '', (o.mode === 'mesa' ? 'MESA ' + (cu.mesa || '') : MODE[o.mode].toUpperCase()) + ' · ' + (cu.name || '')));
+    t.appendChild(el('p', '', (o.mode === 'mesa' ? 'MESA ' + (cu.mesa || '') : MODE[o.mode].toUpperCase()) + (cu.name && o.mode !== 'mesa' ? ' · ' + cu.name : '')));
+    if (o.mozo) t.appendChild(el('p', '', 'Atendió: ' + o.mozo));
     if (cu.phone) t.appendChild(el('p', '', P.fmtPhone(cu.phone)));
     if (o.mode === 'delivery') t.appendChild(el('p', '', (cu.zoneName ? cu.zoneName + '. ' : '') + (cu.address || '')));
     t.appendChild(document.createElement('hr'));
     (o.lines || []).forEach(function (l) {
-      var r = el('div', 'r'); r.appendChild(el('span', '', l.qty + ' × ' + l.name)); r.appendChild(el('span', 'num', String(l.total))); t.appendChild(r);
+      var r = el('div', 'r'); r.appendChild(el('span', 'rn', l.qty + ' × ' + l.name)); r.appendChild(el('span', 'num rp', String(l.total))); t.appendChild(r);
       (l.choices || []).forEach(function (ch) { t.appendChild(el('small', '', ch.label + ': ' + ch.options.map(function (x) { return x.name; }).join(', '))); });
       if (l.note) t.appendChild(el('small', '', 'Nota: ' + l.note));
     });
-    if (o.deliveryFee) { var f = el('div', 'r'); f.appendChild(el('span', '', 'Envío')); f.appendChild(el('span', 'num', String(o.deliveryFee))); t.appendChild(f); }
+    if (o.deliveryFee) { var f = el('div', 'r'); f.appendChild(el('span', 'rn', 'Envío')); f.appendChild(el('span', 'num rp', String(o.deliveryFee))); t.appendChild(f); }
+    if (o.discount) { var d = el('div', 'r'); d.appendChild(el('span', 'rn', 'Descuento')); d.appendChild(el('span', 'num rp', '-' + o.discount)); t.appendChild(d); }
     t.appendChild(document.createElement('hr'));
-    var tt = el('div', 'r'); tt.style.fontSize = '15pt'; tt.appendChild(el('b', '', 'TOTAL')); tt.appendChild(el('b', 'num', money(o.total))); t.appendChild(tt);
-    t.appendChild(el('p', 'c', o.payment && o.payment.status === 'pagado' ? 'COBRADO · ' + o.payment.method : 'POR COBRAR'));
+    var tt = el('div', 'r tot'); tt.appendChild(el('b', 'rn', 'TOTAL')); tt.appendChild(el('b', 'num rp', money(o.total))); t.appendChild(tt);
+    t.appendChild(el('p', 'c', payText(o)));
     if (cu.notes) { t.appendChild(document.createElement('hr')); t.appendChild(el('p', '', 'Notas: ' + cu.notes)); }
     t.appendChild(document.createElement('hr')); t.appendChild(el('p', 'c', 'Gracias por rodar con nosotros'));
-    window.print();
   }
+  /* Ticket para papel de 80 x 210 mm con 4 mm de margen. Se ve antes de imprimir y se puede achicar o agrandar. */
+  var PAPER_H = 210, MARGIN = 4, PX_MM = 96 / 25.4;
+  var prt = { o: null, auto: true, scale: 1, logo: true };
+  try { var sv = JSON.parse(ls('z0.prt') || '{}'); if (sv.scale >= 0.5 && sv.scale <= 1.5) prt.scale = sv.scale; if (sv.auto === false) prt.auto = false; if (sv.logo === false) prt.logo = false; } catch (e) {}
+  var lastTicket = null;
+  function prtFit() {
+    var t = $('#prtTicket'); t.style.setProperty('--ts', '1'); var h = t.getBoundingClientRect().height / PX_MM, room = PAPER_H - MARGIN * 2 - 2;
+    return Math.max(0.5, Math.min(1.25, Math.floor(room / h * 20) / 20));
+  }
+  function prtPaint() {
+    var t = $('#prtTicket'); buildTicket(prt.o, t, prt.logo);
+    if (prt.auto) prt.scale = prtFit();
+    t.style.setProperty('--ts', String(prt.scale));
+    var h = t.getBoundingClientRect().height / PX_MM, fits = h <= PAPER_H - MARGIN * 2;
+    $('#prtPct').textContent = Math.round(prt.scale * 100) + '%';
+    $('#prtAuto').checked = prt.auto; $('#prtLogo').checked = prt.logo;
+    $('#prtInfo').textContent = 'Papel 80 × 210 mm, margen ' + MARGIN + ' mm. El ticket mide ' + Math.round(h) + ' mm de alto' + (fits ? ' y entra completo.' : ' y NO entra: achícalo o activa el ajuste automático.');
+    $('#prtInfo').classList.toggle('bad', !fits);
+    ls('z0.prt', JSON.stringify({ auto: prt.auto, scale: prt.scale, logo: prt.logo }));
+  }
+  function printTicket(o) {
+    lastTicket = o; prt.o = o; $('#prtT').textContent = o.orderId ? 'Ticket ' + o.orderId : 'Cuenta de la mesa ' + ((o.customer || {}).mesa || '');
+    if (!$('#prt').open) $('#prt').showModal(); prtPaint();
+  }
+  $('#prtMinus').addEventListener('click', function () { prt.auto = false; prt.scale = Math.max(0.5, Math.round((prt.scale - 0.05) * 100) / 100); prtPaint(); });
+  $('#prtPlus').addEventListener('click', function () { prt.auto = false; prt.scale = Math.min(1.5, Math.round((prt.scale + 0.05) * 100) / 100); prtPaint(); });
+  $('#prtAuto').addEventListener('change', function () { prt.auto = this.checked; prtPaint(); });
+  $('#prtLogo').addEventListener('change', function () { prt.logo = this.checked; prtPaint(); });
+  $('#prtGo').addEventListener('click', function () {
+    var t = $('#ticket'); buildTicket(prt.o, t, prt.logo); t.style.setProperty('--ts', String(prt.scale)); window.print();
+  });
+  $('#reprint').addEventListener('click', function () {
+    var o = lastTicket || histRows().filter(function (x) { return x.status !== 'cancelado'; })[0];
+    if (!o) { toast('Todavía no hay tickets para reimprimir.'); return; } printTicket(o);
+  });
 
   /* ---------- Historial y CSV ---------- */
   function histRows() { return list().sort(function (a, b) { return String(b.createdAt).localeCompare(String(a.createdAt)); }); }
@@ -256,7 +300,7 @@
 
   /* ---------- Mesas ---------- */
   function kindsOf(l) { return l.kinds && l.kinds.length ? l.kinds : ['comida']; }
-  function lineDoneAll(l) { var d = l.done || []; return kindsOf(l).every(function (k) { return d.indexOf(k) > -1; }); }
+  function lineDoneAll(l) { var d = l.done || []; return kindsOf(l).filter(function (k) { return k === 'comida' || k === 'bebida'; }).every(function (k) { return d.indexOf(k) > -1; }); }
   function openOrders(mesa) {
     return list().filter(function (o) { return o.mode === 'mesa' && o.customer && o.customer.mesa === mesa && o.status !== 'cancelado' && !(o.payment && o.payment.status === 'pagado'); })
       .sort(function (a, b) { return String(a.createdAt).localeCompare(String(b.createdAt)); });
@@ -307,20 +351,59 @@
   function posCats() {
     var box = $('#posCats'); box.textContent = '';
     menu.categories.forEach(function (c) { var b = el('button', 'chip'); b.type = 'button'; b.setAttribute('data-press', ''); b.setAttribute('aria-pressed', c.id === pc.cat ? 'true' : 'false'); b.appendChild(Z0Icon(c.icon)); b.appendChild(document.createTextNode(c.name)); b.addEventListener('click', function () { pc.cat = c.id; posCats(); posGrid(); }); box.appendChild(b); });
+    var fb = el('button', 'chip'); fb.type = 'button'; fb.setAttribute('data-press', ''); fb.setAttribute('aria-pressed', pc.cat === '__free' ? 'true' : 'false'); fb.appendChild(Z0Icon('plus')); fb.appendChild(document.createTextNode('Producto libre')); fb.addEventListener('click', function () { pc.cat = '__free'; posCats(); posGrid(); }); box.appendChild(fb);
   }
+  function cartQty(p) { return pc.lines.reduce(function (t, x) { return t + (x.raw.id === p.id ? x.raw.qty : 0); }, 0); }
+  function simpleLine(p) { return pc.lines.filter(function (x) { return x.raw.id === p.id && !(p.groups && p.groups.length); })[0]; }
   function posGrid() {
-    var g = $('#posGrid'); g.textContent = '';
+    var g = $('#posGrid'), top = g.scrollTop; g.textContent = '';
+    if (pc.cat === '__free') { posFree(g); return; }
     menu.products.filter(function (p) { return p.category === pc.cat; }).forEach(function (p) {
-      var b = el('button', 'ptile' + (p.available === false ? ' out' : '')); b.type = 'button'; b.setAttribute('data-press', ''); b.appendChild(el('b', '', p.title)); if (p.available === false) b.disabled = true;
-      var s = el('span', 'num', p.available === false ? 'Agotado' : money(p.price)); if (p.groups && p.groups.length && p.available !== false) s.appendChild(el('i', '', 'opciones')); b.appendChild(s);
-      b.addEventListener('click', function () { if (p.groups && p.groups.length) posOptions(p); else posAdd({ id: p.id, sel: {}, qty: 1, note: '' }); });
-      g.appendChild(b);
+      var out = p.available === false, opts = p.groups && p.groups.length, q = cartQty(p);
+      var t = el('div', 'ptile' + (out ? ' out' : '') + (q ? ' has' : '')), b = el('button', 'pmain'); b.type = 'button'; b.setAttribute('data-press', ''); b.disabled = out; b.appendChild(el('b', '', p.title));
+      var sp = el('span', 'num', out ? 'Agotado' : money(p.price)); if (opts && !out) sp.appendChild(el('i', '', 'opciones')); b.appendChild(sp);
+      b.addEventListener('click', function () { if (opts) posOptions(p); else posAdd({ id: p.id, sel: {}, qty: 1, note: '' }); });
+      t.appendChild(b);
+      if (!out) {
+        var st = el('div', 'pstep'), m = el('button'), a = el('button'), n = el('b', 'num', String(q));
+        m.type = 'button'; a.type = 'button'; m.setAttribute('aria-label', 'Quitar uno de ' + p.title); a.setAttribute('aria-label', 'Agregar uno de ' + p.title);
+        m.appendChild(Z0Icon('minus')); a.appendChild(Z0Icon('plus')); m.disabled = !q || !!opts;
+        m.addEventListener('click', function () { var it = simpleLine(p); if (!it) return; if (it.raw.qty <= 1) pc.lines = pc.lines.filter(function (x) { return x !== it; }); else { it.raw.qty--; it.line = P.resolveLine(menu, it.raw, { staff: true }).line; } posLines(); });
+        a.addEventListener('click', function () { if (opts) posOptions(p); else posAdd({ id: p.id, sel: {}, qty: 1, note: '' }); });
+        st.appendChild(m); st.appendChild(n); st.appendChild(a); t.appendChild(st);
+      }
+      g.appendChild(t);
     });
+    if (pc.cat === 'extras') {
+      var fr = el('button', 'ptile pfree'); fr.type = 'button'; fr.setAttribute('data-press', ''); fr.appendChild(el('b', '', 'Producto libre')); fr.appendChild(el('span', '', 'Otro producto o de otra tienda'));
+      fr.addEventListener('click', function () { pc.cat = '__free'; posCats(); posGrid(); }); g.appendChild(fr);
+    }
+    g.scrollTop = top;
+  }
+  /* Producto libre: algo que no está en el menú (mini tiendas, favores, cosas sueltas). Solo lo arma el personal. */
+  var freeLast = { kind: 'tienda' };
+  function posFree(g) {
+    var f = el('form', 'pfreeform'); f.noValidate = true;
+    f.appendChild(el('h3', '', 'Producto libre'));
+    f.appendChild(el('p', 'muted', 'Para vender algo que no está en el menú, por ejemplo de otra tienda. Queda en la cuenta y en las ventas.'));
+    var l1 = el('label', 'field'); l1.appendChild(el('span', '', 'Nombre')); var nm = el('input'); nm.maxLength = 60; nm.required = true; l1.appendChild(nm); f.appendChild(l1);
+    var row = el('div', 'two'), l2 = el('label', 'field'); l2.appendChild(el('span', '', 'Precio (Bs)')); var pr = el('input'); pr.type = 'number'; pr.inputMode = 'decimal'; pr.min = '0'; pr.step = '0.5'; l2.appendChild(pr); row.appendChild(l2);
+    var l3 = el('label', 'field'); l3.appendChild(el('span', '', 'Va a')); var ds = el('select'); [['tienda', 'Directo, sin preparar'], ['comida', 'Cocina'], ['bebida', 'Barra']].forEach(function (x) { var o = el('option', '', x[1]); o.value = x[0]; ds.appendChild(o); }); ds.value = freeLast.kind; l3.appendChild(ds); row.appendChild(l3); f.appendChild(row);
+    var l4 = el('label', 'field'); l4.appendChild(el('span', '', 'Cantidad')); var qn = el('input'); qn.type = 'number'; qn.inputMode = 'numeric'; qn.min = '1'; qn.max = String(P.MAX_QTY); qn.value = '1'; l4.appendChild(qn); f.appendChild(l4);
+    var er = el('p', 'formerr'); er.hidden = true; f.appendChild(er);
+    var go = el('button', 'btn btn--block', 'Agregar a la cuenta'); go.type = 'submit'; go.setAttribute('data-press', ''); f.appendChild(go);
+    f.addEventListener('submit', function (e) {
+      e.preventDefault(); er.hidden = true;
+      var raw = { free: { title: nm.value, price: Number(pr.value), kind: ds.value }, qty: Math.floor(Number(qn.value) || 0), note: '' };
+      var r = P.resolveLine(menu, raw, { staff: true }); if (!r.ok) { er.textContent = r.error; er.hidden = false; return; }
+      freeLast.kind = ds.value; posAdd(raw); toast(raw.free.title + ' agregado.'); nm.value = ''; pr.value = ''; qn.value = '1'; nm.focus();
+    });
+    g.appendChild(f);
   }
   function posAdd(raw) {
-    var r = P.resolveLine(menu, raw); if (!r.ok) { toast(r.error); return; }
+    var r = P.resolveLine(menu, raw, { staff: true }); if (!r.ok) { toast(r.error); return; }
     var ex = pc.lines.filter(function (l) { return l.line.key === r.line.key; })[0];
-    if (ex) { ex.raw.qty = Math.min(P.MAX_QTY, ex.raw.qty + raw.qty); ex.line = P.resolveLine(menu, ex.raw).line; } else pc.lines.push({ u: pc.uid++, raw: raw, line: r.line });
+    if (ex) { ex.raw.qty = Math.min(P.MAX_QTY, ex.raw.qty + raw.qty); ex.line = P.resolveLine(menu, ex.raw, { staff: true }).line; } else pc.lines.push({ u: pc.uid++, raw: raw, line: r.line });
     posLines();
   }
   function posOptions(p) {
@@ -355,13 +438,14 @@
     pc.lines.forEach(function (it) {
       var l = it.line, li = el('li', 'pl'); li.appendChild(el('b', '', l.name));
       var st = el('div', 'step'), m = el('button'); m.type = 'button'; m.appendChild(Z0Icon('minus')); var a = el('button'); a.type = 'button'; a.appendChild(Z0Icon('plus'));
-      m.addEventListener('click', function () { if (it.raw.qty <= 1) pc.lines = pc.lines.filter(function (x) { return x !== it; }); else { it.raw.qty--; it.line = P.resolveLine(menu, it.raw).line; } posLines(); });
-      a.addEventListener('click', function () { if (it.raw.qty < P.MAX_QTY) { it.raw.qty++; it.line = P.resolveLine(menu, it.raw).line; posLines(); } });
+      m.addEventListener('click', function () { if (it.raw.qty <= 1) pc.lines = pc.lines.filter(function (x) { return x !== it; }); else { it.raw.qty--; it.line = P.resolveLine(menu, it.raw, { staff: true }).line; } posLines(); });
+      a.addEventListener('click', function () { if (it.raw.qty < P.MAX_QTY) { it.raw.qty++; it.line = P.resolveLine(menu, it.raw, { staff: true }).line; posLines(); } });
       st.appendChild(m); st.appendChild(el('b', 'num', String(it.raw.qty))); st.appendChild(a); li.appendChild(st);
       li.appendChild(el('span', 'pr num', money(l.total)));
       var det = lineDetail(l); if (det) li.appendChild(el('small', '', det));
       ul.appendChild(li);
     });
+    if (pc.cat !== '__free') posGrid();
     posTotals();
   }
   /* Cuenta abierta de la mesa: lo que ya se pidió en rondas anteriores y qué ya salió de cocina. */
