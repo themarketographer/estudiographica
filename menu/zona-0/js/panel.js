@@ -337,7 +337,7 @@
     var o = prt.o;
     var a = document.createElement('a');
     a.href = ticketPng(o); a.download = 'ticket-' + (o.orderId || ('mesa-' + ((o.customer || {}).mesa || ''))) + '.png'; document.body.appendChild(a); a.click(); a.remove();
-    $('#prtTxtMsg').textContent = 'Imagen descargada. Ábrela con Paint, imprime con Ctrl+P y elige papel 80 x 210.';
+    $('#prtTxtMsg').textContent = 'Enviado. Si el ayudante está encendido, imprime solo en unos segundos. Si no, abre la imagen con Paint y Ctrl+P.'; $('#prt').close();
   });
   $('#reprint').addEventListener('click', function () {
     var o = lastTicket || histRows().filter(function (x) { return x.status !== 'cancelado'; })[0];
