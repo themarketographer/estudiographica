@@ -1,63 +1,755 @@
 {
-  "version": 1,
+  "version": 2,
   "brand": {
     "name": "Zona 0",
     "tagline": "Recarga antes de rodar",
     "fullName": "Zona 0 Café Boutique",
     "currency": "Bs",
     "address": "Cochabamba, Bolivia",
-    "orderPrefix": "Z0"
+    "orderPrefix": "Z0",
+    "whatsapp": "59162308010",
+    "email": "zona0cafe@gmail.com",
+    "instagram": "zona0_cafe_Boutique"
   },
-  "hours": { "text": "Todos los días, 06:30 a 20:00", "tz": "America/La_Paz", "open": "06:30", "close": "20:00" },
+  "hours": {
+    "text": "Todos los días, 06:30 a 20:00",
+    "tz": "America/La_Paz",
+    "open": "06:30",
+    "close": "20:00"
+  },
   "service": {
-    "modes": ["mesa", "recojo", "delivery"],
+    "modes": [
+      "mesa",
+      "recojo",
+      "delivery"
+    ],
     "minOrder": 0,
     "freeDeliveryFrom": 120,
     "prepMin": 12,
     "zones": [
-      { "id": "cerca", "name": "Cerca (hasta 2 km)", "fee": 8, "travelMin": 15 },
-      { "id": "media", "name": "Media (2 a 5 km)", "fee": 14, "travelMin": 25 }
+      {
+        "id": "cerca",
+        "name": "Cerca (hasta 2 km)",
+        "fee": 8,
+        "travelMin": 15
+      },
+      {
+        "id": "media",
+        "name": "Media (2 a 5 km)",
+        "fee": 14,
+        "travelMin": 25
+      }
+    ],
+    "tables": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
     ]
   },
   "categories": [
-    { "id": "cafe", "name": "Café", "icon": "cup" },
-    { "id": "rodar", "name": "Para rodar", "icon": "bolt" },
-    { "id": "hidrata", "name": "Hidratación", "icon": "drop" },
-    { "id": "dulce", "name": "Dulce", "icon": "cookie" }
+    {
+      "id": "cafe-hot",
+      "name": "Café caliente",
+      "icon": "cup",
+      "kind": "bebida"
+    },
+    {
+      "id": "cafe-cold",
+      "name": "Café frío",
+      "icon": "drop",
+      "kind": "bebida"
+    },
+    {
+      "id": "te",
+      "name": "Té y mates",
+      "icon": "cup",
+      "kind": "bebida"
+    },
+    {
+      "id": "jugos",
+      "name": "Jugos y shakes",
+      "icon": "drop",
+      "kind": "bebida"
+    },
+    {
+      "id": "refrescos",
+      "name": "Refrescos",
+      "icon": "drop",
+      "kind": "bebida"
+    },
+    {
+      "id": "desayunos",
+      "name": "Desayunos",
+      "icon": "bolt",
+      "kind": "comida"
+    },
+    {
+      "id": "salados",
+      "name": "Salados",
+      "icon": "bag",
+      "kind": "comida"
+    },
+    {
+      "id": "dulces",
+      "name": "Dulces",
+      "icon": "cookie",
+      "kind": "comida"
+    },
+    {
+      "id": "extras",
+      "name": "Extras",
+      "icon": "plus",
+      "kind": "comida"
+    }
   ],
   "optionGroups": {
-    "leche": { "label": "Leche", "hint": "Elige 1", "type": "single", "required": true, "options": [
-      { "id": "entera", "name": "Entera", "price": 0, "default": true },
-      { "id": "deslactosada", "name": "Deslactosada", "price": 0 },
-      { "id": "avena", "name": "Avena", "price": 4 }
-    ] },
-    "shot": { "label": "Más energía", "hint": "Opcional", "type": "multi", "required": false, "max": 2, "options": [
-      { "id": "shot", "name": "Shot extra", "price": 5 }
-    ] },
-    "sabor": { "label": "Sabor", "hint": "Elige 1", "type": "single", "required": true, "options": [
-      { "id": "naranja", "name": "Naranja", "price": 0, "default": true },
-      { "id": "frutilla", "name": "Frutilla", "price": 0 },
-      { "id": "maracuya", "name": "Maracuyá", "price": 0 }
-    ] },
-    "extras-comida": { "label": "Extras", "hint": "Hasta 2", "type": "multi", "required": false, "max": 2, "options": [
-      { "id": "palta", "name": "Palta", "price": 6 },
-      { "id": "huevo", "name": "Huevo", "price": 4 }
-    ] }
+    "tam": {
+      "label": "Tamaño",
+      "hint": "Elige 1",
+      "type": "single",
+      "required": true,
+      "options": [
+        {
+          "id": "mediano",
+          "name": "Mediano",
+          "price": 0,
+          "default": true
+        },
+        {
+          "id": "grande",
+          "name": "Grande",
+          "price": 5
+        }
+      ]
+    },
+    "espresso": {
+      "label": "Espresso",
+      "hint": "Elige 1",
+      "type": "single",
+      "required": true,
+      "options": [
+        {
+          "id": "simple",
+          "name": "Simple",
+          "price": 0,
+          "default": true
+        },
+        {
+          "id": "doble",
+          "name": "Doble",
+          "price": 5
+        }
+      ]
+    },
+    "sabor-ms": {
+      "label": "Sabor",
+      "hint": "Elige 1",
+      "type": "single",
+      "required": true,
+      "options": [
+        {
+          "id": "vainilla",
+          "name": "Vainilla",
+          "price": 0,
+          "default": true
+        },
+        {
+          "id": "frutilla",
+          "name": "Frutilla",
+          "price": 0
+        },
+        {
+          "id": "chocolate",
+          "name": "Chocolate",
+          "price": 0
+        }
+      ]
+    },
+    "jarabe": {
+      "label": "Jarabe",
+      "hint": "Elige 1",
+      "type": "single",
+      "required": true,
+      "options": [
+        {
+          "id": "vainilla",
+          "name": "Vainilla",
+          "price": 0,
+          "default": true
+        },
+        {
+          "id": "caramelo",
+          "name": "Caramelo",
+          "price": 0
+        }
+      ]
+    },
+    "cafe-cic": {
+      "label": "Café",
+      "hint": "Elige 1",
+      "type": "single",
+      "required": true,
+      "options": [
+        {
+          "id": "americano",
+          "name": "Americano",
+          "price": 0,
+          "default": true
+        },
+        {
+          "id": "cortado",
+          "name": "Cortado",
+          "price": 0
+        }
+      ]
+    },
+    "cafe-zona": {
+      "label": "Café a elección",
+      "hint": "Elige 1",
+      "type": "single",
+      "required": true,
+      "options": [
+        {
+          "id": "espresso",
+          "name": "Espresso",
+          "price": 0,
+          "default": true
+        },
+        {
+          "id": "capuchino",
+          "name": "Capuchino",
+          "price": 0
+        },
+        {
+          "id": "latte",
+          "name": "Latte",
+          "price": 0
+        },
+        {
+          "id": "americano",
+          "name": "Americano",
+          "price": 0
+        },
+        {
+          "id": "cortado",
+          "name": "Cortado",
+          "price": 0
+        }
+      ]
+    },
+    "muffin": {
+      "label": "English muffin",
+      "hint": "Elige 1",
+      "type": "single",
+      "required": true,
+      "options": [
+        {
+          "id": "huevo",
+          "name": "Huevo",
+          "price": 0,
+          "default": true
+        },
+        {
+          "id": "jamon-queso",
+          "name": "Jamón con queso",
+          "price": 0
+        },
+        {
+          "id": "huevo-tocino",
+          "name": "Huevo con tocino",
+          "price": 0
+        },
+        {
+          "id": "vegetariano",
+          "name": "Vegetariano",
+          "price": 0
+        }
+      ]
+    },
+    "jugo-zona": {
+      "label": "Jugo",
+      "hint": "Elige 1",
+      "type": "single",
+      "required": true,
+      "options": [
+        {
+          "id": "leche-platano",
+          "name": "De leche con plátano",
+          "price": 0,
+          "default": true
+        },
+        {
+          "id": "temporada",
+          "name": "De temporada",
+          "price": 0
+        }
+      ]
+    }
   },
   "products": [
-    { "id": "espresso", "title": "Espresso", "sub": "Corto, intenso, directo", "category": "cafe", "price": 10, "groups": [] },
-    { "id": "americano", "title": "Americano", "sub": "Espresso largo con agua caliente", "category": "cafe", "price": 12, "groups": [] },
-    { "id": "cappuccino", "title": "Cappuccino", "sub": "Espresso, leche y espuma", "category": "cafe", "price": 16, "groups": ["leche", "shot"] },
-    { "id": "latte", "title": "Latte", "sub": "Suave y cremoso", "category": "cafe", "price": 18, "groups": ["leche", "shot"] },
-    { "id": "coldbrew", "title": "Cold brew", "sub": "Infusión en frío por 12 horas", "category": "cafe", "price": 20, "groups": [] },
-    { "id": "tostada", "title": "Tostada de palta y huevo", "sub": "Pan de masa madre, palta y huevo", "category": "rodar", "price": 28, "groups": ["extras-comida"] },
-    { "id": "sandwich", "title": "Sándwich de pollo y queso", "sub": "Para el tramo largo", "category": "rodar", "price": 32, "groups": ["extras-comida"] },
-    { "id": "bowl", "title": "Bowl de granola y fruta", "sub": "Yogur, granola y fruta de estación", "category": "rodar", "price": 26, "groups": [] },
-    { "id": "banana", "title": "Banana con maní", "sub": "El clásico antes de pedalear", "category": "rodar", "price": 14, "groups": [] },
-    { "id": "jugo", "title": "Jugo natural", "sub": "Exprimido al momento", "category": "hidrata", "price": 14, "groups": ["sabor"] },
-    { "id": "isotonico", "title": "Isotónico casero", "sub": "Limón, sal y miel", "category": "hidrata", "price": 12, "groups": [] },
-    { "id": "agua", "title": "Agua", "sub": "500 ml", "category": "hidrata", "price": 6, "groups": [] },
-    { "id": "brownie", "title": "Brownie", "sub": "Chocolate amargo", "category": "dulce", "price": 12, "groups": [] },
-    { "id": "barra", "title": "Barra energética", "sub": "Avena, dátiles y semillas", "category": "dulce", "price": 10, "groups": [] }
+    {
+      "id": "espresso",
+      "title": "Espresso",
+      "sub": "Simple o doble",
+      "category": "cafe-hot",
+      "price": 10,
+      "groups": [
+        "espresso"
+      ]
+    },
+    {
+      "id": "cappuccino",
+      "title": "Cappuccino",
+      "sub": "Mediano o grande",
+      "category": "cafe-hot",
+      "price": 20,
+      "groups": [
+        "tam"
+      ]
+    },
+    {
+      "id": "latte",
+      "title": "Latte",
+      "sub": "Mediano o grande",
+      "category": "cafe-hot",
+      "price": 20,
+      "groups": [
+        "tam"
+      ]
+    },
+    {
+      "id": "americano",
+      "title": "Americano",
+      "sub": "Mediano o grande",
+      "category": "cafe-hot",
+      "price": 15,
+      "groups": [
+        "tam"
+      ]
+    },
+    {
+      "id": "moca",
+      "title": "Moca",
+      "sub": "Mediano o grande",
+      "category": "cafe-hot",
+      "price": 20,
+      "groups": [
+        "tam"
+      ]
+    },
+    {
+      "id": "cortado",
+      "title": "Café cortado",
+      "sub": "Tamaño grande",
+      "category": "cafe-hot",
+      "price": 20,
+      "groups": []
+    },
+    {
+      "id": "bombon",
+      "title": "Café bombón",
+      "sub": "Tamaño grande",
+      "category": "cafe-hot",
+      "price": 25,
+      "groups": []
+    },
+    {
+      "id": "chocolate",
+      "title": "Chocolate caliente",
+      "sub": "Tamaño grande",
+      "category": "cafe-hot",
+      "price": 25,
+      "groups": []
+    },
+    {
+      "id": "submarino",
+      "title": "Submarino",
+      "sub": "Tamaño grande",
+      "category": "cafe-hot",
+      "price": 25,
+      "groups": []
+    },
+    {
+      "id": "ameri-helado",
+      "title": "Ameri-helado",
+      "sub": "Café frío",
+      "category": "cafe-cold",
+      "price": 25,
+      "groups": []
+    },
+    {
+      "id": "vienessa",
+      "title": "Vienessa",
+      "sub": "Café frío",
+      "category": "cafe-cold",
+      "price": 25,
+      "groups": []
+    },
+    {
+      "id": "iced-moca",
+      "title": "Iced moca",
+      "sub": "Café frío",
+      "category": "cafe-cold",
+      "price": 25,
+      "groups": []
+    },
+    {
+      "id": "cold-brew",
+      "title": "Cold brew",
+      "sub": "Café frío",
+      "category": "cafe-cold",
+      "price": 20,
+      "groups": []
+    },
+    {
+      "id": "affogato",
+      "title": "Affogato",
+      "sub": "Café frío",
+      "category": "cafe-cold",
+      "price": 25,
+      "groups": []
+    },
+    {
+      "id": "dalgona",
+      "title": "Dalgona",
+      "sub": "Café frío",
+      "category": "cafe-cold",
+      "price": 20,
+      "groups": []
+    },
+    {
+      "id": "milkshake",
+      "title": "Milkshake",
+      "sub": "Vainilla, frutilla o chocolate",
+      "category": "cafe-cold",
+      "price": 20,
+      "groups": [
+        "sabor-ms"
+      ]
+    },
+    {
+      "id": "te",
+      "title": "Té",
+      "sub": "Tamaño grande",
+      "category": "te",
+      "price": 15,
+      "groups": []
+    },
+    {
+      "id": "yerba",
+      "title": "Yerba mate",
+      "sub": "Tamaño grande",
+      "category": "te",
+      "price": 15,
+      "groups": []
+    },
+    {
+      "id": "matcha",
+      "title": "Matcha",
+      "sub": "Mediano o grande",
+      "category": "te",
+      "price": 20,
+      "groups": [
+        "tam"
+      ]
+    },
+    {
+      "id": "jugo-verde",
+      "title": "Jugo verde",
+      "sub": "Manzana verde, apio, pepino y espinaca",
+      "category": "jugos",
+      "price": 25,
+      "groups": []
+    },
+    {
+      "id": "jugo-rojo",
+      "title": "Jugo rojo",
+      "sub": "Remolacha, manzana roja, zanahoria, limón y gengibre",
+      "category": "jugos",
+      "price": 25,
+      "groups": []
+    },
+    {
+      "id": "multi",
+      "title": "Multivitamínico",
+      "sub": "Leche, huevo, miel, maltín, nuez o almendra, avena y plátano",
+      "category": "jugos",
+      "price": 25,
+      "groups": []
+    },
+    {
+      "id": "fruta",
+      "title": "Fruta de temporada",
+      "sub": "Jugo de la fruta del día",
+      "category": "jugos",
+      "price": 20,
+      "groups": []
+    },
+    {
+      "id": "shake-agua",
+      "title": "Shake de proteína con agua",
+      "sub": "Tamaño grande",
+      "category": "jugos",
+      "price": 10,
+      "groups": []
+    },
+    {
+      "id": "shake-leche",
+      "title": "Shake de proteína con leche",
+      "sub": "Tamaño grande",
+      "category": "jugos",
+      "price": 13,
+      "groups": []
+    },
+    {
+      "id": "coca",
+      "title": "Coca Cola 500 ml",
+      "sub": "Refresco",
+      "category": "refrescos",
+      "price": 10,
+      "groups": []
+    },
+    {
+      "id": "fanta",
+      "title": "Fanta 500 ml",
+      "sub": "Refresco",
+      "category": "refrescos",
+      "price": 10,
+      "groups": []
+    },
+    {
+      "id": "sprite",
+      "title": "Sprite 500 ml",
+      "sub": "Refresco",
+      "category": "refrescos",
+      "price": 10,
+      "groups": []
+    },
+    {
+      "id": "powerade",
+      "title": "Power Ade 473 ml",
+      "sub": "Refresco",
+      "category": "refrescos",
+      "price": 10,
+      "groups": []
+    },
+    {
+      "id": "agua",
+      "title": "Agua 600 ml",
+      "sub": "Refresco",
+      "category": "refrescos",
+      "price": 10,
+      "groups": []
+    },
+    {
+      "id": "agua-gas",
+      "title": "Agua con gas 600 ml",
+      "sub": "Refresco",
+      "category": "refrescos",
+      "price": 10,
+      "groups": []
+    },
+    {
+      "id": "ciclista",
+      "title": "Ciclista",
+      "sub": "Café americano o cortado, jugo verde y pie de pollo",
+      "category": "desayunos",
+      "price": 55,
+      "groups": [
+        "cafe-cic"
+      ],
+      "kinds": [
+        "comida",
+        "bebida"
+      ],
+      "includes": "Jugo verde y pie de pollo"
+    },
+    {
+      "id": "ciclista-elite",
+      "title": "Ciclista Élite",
+      "sub": "Capuchino, bowl de carga energética y jugo rojo",
+      "category": "desayunos",
+      "price": 55,
+      "groups": [],
+      "kinds": [
+        "comida",
+        "bebida"
+      ],
+      "includes": "Capuchino, bowl de carga energética (avena, leche, frutos secos, huevo, plátano y miel) y jugo rojo"
+    },
+    {
+      "id": "desayuno-zona",
+      "title": "Zona 0",
+      "sub": "Café a elección, english muffin, jugo y short bread",
+      "category": "desayunos",
+      "price": 55,
+      "groups": [
+        "cafe-zona",
+        "muffin",
+        "jugo-zona"
+      ],
+      "kinds": [
+        "comida",
+        "bebida"
+      ],
+      "includes": "Short bread"
+    },
+    {
+      "id": "pie-pollo",
+      "title": "Pie de pollo",
+      "sub": "Acompañado de puré de papa",
+      "category": "salados",
+      "price": 35,
+      "groups": []
+    },
+    {
+      "id": "mf-huevo",
+      "title": "English muffin de huevo",
+      "sub": "English muffin sandwich",
+      "category": "salados",
+      "price": 15,
+      "groups": []
+    },
+    {
+      "id": "mf-jamon",
+      "title": "English muffin de jamón con queso",
+      "sub": "English muffin sandwich",
+      "category": "salados",
+      "price": 20,
+      "groups": []
+    },
+    {
+      "id": "mf-tocino",
+      "title": "English muffin de huevo con tocino",
+      "sub": "English muffin sandwich",
+      "category": "salados",
+      "price": 20,
+      "groups": []
+    },
+    {
+      "id": "mf-veg",
+      "title": "English muffin vegetariano",
+      "sub": "Queso, champiñones, albahaca y tomate",
+      "category": "salados",
+      "price": 15,
+      "groups": []
+    },
+    {
+      "id": "mf-eleccion",
+      "title": "English muffin a elección",
+      "sub": "English muffin sandwich, relleno a elección",
+      "category": "salados",
+      "price": 25,
+      "groups": []
+    },
+    {
+      "id": "crispy",
+      "title": "Crispy chicken",
+      "sub": "English muffin sandwich",
+      "category": "salados",
+      "price": 25,
+      "groups": []
+    },
+    {
+      "id": "apple",
+      "title": "Apple crumble",
+      "sub": "Dulce",
+      "category": "dulces",
+      "price": 25,
+      "groups": []
+    },
+    {
+      "id": "cheesecake",
+      "title": "Cheesecake",
+      "sub": "Chocolate y naranja",
+      "category": "dulces",
+      "price": 25,
+      "groups": []
+    },
+    {
+      "id": "brownie",
+      "title": "Brownie",
+      "sub": "Con helado",
+      "category": "dulces",
+      "price": 25,
+      "groups": []
+    },
+    {
+      "id": "galletas",
+      "title": "Galletas",
+      "sub": "Chispas de chocolate",
+      "category": "dulces",
+      "price": 7,
+      "groups": []
+    },
+    {
+      "id": "short2x",
+      "title": "Shortbread 2x",
+      "sub": "Dulce",
+      "category": "dulces",
+      "price": 12,
+      "groups": []
+    },
+    {
+      "id": "short-car",
+      "title": "Shortbread caramel",
+      "sub": "Dulce",
+      "category": "dulces",
+      "price": 12,
+      "groups": []
+    },
+    {
+      "id": "torta",
+      "title": "Porción de torta",
+      "sub": "Dulce",
+      "category": "dulces",
+      "price": 20,
+      "groups": []
+    },
+    {
+      "id": "crema",
+      "title": "Porción de crema",
+      "sub": "Extra",
+      "category": "extras",
+      "price": 5,
+      "groups": []
+    },
+    {
+      "id": "helado",
+      "title": "Porción de helado",
+      "sub": "Vainilla",
+      "category": "extras",
+      "price": 5,
+      "groups": []
+    },
+    {
+      "id": "proteina",
+      "title": "30 g de proteína",
+      "sub": "Extra para tu bebida",
+      "category": "extras",
+      "price": 9,
+      "groups": [],
+      "kinds": [
+        "bebida"
+      ]
+    },
+    {
+      "id": "jarabe",
+      "title": "Jarabe",
+      "sub": "Vainilla o caramelo",
+      "category": "extras",
+      "price": 3,
+      "groups": [
+        "jarabe"
+      ],
+      "kinds": [
+        "bebida"
+      ]
+    }
   ]
 }

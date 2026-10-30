@@ -98,6 +98,66 @@ async function setPayment(event, key, status, method) {
   return rec;
 }
 
+// Cocina marca una estación (comida o bebida) de una línea como lista o la desmarca.
+// Cuando todas las estaciones de todas las líneas están listas, el pedido pasa solo a "listo".
+function lineKinds(l) { return Array.isArray(l.kinds) && l.kinds.length ? l.kinds : ['comida']; }
+function lineDone(l) { const d = Array.isArray(l.done) ? l.done : []; return lineKinds(l).every((k) => d.indexOf(k) > -1); }
+async function setLineDone(event, key, idx, station, done) {
+  const store = open(event);
+  const rec = await store.get(key, { type: 'json' });
+  if (!rec || !Array.isArray(rec.lines) || !rec.lines[idx]) return null;
+  const l = rec.lines[idx];
+  if (lineKinds(l).indexOf(station) === -1) return null;
+  const d = new Set(Array.isArray(l.done) ? l.done : []);
+  if (done) d.add(station); else d.delete(station);
+  l.done = Array.from(d);
+  if (rec.status === 'preparando' || rec.status === 'listo') {
+    rec.status = rec.lines.every(lineDone) ? 'listo' : 'preparando';
+  }
+  rec.updatedAt = new Date().toISOString();
+  await store.setJSON(key, rec);
+  await touch(event, key);
+  return rec;
+}
+
+// Cobra un pedido y lo da por entregado (se usa al cerrar una mesa).
+async function settle(event, key, method) {
+  const store = open(event);
+  const rec = await store.get(key, { type: 'json' });
+  if (!rec || rec.status === 'cancelado') return rec || null;
+  const now = new Date().toISOString();
+  rec.payment = Object.assign({}, rec.payment, { status: 'pagado', method, updatedAt: now });
+  rec.status = 'entregado';
+  rec.updatedAt = now;
+  await store.setJSON(key, rec);
+  await touch(event, key);
+  return rec;
+}
+
+// Libro diario: una clave por movimiento, "led/<fecha>/<ms>-<azar>". Los movimientos anulados se conservan marcados.
+async function ledgerAdd(event, day, entry) {
+  const id = 'led/' + day + '/' + Date.now() + '-' + Math.random().toString(36).slice(2, 6);
+  const rec = Object.assign({ id, day }, entry);
+  await open(event).setJSON(id, rec);
+  return rec;
+}
+async function ledgerRange(event, dayKeys) {
+  const store = open(event);
+  const lists = await Promise.all(dayKeys.map((d) => store.list({ prefix: 'led/' + d + '/' }).then((r) => r.blobs).catch(() => [])));
+  const keys = [].concat.apply([], lists.map((bl) => bl.map((b) => b.key))).slice(-1500);
+  const rows = await Promise.all(keys.map((k) => store.get(k, { type: 'json' }).catch(() => null)));
+  return rows.filter(Boolean).sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
+}
+async function ledgerVoid(event, id, by, reason) {
+  if (!/^led\/\d{4}-\d{2}-\d{2}\/[\w-]+$/.test(id)) return null;
+  const store = open(event);
+  const rec = await store.get(id, { type: 'json' });
+  if (!rec) return null;
+  rec.voided = true; rec.voidedAt = new Date().toISOString(); rec.voidReason = String(reason || '').slice(0, 80); rec.voidedBy = String(by || '').slice(0, 40);
+  await store.setJSON(id, rec);
+  return rec;
+}
+
 // Interruptor "recibiendo pedidos". Por defecto abierto.
 async function isOpen(event) {
   try {
@@ -110,4 +170,4 @@ async function setOpen(event, open_) {
   return !!open_;
 }
 
-module.exports = { isProd, storeName, STATUSES, keyFor, saveNumbered, touch, changedSince, listDays, getOrder, setStatus, setPayment, isOpen, setOpen };
+module.exports = { isProd, storeName, STATUSES, keyFor, saveNumbered, touch, changedSince, listDays, getOrder, setStatus, setPayment, isOpen, setOpen, setLineDone, settle, lineKinds, lineDone, ledgerAdd, ledgerRange, ledgerVoid };

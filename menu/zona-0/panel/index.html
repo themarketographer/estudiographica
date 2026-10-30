@@ -16,12 +16,19 @@
 
 <header class="bar on-ink">
   <a class="brandmark" href="./" aria-label="Panel de Zona 0"><img class="bm-bean" src="../img/bean.svg" alt="" width="17" height="28"><span class="bm-name">Zona 0</span><em>Panel</em></a>
+  <nav class="tabs" id="tabs" aria-label="Secciones" hidden>
+    <button type="button" data-tab="mesas" data-press aria-pressed="true">Mesas</button>
+    <button type="button" data-tab="pedidos" data-press aria-pressed="false">Pedidos<b class="badge" id="bdgPed" hidden>0</b></button>
+    <button type="button" data-tab="ventas" data-press aria-pressed="false">Ventas</button>
+    <button type="button" data-tab="libro" data-press aria-pressed="false">Libro diario</button>
+    <button type="button" data-tab="menu" data-press aria-pressed="false">Menú</button>
+    <a class="tablink" href="../cocina/" target="_blank" rel="noopener">Cocina</a>
+  </nav>
   <span class="live" id="live" hidden>En vivo</span>
   <div class="tools" id="tools" hidden>
-    <button class="tool" id="sound" type="button" data-press aria-pressed="false"><svg class="ic"><use href="#i-mute"/></svg><span>Sonido</span></button>
+    <button class="tool" id="sound" type="button" data-press aria-pressed="false" title="Sonido de pedidos nuevos"><svg class="ic"><use href="#i-mute"/></svg><span>Sonido</span></button>
     <button class="tool sw" id="openSw" type="button" data-press aria-pressed="true" title="Cuando está apagado, los clientes no pueden pedir desde el celular"><i class="knob"></i><span>Recibiendo pedidos</span></button>
-    <button class="tool" id="histBtn" type="button" data-press><svg class="ic"><use href="#i-list"/></svg><span>Historial</span></button>
-    <button class="tool go" id="newBtn" type="button" data-press><svg class="ic"><use href="#i-plus"/></svg><span>Nuevo pedido</span></button>
+    <button class="tool" id="histBtn" type="button" data-press title="Historial de pedidos"><svg class="ic"><use href="#i-list"/></svg><span>Historial</span></button>
     <button class="tool ico" id="logout" type="button" data-press aria-label="Salir"><svg class="ic"><use href="#i-out"/></svg></button>
   </div>
 </header>
@@ -40,58 +47,99 @@
 </form>
 
 <main class="app" id="app" hidden>
-  <section class="kpis" id="kpis" aria-label="Resumen de hoy"></section>
   <div class="closed-banner" id="closedBanner" hidden><svg class="ic"><use href="#i-bell"/></svg>Los pedidos desde el celular están en pausa. Actívalos con el interruptor de arriba.</div>
-  <section class="board" id="board">
-    <div class="col" data-col="nuevo"><h2><span>Nuevos</span><b class="num" data-n>0</b></h2><div class="stack" data-stack></div></div>
-    <div class="col" data-col="preparando"><h2><span>En cocina</span><b class="num" data-n>0</b></h2><div class="stack" data-stack></div></div>
-    <div class="col" data-col="listo"><h2><span>Listos para entregar</span><b class="num" data-n>0</b></h2><div class="stack" data-stack></div></div>
+
+  <!-- Mesas: vista principal -->
+  <section class="view" id="v-mesas" data-view="mesas" aria-label="Mesas">
+    <div class="vhead"><h1>Mesas</h1>
+      <div class="vact"><button class="tool dark" id="takeBtn" type="button" data-press><svg class="ic"><use href="#i-bag"/></svg><span>Para llevar</span></button><button class="tool dark" id="delBtn" type="button" data-press><svg class="ic"><use href="#i-bike"/></svg><span>Delivery</span></button></div>
+    </div>
+    <div class="legend"><span><i class="lg free"></i>Libre</span><span><i class="lg busy"></i>Con cuenta abierta</span><span><i class="lg ready"></i>Lista para servir</span></div>
+    <div class="tables" id="tables"></div>
   </section>
-  <section class="done" id="doneSec"><h2>Entregados hoy <b class="num" id="doneN">0</b></h2><div class="done-list" id="doneList"></div></section>
+
+  <!-- Pedidos: tablero -->
+  <section class="view" id="v-pedidos" data-view="pedidos" hidden aria-label="Pedidos">
+    <section class="kpis" id="kpis" aria-label="Resumen de hoy"></section>
+    <section class="board" id="board">
+      <div class="col" data-col="nuevo"><h2><span>Del celular, por aceptar</span><b class="num" data-n>0</b></h2><div class="stack" data-stack></div></div>
+      <div class="col" data-col="preparando"><h2><span>En cocina</span><b class="num" data-n>0</b></h2><div class="stack" data-stack></div></div>
+      <div class="col" data-col="listo"><h2><span>Listos para servir</span><b class="num" data-n>0</b></h2><div class="stack" data-stack></div></div>
+    </section>
+    <section class="done" id="doneSec"><h2>Entregados hoy <b class="num" id="doneN">0</b></h2><div class="done-list" id="doneList"></div></section>
+  </section>
+
+  <!-- Ventas del día -->
+  <section class="view" id="v-ventas" data-view="ventas" hidden aria-label="Ventas del día"></section>
+  <!-- Libro diario -->
+  <section class="view" id="v-libro" data-view="libro" hidden aria-label="Libro diario"></section>
+  <!-- Menú -->
+  <section class="view" id="v-menu" data-view="menu" hidden aria-label="Menú"></section>
 </main>
 
-<!-- Nuevo pedido desde la computadora -->
+<!-- Mesa o pedido desde la computadora -->
 <dialog class="dlg pos" id="pos" aria-labelledby="posT">
   <div class="pos-l">
-    <div class="pos-h"><h2 id="posT">Nuevo pedido</h2><button class="x" type="button" data-press data-close aria-label="Cerrar"><svg class="ic"><use href="#i-x"/></svg></button></div>
+    <div class="pos-h"><h2 id="posT">Mesa</h2><button class="x" type="button" data-press data-close aria-label="Cerrar"><svg class="ic"><use href="#i-x"/></svg></button></div>
     <div class="pos-cats" id="posCats"></div>
     <div class="pos-grid" id="posGrid"></div>
     <div class="pos-opts" id="posOpts" hidden></div>
   </div>
   <form class="pos-r" id="posForm" novalidate>
+    <div class="acct" id="posAcct" hidden></div>
+    <h3 class="newh" id="posNewH" hidden>Para enviar ahora</h3>
     <ul class="pos-lines" id="posLines"></ul>
     <p class="empty" id="posEmpty">Toca un producto para agregarlo.</p>
     <div class="pos-f">
       <div class="seg" id="posSeg" role="group" aria-label="Tipo de pedido"><i class="thumb"></i>
-        <button type="button" data-mode="mesa" data-press aria-pressed="true">Mesa</button>
-        <button type="button" data-mode="recojo" data-press aria-pressed="false">Para llevar</button>
+        <button type="button" data-mode="recojo" data-press aria-pressed="true">Para llevar</button>
         <button type="button" data-mode="delivery" data-press aria-pressed="false">Delivery</button>
       </div>
       <div class="two">
-        <label class="field" id="pMesaG"><span>Mesa</span><input id="pMesa" maxlength="10" inputmode="numeric"></label>
         <label class="field"><span>Nombre <i>(opcional)</i></span><input id="pName" maxlength="50"></label>
+        <label class="field"><span>Notas <i>(opcional)</i></span><input id="pNotes" maxlength="240"></label>
       </div>
       <div class="two" id="pDelG" hidden>
         <label class="field"><span>Zona</span><select id="pZone"></select></label>
         <label class="field"><span>Celular</span><input id="pPhone" type="tel" inputmode="tel" maxlength="16"></label>
       </div>
       <label class="field" id="pAddrG" hidden><span>Dirección o referencia</span><input id="pAddr" maxlength="160"></label>
-      <label class="field"><span>Notas <i>(opcional)</i></span><input id="pNotes" maxlength="240"></label>
-      <div class="payrow">
+      <div class="payrow" id="payRow"><span class="paylab">Cobrar con</span>
         <div class="seg sm" id="payMethod" role="group" aria-label="Medio de pago"><i class="thumb"></i>
           <button type="button" data-m="efectivo" data-press aria-pressed="true">Efectivo</button>
           <button type="button" data-m="qr" data-press aria-pressed="false">QR</button>
           <button type="button" data-m="tarjeta" data-press aria-pressed="false">Tarjeta</button>
         </div>
-        <label class="chk"><input type="checkbox" id="pPaid"><span>Ya cobrado</span></label>
+        <label class="chk" id="paidChk"><input type="checkbox" id="pPaid"><span>Ya cobrado</span></label>
       </div>
       <p class="formerr" id="posErr" hidden></p>
     </div>
     <div class="pos-t">
       <div class="sum" id="posFeeRow" hidden><span>Envío</span><b class="num" id="posFee"></b></div>
-      <div class="sum big"><span>Total</span><b class="num" id="posTot">0 Bs</b></div>
-      <button class="btn btn--block" id="posSend" type="submit" data-press>Registrar pedido</button>
+      <div class="sum" id="posOldRow" hidden><span>Ya consumido</span><b class="num" id="posOld">0 Bs</b></div>
+      <div class="sum big"><span id="posTotL">Total</span><b class="num" id="posTot">0 Bs</b></div>
+      <div class="two btns">
+        <button class="btn btn--block" id="posSend" type="submit" data-press>Enviar a cocina</button>
+        <button class="btn btn--ink btn--block" id="posPay" type="button" data-press>Cobrar mesa</button>
+      </div>
+      <button class="mini center" id="posPrint" type="button" hidden><svg class="ic"><use href="#i-print"/></svg>Imprimir cuenta</button>
     </div>
+  </form>
+</dialog>
+
+<!-- Libro diario: registrar movimiento -->
+<dialog class="dlg ldg" id="ldg" aria-labelledby="ldgT">
+  <form id="ldgForm" novalidate>
+    <div class="pos-h"><h2 id="ldgT">Registrar gasto</h2><button class="x" type="button" data-press data-close aria-label="Cerrar"><svg class="ic"><use href="#i-x"/></svg></button></div>
+    <div class="two"><label class="field"><span>Monto (Bs)</span><input id="lAmt" type="number" inputmode="decimal" min="0" step="0.5" required></label>
+      <label class="field"><span>Fecha</span><input id="lDay" type="date"></label></div>
+    <label class="field"><span id="lConceptL">En qué se usó</span><input id="lConcept" maxlength="80" placeholder="Ejemplo: leche para el café" required></label>
+    <div class="two"><label class="field"><span>Categoría</span><select id="lCat"></select></label>
+      <label class="field"><span>Medio</span><select id="lMethod"><option value="efectivo">Efectivo de caja</option><option value="qr">QR</option><option value="tarjeta">Tarjeta</option><option value="transferencia">Transferencia</option></select></label></div>
+    <label class="field"><span>Responsable (quién sacó o puso el dinero)</span><input id="lResp" maxlength="40" list="lRespList" autocomplete="off" required></label>
+    <datalist id="lRespList"></datalist>
+    <p class="formerr" id="lErr" hidden></p>
+    <button class="btn btn--block" id="lSave" type="submit" data-press>Guardar</button>
   </form>
 </dialog>
 
@@ -110,5 +158,6 @@
 <script src="../js/spring.js"></script>
 <script src="../js/pricing.js"></script>
 <script src="../js/panel.js"></script>
+<script src="../js/panel-books.js"></script>
 </body>
 </html>

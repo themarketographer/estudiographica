@@ -30,3 +30,4 @@
 .bm-bean{height:28px;width:auto;flex:none}
 .bm-name{font-family:"Cinzel",Georgia,serif;font-weight:700;font-size:19px;letter-spacing:.09em;text-transform:uppercase}
 .bar .bm-bean{filter:drop-shadow(0 0 5px rgba(236,208,120,.45))}
+.bm-name{white-space:nowrap}

@@ -48,10 +48,19 @@ exports.handler = async function (event) {
   const method = staff && Pricing.PAY_METHODS.indexOf(pay.method) > -1 ? pay.method : 'efectivo';
   const paid = staff && pay.paid === true;
 
+  // Cada línea sabe si es comida, bebida o las dos, para separar la comanda en cocina.
+  const catKind = {};
+  (menu.categories || []).forEach((c) => { catKind[c.id] = c.kind || 'comida'; });
+  const kindsOf = (id) => {
+    const p = Pricing.findProduct(menu, id);
+    return p && Array.isArray(p.kinds) && p.kinds.length ? p.kinds.slice(0, 2) : [catKind[p && p.category] || 'comida'];
+  };
+  const incOf = (id) => { const p = Pricing.findProduct(menu, id); return p && p.includes ? String(p.includes) : ''; };
+
   const make = (n, key) => ({
     key, orderId: Pricing.orderNumber(n, now), number: n, createdAt, updatedAt: createdAt,
     status: staff ? 'preparando' : 'nuevo', source: staff ? 'local' : 'app', mode: o.customer.mode, customer: o.customer,
-    lines: o.lines.map((l) => ({ name: l.name, qty: l.qty, unitPrice: l.unitPrice, total: l.total, choices: l.choices, note: l.note })),
+    lines: o.lines.map((l) => ({ id: l.id, name: l.name, qty: l.qty, unitPrice: l.unitPrice, total: l.total, choices: l.choices, note: l.note, kinds: kindsOf(l.id), inc: incOf(l.id), done: [] })),
     subtotal: o.subtotal, deliveryFee: o.deliveryFee, total: o.total, count: o.count, currency: menu.brand.currency,
     payment: { method, status: paid ? 'pagado' : 'pendiente' },
     context: Store.isProd(event) ? 'production' : 'preview'

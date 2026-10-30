@@ -92,6 +92,16 @@ node_bundler = "esbuild"
   to = "/.netlify/functions/zona0-track"
   status = 200
 
+[[redirects]]
+  from = "/api/zona0/kitchen"
+  to = "/.netlify/functions/zona0-kitchen"
+  status = 200
+
+[[redirects]]
+  from = "/api/zona0/ledger"
+  to = "/.netlify/functions/zona0-ledger"
+  status = 200
+
 [[headers]]
   for = "/menu/zona-0/js/*"
   [headers.values]
