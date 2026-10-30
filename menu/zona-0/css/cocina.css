@@ -68,3 +68,19 @@ body:has(.selbar:not([hidden])) .kmain{padding-bottom:90px}
 
 .kcard.fin{opacity:.6;border-color:#4ade80}
 .kcard.fin .kh::after{content:"Lista";margin-left:auto;padding:4px 12px;border-radius:999px;background:#4ade80;color:#0d1f14;font-weight:800}
+
+/* ===== Pulido de cocina ===== */
+:root{--ease-out:cubic-bezier(.23,1,.32,1)}
+.kline{transition:background-color .2s ease,opacity .2s ease,transform .14s var(--ease-out),outline-color .15s}
+.kline:active{transform:scale(.98)}
+.kall,.kgo,.ktool,.kbtn{transition:transform .14s var(--ease-out),opacity .15s,background-color .2s}
+.kall:active,.kgo:active:not(:disabled),.ktool:active,.kbtn:active{transform:scale(.97)}
+.kcard{transition:opacity .3s ease,border-color .3s ease}
+.kcard.jd{animation:jd .7s var(--ease-out)}
+@keyframes jd{0%{border-color:#4ade80;box-shadow:0 0 0 5px rgba(74,222,128,.35)}100%{box-shadow:0 0 0 0 rgba(74,222,128,0)}}
+.selbar{animation:barIn .22s var(--ease-out) both}
+@keyframes barIn{from{transform:translateY(100%)}}
+.kt b,.kwho,.kage{font-variant-numeric:tabular-nums}
+.kmain,.klines{scrollbar-width:thin;scrollbar-color:#444 transparent}
+@media (hover:hover) and (pointer:fine){.kline:not(.on):hover{background:#2e2e2e}}
+@media (prefers-reduced-motion:reduce){.kcard.jd,.selbar{animation:none}.kline:active,.kall:active,.kgo:active,.ktool:active,.kbtn:active{transform:none}}

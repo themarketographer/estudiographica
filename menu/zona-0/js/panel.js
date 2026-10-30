@@ -365,7 +365,7 @@
       b.addEventListener('click', function () { if (opts) posOptions(p); else posAdd({ id: p.id, sel: {}, qty: 1, note: '' }); });
       t.appendChild(b);
       if (!out) {
-        var st = el('div', 'pstep'), m = el('button'), a = el('button'), n = el('b', 'num', String(q));
+        var st = el('div', 'pstep'), m = el('button'), a = el('button'), n = el('b', 'num' + (pc.bump === p.id ? ' bump' : ''), String(q));
         m.type = 'button'; a.type = 'button'; m.setAttribute('aria-label', 'Quitar uno de ' + p.title); a.setAttribute('aria-label', 'Agregar uno de ' + p.title);
         m.appendChild(Z0Icon('minus')); a.appendChild(Z0Icon('plus')); m.disabled = !q || !!opts;
         m.addEventListener('click', function () { var it = simpleLine(p); if (!it) return; if (it.raw.qty <= 1) pc.lines = pc.lines.filter(function (x) { return x !== it; }); else { it.raw.qty--; it.line = P.resolveLine(menu, it.raw, { staff: true }).line; } posLines(); });
@@ -378,6 +378,7 @@
       var fr = el('button', 'ptile pfree'); fr.type = 'button'; fr.setAttribute('data-press', ''); fr.appendChild(el('b', '', 'Producto libre')); fr.appendChild(el('span', '', 'Otro producto o de otra tienda'));
       fr.addEventListener('click', function () { pc.cat = '__free'; posCats(); posGrid(); }); g.appendChild(fr);
     }
+    pc.bump = '';
     g.scrollTop = top;
   }
   /* Producto libre: algo que no está en el menú (mini tiendas, favores, cosas sueltas). Solo lo arma el personal. */
@@ -403,7 +404,8 @@
   function posAdd(raw) {
     var r = P.resolveLine(menu, raw, { staff: true }); if (!r.ok) { toast(r.error); return; }
     var ex = pc.lines.filter(function (l) { return l.line.key === r.line.key; })[0];
-    if (ex) { ex.raw.qty = Math.min(P.MAX_QTY, ex.raw.qty + raw.qty); ex.line = P.resolveLine(menu, ex.raw, { staff: true }).line; } else pc.lines.push({ u: pc.uid++, raw: raw, line: r.line });
+    pc.bump = raw.id || ''; pc.enterU = 0;
+    if (ex) { pc.bumpU = ex.u; ex.raw.qty = Math.min(P.MAX_QTY, ex.raw.qty + raw.qty); ex.line = P.resolveLine(menu, ex.raw, { staff: true }).line; } else { pc.enterU = pc.uid; pc.lines.push({ u: pc.uid++, raw: raw, line: r.line }); }
     posLines();
   }
   function posOptions(p) {
@@ -436,16 +438,17 @@
   function posLines() {
     var ul = $('#posLines'); ul.textContent = ''; $('#posEmpty').hidden = pc.lines.length > 0 || (pc.mode === 'mesa' && openOrders(pc.mesa).length > 0);
     pc.lines.forEach(function (it) {
-      var l = it.line, li = el('li', 'pl'); li.appendChild(el('b', '', l.name));
+      var l = it.line, li = el('li', 'pl' + (pc.enterU === it.u ? ' enter' : '')); li.appendChild(el('b', '', l.name));
       var st = el('div', 'step'), m = el('button'); m.type = 'button'; m.appendChild(Z0Icon('minus')); var a = el('button'); a.type = 'button'; a.appendChild(Z0Icon('plus'));
       m.addEventListener('click', function () { if (it.raw.qty <= 1) pc.lines = pc.lines.filter(function (x) { return x !== it; }); else { it.raw.qty--; it.line = P.resolveLine(menu, it.raw, { staff: true }).line; } posLines(); });
       a.addEventListener('click', function () { if (it.raw.qty < P.MAX_QTY) { it.raw.qty++; it.line = P.resolveLine(menu, it.raw, { staff: true }).line; posLines(); } });
-      st.appendChild(m); st.appendChild(el('b', 'num', String(it.raw.qty))); st.appendChild(a); li.appendChild(st);
+      st.appendChild(m); st.appendChild(el('b', 'num' + (pc.bumpU === it.u ? ' bump' : ''), String(it.raw.qty))); st.appendChild(a); li.appendChild(st);
       li.appendChild(el('span', 'pr num', money(l.total)));
       var det = lineDetail(l); if (det) li.appendChild(el('small', '', det));
       ul.appendChild(li);
     });
     if (pc.cat !== '__free') posGrid();
+    pc.enterU = 0; pc.bumpU = 0;
     posTotals();
   }
   /* Cuenta abierta de la mesa: lo que ya se pidió en rondas anteriores y qué ya salió de cocina. */

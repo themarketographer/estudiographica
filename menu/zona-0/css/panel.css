@@ -368,3 +368,50 @@ body{background:var(--paper);min-height:100dvh}
 .ptile.has .pstep{background:var(--ink);color:var(--paper)}
 .ptile.pfree{padding:14px;border-style:dashed;align-content:space-between}
 .pfreeform{grid-column:1/-1;display:grid;gap:12px;max-width:520px}
+
+/* ===== Pulido: ritmo, movimiento y detalles de lectura ===== */
+:root{--ease-out:cubic-bezier(.23,1,.32,1);--ease-io:cubic-bezier(.77,0,.175,1)}
+.num,.kpi b,.tile .tt,.sum b,.pl .pr,.mh .num{font-variant-numeric:tabular-nums}
+
+/* Ventanas: se usan decenas de veces al día, entran rápido y desde un tamaño casi final */
+.dlg[open]{animation:dlgIn .22s var(--ease-out) both}
+@keyframes dlgIn{from{opacity:0;transform:scale(.965)}}
+.dlg[open]::backdrop{animation:fadeIn .2s ease-out both}
+@keyframes fadeIn{from{opacity:0}}
+/* Cambiar de sección: aparece sin desenfoque ni viaje largo */
+.view{animation:viewIn .2s var(--ease-out) both}
+@keyframes viewIn{from{opacity:0;transform:translateY(6px)}}
+
+/* Mesas: los estados cambian de color con suavidad y la tarjeta responde al tacto */
+.tile{transition:background-color .25s ease,border-color .25s ease,transform .16s var(--ease-out),box-shadow .25s ease}
+.tile:active{transform:scale(.975)}
+@media (hover:hover) and (pointer:fine){.tile:hover{transform:translateY(-2px);box-shadow:0 14px 28px -18px rgba(24,24,24,.35)}.tile:active{transform:scale(.975)}}
+.tile.ready{animation:readyPulse 2.8s ease-in-out infinite}
+
+/* POS: los productos responden al instante */
+.ptile{transition:background-color .18s ease,border-color .18s ease,transform .14s var(--ease-out)}
+.ptile:not(.out):active{transform:scale(.975)}
+.ptile .pstep button{transition:transform .12s var(--ease-out),opacity .15s}
+.ptile .pstep button:active:not(:disabled){transform:scale(.88)}
+.ptile .pstep,.ptile .pstep b{transition:background-color .2s ease,color .2s ease}
+.bump{animation:bump .18s var(--ease-out)}
+@keyframes bump{40%{transform:scale(1.28)}}
+.pl.enter{animation:lineIn .2s var(--ease-out) both}
+@keyframes lineIn{from{opacity:0;transform:translateY(8px)}}
+.step button:active{transform:scale(.88)}
+.step button{transition:transform .12s var(--ease-out)}
+
+/* Panel de cobro: sombra suave cuando hay contenido debajo del total */
+.pos-t::before{content:"";position:absolute;left:0;right:0;top:-20px;height:20px;background:linear-gradient(rgba(255,255,255,0),var(--card));pointer-events:none}
+.pos-r,.pos-grid,.hist-scroll,.prt-paper{scrollbar-width:thin;scrollbar-color:#cfc9b4 transparent}
+.pos-r::-webkit-scrollbar,.pos-grid::-webkit-scrollbar{width:8px}
+.pos-r::-webkit-scrollbar-thumb,.pos-grid::-webkit-scrollbar-thumb{background:#cfc9b4;border-radius:8px}
+
+/* Avisos: transición en vez de animación, para que se puedan disparar seguido */
+.toast{transition:opacity .2s ease,transform .24s var(--ease-out)}
+
+@media (prefers-reduced-motion:reduce){
+  .dlg[open],.dlg[open]::backdrop,.view,.pl.enter{animation:fadeIn .15s ease-out both}
+  .bump,.tile.ready{animation:none}
+  .tile,.tile:hover,.tile:active,.ptile:active,.step button:active,.ptile .pstep button:active{transform:none}
+}

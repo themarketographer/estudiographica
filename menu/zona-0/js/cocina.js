@@ -74,7 +74,8 @@
         if (!o.lines.some(function (l) { return l.kinds.indexOf(st) > -1; })) return;
         var r = card(o, st), id = st + o.key;
         if (!r.done) { delete doneAt[id]; act.appendChild(r.node); na++; return; }
-        if (!(id in doneAt)) doneAt[id] = first ? 0 : Date.now();
+        var justNow = false; if (!(id in doneAt)) { doneAt[id] = first ? 0 : Date.now(); justNow = !first; }
+        if (justNow) r.node.classList.add('jd');
         if (Date.now() - doneAt[id] < HOLD) { r.node.classList.add('fin'); act.appendChild(r.node); nd++; }
         else { doneCards.push(r.node); nd++; }
       });
