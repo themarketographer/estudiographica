@@ -227,8 +227,8 @@
   }
   /* Ticket para papel de 80 x 210 mm con 4 mm de margen. Se ve antes de imprimir y se puede achicar o agrandar. */
   var PAPER_H = 210, MARGIN = 4, PX_MM = 96 / 25.4;
-  var prt = { o: null, auto: true, scale: 1, logo: false, compat: false };
-  try { var sv = JSON.parse(ls('z0.prt') || '{}'); if (sv.scale >= 0.5 && sv.scale <= 1.5) prt.scale = sv.scale; if (sv.auto === false) prt.auto = false; if (sv.v === 3 && sv.logo === true) prt.logo = true; if (sv.v === 3 && sv.compat === true) prt.compat = true; } catch (e) {}
+  var prt = { o: null, auto: true, scale: 1, logo: false, compat: true };
+  try { var sv = JSON.parse(ls('z0.prt') || '{}'); if (sv.scale >= 0.5 && sv.scale <= 1.5) prt.scale = sv.scale; if (sv.auto === false) prt.auto = false; if (sv.v === 4 && sv.logo === true) prt.logo = true; if (sv.v === 4 && sv.compat === false) prt.compat = false; } catch (e) {}
   var lastTicket = null;
   function prtFit() {
     var t = $('#prtTicket'); t.style.setProperty('--ts', '1'); var h = t.getBoundingClientRect().height / PX_MM, room = PAPER_H - MARGIN * 2 - 8;
@@ -241,9 +241,9 @@
     var h = t.getBoundingClientRect().height / PX_MM, fits = h <= PAPER_H - MARGIN * 2; prt.h = h;
     $('#prtPct').textContent = Math.round(prt.scale * 100) + '%';
     $('#prtAuto').checked = prt.auto; $('#prtLogo').checked = prt.logo; $('#prtCompat').checked = prt.compat;
-    $('#prtInfo').textContent = 'Papel 80 × 210 mm, margen ' + MARGIN + ' mm. El ticket mide ' + Math.round(h) + ' mm de alto' + (fits ? ' y entra completo.' : ' y NO entra: achícalo o activa el ajuste automático.');
+    $('#prtInfo').textContent = prt.compat ? 'En la ventana de impresión elige el papel 80 x 3276 (el mismo de Excel) y Márgenes: Ninguno. El ticket mide ' + Math.round(h) + ' mm de alto.' : 'Papel 72 mm. El ticket mide ' + Math.round(h) + ' mm de alto' + (fits ? ' y entra completo.' : ' y NO entra: achícalo o activa el ajuste automático.');
     $('#prtInfo').classList.toggle('bad', !fits);
-    ls('z0.prt', JSON.stringify({ auto: prt.auto, scale: prt.scale, logo: prt.logo, compat: prt.compat, v: 3 }));
+    ls('z0.prt', JSON.stringify({ auto: prt.auto, scale: prt.scale, logo: prt.logo, compat: prt.compat, v: 4 }));
   }
   function printTicket(o) {
     lastTicket = o; prt.o = o; $('#prtT').textContent = o.orderId ? 'Ticket ' + o.orderId : 'Cuenta de la mesa ' + ((o.customer || {}).mesa || '');
