@@ -227,8 +227,8 @@
   }
   /* Ticket para papel de 80 x 210 mm con 4 mm de margen. Se ve antes de imprimir y se puede achicar o agrandar. */
   var PAPER_H = 210, MARGIN = 4, PX_MM = 96 / 25.4;
-  var prt = { o: null, auto: true, scale: 1, logo: true, compat: true };
-  try { var sv = JSON.parse(ls('z0.prt') || '{}'); if (sv.scale >= 0.5 && sv.scale <= 1.5) prt.scale = sv.scale; if (sv.auto === false) prt.auto = false; if (sv.logo === false) prt.logo = false; if (sv.compat === false) prt.compat = false; } catch (e) {}
+  var prt = { o: null, auto: true, scale: 1, logo: false, compat: false };
+  try { var sv = JSON.parse(ls('z0.prt') || '{}'); if (sv.scale >= 0.5 && sv.scale <= 1.5) prt.scale = sv.scale; if (sv.auto === false) prt.auto = false; if (sv.v === 3 && sv.logo === true) prt.logo = true; if (sv.v === 3 && sv.compat === true) prt.compat = true; } catch (e) {}
   var lastTicket = null;
   function prtFit() {
     var t = $('#prtTicket'); t.style.setProperty('--ts', '1'); var h = t.getBoundingClientRect().height / PX_MM, room = PAPER_H - MARGIN * 2 - 8;
@@ -243,7 +243,7 @@
     $('#prtAuto').checked = prt.auto; $('#prtLogo').checked = prt.logo; $('#prtCompat').checked = prt.compat;
     $('#prtInfo').textContent = 'Papel 80 × 210 mm, margen ' + MARGIN + ' mm. El ticket mide ' + Math.round(h) + ' mm de alto' + (fits ? ' y entra completo.' : ' y NO entra: achícalo o activa el ajuste automático.');
     $('#prtInfo').classList.toggle('bad', !fits);
-    ls('z0.prt', JSON.stringify({ auto: prt.auto, scale: prt.scale, logo: prt.logo, compat: prt.compat }));
+    ls('z0.prt', JSON.stringify({ auto: prt.auto, scale: prt.scale, logo: prt.logo, compat: prt.compat, v: 3 }));
   }
   function printTicket(o) {
     lastTicket = o; prt.o = o; $('#prtT').textContent = o.orderId ? 'Ticket ' + o.orderId : 'Cuenta de la mesa ' + ((o.customer || {}).mesa || '');
@@ -261,7 +261,7 @@
     var real = t.getBoundingClientRect().height / PX_MM; t.style.display = t.style.position = t.style.visibility = t.style.left = t.style.top = '';
     var H = Math.min(PAPER_H, Math.max(60, Math.ceil(real + MARGIN * 2 + 6)));
     var st = document.getElementById('pageSize'); if (!st) { st = document.createElement('style'); st.id = 'pageSize'; document.head.appendChild(st); }
-    st.textContent = prt.compat ? '@media print{@page{margin:0}#ticket{margin:0 auto!important;padding:' + MARGIN + 'mm 0}}' : '@media print{@page{size:80mm ' + H + 'mm;margin:' + MARGIN + 'mm}}';
+    st.textContent = prt.compat ? '@media print{@page{margin:0}#ticket{margin:0 auto!important;padding:' + MARGIN + 'mm 0}}' : '@media print{@page{size:72mm ' + H + 'mm;margin:0}#ticket{margin:0 auto!important;padding:' + MARGIN + 'mm 0}}';
     window.print();
   });
   $('#prtUsb').addEventListener('click', function () {
