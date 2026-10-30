@@ -291,8 +291,8 @@
     window.print();
   });
   $('#prtTxt').addEventListener('click', function () {
-    var t = ticketText(prt.o, 42), msg = $('#prtTxtMsg');
-    var done = function () { msg.textContent = 'Copiado. Abre el Bloc de notas, pega con Ctrl+V e imprime con Ctrl+P.'; };
+    var t = ticketText(prt.o, 40), msg = $('#prtTxtMsg');
+    var done = function () { msg.textContent = 'Copiado. En el Bloc de notas: Ctrl+V para pegar, Ctrl+P para imprimir, papel 80 x 210.'; };
     if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(done, function () { msg.textContent = 'No se pudo copiar.'; }); else msg.textContent = 'Este navegador no permite copiar.';
   });
   $('#reprint').addEventListener('click', function () {
