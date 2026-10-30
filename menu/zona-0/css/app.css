@@ -174,3 +174,18 @@ body{padding-bottom:calc(120px + var(--safe-b))}
 body::before{content:"";position:fixed;z-index:55;top:0;left:0;right:0;height:calc(70px + var(--safe-t));pointer-events:none;background:linear-gradient(var(--paper) 55%,rgba(248,248,248,0));opacity:0;transition:opacity .4s var(--ease)}
 body.is-stuck::before{opacity:1}
 .top{z-index:60}
+
+/* Logo de Zona 0 Café Boutique: fondo crema del logo, bean negro y dorado */
+.avatar{width:34px;height:34px;border-radius:10px;object-fit:cover;flex:none;box-shadow:0 0 0 1px rgba(255,255,255,.18)}
+.avatar.big{width:64px;height:64px;border-radius:18px}
+.top .brandmark .avatar{width:30px;height:30px}
+.hero--cream{background:#f7ebdf;color:var(--ink);align-items:center;padding-top:calc(88px + var(--safe-t));padding-bottom:48px;min-height:0}
+.hero--cream::after{background:linear-gradient(180deg,transparent 70%,rgba(24,24,24,.04))}
+.hero-logo{display:block;width:min(78vw,380px);height:auto;margin:0 auto 18px;border-radius:28px}
+.hero--cream .eyebrow{color:#8a6a1f;text-align:center}
+.hero--cream h1{text-align:center;font-size:clamp(40px,11vw,68px)}
+.hero--cream .lead{color:var(--muted);margin-inline:auto;text-align:center}
+.hero--cream .pills{justify-content:center}
+.hero--cream .pill{background:rgba(24,24,24,.06);border-color:rgba(24,24,24,.12);color:var(--ink)}
+.hero--cream .pill .ic{color:#8a6a1f}
+.hero--cream .pill.is-open .led{background:#1f8a4c}

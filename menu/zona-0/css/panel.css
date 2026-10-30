@@ -178,3 +178,7 @@ body{background:var(--paper);min-height:100dvh}
   .tool span{display:none}.tool{padding:0 14px}.tool.sw{padding:0 14px 0 8px}.tool.sw span{display:inline}
   .pos[open]{grid-template-columns:1fr;grid-template-rows:1fr 1fr;overflow-y:auto}
 }
+
+.avatar{width:34px;height:34px;border-radius:10px;object-fit:cover;flex:none}
+.hero-note{display:none}
+@media print{#ticket .logo{display:block;width:30mm;height:30mm;margin:0 auto 2mm;filter:grayscale(1) contrast(1.35)}}

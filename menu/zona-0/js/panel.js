@@ -193,7 +193,7 @@
   /* ---------- Ticket de 80 mm ---------- */
   function printTicket(o) {
     var t = $('#ticket'); t.textContent = ''; var cu = o.customer || {}, n = split(o.orderId);
-    t.appendChild(el('h1', '', 'Zona 0')); t.appendChild(el('p', 'c', 'Cafetería para ciclistas'));
+    var lg = el('img', 'logo'); lg.src = '../img/logo-192.png'; lg.alt = ''; t.appendChild(lg); t.appendChild(el('h1', '', 'Zona 0')); t.appendChild(el('p', 'c', 'Café Boutique'));
     t.appendChild(document.createElement('hr'));
     t.appendChild(el('p', 'big num', '#' + n[0])); t.appendChild(el('p', 'c', n[1] + ' · ' + hm(o.createdAt)));
     t.appendChild(document.createElement('hr'));

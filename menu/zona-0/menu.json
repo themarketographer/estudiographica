@@ -3,6 +3,7 @@
   "brand": {
     "name": "Zona 0",
     "tagline": "Recarga antes de rodar",
+    "fullName": "Zona 0 Café Boutique",
     "currency": "Bs",
     "address": "Cochabamba, Bolivia",
     "orderPrefix": "Z0"

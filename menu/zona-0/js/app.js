@@ -132,7 +132,7 @@
 
   function scrollFx() {
     var wheel = $('#heroWheel'), cats = $('#cats'), tick = false;
-    function f() { tick = false; var y = window.scrollY; if (!S.reduce) wheel.style.setProperty('--rot', (y * 0.12) + 'deg'); var st = cats.getBoundingClientRect().top <= 70; cats.classList.toggle('stuck', st); document.body.classList.toggle('is-stuck', st); }
+    function f() { tick = false; var y = window.scrollY; if (wheel && !S.reduce) wheel.style.setProperty('--rot', (y * 0.12) + 'deg'); var st = cats.getBoundingClientRect().top <= 70; cats.classList.toggle('stuck', st); document.body.classList.toggle('is-stuck', st); }
     window.addEventListener('scroll', function () { if (!tick) { tick = true; requestAnimationFrame(f); } }, { passive: true });
     f();
   }
