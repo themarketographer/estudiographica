@@ -226,8 +226,8 @@
   }
   /* Ticket para papel de 80 x 210 mm con 4 mm de margen. Se ve antes de imprimir y se puede achicar o agrandar. */
   var PAPER_H = 210, MARGIN = 4, PX_MM = 96 / 25.4;
-  var prt = { o: null, auto: true, scale: 1, logo: true };
-  try { var sv = JSON.parse(ls('z0.prt') || '{}'); if (sv.scale >= 0.5 && sv.scale <= 1.5) prt.scale = sv.scale; if (sv.auto === false) prt.auto = false; if (sv.logo === false) prt.logo = false; } catch (e) {}
+  var prt = { o: null, auto: true, scale: 1, logo: true, compat: true };
+  try { var sv = JSON.parse(ls('z0.prt') || '{}'); if (sv.scale >= 0.5 && sv.scale <= 1.5) prt.scale = sv.scale; if (sv.auto === false) prt.auto = false; if (sv.logo === false) prt.logo = false; if (sv.compat === false) prt.compat = false; } catch (e) {}
   var lastTicket = null;
   function prtFit() {
     var t = $('#prtTicket'); t.style.setProperty('--ts', '1'); var h = t.getBoundingClientRect().height / PX_MM, room = PAPER_H - MARGIN * 2 - 8;
@@ -239,10 +239,10 @@
     t.style.setProperty('--ts', String(prt.scale));
     var h = t.getBoundingClientRect().height / PX_MM, fits = h <= PAPER_H - MARGIN * 2; prt.h = h;
     $('#prtPct').textContent = Math.round(prt.scale * 100) + '%';
-    $('#prtAuto').checked = prt.auto; $('#prtLogo').checked = prt.logo;
+    $('#prtAuto').checked = prt.auto; $('#prtLogo').checked = prt.logo; $('#prtCompat').checked = prt.compat;
     $('#prtInfo').textContent = 'Papel 80 × 210 mm, margen ' + MARGIN + ' mm. El ticket mide ' + Math.round(h) + ' mm de alto' + (fits ? ' y entra completo.' : ' y NO entra: achícalo o activa el ajuste automático.');
     $('#prtInfo').classList.toggle('bad', !fits);
-    ls('z0.prt', JSON.stringify({ auto: prt.auto, scale: prt.scale, logo: prt.logo }));
+    ls('z0.prt', JSON.stringify({ auto: prt.auto, scale: prt.scale, logo: prt.logo, compat: prt.compat }));
   }
   function printTicket(o) {
     lastTicket = o; prt.o = o; $('#prtT').textContent = o.orderId ? 'Ticket ' + o.orderId : 'Cuenta de la mesa ' + ((o.customer || {}).mesa || '');
@@ -252,14 +252,15 @@
   $('#prtPlus').addEventListener('click', function () { prt.auto = false; prt.scale = Math.min(1.5, Math.round((prt.scale + 0.05) * 100) / 100); prtPaint(); });
   $('#prtAuto').addEventListener('change', function () { prt.auto = this.checked; prtPaint(); });
   $('#prtLogo').addEventListener('change', function () { prt.logo = this.checked; prtPaint(); });
+  $('#prtCompat').addEventListener('change', function () { prt.compat = this.checked; prtPaint(); });
   $('#prtGo').addEventListener('click', function () {
-    var t = $('#ticket'); buildTicket(prt.o, t, prt.logo); t.style.setProperty('--ts', String(prt.scale));
+    var t = $('#ticket'); buildTicket(prt.o, t, prt.logo && !prt.compat); t.style.setProperty('--ts', String(prt.scale));
     /* El alto de la hoja se ajusta al ticket (máximo 210 mm): las impresoras de rollo no avanzan papel de más. */
     t.style.cssText += ';display:block;position:absolute;visibility:hidden;left:-9999px;top:0';
     var real = t.getBoundingClientRect().height / PX_MM; t.style.display = t.style.position = t.style.visibility = t.style.left = t.style.top = '';
     var H = Math.min(PAPER_H, Math.max(60, Math.ceil(real + MARGIN * 2 + 6)));
     var st = document.getElementById('pageSize'); if (!st) { st = document.createElement('style'); st.id = 'pageSize'; document.head.appendChild(st); }
-    st.textContent = '@media print{@page{size:80mm ' + H + 'mm;margin:' + MARGIN + 'mm}}';
+    st.textContent = prt.compat ? '@media print{@page{margin:0}#ticket{margin:0 auto!important;padding:' + MARGIN + 'mm 0}}' : '@media print{@page{size:80mm ' + H + 'mm;margin:' + MARGIN + 'mm}}';
     window.print();
   });
   $('#reprint').addEventListener('click', function () {
