@@ -300,8 +300,8 @@
     t.style.setProperty('--ts', String(prt.scale));
     var h = t.getBoundingClientRect().height / PX_MM, fits = h <= PAPER_H - MARGIN * 2; prt.h = h;
     $('#prtPct').textContent = Math.round(prt.scale * 100) + '%';
-    $('#prtAuto').checked = prt.auto; $('#prtLogo').checked = prt.logo; $('#prtCompat').checked = prt.compat;
-    $('#prtInfo').textContent = prt.compat ? 'Elige el papel que quieras en la ventana de impresión.' : 'Se imprime como imagen en papel 80 x 210. En la ventana de impresión elige ese papel, Márgenes: Ninguno.';
+    $('#prtAuto').checked = prt.auto; $('#prtLogo').checked = prt.logo;
+    $('#prtInfo').textContent = prt.compat ? 'Al imprimir, elige el papel 80 x 210 y Márgenes: Ninguno.' : 'Al imprimir, elige el papel 80 x 210 y Márgenes: Ninguno.';
     $('#prtInfo').classList.toggle('bad', !fits);
     ls('z0.prt', JSON.stringify({ auto: prt.auto, scale: prt.scale, logo: prt.logo, compat: prt.compat, v: 5 }));
   }
@@ -313,17 +313,14 @@
   $('#prtPlus').addEventListener('click', function () { prt.auto = false; prt.scale = Math.min(1.5, Math.round((prt.scale + 0.05) * 100) / 100); prtPaint(); });
   $('#prtAuto').addEventListener('change', function () { prt.auto = this.checked; prtPaint(); });
   $('#prtLogo').addEventListener('change', function () { prt.logo = this.checked; prtPaint(); });
-  $('#prtCompat').addEventListener('change', function () { prt.compat = this.checked; prtPaint(); });
-  /* Imprimir: el ticket va como UNA IMAGEN en blanco y negro, sin texto. Los drivers térmicos (como el de la MJ809) cambian las
-     letras del navegador por las fuentes internas de la impresora y no saben dibujarlas: sale papel en blanco. Una imagen la imprimen siempre.
-     Hoja 80 x 210 mm, la misma que funciona con el Bloc de notas. */
+  /* Imprimir: igual que la versión que sí imprimió en la MJ809. Se cierra la ventana del ticket ANTES de imprimir
+     (con una ventana modal abierta, Chrome manda la hoja en blanco a este driver) y no se impone tamaño de hoja. */
   $('#prtGo').addEventListener('click', function () {
-    var t = $('#ticket'); t.textContent = ''; t.style.removeProperty('--ts');
-    var im = new Image(); im.alt = '';
+    var t = $('#ticket'); buildTicket(prt.o, t, prt.logo); t.style.setProperty('--ts', String(prt.scale));
     var st = document.getElementById('pageSize'); if (!st) { st = document.createElement('style'); st.id = 'pageSize'; document.head.appendChild(st); }
-    st.textContent = '@media print{@page{' + (prt.compat ? '' : 'size:80mm 210mm;') + 'margin:0}#ticket{width:auto!important;zoom:1!important;margin:0!important;padding:3mm 0 0!important}#ticket img{display:block;width:70mm;max-height:200mm;object-fit:contain;object-position:top;margin:0 auto}}';
-    im.onload = function () { window.print(); };
-    t.appendChild(im); im.src = ticketPng(prt.o);
+    st.textContent = '@media print{@page{margin:0}#ticket{margin:0 auto!important;padding:4mm 0 8mm!important}}';
+    $('#prt').close();
+    setTimeout(function () { window.print(); }, 150);
   });
   $('#prtTxt').addEventListener('click', function () {
     var t = ticketText(prt.o, 40), msg = $('#prtTxtMsg');
