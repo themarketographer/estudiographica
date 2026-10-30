@@ -237,7 +237,7 @@
     var t = $('#prtTicket'); buildTicket(prt.o, t, prt.logo);
     if (prt.auto) prt.scale = prtFit();
     t.style.setProperty('--ts', String(prt.scale));
-    var h = t.getBoundingClientRect().height / PX_MM, fits = h <= PAPER_H - MARGIN * 2;
+    var h = t.getBoundingClientRect().height / PX_MM, fits = h <= PAPER_H - MARGIN * 2; prt.h = h;
     $('#prtPct').textContent = Math.round(prt.scale * 100) + '%';
     $('#prtAuto').checked = prt.auto; $('#prtLogo').checked = prt.logo;
     $('#prtInfo').textContent = 'Papel 80 × 210 mm, margen ' + MARGIN + ' mm. El ticket mide ' + Math.round(h) + ' mm de alto' + (fits ? ' y entra completo.' : ' y NO entra: achícalo o activa el ajuste automático.');
@@ -253,7 +253,14 @@
   $('#prtAuto').addEventListener('change', function () { prt.auto = this.checked; prtPaint(); });
   $('#prtLogo').addEventListener('change', function () { prt.logo = this.checked; prtPaint(); });
   $('#prtGo').addEventListener('click', function () {
-    var t = $('#ticket'); buildTicket(prt.o, t, prt.logo); t.style.setProperty('--ts', String(prt.scale)); window.print();
+    var t = $('#ticket'); buildTicket(prt.o, t, prt.logo); t.style.setProperty('--ts', String(prt.scale));
+    /* El alto de la hoja se ajusta al ticket (máximo 210 mm): las impresoras de rollo no avanzan papel de más. */
+    t.style.cssText += ';display:block;position:absolute;visibility:hidden;left:-9999px;top:0';
+    var real = t.getBoundingClientRect().height / PX_MM; t.style.display = t.style.position = t.style.visibility = t.style.left = t.style.top = '';
+    var H = Math.min(PAPER_H, Math.max(60, Math.ceil(real + MARGIN * 2 + 6)));
+    var st = document.getElementById('pageSize'); if (!st) { st = document.createElement('style'); st.id = 'pageSize'; document.head.appendChild(st); }
+    st.textContent = '@media print{@page{size:80mm ' + H + 'mm;margin:' + MARGIN + 'mm}}';
+    window.print();
   });
   $('#reprint').addEventListener('click', function () {
     var o = lastTicket || histRows().filter(function (x) { return x.status !== 'cancelado'; })[0];

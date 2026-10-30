@@ -172,10 +172,10 @@ body{background:var(--paper);min-height:100dvh}
 .tkt .logo{display:block;width:auto;height:18mm;margin:0 auto 2mm;filter:grayscale(1) contrast(1.35)}
 #ticket{display:none}
 @media print{
-  @page{size:80mm 210mm;margin:4mm}
+  @page{margin:4mm}
   html,body{background:#fff!important;height:auto!important;min-height:0!important;margin:0!important;padding:0!important;overflow:hidden!important}
   body>*:not(#ticket){display:none!important}
-  #ticket{display:block;margin:0;break-after:avoid;page-break-after:avoid;break-before:avoid}
+  #ticket{display:block;margin:0;-webkit-print-color-adjust:exact;print-color-adjust:exact;break-after:avoid;page-break-after:avoid;break-before:avoid}
   #ticket,#ticket *{break-inside:avoid}
 }
 .prt{width:min(760px,96vw);padding:22px;max-height:94vh;overflow:auto}
