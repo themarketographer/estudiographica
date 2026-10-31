@@ -460,3 +460,14 @@ body{background:var(--paper);min-height:100dvh}
 .seg button{min-height:42px;padding:0 8px;border-radius:10px;font:inherit;font-weight:600;font-size:14px;color:var(--muted);background:none;border:0;cursor:pointer;transition:background-color .16s var(--ease-out,ease),color .16s var(--ease-out,ease)}
 .seg button[aria-checked="true"]{background:var(--ink);color:var(--paper)}
 @media (max-width:560px){.pgrid{grid-template-columns:1fr}.seg{grid-template-columns:1fr 1fr}}
+
+/* Descuento por ítem */
+.pl .dtog{grid-column:1/-1;justify-self:start;font-size:13px;font-weight:600;color:var(--muted);padding:2px 0}
+.pl .dtog.on{color:var(--accent,#b4491f)}
+.pl .pr s{display:block;font-weight:400;font-size:12px;color:var(--muted);text-align:right}
+.pl .dsc{grid-column:1/-1;display:flex;gap:6px;flex-wrap:wrap;align-items:center;padding:6px 0 2px}
+.pl .dsc .chip{min-height:36px;padding:0 14px;border-radius:var(--r-pill);background:var(--hair);font-weight:700;font-size:14px}
+.pl .dsc .chip.on{background:var(--ink,#222);color:#fff}
+.pl .dsc input{width:92px;min-height:36px;border-radius:var(--r-pill);border:1px solid var(--hair);padding:0 12px;font:inherit;font-size:14px;background:var(--paper)}
+.racts{display:flex;gap:6px;justify-content:flex-end;white-space:nowrap}
+.mini.danger.armed{background:var(--danger,#b3261e);color:#fff}

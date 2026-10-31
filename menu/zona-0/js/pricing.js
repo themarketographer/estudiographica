@@ -61,6 +61,20 @@
     return menu;
   }
 
+  /* Descuento por ítem (solo personal): porcentaje entero 1 a 90 sobre la línea. */
+  function r2(n) { return Math.round(n * 100) / 100; }
+  function discOf(raw, opts) {
+    var d = Math.round(Number(raw && raw.disc));
+    if (!(opts && opts.staff) || !(d >= 1)) return 0;
+    return Math.min(d, 90);
+  }
+  function applyDisc(line, raw, opts) {
+    var d = discOf(raw, opts);
+    line.gross = r2(line.unitPrice * line.qty);
+    if (d) { line.disc = d; line.total = r2(line.gross * (1 - d / 100)); line.key += '|d' + d; }
+    return line;
+  }
+
   /* Producto libre (solo personal): { free:{ title, price, kind:'comida'|'bebida'|'tienda' }, qty, note }.
      Sirve para productos de las mini tiendas o cosas que no están en el menú. 'tienda' no pasa por cocina ni barra. */
   var FREE_KINDS = ['comida', 'bebida', 'tienda'];
@@ -73,10 +87,10 @@
     if (!(price > 0) || price > 5000) return { ok: false, error: 'Revisa el precio de ' + title + '.' };
     if (!Number.isInteger(qty) || qty < 1 || qty > MAX_QTY) return { ok: false, error: 'Cantidad inválida en ' + title + '.' };
     var note = text(raw.note, 120);
-    return { ok: true, line: {
+    return { ok: true, line: applyDisc({
       key: 'free|' + title + '|' + price + '|' + kind + '|' + note,
       id: 'free', name: title, choices: [], note: note, qty: qty, unitPrice: price, total: Math.round(price * qty * 100) / 100, free: true, kind: kind
-    } };
+    }, raw, opts) };
   }
 
   /* raw: { id, sel: { grupo: [opcion] }, qty, note }  ->  { ok, line } | { ok:false, error } */
@@ -119,17 +133,17 @@
       }
     }
     var note = text(raw.note, 120);
-    return { ok: true, line: {
+    return { ok: true, line: applyDisc({
       key: product.id + '|' + keyParts.join(';') + '|' + note,
       id: product.id, name: product.title, choices: choices, note: note, qty: qty, unitPrice: unit, total: unit * qty
-    } };
+    }, raw, opts) };
   }
 
   /* Línea resuelta a su forma cruda (para guardar y reenviar). */
   function toRaw(line) {
     var sel = {};
     line.choices.forEach(function (c) { sel[c.group] = c.options.map(function (o) { return o.id; }); });
-    return { id: line.id, sel: sel, qty: line.qty, note: line.note || '' };
+    var r = { id: line.id, sel: sel, qty: line.qty, note: line.note || '' }; if (line.disc) r.disc = line.disc; return r;
   }
 
   function resolveOrder(menu, rawLines, opts) {
@@ -143,7 +157,7 @@
       if (ex) {
         ex.qty += r.line.qty;
         if (ex.qty > MAX_QTY) return { ok: false, error: 'Cantidad inválida en ' + ex.name + '.' };
-        ex.total = Math.round(ex.unitPrice * ex.qty * 100) / 100;
+        ex.gross = r2(ex.unitPrice * ex.qty); ex.total = ex.disc ? r2(ex.gross * (1 - ex.disc / 100)) : ex.gross;
       } else { byKey[r.line.key] = r.line; lines.push(r.line); }
     }
     var total = lines.reduce(function (s, l) { return s + l.total; }, 0);

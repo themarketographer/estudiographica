@@ -41,10 +41,10 @@ async function saveNumbered(event, dateKey, build) {
 // Registro de cambios: cada pedido nuevo o modificado deja una marca diminuta "ev/<hora>/<ms>-<azar>".
 // El panel pregunta solo por las marcas recientes y lee únicamente los pedidos que cambiaron.
 function hourKey(ms) { return new Date(ms).toISOString().slice(0, 13); }
-async function touch(event, key) {
+async function touch(event, key, gone) {
   try {
     const now = Date.now();
-    await open(event).setJSON('ev/' + hourKey(now) + '/' + now + '-' + Math.random().toString(36).slice(2, 6), { k: key });
+    await open(event).setJSON('ev/' + hourKey(now) + '/' + now + '-' + Math.random().toString(36).slice(2, 6), (gone ? { k: key, del: 1 } : { k: key }));
   } catch (e) { console.error('zona0 touch:', e && e.message); }
 }
 
@@ -57,11 +57,11 @@ async function changedSince(event, since) {
   const lists = await Promise.all(hours.map((h) => store.list({ prefix: 'ev/' + h + '/' }).then((r) => r.blobs).catch(() => [])));
   const keys = [];
   lists.forEach((bl) => bl.forEach((b) => { const ms = Number(b.key.split('/')[2].split('-')[0]); if (ms >= floor) keys.push(b.key); }));
-  const targets = new Set();
+  const targets = new Set(), gone = new Set();
   const evs = await Promise.all(keys.slice(-300).map((k) => store.get(k, { type: 'json' }).catch(() => null)));
-  evs.forEach((e) => { if (e && e.k) targets.add(e.k); });
+  evs.forEach((e) => { if (e && e.k) { if (e.del) { gone.add(e.k); targets.delete(e.k); } else if (!gone.has(e.k)) targets.add(e.k); } });
   const rows = await Promise.all(Array.from(targets).slice(0, 200).map((k) => store.get(k, { type: 'json' }).catch(() => null)));
-  return { now, orders: rows.filter(Boolean) };
+  return { now, orders: rows.filter(Boolean), gone: Array.from(gone) };
 }
 
 async function listDays(event, dayKeys, cap) {
@@ -74,6 +74,17 @@ async function listDays(event, dayKeys, cap) {
 
 async function getOrder(event, key) {
   return open(event).get(key, { type: 'json' }).catch(() => null);
+}
+
+// Borra un registro. Guarda una copia en "del/<clave>" para poder recuperarlo si hizo falta.
+async function deleteOrder(event, key, by) {
+  const store = open(event);
+  const rec = await store.get(key, { type: 'json' }).catch(() => null);
+  if (!rec) return null;
+  await store.setJSON('del/' + key, { deletedAt: new Date().toISOString(), by: by || '', order: rec });
+  await store.delete(key);
+  await touch(event, key, true);
+  return rec;
 }
 
 async function setStatus(event, key, status) {
@@ -222,4 +233,4 @@ async function setOpen(event, open_) {
   return !!open_;
 }
 
-module.exports = { isProd, storeName, STATUSES, keyFor, saveNumbered, touch, changedSince, listDays, getOrder, setStatus, setPayment, isOpen, setOpen, setLineDone, settle, lineKinds, lineDone, ledgerAdd, ledgerRange, ledgerVoid, importRecords, settleParts, getMenuExtra, setMenuExtra };
+module.exports = { isProd, storeName, STATUSES, keyFor, saveNumbered, touch, changedSince, listDays, getOrder, setStatus, deleteOrder, setPayment, isOpen, setOpen, setLineDone, settle, lineKinds, lineDone, ledgerAdd, ledgerRange, ledgerVoid, importRecords, settleParts, getMenuExtra, setMenuExtra };

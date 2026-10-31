@@ -5,6 +5,7 @@
 //   POST /api/zona0/orders { key, payment:'pagado'|'pendiente', method? }  registra el cobro
 //   POST /api/zona0/orders { settle:[key,...], method }       cobra varios pedidos (cierra una mesa) y los marca entregados
 //   POST /api/zona0/orders { settle:[key,...], parts:[{method,amount}] }  cobra con la cuenta dividida (los montos suman el total)
+//   POST /api/zona0/orders { key, remove:true }               borra el registro (guarda copia en del/<clave>)
 //   POST /api/zona0/orders { open: true|false }               abre o cierra la recepción de pedidos
 const Store = require('./lib-zona0/store.js');
 const Pricing = require('../../menu/zona-0/js/pricing.js');
@@ -18,7 +19,7 @@ exports.handler = async function (event) {
       const q = event.queryStringParameters || {};
       if (q.since) {
         const [r, open] = await Promise.all([Store.changedSince(event, Number(q.since) || 0), Store.isOpen(event)]);
-        return reply(200, { ok: true, now: r.now, open, orders: r.orders });
+        return reply(200, { ok: true, now: r.now, open, orders: r.orders, gone: r.gone });
       }
       const days = Math.min(120, Math.max(1, parseInt(q.days, 10) || 2));
       const keys = [];
@@ -48,6 +49,11 @@ exports.handler = async function (event) {
         return reply(200, { ok: true, orders: rows });
       }
       if (typeof body.key !== 'string') return reply(422, { ok: false, error: 'Falta el pedido.' });
+      if (body.remove === true) {
+        if (!/^\d{4}-\d{2}-\d{2}\/[A-Za-z0-9-]{1,24}$/.test(body.key)) return reply(422, { ok: false, error: 'Clave de pedido inválida.' });
+        const gone = await Store.deleteOrder(event, body.key, 'panel');
+        return gone ? reply(200, { ok: true, removed: body.key }) : reply(404, { ok: false, error: 'No existe ese pedido.' });
+      }
       if (typeof body.payment === 'string') {
         if (['pagado', 'pendiente'].indexOf(body.payment) === -1) return reply(422, { ok: false, error: 'Estado de pago inválido.' });
         const method = Pricing.PAY_METHODS.indexOf(body.method) > -1 ? body.method : undefined;

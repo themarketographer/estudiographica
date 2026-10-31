@@ -94,7 +94,15 @@
     var kp = el('section', 'kpis k3'); kpi(kp, [['Vendido', money(total), true], ['Cobros', String(rows.length)], ['Cobro promedio', rows.length ? money(Math.round(total / rows.length * 10) / 10) : '0 Bs']]); box.appendChild(kp);
     var meth = el('div', 'chips'); ['efectivo', 'qr', 'tarjeta'].forEach(function (m) { var c = el('span', 'mchip'); c.appendChild(el('small', '', METHOD[m])); c.appendChild(el('b', 'num', money(byM[m] || 0))); meth.appendChild(c); }); box.appendChild(meth);
     var grid = el('div', 'two-col');
-    var cells = rows.map(function (x) { var pr = el('button', 'mini', 'Ticket'); pr.type = 'button'; pr.addEventListener('click', function () { Z.printTicket(x.o); }); return { cells: [hmOf(x.at), x.o.orderId, who(x.o), summary(x.o), methLabel(x.o), money(x.o.total), pr] }; });
+    var cells = rows.map(function (x) { var pr = el('button', 'mini', 'Ticket'); pr.type = 'button'; pr.addEventListener('click', function () { Z.printTicket(x.o); });
+      var bx = el('button', 'mini danger', 'Borrar'); bx.type = 'button'; var armed = 0, tm = 0;
+      bx.addEventListener('click', function () {
+        if (!armed) { armed = 1; bx.textContent = '¿Borrar ' + x.o.orderId + '?'; bx.classList.add('armed'); tm = setTimeout(function () { armed = 0; bx.textContent = 'Borrar'; bx.classList.remove('armed'); }, 3500); return; }
+        clearTimeout(tm); bx.disabled = true; bx.textContent = 'Borrando…';
+        Z.removeOrder(x.o.key).then(function () { Z.toast('Registro ' + x.o.orderId + ' borrado'); }).catch(function (e) { bx.disabled = false; armed = 0; bx.textContent = 'Borrar'; bx.classList.remove('armed'); Z.toast(e.message || 'No se pudo borrar'); });
+      });
+      var act = el('div', 'racts'); act.appendChild(pr); act.appendChild(bx);
+      return { cells: [hmOf(x.at), x.o.orderId, who(x.o), summary(x.o), methLabel(x.o), money(x.o.total), act] }; });
     grid.appendChild(table([['Hora'], ['Pedido'], ['Tipo'], ['Productos', 'wide'], ['Medio'], ['Total', 'r'], ['']], cells));
     var prod = {}; rows.forEach(function (x) { (x.o.lines || []).forEach(function (l) { prod[l.name] = (prod[l.name] || 0) + l.qty; }); });
     var top = Object.keys(prod).map(function (k) { return [k, prod[k]]; }).sort(function (a, b) { return b[1] - a[1]; }).slice(0, 10);
