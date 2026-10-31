@@ -13,7 +13,11 @@ const NTFY_TOPIC = 'eg-uptime-dac703bf';
 
 exports.handler = async function () {
   try {
-    const res = await fetch(SITE_URL, { method: 'GET', redirect: 'follow' });
+    const res = await fetch(SITE_URL, {
+      method: 'GET',
+      redirect: 'follow',
+      signal: AbortSignal.timeout(8000),
+    });
     if (!res.ok) {
       await notify('estudiographica.com respondió con código ' + res.status + '. Revisa Netlify.');
     }

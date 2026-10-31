@@ -6,5 +6,8 @@ Disallow: /gracias-plan
 Disallow: /gracias-jornada
 Disallow: /contrato
 Disallow: /cotizacion
+Disallow: /api/
+Disallow: /menu/zona-0/panel/
+Disallow: /menu/zona-0/cocina/
 
 Sitemap: https://estudiographica.com/sitemap.xml
