@@ -191,7 +191,7 @@ body{background:var(--paper);min-height:100dvh}
 @media (max-width:1100px){
   .board{grid-template-columns:1fr}
   .kpis{grid-template-columns:repeat(2,1fr)}
-  .tool span{display:none}.tool{padding:0 14px}.tool.sw{padding:0 14px 0 8px}.tool.sw span{display:inline}
+  .tool{padding:0 14px}.tool.sw{padding:0 14px 0 8px}
   .pos[open]{grid-template-columns:1fr;grid-template-rows:1fr 1fr;overflow-y:auto}
 }
 
@@ -329,7 +329,7 @@ body{background:var(--paper);min-height:100dvh}
 .bar .live{white-space:nowrap}
 .bar .brandmark{flex:none}
 .paylab{font-weight:600;font-size:14px;color:var(--muted)}
-@media (max-width:1750px){#sound span,#histBtn span{display:none}#sound,#histBtn{padding:0;width:44px;justify-content:center}}
+@media (min-width:1101px) and (max-width:1750px){#sound span,#histBtn span{display:none}#sound,#histBtn{padding:0;width:44px;justify-content:center}}
 
 .sp-rows{display:grid;gap:8px}
 .sp-row{display:grid;grid-template-columns:1fr 110px 130px;gap:8px;align-items:center}
@@ -471,3 +471,83 @@ body{background:var(--paper);min-height:100dvh}
 .pl .dsc input{width:92px;min-height:36px;border-radius:var(--r-pill);border:1px solid var(--hair);padding:0 12px;font:inherit;font-size:14px;background:var(--paper)}
 .racts{display:flex;gap:6px;justify-content:flex-end;white-space:nowrap}
 .mini.danger.armed{background:var(--danger,#b3261e);color:#fff}
+
+/* ===== Diagnóstico UX: móvil, objetivos táctiles, menús ===== */
+.more{display:none}
+.mini{min-height:44px}.mini.ico{width:44px;padding:0;justify-content:center}
+.seg.sm button,.subtabs button{min-height:44px}
+.mprice{min-height:44px;padding:0 12px}.mprice input{min-height:44px}
+.xl{display:inline}
+
+/* Menú emergente */
+.popm{position:fixed;z-index:300;min-width:200px;padding:6px;border-radius:18px;background:var(--card);border:1px solid var(--hair);box-shadow:0 18px 40px -16px rgba(24,24,24,.45);opacity:0;transform:scale(.96);transition:opacity .15s var(--ease-out,ease),transform .15s var(--ease-out,ease)}
+.popm.on{opacity:1;transform:none}
+.popm .pi{display:flex;align-items:center;width:100%;min-height:46px;padding:0 14px;border-radius:12px;font:inherit;font-weight:600;font-size:15px;text-align:left}
+.popm .pi.danger{color:var(--err)}
+.popm .pi.armed{background:var(--err);color:#fff}
+@media (hover:hover) and (pointer:fine){.popm .pi:not(.armed):hover{background:var(--hair)}}
+@media (prefers-reduced-motion:reduce){.popm{transform:none;transition:opacity .15s}}
+
+/* Controles de tabla y chips */
+.racts{align-items:center}
+.subtabs.light{max-width:100%;overflow-x:auto;scrollbar-width:none}.subtabs.light::-webkit-scrollbar{display:none}
+.subtabs button{white-space:nowrap}
+.lbar{max-width:100%}
+
+/* Descuento por ítem */
+.pl .ctl{display:flex;align-items:center;gap:6px}
+.pl .dtog{grid-column:auto;justify-self:auto;display:inline-grid;place-items:center;min-width:44px;min-height:44px;padding:0 10px;border-radius:var(--r-pill);border:1.5px solid var(--hair);font-size:15px;font-weight:700;color:var(--muted)}
+.pl .dtog.on{border-color:var(--ink);color:var(--ink);background:var(--card)}
+.pl .dsc .chip{min-height:44px}.pl .dsc input{min-height:44px}
+
+/* Mesa con cuenta: contorno y marcador, el amarillo queda para lo que pide acción */
+.tile.busy{background:var(--card);border:2px solid var(--ink)}
+.tile.busy .tt{background:linear-gradient(transparent 58%,var(--y) 58%);align-self:start;justify-self:start;padding:0 4px;margin-left:-4px}
+
+/* Pedidos vacíos y por aceptar */
+.col[data-col="nuevo"]:not(.is-empty){outline:2px solid var(--y);outline-offset:-2px}
+@media (max-width:1100px){
+  .col.is-empty{min-height:0;padding:6px 14px}.col.is-empty h2{padding:8px;color:var(--muted)}.col.is-empty .stack{display:none}
+}
+
+/* Diálogo de impresión: opciones secundarias */
+.prt-more{margin-top:4px}.prt-more summary{display:flex;align-items:center;min-height:44px;cursor:pointer;font-weight:600;font-size:15px;color:var(--muted)}
+.prt-more[open] summary{margin-bottom:6px}.prt-more .tool{display:flex;width:100%;margin-bottom:8px}
+
+/* Tablet */
+@media (min-width:701px) and (max-width:1100px){
+  .tables{grid-template-columns:repeat(auto-fill,minmax(180px,1fr))}
+}
+
+/* Móvil */
+@media (max-width:700px){
+  .bar{flex-wrap:nowrap;gap:10px;padding:10px 14px}
+  .bar .brandmark em{display:none}
+  .bar .live{font-size:13px}
+  .more{display:inline-flex;flex:none}
+  .more[hidden]{display:none}
+  .tools{display:none}
+  .tools.open{display:grid;position:absolute;right:12px;top:calc(100% + 6px);z-index:60;width:min(320px,calc(100vw - 24px));gap:6px;padding:10px;border-radius:22px;background:#242424;border:1px solid rgba(255,255,255,.12);box-shadow:0 18px 40px -12px rgba(0,0,0,.6)}
+  .tools.open .tool{justify-content:flex-start;width:100%;padding:0 16px}
+  .tools.open .tool span{display:inline}
+  .tools.open .tool.ico{width:100%}
+  .tools.open #logout::after{content:"Salir";font-weight:600}
+  .tabs{position:fixed;left:0;right:0;bottom:0;order:0;width:auto;z-index:50;justify-content:space-between;gap:2px;padding:6px 8px calc(6px + env(safe-area-inset-bottom,0px));border-radius:0;background:#181818;border-top:1px solid rgba(255,255,255,.12);overflow:visible}
+  .tabs button,.tabs .tablink{flex:1 1 0;min-width:0;justify-content:center;gap:4px;padding:0 2px;min-height:48px;font-size:13px}
+  .tabs .xl{display:none}
+  .tabs .badge{margin-left:2px}
+  .app{padding-bottom:calc(100px + env(safe-area-inset-bottom,0px))}
+  .toast{bottom:calc(84px + env(safe-area-inset-bottom,0px))}
+  .tables{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .tile{min-height:116px;padding:14px;border-radius:22px;gap:6px}
+  .tile .tn b{font-size:40px}.tile .tt{font-size:22px}
+  .tile.free{min-height:92px}
+  .legend{flex-wrap:nowrap;overflow-x:auto;white-space:nowrap;gap:14px;font-size:13px;scrollbar-width:none}
+  .legend::-webkit-scrollbar{display:none}
+  .vact{width:100%}
+  .daynav{flex:1 1 100%}.daynav .dateinp{flex:1}
+}
+@media (max-width:700px) and (prefers-reduced-motion:no-preference){.tools.open{animation:moreIn .16s var(--ease-out,ease)}@keyframes moreIn{from{opacity:0;transform:translateY(-6px) scale(.98)}}}
+
+.tabs button,.tabs .tablink{min-height:44px}
+.bar .brandmark{min-height:44px;display:inline-flex;align-items:center}

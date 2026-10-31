@@ -56,6 +56,42 @@
     });
   }
 
+
+  /* Menú "Más" de la cabecera (móvil) */
+  (function () {
+    var mb = $('#moreBtn'), tl = $('#tools');
+    function setOpen(v) { tl.classList.toggle('open', v); mb.setAttribute('aria-expanded', v ? 'true' : 'false'); }
+    mb.addEventListener('click', function (e) { e.stopPropagation(); setOpen(!tl.classList.contains('open')); });
+    document.addEventListener('click', function (e) { if (tl.classList.contains('open') && !tl.contains(e.target)) setOpen(false); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setOpen(false); });
+    tl.addEventListener('click', function (e) { if (e.target.closest('button') && !e.target.closest('#openSw')) setOpen(false); });
+  })();
+
+  /* Menú emergente pequeño anclado a un botón: items = [{ text, danger, confirm, fn }] */
+  var popEl = null;
+  function popClose() { if (popEl) { popEl.remove(); popEl = null; } }
+  function popMenu(anchor, items) {
+    popClose();
+    var m = el('div', 'popm'); m.setAttribute('role', 'menu');
+    items.forEach(function (it) {
+      var b = el('button', 'pi' + (it.danger ? ' danger' : ''), it.text); b.type = 'button'; b.setAttribute('role', 'menuitem'); var armed = 0, tm = 0;
+      b.addEventListener('click', function (e) {
+        e.stopPropagation();
+        if (it.confirm && !armed) { armed = 1; b.textContent = it.confirm; b.classList.add('armed'); tm = setTimeout(function () { armed = 0; b.textContent = it.text; b.classList.remove('armed'); }, 3500); return; }
+        clearTimeout(tm); popClose(); it.fn();
+      });
+      m.appendChild(b);
+    });
+    document.body.appendChild(m); popEl = m; m._a = anchor;
+    var r = anchor.getBoundingClientRect(), w = m.offsetWidth, h = m.offsetHeight;
+    var left = Math.min(Math.max(8, r.right - w), innerWidth - w - 8), top = r.bottom + 6; if (top + h > innerHeight - 8) top = Math.max(8, r.top - h - 6);
+    m.style.left = left + 'px'; m.style.top = top + 'px'; m.style.transformOrigin = (r.right - left) + 'px ' + (top > r.top ? '0' : '100%');
+    requestAnimationFrame(function () { m.classList.add('on'); }); var f = m.querySelector('button'); if (f) f.focus();
+  }
+  document.addEventListener('click', function (e) { if (popEl && !popEl.contains(e.target) && !popEl._a.contains(e.target)) popClose(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') popClose(); });
+  window.addEventListener('scroll', popClose, true); window.addEventListener('resize', popClose);
+
   function newAlert(n) {
     if (soundOn) beep();
     var base = 'Panel · Zona 0'; document.title = '(' + n + ') Pedido nuevo · Zona 0';
@@ -148,7 +184,7 @@
       var col = $('.col[data-col="' + st + '"]'), stack = $('[data-stack]', col); stack.textContent = '';
       var items = td.filter(function (o) { return o.status === st; }).sort(function (a, b) { return String(a.createdAt).localeCompare(String(b.createdAt)); });
       items.forEach(function (o) { stack.appendChild(card(o)); });
-      $('[data-n]', col).textContent = String(items.length);
+      $('[data-n]', col).textContent = String(items.length); col.classList.toggle('is-empty', !items.length);
     });
     var done = td.filter(function (o) { return o.status === 'entregado' && o.key.slice(0, 10) === today(); }).sort(function (a, b) { return String(b.updatedAt).localeCompare(String(a.updatedAt)); });
     var dl = $('#doneList'); dl.textContent = ''; $('#doneN').textContent = String(done.length);
@@ -573,12 +609,12 @@
       var st = el('div', 'step'), m = el('button'); m.type = 'button'; m.appendChild(Z0Icon('minus')); var a = el('button'); a.type = 'button'; a.appendChild(Z0Icon('plus'));
       m.addEventListener('click', function () { if (it.raw.qty <= 1) pc.lines = pc.lines.filter(function (x) { return x !== it; }); else { it.raw.qty--; it.line = P.resolveLine(menu, it.raw, { staff: true }).line; } posLines(); });
       a.addEventListener('click', function () { if (it.raw.qty < P.MAX_QTY) { it.raw.qty++; it.line = P.resolveLine(menu, it.raw, { staff: true }).line; posLines(); } });
-      st.appendChild(m); st.appendChild(el('b', 'num' + (pc.bumpU === it.u ? ' bump' : ''), String(it.raw.qty))); st.appendChild(a); li.appendChild(st);
+      st.appendChild(m); st.appendChild(el('b', 'num' + (pc.bumpU === it.u ? ' bump' : ''), String(it.raw.qty))); st.appendChild(a); var ctl = el('div', 'ctl'); ctl.appendChild(st);
       var pr = el('span', 'pr num'); if (l.disc) pr.appendChild(el('s', '', money(l.gross))); pr.appendChild(document.createTextNode(money(l.total))); li.appendChild(pr);
       var det = lineDetail(l); if (det) li.appendChild(el('small', '', det));
-      var dtog = el('button', 'dtog' + (l.disc ? ' on' : ''), l.disc ? 'Dto -' + l.disc + '%' : '% Descuento'); dtog.type = 'button';
+      var dtog = el('button', 'dtog' + (l.disc ? ' on' : ''), l.disc ? '-' + l.disc + '%' : '%'); dtog.type = 'button'; dtog.setAttribute('aria-label', l.disc ? 'Descuento de ' + l.disc + ' por ciento, cambiar' : 'Agregar descuento'); dtog.setAttribute('aria-expanded', it.dopen ? 'true' : 'false');
       dtog.addEventListener('click', function () { it.dopen = !it.dopen; posLines(); });
-      li.appendChild(dtog);
+      ctl.appendChild(dtog); li.insertBefore(ctl, li.children[1] || null);
       if (it.dopen) {
         var dr = el('div', 'dsc');
         var setD = function (v) { v = Math.max(0, Math.min(90, Math.round(Number(v) || 0))); if (v) it.raw.disc = v; else delete it.raw.disc; it.line = P.resolveLine(menu, it.raw, { staff: true }).line; it.dopen = false; posLines(); };
@@ -740,7 +776,7 @@
 
   /* ---------- Entrar, consultar y salir ---------- */
   function enter() {
-    $('#login').hidden = true; $('#app').hidden = false; $('#tools').hidden = false; $('#tabs').hidden = false; go(ls('z0.tab') || 'mesas');
+    $('#login').hidden = true; $('#app').hidden = false; $('#tools').hidden = false; $('#moreBtn').hidden = false; $('#tabs').hidden = false; go(ls('z0.tab') || 'mesas');
     var n = 0; clearInterval(timer); clearInterval(tick);
     /* Cada 20 s mientras hay movimiento. Si pasan 6 consultas sin cambios, cada 60 s. Con la pestaña oculta no consulta.
        Sin actividad por 15 minutos y con el sonido apagado, se pausa hasta que alguien toque la pantalla. */
@@ -754,7 +790,7 @@
   }
   function leave(msg) {
     token = ''; ls(KEY, ''); clearInterval(timer); clearInterval(tick); orders = {}; lastNow = 0; first = true; idle = 0;
-    $('#login').hidden = false; $('#app').hidden = true; $('#tools').hidden = true; $('#tabs').hidden = true; $('#live').hidden = true;
+    $('#login').hidden = false; $('#app').hidden = true; $('#tools').hidden = true; $('#moreBtn').hidden = true; $('#tools').classList.remove('open'); $('#tabs').hidden = true; $('#live').hidden = true;
     var e = $('#err'); e.textContent = msg || ''; e.hidden = !msg;
   }
   function wake() { lastAct = Date.now(); if (paused) { paused = false; idle = 0; load().catch(function () {}); } }
@@ -771,7 +807,7 @@
     printTicket: printTicket, lineDoneAll: lineDoneAll, tab: function () { return tab; }, onChange: function (f) { listeners.push(f); },
     ensureDays: function (n) { return loadedDays >= n ? Promise.resolve() : load(n); }, leave: leave,
     extra: function () { return extra; },
-    removeOrder: function (key) { return api('POST', { key: key, remove: true }).then(function () { delete orders[key]; render(); }); },
+    popMenu: popMenu, removeOrder: function (key) { return api('POST', { key: key, remove: true }).then(function () { delete orders[key]; render(); }); },
     setExtra: function (x) { extra = x; menu.products = JSON.parse(baseJson).products; P.applyExtras(menu, extra, today()); if (pc.cat && $('#pos').open) posGrid(); }
   };
   var extra = { custom: [], off: [], over: {}, hide: [] }, baseJson = '{"products":[]}';

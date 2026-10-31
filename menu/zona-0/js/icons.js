@@ -20,6 +20,7 @@
     arrow: '<path d="M4 12h15M13 6l6 6-6 6"/>',
     sound: '<path d="M4 10v4h4l5 4V6L8 10zM16.5 9a4 4 0 0 1 0 6M19 6.5a7.5 7.5 0 0 1 0 11"/>',
     mute: '<path d="M4 10v4h4l5 4V6L8 10zM17 9.5l4 5M21 9.5l-4 5"/>',
+    dots: '<path d="M5 12v.01M12 12v.01M19 12v.01" stroke-width="3"/>',
     list: '<path d="M8 6h12M8 12h12M8 18h12M4 6v.01M4 12v.01M4 18v.01"/>',
     download: '<path d="M12 4v11M7 11l5 5 5-5M5 20h14"/>',
     out: '<path d="M10 4H5v16h5M14 8l4 4-4 4M18 12H9"/>',

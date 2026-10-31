@@ -9,9 +9,9 @@
 <link rel="icon" href="/favicon-32x32.png" sizes="32x32">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="preload" href="/fonts/izmir-bold.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="../css/base.css?v=20261030s">
-<link rel="stylesheet" href="../css/brand.css?v=20261030s">
-<link rel="stylesheet" href="../css/panel.css?v=20261030s">
+<link rel="stylesheet" href="../css/base.css?v=20261030t">
+<link rel="stylesheet" href="../css/brand.css?v=20261030t">
+<link rel="stylesheet" href="../css/panel.css?v=20261030t">
 </head>
 <body>
 
@@ -21,11 +21,12 @@
     <button type="button" data-tab="mesas" data-press aria-pressed="true">Mesas</button>
     <button type="button" data-tab="pedidos" data-press aria-pressed="false">Pedidos<b class="badge" id="bdgPed" hidden>0</b></button>
     <button type="button" data-tab="ventas" data-press aria-pressed="false">Ventas</button>
-    <button type="button" data-tab="libro" data-press aria-pressed="false">Libro diario</button>
+    <button type="button" data-tab="libro" data-press aria-pressed="false">Libro<span class="xl">&nbsp;diario</span></button>
     <button type="button" data-tab="menu" data-press aria-pressed="false">Menú</button>
     <a class="tablink" href="../cocina/" target="_blank" rel="noopener">Cocina</a>
   </nav>
   <span class="live" id="live" hidden>En vivo</span>
+  <button class="tool more" id="moreBtn" type="button" data-press aria-expanded="false" aria-controls="tools" hidden><svg class="ic"><use href="#i-dots"/></svg><span>Más</span></button>
   <div class="tools" id="tools" hidden>
     <button class="tool" id="sound" type="button" data-press aria-pressed="false" title="Sonido de pedidos nuevos"><svg class="ic"><use href="#i-mute"/></svg><span>Sonido</span></button>
     <button class="tool sw" id="openSw" type="button" data-press aria-pressed="true" title="Cuando está apagado, los clientes no pueden pedir desde el celular"><i class="knob"></i><span>Recibiendo pedidos</span></button>
@@ -182,9 +183,11 @@
       <label class="chk"><input type="checkbox" id="prtAuto"><span>Ajustar al papel automáticamente</span></label>
       <label class="chk"><input type="checkbox" id="prtLogo"><span>Mostrar el logo</span></label>
       <button class="btn btn--block" id="prtImg" type="button" data-press>Descargar ticket (imagen para Paint)</button>
-      <button class="tool" id="prtGo" type="button" data-press>Imprimir con el navegador</button>
-      <button class="tool" id="prtTxt" type="button" data-press>Copiar ticket para el Bloc de notas</button>
-      <button class="tool" id="prtPdf" type="button" data-press>Descargar PDF 80 x 210</button>
+      <details class="prt-more"><summary>Otras opciones</summary>
+        <button class="tool" id="prtGo" type="button" data-press>Imprimir con el navegador</button>
+        <button class="tool" id="prtTxt" type="button" data-press>Copiar ticket para el Bloc de notas</button>
+        <button class="tool" id="prtPdf" type="button" data-press>Descargar PDF 80 x 210</button>
+      </details>
       <p class="prt-info" id="prtTxtMsg" aria-live="polite"></p>
     </div>
   </div>
@@ -193,10 +196,10 @@
 <div id="ticket" class="tkt" aria-hidden="true"></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script src="../js/icons.js?v=20261030s"></script>
-<script src="../js/spring.js?v=20261030s"></script>
-<script src="../js/pricing.js?v=20261030s"></script>
-<script src="../js/panel.js?v=20261030s"></script>
-<script src="../js/panel-books.js?v=20261030s"></script>
+<script src="../js/icons.js?v=20261030t"></script>
+<script src="../js/spring.js?v=20261030t"></script>
+<script src="../js/pricing.js?v=20261030t"></script>
+<script src="../js/panel.js?v=20261030t"></script>
+<script src="../js/panel-books.js?v=20261030t"></script>
 </body>
 </html>
