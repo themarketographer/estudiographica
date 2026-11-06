@@ -15,8 +15,7 @@ function storeName(event) { return isProd(event) ? 'zona0-orders' : 'zona0-order
 function open(event) {
   const { getStore, connectLambda } = require('@netlify/blobs');
   if (event) connectLambda(event);
-  // Lectura fuerte: con la lectura eventual por defecto, un sondeo podía traer el pedido anterior y desmarcar lo recién tildado.
-  return getStore({ name: storeName(event), consistency: 'strong' });
+  return getStore({ name: storeName(event) });
 }
 
 function keyFor(dateKey, n) { return dateKey + '/' + String(n).padStart(3, '0'); }
@@ -116,26 +115,20 @@ function lineKinds(l) { return Array.isArray(l.kinds) && l.kinds.length ? l.kind
 function lineDone(l) { const d = Array.isArray(l.done) ? l.done : []; return lineKinds(l).filter((k) => k === 'comida' || k === 'bebida').every((k) => d.indexOf(k) > -1); }
 async function setLineDone(event, key, idx, station, done) {
   const store = open(event);
-  // Escritura condicional: si otro dispositivo guardó en medio, se relee y se reintenta, así ningún tilde pisa a otro.
-  for (let attempt = 0; attempt < 6; attempt++) {
-    const got = typeof store.getWithMetadata === 'function' ? await store.getWithMetadata(key, { type: 'json' }) : { data: await store.get(key, { type: 'json' }), etag: undefined };
-    const rec = got && got.data;
-    if (!rec || !Array.isArray(rec.lines) || !rec.lines[idx]) return null;
-    const l = rec.lines[idx];
-    if (lineKinds(l).indexOf(station) === -1) return null;
-    const d = new Set(Array.isArray(l.done) ? l.done : []);
-    if (done) d.add(station); else d.delete(station);
-    l.done = Array.from(d);
-    if (rec.status === 'preparando' || rec.status === 'listo') {
-      rec.status = rec.lines.every(lineDone) ? 'listo' : 'preparando';
-    }
-    rec.updatedAt = new Date().toISOString();
-    const r = await store.setJSON(key, rec, got.etag ? { onlyIfMatch: got.etag } : undefined);
-    if (r && r.modified === false) continue;
-    await touch(event, key);
-    return rec;
+  const rec = await store.get(key, { type: 'json' });
+  if (!rec || !Array.isArray(rec.lines) || !rec.lines[idx]) return null;
+  const l = rec.lines[idx];
+  if (lineKinds(l).indexOf(station) === -1) return null;
+  const d = new Set(Array.isArray(l.done) ? l.done : []);
+  if (done) d.add(station); else d.delete(station);
+  l.done = Array.from(d);
+  if (rec.status === 'preparando' || rec.status === 'listo') {
+    rec.status = rec.lines.every(lineDone) ? 'listo' : 'preparando';
   }
-  throw new Error('conflicto al guardar la línea');
+  rec.updatedAt = new Date().toISOString();
+  await store.setJSON(key, rec);
+  await touch(event, key);
+  return rec;
 }
 
 // Cobra un pedido y lo da por entregado (se usa al cerrar una mesa).
