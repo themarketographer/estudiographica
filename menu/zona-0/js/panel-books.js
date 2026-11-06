@@ -76,6 +76,38 @@
     };
     rd.readAsText(file);
   }
+  /* Una mesa, un registro: los pedidos de la misma mesa cobrados juntos (separados por menos de 2 minutos) se muestran como una sola cuenta. */
+  function groupMesa(rows) {
+    var asc = rows.slice().sort(function (a, b) { return String(a.at).localeCompare(String(b.at)); }), groups = [];
+    asc.forEach(function (x) {
+      var o = x.o, g = null;
+      if (o.mode === 'mesa' && o.customer && o.customer.mesa) {
+        for (var i = groups.length - 1; i >= 0; i--) {
+          var h = groups[i][0].o;
+          if (h.mode === 'mesa' && h.customer && String(h.customer.mesa) === String(o.customer.mesa)) {
+            var last = groups[i][groups[i].length - 1];
+            if (Date.parse(x.at) - Date.parse(last.at) <= 120000) g = groups[i];
+            break;
+          }
+        }
+      }
+      if (g) g.push(x); else groups.push([x]);
+    });
+    return groups.map(mergeGroup).sort(function (a, b) { return String(b.at).localeCompare(String(a.at)); });
+  }
+  function mergeGroup(items) {
+    if (items.length === 1) return items[0];
+    var os = items.map(function (x) { return x.o; }), by = {}, lines = [];
+    os.forEach(function (o) { parts(o).forEach(function (q) { by[q.method] = (by[q.method] || 0) + q.amount; }); (o.lines || []).forEach(function (l) { lines.push(l); }); });
+    var arr = Object.keys(by).map(function (m) { return { method: m, amount: Math.round(by[m] * 100) / 100 }; });
+    var main = arr.slice().sort(function (a, b) { return b.amount - a.amount; })[0], first = os[0], at = items[items.length - 1].at;
+    var ids = os.map(function (o, i) { return i ? String(o.orderId).split('-')[0] : o.orderId; });
+    return { at: at, day: items[0].day, o: {
+      key: first.key, keys: os.map(function (o) { return o.key; }), orderId: ids.join(' + '), createdAt: first.createdAt, mode: 'mesa', customer: first.customer, mozo: first.mozo,
+      lines: lines, deliveryFee: 0, total: Math.round(os.reduce(function (s, o) { return s + o.total; }, 0) * 100) / 100,
+      payment: { status: 'pagado', method: main ? main.method : 'efectivo', parts: arr, updatedAt: at }, _n: os.length
+    } };
+  }
   var vs = { day: '' };
   function renderVentas() {
     var box = $('#v-ventas'); if (!vs.day) vs.day = todayKey();
@@ -86,7 +118,7 @@
     var prev = btn('', 'tool dark ico', function () { vs.day = shift(vs.day, -1); renderVentas(); }, 'arrow'); prev.firstChild.style.transform = 'scaleX(-1)'; prev.setAttribute('aria-label', 'Día anterior');
     var next = btn('', 'tool dark ico', function () { if (vs.day < todayKey()) { vs.day = shift(vs.day, 1); renderVentas(); } }, 'arrow'); next.setAttribute('aria-label', 'Día siguiente'); next.disabled = vs.day >= todayKey();
     nav.appendChild(prev); nav.appendChild(inp); nav.appendChild(next); nav.appendChild(btn('Hoy', 'tool dark', function () { vs.day = todayKey(); renderVentas(); }));
-    var rows = paidSales(vs.day, vs.day);
+    var rows = groupMesa(paidSales(vs.day, vs.day));
     var exp = btn('Exportar', 'tool dark', function () {
       Z.popMenu(exp, [
         { text: 'Descargar CSV del día', fn: function () { csvDownload('ventas-zona0-' + vs.day + '.csv', [['hora', 'pedido', 'tipo', 'productos', 'medio', 'total']].concat(rows.map(function (x) { return [hmOf(x.at), x.o.orderId, who(x.o), summary(x.o), methLabel(x.o), x.o.total]; }))); } },
@@ -100,13 +132,13 @@
     var kp = el('section', 'kpis k3'); kpi(kp, [['Vendido', money(total), true], ['Cobros', String(rows.length)], ['Cobro promedio', rows.length ? money(Math.round(total / rows.length * 10) / 10) : '0 Bs']]); box.appendChild(kp);
     var meth = el('div', 'chips'); ['efectivo', 'qr', 'tarjeta'].forEach(function (m) { var c = el('span', 'mchip'); c.appendChild(el('small', '', METHOD[m])); c.appendChild(el('b', 'num', money(byM[m] || 0))); meth.appendChild(c); }); box.appendChild(meth);
     var grid = el('div', 'two-col');
-    var cells = rows.map(function (x) { var pr = el('button', 'mini', 'Ticket'); pr.type = 'button'; pr.addEventListener('click', function () { Z.printTicket(x.o); });
+    var cells = rows.map(function (x) { var pr = el('button', 'mini', 'Ticket'); pr.type = 'button'; pr.addEventListener('click', function () { Z.printTicket(x.o._n ? Object.assign({}, x.o, { orderId: '', customer: Object.assign({}, x.o.customer, { name: 'Mesa ' + x.o.customer.mesa }) }) : x.o); });
       var bx = el('button', 'mini ico', ''); bx.type = 'button'; bx.setAttribute('aria-label', 'Más acciones del registro ' + x.o.orderId); bx.setAttribute('aria-haspopup', 'menu');
       bx.appendChild(Z0Icon('dots'));
       bx.addEventListener('click', function (e) {
         e.stopPropagation();
         Z.popMenu(bx, [{ text: 'Borrar registro', danger: true, confirm: '¿Borrar ' + x.o.orderId + '?', fn: function () {
-          Z.removeOrder(x.o.key).then(function () { Z.toast('Registro ' + x.o.orderId + ' borrado'); }).catch(function (er) { Z.toast(er.message || 'No se pudo borrar'); });
+          (x.o.keys || [x.o.key]).reduce(function (pr2, k) { return pr2.then(function () { return Z.removeOrder(k); }); }, Promise.resolve()).then(function () { Z.toast('Registro ' + x.o.orderId + ' borrado'); }).catch(function (er) { Z.toast(er.message || 'No se pudo borrar'); });
         } }]);
       });
       var act = el('div', 'racts'); act.appendChild(pr); act.appendChild(bx);
