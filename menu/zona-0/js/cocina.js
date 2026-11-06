@@ -6,7 +6,7 @@
   var $$ = function (s, r) { return [].slice.call((r || document).querySelectorAll(s)); };
   function el(tag, cls, text) { var n = document.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; }
   function ls(k, v) { try { if (v === undefined) return localStorage.getItem(k) || ''; if (v === null || v === '') localStorage.removeItem(k); else localStorage.setItem(k, v); } catch (e) {} return ''; }
-  var KEY = 'z0.kt', token = '', orders = {}, lastNow = 0, idle = 0, n = 0, timer = 0, tick = 0, first = true, soundOn = false, audio = null, toastT = 0, queue = {}, selMode = false, sel = {}, doneAt = {}, HOLD = 120000, holdT = 0;
+  var KEY = 'z0.kt', token = '', orders = {}, lastNow = 0, idle = 0, n = 0, timer = 0, tick = 0, first = true, soundOn = false, audio = null, toastT = 0, queue = {}, pend = {}, mutAt = {}, selMode = false, sel = {}, doneAt = {}, HOLD = 120000, holdT = 0;
   var CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 9.5 17 19 7.5"/></svg>';
 
   function toast(m) { var t = $('#toast'); t.textContent = m; t.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(function () { t.classList.remove('on'); }, 3000); }
@@ -21,10 +21,10 @@
   function beep() { try { audio = audio || new (window.AudioContext || window.webkitAudioContext)(); [700, 940].forEach(function (f, i) { var o = audio.createOscillator(), g = audio.createGain(), t0 = audio.currentTime + i * 0.18; o.type = 'sine'; o.frequency.value = f; g.gain.setValueAtTime(0.0001, t0); g.gain.exponentialRampToValueAtTime(0.35, t0 + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.25); o.connect(g); g.connect(audio.destination); o.start(t0); o.stop(t0 + 0.28); }); } catch (e) {} }
 
   function load() {
-    var url = lastNow ? '?since=' + Math.max(0, lastNow - 20000) : '?days=1';
+    var url = lastNow ? '?since=' + Math.max(0, lastNow - 20000) : '?days=1', t0 = Date.now();
     return api('GET', null, url).then(function (d) {
       var fresh = 0, changed = false;
-      d.orders.forEach(function (o) { var old = orders[o.key]; if (!old) { changed = true; if (!first) { fresh++; o._new = true; } } else if (JSON.stringify(old) !== JSON.stringify(o)) changed = true; orders[o.key] = o; });
+      d.orders.forEach(function (o) { if (pend[o.key] > 0 || (mutAt[o.key] || 0) >= t0) return; var old = orders[o.key]; if (!old) { changed = true; if (!first) { fresh++; o._new = true; } } else if (JSON.stringify(old) !== JSON.stringify(o)) changed = true; orders[o.key] = o; });
       (d.gone || []).forEach(function (k) { if (orders[k]) { delete orders[k]; changed = true; } });
       lastNow = d.now; setLive(true);
       if (changed) { idle = 0; render(); } else idle++;
@@ -99,10 +99,11 @@
     var prevs = items.map(function (it) { var l = it.o.lines[it.i], p = l.done.slice(); l.done = it.done ? l.done.concat(it.st) : l.done.filter(function (x) { return x !== it.st; }); return p; });
     render();
     items.forEach(function (it, n) {
-      var o = it.o, idx = it.i, st = it.st, done = it.done, l = o.lines[idx], prev = prevs[n];
-      queue[o.key] = (queue[o.key] || Promise.resolve()).then(function () { return api('POST', { key: o.key, line: idx, station: st, done: done }); })
-        .then(function (d) { if (d.order) orders[o.key] = d.order; else delete orders[o.key]; render(); })
-        .catch(function (e) { if (e.auth) { leave(e.message); return; } l.done = prev; render(); toast('No se pudo guardar. Revisa la conexión.'); });
+      var o = it.o, idx = it.i, st = it.st, done = it.done, l = o.lines[idx], prev = prevs[n], k = o.key;
+      pend[k] = (pend[k] || 0) + 1; mutAt[k] = Date.now();
+      queue[k] = (queue[k] || Promise.resolve()).then(function () { return api('POST', { key: k, line: idx, station: st, done: done }); })
+        .then(function (d) { pend[k]--; mutAt[k] = Date.now(); if (pend[k] > 0) return; if (d.order) orders[k] = d.order; else delete orders[k]; render(); })
+        .catch(function (e) { pend[k]--; if (e.auth) { leave(e.message); return; } l.done = prev; render(); toast('No se pudo guardar. Revisa la conexión.'); });
     });
   }
   function selBar() {
