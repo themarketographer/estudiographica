@@ -113,12 +113,10 @@ async function setPayment(event, key, status, method) {
 // Cuando todas las estaciones de todas las líneas están listas, el pedido pasa solo a "listo".
 function lineKinds(l) { return Array.isArray(l.kinds) && l.kinds.length ? l.kinds : ['comida']; }
 function lineDone(l) { const d = Array.isArray(l.done) ? l.done : []; return lineKinds(l).filter((k) => k === 'comida' || k === 'bebida').every((k) => d.indexOf(k) > -1); }
-async function setLineDone(event, key, idx, station, done) {
-  const store = open(event);
-  const rec = await store.get(key, { type: 'json' });
-  if (!rec || !Array.isArray(rec.lines) || !rec.lines[idx]) return null;
+function applyLineDone(rec, idx, station, done) {
+  if (!rec || !Array.isArray(rec.lines) || !rec.lines[idx]) return false;
   const l = rec.lines[idx];
-  if (lineKinds(l).indexOf(station) === -1) return null;
+  if (lineKinds(l).indexOf(station) === -1) return false;
   const d = new Set(Array.isArray(l.done) ? l.done : []);
   if (done) d.add(station); else d.delete(station);
   l.done = Array.from(d);
@@ -126,6 +124,29 @@ async function setLineDone(event, key, idx, station, done) {
     rec.status = rec.lines.every(lineDone) ? 'listo' : 'preparando';
   }
   rec.updatedAt = new Date().toISOString();
+  return true;
+}
+// Escritura condicional: si otro guardado se cruzó (la lectura puede venir con datos viejos), la etiqueta no coincide
+// y se vuelve a leer. Si la condicional no está disponible o falla, se guarda como siempre (comportamiento anterior).
+async function setLineDone(event, key, idx, station, done) {
+  const store = open(event);
+  if (typeof store.getWithMetadata === 'function') {
+    try {
+      for (let attempt = 0; attempt < 5; attempt++) {
+        const got = await store.getWithMetadata(key, { type: 'json' });
+        const rec = got && got.data;
+        if (!rec) return null;
+        if (!applyLineDone(rec, idx, station, done)) return null;
+        if (!got.etag) break;
+        const r = await store.setJSON(key, rec, { onlyIfMatch: got.etag });
+        if (r && r.modified === false) { await new Promise((ok) => setTimeout(ok, 120 * (attempt + 1))); continue; }
+        await touch(event, key);
+        return rec;
+      }
+    } catch (e) { console.error('zona0 setLineDone condicional:', e && e.message); }
+  }
+  const rec = await store.get(key, { type: 'json' });
+  if (!applyLineDone(rec, idx, station, done)) return null;
   await store.setJSON(key, rec);
   await touch(event, key);
   return rec;
