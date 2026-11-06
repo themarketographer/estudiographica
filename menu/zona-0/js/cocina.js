@@ -41,7 +41,7 @@
     var c = el('article', 'kcard' + (o._new ? ' new' : '')); c.dataset.key = o.key;
     var h = el('div', 'kh'); h.appendChild(el('div', 'kwho', whoLabel(o)));
     var cu = o.customer || {}, meta = el('div', 'kmeta'); meta.appendChild(el('div', '', o.orderId + (o.mode !== 'mesa' && cu.name ? ' · ' + cu.name : '')));
-    var a = mins(o.createdAt), age = el('span', 'kage num' + (a >= 20 ? ' late' : a >= 10 ? ' warn' : ''), a < 1 ? 'ahora' : a + ' min'); age.title = 'Entró a las ' + hm(o.createdAt); meta.appendChild(age); h.appendChild(meta); c.appendChild(h);
+    var a = mins(o.createdAt), ayer = new Date(o.createdAt).toLocaleDateString('es-BO', { timeZone: 'America/La_Paz' }) !== new Date().toLocaleDateString('es-BO', { timeZone: 'America/La_Paz' }), age = el('span', 'kage num' + (a >= 20 ? ' late' : a >= 10 ? ' warn' : ''), ayer ? 'de ayer' : a < 1 ? 'ahora' : a >= 120 ? Math.floor(a / 60) + ' h' : a + ' min'); age.title = 'Entró a las ' + hm(o.createdAt); meta.appendChild(age); h.appendChild(meta); c.appendChild(h);
     var ul = el('ul', 'klines');
     lines.forEach(function (x) {
       var on = x.l.done.indexOf(st) > -1, li = el('li'), b = el('button', 'kline' + (on ? ' on' : '')); b.type = 'button'; b.setAttribute('aria-pressed', on ? 'true' : 'false');

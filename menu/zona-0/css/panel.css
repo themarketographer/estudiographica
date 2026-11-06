@@ -551,3 +551,7 @@ body{background:var(--paper);min-height:100dvh}
 
 .tabs button,.tabs .tablink{min-height:44px}
 .bar .brandmark{min-height:44px;display:inline-flex;align-items:center}
+
+/* Cuenta abierta desde ayer: se nota sin gritar */
+.tile.stale{border-style:dashed}
+.tile.stale .ta{color:var(--red,#b3261e);font-weight:700}

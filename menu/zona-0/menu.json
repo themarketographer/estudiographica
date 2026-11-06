@@ -520,6 +520,7 @@
       "sub": "Refresco",
       "category": "refrescos",
       "price": 10,
+      "kinds": ["tienda"],
       "groups": []
     },
     {
@@ -528,6 +529,7 @@
       "sub": "Refresco",
       "category": "refrescos",
       "price": 10,
+      "kinds": ["tienda"],
       "groups": []
     },
     {
@@ -536,6 +538,7 @@
       "sub": "Refresco",
       "category": "refrescos",
       "price": 10,
+      "kinds": ["tienda"],
       "groups": []
     },
     {
@@ -544,6 +547,7 @@
       "sub": "Refresco",
       "category": "refrescos",
       "price": 10,
+      "kinds": ["tienda"],
       "groups": []
     },
     {
@@ -552,6 +556,7 @@
       "sub": "Refresco",
       "category": "refrescos",
       "price": 10,
+      "kinds": ["tienda"],
       "groups": []
     },
     {
@@ -560,6 +565,7 @@
       "sub": "Refresco",
       "category": "refrescos",
       "price": 10,
+      "kinds": ["tienda"],
       "groups": []
     },
     {

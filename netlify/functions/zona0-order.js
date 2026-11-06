@@ -58,9 +58,11 @@ exports.handler = async function (event) {
   };
   const incOf = (id) => { const p = Pricing.findProduct(menu, id); return p && p.includes ? String(p.includes) : ''; };
 
+  // Si todo es de tienda (gaseosas, barritas) no pasa por cocina ni barra; si además ya se pagó en el local, queda entregado.
+  const tiendaOnly = o.lines.every((l) => (l.free ? [l.kind] : kindsOf(l.id)).every((k) => k === 'tienda'));
   const make = (n, key) => ({
     key, orderId: Pricing.orderNumber(n, now), number: n, createdAt, updatedAt: createdAt,
-    status: staff ? (o.lines.every((l) => (l.free ? [l.kind] : kindsOf(l.id)).every((k) => k === 'tienda')) ? 'listo' : 'preparando') : 'nuevo', source: staff ? 'local' : 'app', mode: o.customer.mode, customer: o.customer,
+    status: staff ? (tiendaOnly ? (paid && o.customer.mode !== 'delivery' ? 'entregado' : 'listo') : 'preparando') : 'nuevo', source: staff ? 'local' : 'app', mode: o.customer.mode, customer: o.customer,
     lines: o.lines.map((l) => ({ id: l.id, name: l.name, qty: l.qty, unitPrice: l.unitPrice, total: l.total, disc: l.disc || undefined, gross: l.disc ? l.gross : undefined, choices: l.choices, note: l.note, kinds: l.free ? [l.kind] : kindsOf(l.id), inc: l.free ? '' : incOf(l.id), done: [], free: l.free ? true : undefined })),
     subtotal: o.subtotal, deliveryFee: o.deliveryFee, total: o.total, count: o.count, currency: menu.brand.currency,
     payment: { method, status: paid ? 'pagado' : 'pendiente' },

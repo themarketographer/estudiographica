@@ -77,6 +77,7 @@
     rd.readAsText(file);
   }
   /* Una mesa, un registro: los pedidos de la misma mesa cobrados juntos (separados por menos de 2 minutos) se muestran como una sola cuenta. */
+  function mk(m) { return String(m == null ? '' : m).trim().toLowerCase().replace(/^0+(?=\d)/, ''); }
   function groupMesa(rows) {
     var asc = rows.slice().sort(function (a, b) { return String(a.at).localeCompare(String(b.at)); }), groups = [];
     asc.forEach(function (x) {
@@ -84,7 +85,7 @@
       if (o.mode === 'mesa' && o.customer && o.customer.mesa) {
         for (var i = groups.length - 1; i >= 0; i--) {
           var h = groups[i][0].o;
-          if (h.mode === 'mesa' && h.customer && String(h.customer.mesa) === String(o.customer.mesa)) {
+          if (h.mode === 'mesa' && h.customer && mk(h.customer.mesa) === mk(o.customer.mesa)) {
             var last = groups[i][groups[i].length - 1];
             if (Date.parse(x.at) - Date.parse(last.at) <= 120000) g = groups[i];
             break;

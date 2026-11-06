@@ -152,6 +152,13 @@ async function setLineDone(event, key, idx, station, done) {
   return rec;
 }
 
+// Al cobrar, un pedido que cocina o barra todavía no terminó (y es reciente) sigue en cocina para que no se pierda la comanda.
+// La mesa se libera igual porque ya está pagada. Si ya está listo, o es de hace más de 3 horas, pasa a "entregado" como siempre.
+function afterPay(rec) {
+  const recent = Date.now() - Date.parse(rec.createdAt || 0) < 3 * 3600 * 1000;
+  if (rec.status === 'preparando' && recent && Array.isArray(rec.lines) && !rec.lines.every(lineDone)) return 'preparando';
+  return 'entregado';
+}
 // Cobra un pedido y lo da por entregado (se usa al cerrar una mesa).
 async function settle(event, key, method) {
   const store = open(event);
@@ -159,7 +166,7 @@ async function settle(event, key, method) {
   if (!rec || rec.status === 'cancelado') return rec || null;
   const now = new Date().toISOString();
   rec.payment = Object.assign({}, rec.payment, { status: 'pagado', method, updatedAt: now });
-  rec.status = 'entregado';
+  rec.status = afterPay(rec);
   rec.updatedAt = now;
   await store.setJSON(key, rec);
   await touch(event, key);
@@ -190,7 +197,7 @@ async function settleParts(event, keys, parts) {
     const arr = Object.keys(mine).map((m) => ({ method: m, amount: mine[m] / 100 }));
     const main = arr.slice().sort((a, b) => b.amount - a.amount)[0];
     rec.payment = Object.assign({}, rec.payment, { status: 'pagado', method: main ? main.method : 'efectivo', parts: arr, split: parts.length, updatedAt: now });
-    rec.status = 'entregado'; rec.updatedAt = now;
+    rec.status = afterPay(rec); rec.updatedAt = now;
     await store.setJSON(k, rec); await touch(event, k);
     out.push(rec);
   }

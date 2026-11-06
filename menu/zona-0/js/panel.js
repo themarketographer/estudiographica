@@ -468,13 +468,14 @@
   /* ---------- Mesas ---------- */
   function kindsOf(l) { return l.kinds && l.kinds.length ? l.kinds : ['comida']; }
   function lineDoneAll(l) { var d = l.done || []; return kindsOf(l).filter(function (k) { return k === 'comida' || k === 'bebida'; }).every(function (k) { return d.indexOf(k) > -1; }); }
+  function mesaKey(m) { return String(m == null ? '' : m).trim().toLowerCase().replace(/^0+(?=\d)/, ''); }
   function openOrders(mesa) {
-    return list().filter(function (o) { return o.mode === 'mesa' && o.customer && o.customer.mesa === mesa && o.status !== 'cancelado' && !(o.payment && o.payment.status === 'pagado'); })
+    return list().filter(function (o) { return o.mode === 'mesa' && o.customer && mesaKey(o.customer.mesa) === mesaKey(mesa) && o.status !== 'cancelado' && !(o.payment && o.payment.status === 'pagado'); })
       .sort(function (a, b) { return String(a.createdAt).localeCompare(String(b.createdAt)); });
   }
   function tableNames() {
     var t = ((menu && menu.service && menu.service.tables) || []).slice();
-    list().forEach(function (o) { var m = o.customer && o.customer.mesa; if (o.mode === 'mesa' && m && t.indexOf(m) < 0 && openOrders(m).length) t.push(m); });
+    list().forEach(function (o) { var m = o.customer && o.customer.mesa; if (o.mode === 'mesa' && m && !t.some(function (x) { return mesaKey(x) === mesaKey(m); }) && openOrders(m).length) t.push(m); });
     return t;
   }
   function renderTables() {
@@ -491,7 +492,9 @@
         b.appendChild(el('span', 'tt num', money(total)));
         var st = pendingApp ? 'Por aceptar' : ready ? 'Lista para servir' : 'En cocina · ' + doneN + '/' + allLines.length;
         b.appendChild(el('span', 'ts', st));
-        b.appendChild(el('span', 'ta num', mins(os[0].createdAt) + ' min · ' + os.length + (os.length === 1 ? ' ronda' : ' rondas')));
+        var am = mins(os[0].createdAt), old = P.boliviaDate(new Date(os[0].createdAt)).key !== today();
+        b.appendChild(el('span', 'ta num', (old ? 'De ayer · ' : '') + (am >= 120 ? Math.floor(am / 60) + ' h' : am + ' min') + ' · ' + os.length + (os.length === 1 ? ' ronda' : ' rondas')));
+        if (old) b.classList.add('stale');
       }
       b.addEventListener('click', function () { openPos('mesa', name); });
       box.appendChild(b);
