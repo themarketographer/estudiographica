@@ -56,7 +56,17 @@
 
 
 <!-- ═══════════ PIXEL + GA4 (reemplazar IDs) ═══════════ -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-9H6Z8N5DTP"></script>
+<script>
+/* Los píxeles (GA4, Meta, TikTok) se descargan después de que la página cargó, para que no
+   compitan con la foto principal. Los eventos que se disparen antes quedan en cola y se envían igual. */
+window.__egDefer = function (fn) {
+  var done = false;
+  function run() { if (done) return; done = true; fn(); }
+  function arm() { setTimeout(run, 1000); ['pointerdown', 'keydown', 'touchstart', 'scroll'].forEach(function (ev) { addEventListener(ev, run, { once: true, passive: true }); }); }
+  if (document.readyState === 'complete') arm(); else addEventListener('load', arm);
+};
+</script>
+<script>__egDefer(function(){var g=document.createElement("script");g.async=true;g.src="https://www.googletagmanager.com/gtag/js?id=G-9H6Z8N5DTP";document.head.appendChild(g)})</script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){ dataLayer.push(arguments); }
@@ -67,7 +77,7 @@
   !(function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
   n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
   n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
-  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)})(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  t.src=v;s=b.getElementsByTagName(e)[0];__egDefer(function(){s.parentNode.insertBefore(t,s)})})(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
   fbq('set', 'autoConfig', false, '1059099676340072');
   fbq('init', '1059099676340072');
   fbq('track', 'PageView');
@@ -82,8 +92,10 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 ;n.type="text/javascript",n.async=!0,n.src=r+"?sdkid="+e+"&lib="+t;e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(n,e)};
 
 
-  ttq.load('DA6J3MJC77UC8FLJ47I0');
-  ttq.page();
+  __egDefer(function () {
+    ttq.load('DA6J3MJC77UC8FLJ47I0');
+    ttq.page();
+  });
 }(window, document, 'ttq');
 </script>
 <!-- TikTok Pixel Code End -->
@@ -110,6 +122,7 @@ window.egOpt = function (url, w) {
 <link rel="preload" href="/fonts/izmir-regular.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="preload" href="/fonts/izmir-extrabold.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="preconnect" href="https://res.cloudinary.com" crossorigin />
+<link rel="preload" as="image" href="https://res.cloudinary.com/dplhu2z6j/image/upload/c_limit,w_720,q_auto,f_auto/v1791601180/f700513a-82d5-4069-bf00-325975d4e1dc_om7yu7.jpg" fetchpriority="high" data-eg-lcp />
 <link rel="stylesheet" href="/assets/css/button-states.css" />
 <link rel="stylesheet" href="/assets/css/eg-ui.css" />
 <link rel="stylesheet" href="/assets/css/eg-home.css" />
