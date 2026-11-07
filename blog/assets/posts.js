@@ -93,5 +93,12 @@ window.EG_BLOG_POSTS = [
     "excerpt": "Qué cambia entre una foto para redes y una foto pensada para tu carta.",
     "img": "https://res.cloudinary.com/dplhu2z6j/image/upload/v1745819075/1_ymdvor.jpg",
     "eyebrow": "Guías · Fotografía gastronómica"
+  },
+  {
+    "slug": "fotos-restaurante-google-maps-cochabamba",
+    "title": "Fotos para Google Maps: qué subir de tu restaurante",
+    "excerpt": "Qué fotos subir al perfil de Google de tu restaurante y en qué orden.",
+    "img": "https://res.cloudinary.com/dplhu2z6j/image/upload/v1745819075/1_ymdvor.jpg",
+    "eyebrow": "Guías · Google Maps"
   }
 ];

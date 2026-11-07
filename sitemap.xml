@@ -115,6 +115,12 @@
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
+  <url>
+    <loc>https://estudiographica.com/blog/fotos-restaurante-google-maps-cochabamba/</loc>
+    <lastmod>2026-11-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
 </urlset>
 <!--
   NOTA: /gracias-reunion, /gracias-sesion y /gracias-plan NO están en este
