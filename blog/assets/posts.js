@@ -100,5 +100,12 @@ window.EG_BLOG_POSTS = [
     "excerpt": "Qué fotos subir al perfil de Google de tu restaurante y en qué orden.",
     "img": "https://res.cloudinary.com/dplhu2z6j/image/upload/v1745819075/1_ymdvor.jpg",
     "eyebrow": "Guías · Google Maps"
+  },
+  {
+    "slug": "plan-mensual-fotos-restaurante-cochabamba",
+    "title": "Plan mensual de fotos para restaurantes: cuándo conviene",
+    "excerpt": "Cuánto cuesta cada formato, la cuenta por foto y cuándo conviene elegir cada uno.",
+    "img": "https://res.cloudinary.com/dplhu2z6j/image/upload/v1791601945/_MG_5822_syndep.jpg",
+    "eyebrow": "Guías · Planes"
   }
 ];
