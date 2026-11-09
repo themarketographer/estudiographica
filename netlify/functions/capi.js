@@ -15,7 +15,7 @@ function normalizePhone(phone) {
   return phone.replace(/[^\d]/g, '');
 }
 
-async function sendCapiEvent({ eventName, eventId, email, phone, sourceUrl, eventTime, fbp, fbc, clientUserAgent, nombre }) {
+async function sendCapiEvent({ eventName, eventId, email, phone, sourceUrl, eventTime, fbp, fbc, clientUserAgent, nombre, clientIp, customData }) {
   if (!PIXEL_ID || !ACCESS_TOKEN) {
     throw new Error('Faltan META_PIXEL_ID o META_ACCESS_TOKEN en las variables de entorno.');
   }
@@ -44,6 +44,7 @@ async function sendCapiEvent({ eventName, eventId, email, phone, sourceUrl, even
   // emparejarla con el evento del Pixel. Sin user-agent se mantiene
   // 'system_generated', porque 'website' lo exige.
   if (clientUserAgent) userData.client_user_agent = clientUserAgent;
+  if (clientIp) userData.client_ip_address = clientIp;
   
   const payload = {
     data: [
@@ -54,6 +55,7 @@ async function sendCapiEvent({ eventName, eventId, email, phone, sourceUrl, even
         action_source: clientUserAgent ? 'website' : 'system_generated',
         event_source_url: sourceUrl || undefined,
         user_data: userData,
+        ...(customData ? { custom_data: customData } : {}),
       },
       ],
   };
