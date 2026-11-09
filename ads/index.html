@@ -271,62 +271,381 @@ Hacemos que tus clientes vean tu comida y digan &quot;Woooow&quot;.</p>
 </section>
 
 <section class="s-paper pad" id="precios">
-  <div class="wrap calc">
-    <h2 class="rv">Arma tu sesión y mira cuánto cuesta</h2>
-    <p class="lead rv" style="--d:120ms">Mueve la barra, elige cuántas fotos necesitas y escríbenos con tu paquete listo.</p>
-    <div class="calc-card rv" style="--d:200ms">
-      <div class="calc-l">
-        <div class="calc-head"><label for="calcRange">Cantidad de fotos</label><b id="calcN">15 fotos</b></div>
-        <input type="range" id="calcRange" min="8" max="24" step="1" value="15">
-        <div class="calc-ends"><span>8</span><span>24</span></div>
-        <ul class="calc-tiers" id="calcTiers"></ul>
+  <div class="wrap pr-head">
+    <h2 class="rv">Arma tu paquete y mira cuánto cuesta</h2>
+    <p class="lead rv" style="--d:120ms">Elige una sesión puntual o un plan mensual, ajusta lo que necesitas y escríbenos con tu paquete listo.</p>
+  </div>
+<div class="toggle-wrap">
+  <div class="toggle">
+    <button id="tabSesion" class="active"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8.5A2.5 2.5 0 0 1 6.5 6h1.2a1 1 0 0 0 .9-.55l.5-1A1 1 0 0 1 10 4h4a1 1 0 0 1 .9.55l.5 1a1 1 0 0 0 .9.55h1.2A2.5 2.5 0 0 1 20 8.5v8A2.5 2.5 0 0 1 17.5 19h-11A2.5 2.5 0 0 1 4 16.5z"/><circle cx="12" cy="12.5" r="3.4"/></svg>Sesión de Fotos</button>
+    <button id="tabPlan"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="3.5"/><path d="M4 10h16M9 3v4M15 3v4"/></svg>Plan Mensual</button>
+  </div>
+</div>
+
+<div class="container">
+  <div class="card">
+    <div class="left-col">
+      <!-- SESIÓN -->
+      <div id="panelSesion">
+        <div class="slider-block slider-block--main">
+          <div class="slider-head">
+            <span class="slider-label">Cantidad de fotos</span>
+            <span class="slider-value" id="fotosValue">15 fotos</span>
+          </div>
+          <input type="range" id="fotosSlider" min="8" max="24" step="1" value="15" />
+          <div class="range-labels"><span>8</span><span>24</span></div>
+        </div>
       </div>
-      <div class="calc-r">
-        <p class="calc-pk" id="calcPk">Sesión Estándar</p>
-        <p class="calc-price" id="calcPrice">Bs. 1020</p>
-        <p class="calc-note">Precio referencial, pago único. Lo afinamos por WhatsApp.</p>
-        <ul class="calc-ben" id="calcBen"></ul>
-        <a class="btn btn--block" href="https://api.whatsapp.com/send?phone=59169422335&amp;text=%C2%A1Hola%2C%20Estudio%20Graphica%21%20Vi%20su%20anuncio%20y%20quiero%20fotos%20profesionales%20para%20mi%20restaurante%20%F0%9F%93%B8" target="_blank" rel="noopener" data-wa="calculadora" id="calcWA" data-wa-value="1020"><svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592z"/></svg><span>Escríbenos por WhatsApp</span></a>
+
+      <!-- PLAN -->
+      <div id="panelPlan" style="display:none;">
+        <div class="slider-block slider-block--main">
+          <div class="slider-head">
+            <span class="slider-label">Fotos mensuales</span>
+            <span class="slider-value" id="planFotosValue">16 fotos/mes</span>
+          </div>
+          <input type="range" id="planFotosSlider" min="8" max="26" step="1" value="16" />
+          <div class="range-labels"><span>8</span><span>26</span></div>
+        </div>
+        <div class="slider-block">
+          <div class="slider-head"><span class="slider-label">Duración del plan</span></div>
+          <div class="dur-chips" id="durChips">
+            <div class="dur-chip active" data-dur="3">3 meses</div>
+            <div class="dur-chip" data-dur="6">6 meses</div>
+            <div class="dur-chip" data-dur="12">12 meses</div>
+          </div>
+        </div>
+        <div class="checkbox-row" id="videoCheckbox">
+          <span class="check-square" id="videoCheckSquare"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
+          <span style="font-size:14px; font-weight:500;">Añadir servicio de videos</span>
+        </div>
+        <div class="slider-block" id="reelsBlock" style="display:none; margin-top:18px;">
+          <div class="slider-head">
+            <span class="slider-label">Reels mensuales</span>
+            <span class="slider-value" id="reelsValue">4 reels/mes</span>
+          </div>
+          <input type="range" id="reelsSlider" min="4" max="12" step="1" value="4" />
+          <div class="range-labels"><span>4</span><span>12</span></div>
+        </div>
+      </div>
+
+      <!-- EXTRAS — a la carta, se suman al precio en tiempo real, aplica a ambos tabs -->
+      <div class="extras-block">
+        <p class="extras-title" data-t="pg_precios.t04">Extras (opcional)</p>
+        <div id="extrasList"></div>
       </div>
     </div>
+
+    <div class="right-col">
+      <div class="paquete-label" id="paqueteLabel">Sesión Estándar</div>
+      <div class="paquete-name" id="paqueteName">Paquete Estándar</div>
+      <div class="price" id="precioValue">Bs. <span id="precioNum">1020</span><span class="price-unit">pago único</span></div>
+      <div class="price-extras-line" id="extrasLine" style="display:none;"></div>
+      <div class="price-note" data-t="pg_precios.t05">Precio referencial. Lo afinamos por WhatsApp.</div>
+      <ul class="benefits" id="benefitsList"></ul>
+      <a class="btn-primary" id="calcWA" href="#" target="_blank" rel="noopener" data-wa="calculadora" data-wa-value=""><svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592z"/></svg><span>Escríbenos por WhatsApp</span></a>
+    </div>
   </div>
+</div>
 <style>
-.calc h2{max-width:20ch}.calc .lead{margin:14px 0 36px;max-width:46ch}
-.calc-card{display:grid;grid-template-columns:1.1fr 1fr;gap:clamp(24px,4vw,48px);background:#fff;border:1px solid var(--hair);border-radius:28px;padding:clamp(22px,4vw,40px);box-shadow:0 24px 60px -30px rgba(24,24,24,.25)}
-.calc-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;font-weight:600}
-.calc-head b{background:var(--y);padding:4px 14px;border-radius:999px;font-size:15px}
-#calcRange{width:100%;height:8px;-webkit-appearance:none;appearance:none;background:var(--hair);border-radius:999px;outline:none;cursor:pointer}
-#calcRange::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;border-radius:50%;background:var(--ink);border:4px solid var(--y);box-shadow:0 4px 12px rgba(24,24,24,.3)}
-#calcRange::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:var(--ink);border:4px solid var(--y)}
-.calc-ends{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin:6px 0 22px}
-.calc-tiers,.calc-ben{list-style:none;padding:0}
-.calc-tiers li{display:flex;gap:12px;padding:12px 14px;border:1.5px solid var(--hair);border-radius:14px;margin-bottom:8px;transition:background .3s,border-color .3s}
-.calc-tiers li.on{background:var(--y);border-color:var(--ink)}
-.calc-tiers b{display:block;font-size:15px}.calc-tiers small{font-size:13px;color:var(--muted)}
-.calc-r{display:flex;flex-direction:column;border-left:1px dashed var(--hair);padding-left:clamp(20px,4vw,40px)}
-.calc-pk{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
-.calc-price{font-size:clamp(40px,6vw,56px);font-weight:800;letter-spacing:-.04em;line-height:1.1;margin-top:6px}
-.calc-note{font-size:13px;color:var(--muted);font-style:italic;margin:4px 0 18px}
-.calc-ben{flex:1;margin-bottom:22px}.calc-ben li{font-size:15px;padding:5px 0 5px 26px;position:relative}
-.calc-ben li::before{content:"✓";position:absolute;left:0;top:6px;width:18px;height:18px;border-radius:50%;background:var(--ink);color:var(--y);font-size:11px;display:grid;place-items:center}
-@media(max-width:760px){.calc-card{grid-template-columns:1fr}.calc-r{border-left:0;padding-left:0;border-top:1px dashed var(--hair);padding-top:24px}}
+#precios .toggle-wrap{display:flex;justify-content:center;margin:6px 0 30px;padding-inline:var(--gutter)}
+#precios .toggle{display:inline-flex;gap:4px;padding:5px;border-radius:999px;background:rgba(24,24,24,.07);position:relative}
+#precios .toggle button{display:inline-flex;align-items:center;gap:9px;border:0;background:transparent;padding:13px 24px;border-radius:999px;font:600 15px/1 var(--f);color:var(--muted);transition:background .4s var(--ease),color .3s,transform .2s var(--ease)}
+#precios .toggle button svg{width:18px;height:18px;flex:none}
+#precios .toggle button:hover{color:var(--ink)}
+#precios .toggle button:active{transform:scale(.97)}
+#precios .toggle button.active{background:var(--ink);color:var(--y);box-shadow:0 10px 22px -12px rgba(24,24,24,.6)}
+@media(max-width:480px){#precios .toggle button{padding:12px 16px;font-size:14px}}
+#precios .container{max-width:1080px;margin:0 auto;padding:0 var(--gutter) clamp(40px,7vw,90px);width:100%}
+#precios .card{background:#fff;border:1px solid var(--hair);border-radius:36px;box-shadow:0 30px 60px -36px rgba(24,24,24,.28);animation:rise .9s var(--ease) .15s backwards}
+#precios .container>.card:has(.left-col){display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:14px;padding:14px}
+#precios .left-col{padding:clamp(18px,3vw,30px)}
+#precios .slider-block{margin-bottom:22px;padding:20px 22px 22px;border-radius:26px;background:var(--paper);border:1px solid var(--hair);transition:background .4s var(--ease)}
+#precios .slider-block--main{background:var(--y);border-color:transparent;box-shadow:inset 0 1px 0 rgba(255,255,255,.55)}
+#precios .slider-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:16px}
+#precios .slider-label{font-size:14.5px;font-weight:600}
+#precios .slider-value{font:700 22px/1 var(--f);letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+#precios .range-labels{display:flex;justify-content:space-between;margin-top:10px;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+#precios .slider-block--main .range-labels{color:rgba(24,24,24,.7)}
+#precios .slider-block--main input[type=range]{background:linear-gradient(90deg,var(--ink) var(--rp,50%),rgba(24,24,24,.2) var(--rp,50%))}
+#precios .dur-chips{display:flex;gap:8px;flex-wrap:wrap}
+#precios .dur-chip{padding:11px 20px;border-radius:999px;border:1.5px solid rgba(24,24,24,.16);background:#fff;font-size:14px;font-weight:600;cursor:pointer;user-select:none;transition:background .35s var(--ease),border-color .3s,color .3s,transform .2s var(--ease)}
+#precios .dur-chip:hover{border-color:var(--ink)}
+#precios .dur-chip:active{transform:scale(.96)}
+#precios .dur-chip.active{background:var(--ink);border-color:var(--ink);color:var(--y)}
+#precios .checkbox-row{display:flex;align-items:center;gap:14px;padding:16px 18px;border-radius:22px;border:1.5px solid var(--hair);background:#fff;cursor:pointer;user-select:none;transition:border-color .3s,background .35s var(--ease)}
+#precios .checkbox-row:hover{border-color:var(--ink)}
+#precios .checkbox-row:has(.check-square.active){background:var(--y-soft);border-color:var(--ink)}
+#precios .extras-block{margin-top:26px}
+#precios .extras-title{font-size:15px;font-weight:700;margin-bottom:4px;max-width:none}
+#precios .extras-note{font-size:12.5px;color:var(--muted);margin-top:2px}
+#precios .extra-row{display:flex;align-items:center;gap:14px;padding:15px 18px;margin-top:10px;border-radius:22px;border:1.5px solid var(--hair);background:#fff;cursor:pointer;user-select:none;transition:border-color .3s,background .35s var(--ease),transform .3s var(--ease)}
+#precios .extra-row:hover{border-color:var(--ink);transform:translateY(-1px)}
+#precios .extra-row.active{background:var(--y-soft);border-color:var(--ink)}
+#precios .extra-copy{flex:1;display:flex;flex-direction:column;min-width:0}
+#precios .extra-name{font-size:14.5px;font-weight:600;line-height:1.3}
+#precios .extra-desc{font-size:12.5px;color:var(--muted);line-height:1.4;margin-top:2px}
+#precios .extra-price{font-size:13.5px;font-weight:600;white-space:nowrap;font-variant-numeric:tabular-nums}
+#precios .extra-stepper{display:flex;align-items:center;gap:6px}
+#precios .extra-stepper button{width:32px;height:32px;border-radius:11px;border:1.5px solid var(--ink);background:#fff;font:600 17px/1 var(--f);display:grid;place-items:center;padding:0;transition:background .25s,color .25s,transform .2s var(--ease)}
+#precios .extra-stepper button:hover:not(:disabled){background:var(--ink);color:var(--y)}
+#precios .extra-stepper button:active:not(:disabled){transform:scale(.9)}
+#precios .extra-stepper button:disabled{opacity:.3;cursor:not-allowed}
+#precios .qty{min-width:24px;text-align:center;font-weight:700;font-variant-numeric:tabular-nums}
+@media(max-width:560px){#precios .extra-row{flex-wrap:wrap}
+#precios .extra-price{margin-left:36px}}
+#precios .right-col{background:var(--ink);color:var(--paper);border-radius:28px;padding:clamp(24px,3vw,34px);align-self:start;position:sticky;top:92px;overflow:hidden;isolation:isolate}
+#precios .right-col::before{content:"";position:absolute;z-index:-1;width:300px;height:300px;right:-110px;top:-130px;border-radius:50%;background:radial-gradient(circle,rgba(255,221,90,.34),transparent 68%)}
+#precios .paquete-label{display:inline-block;padding:6px 14px;border-radius:999px;background:rgba(255,221,90,.16);color:var(--y);font-size:12.5px;font-weight:600}
+#precios .paquete-name{font:700 clamp(26px,3vw,34px)/1.1 var(--f);letter-spacing:-.035em;margin-top:14px}
+#precios .price{font:700 clamp(42px,4.8vw,56px)/1 var(--f);letter-spacing:-.045em;margin-top:18px;color:var(--y);font-variant-numeric:tabular-nums}
+#precios .price-unit{display:block;font:500 14px/1.3 var(--f);letter-spacing:0;color:rgba(248,248,248,.62);margin-top:8px}
+#precios .price-extras-line{font-size:13.5px;color:rgba(248,248,248,.78);margin-top:12px}
+#precios .price-extras-line b{color:var(--y);font-weight:600}
+#precios .price-pop{animation:pricePop .5s var(--ease)}
+@keyframes pricePop{40%{transform:scale(1.04)}}
+#precios .price-note{font-size:12.5px;color:rgba(248,248,248,.55);margin-top:10px}
+#precios .benefits{list-style:none;display:grid;gap:12px;margin:24px 0 28px;padding:0}
+#precios .benefits li{display:flex;gap:12px;align-items:flex-start;font-size:14.5px;line-height:1.45;color:rgba(248,248,248,.9)}
+#precios .check{flex:none;width:24px;height:24px;border-radius:8px;background:var(--y);color:var(--ink);display:grid;place-items:center;margin-top:-1px}
+#precios .check svg{width:13px;height:13px}
+#precios .btn-primary{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:58px;padding:0 26px;border:0;border-radius:999px;background:var(--y);color:var(--ink);font:600 16px/1.1 var(--f);text-decoration:none;cursor:pointer;transition:background .3s,transform .2s var(--ease),box-shadow .3s;box-shadow:inset 0 1px 0 rgba(255,255,255,.55)}
+#precios .btn-primary:hover{background:#fff}
+#precios .btn-primary:active{transform:scale(.97)}
+#precios .btn-primary svg{transition:transform .45s var(--ease)}
+#precios .btn-primary:hover svg{transform:translateX(4px)}
+#precios .btn-primary[disabled]{opacity:.5;cursor:not-allowed}
+#precios .wa-link{display:block;text-align:center;margin-top:16px;font-size:14px;font-weight:500;color:rgba(248,248,248,.8);text-decoration:underline;text-decoration-color:var(--y);text-decoration-thickness:2px;text-underline-offset:5px;transition:color .25s,text-underline-offset .4s var(--ease)}
+#precios .wa-link:hover{color:var(--y);text-underline-offset:8px}
+#precios .paper .wa-link,#precios .s-paper .wa-link,#precios .card .wa-link{color:var(--ink)}
+#precios .card .wa-link:hover{color:var(--ink)}
+#precios .right-col .wa-link,#precios .card-dark .wa-link{color:rgba(248,248,248,.82)}
+#precios .right-col .wa-link:hover,#precios .card-dark .wa-link:hover{color:var(--y)}
+@media(max-width:880px){#precios .container>.card:has(.left-col){grid-template-columns:minmax(0,1fr)}
+#precios .right-col{position:relative;top:auto}}
+#precios .btn-primary{text-decoration:none}#precios .pr-head h2{max-width:20ch}#precios .pr-head{margin-bottom:28px}#precios .pr-head .lead{margin-top:14px;max-width:46ch}#precios .toggle-wrap{margin-top:0}
 </style>
 <script>
-document.addEventListener('DOMContentLoaded',function(){
-  if(!window.EGPricing)return;
-  var r=document.getElementById('calcRange'),a=document.getElementById('calcWA');
-  function draw(){
-    var n=+r.value,d=EGPricing.calcSesion(n);
-    document.getElementById('calcN').textContent=n+' fotos';
-    document.getElementById('calcPk').textContent='Sesión '+d.paquete;
-    document.getElementById('calcPrice').textContent='Bs. '+d.precio;
-    document.getElementById('calcBen').innerHTML=EGPricing.sesionBenefits(n).map(function(b){return'<li>'+b+'</li>'}).join('');
-    document.getElementById('calcTiers').innerHTML=[['Básico','8–10 fotos','Para refrescar carta o redes',n<=10],['Estándar','11–18 fotos','Cobertura completa de menú',n>10&&n<=18],['Premium','19–24 fotos','Menú + ambiente + ingredientes',n>18]].map(function(t){return'<li'+(t[3]?' class="on"':'')+'><div><b>'+t[0]+' · '+t[1]+'</b><small>'+t[2]+'</small></div></li>'}).join('');
-    var msg='¡Hola, Estudio Graphica! Vi su anuncio. Quiero una *Sesión de Fotos*:\n- Paquete '+d.paquete+'\n- '+n+' fotos\n- Bs. '+d.precio+'\n\n¿Cuándo agendamos? 📸';
-    a.href='https://api.whatsapp.com/send?phone=59169422335&text='+encodeURIComponent(msg);
-    a.setAttribute('data-wa-value',d.precio);
-  }
-  r.addEventListener('input',draw);draw();
+document.addEventListener('DOMContentLoaded', function () {
+  if (!window.EGPricing) return;
+  (function () {
+    var tipo = 'sesion';
+    var CHK = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+    var fotos = 15, planFotos = 16, duracion = 3, addVideo = false, reels = 4;
+    var extrasSeleccionados = {}; // { [id]: cantidad } — 0/ausente = no seleccionado
+
+    var tabSesion = document.getElementById('tabSesion');
+    var tabPlan = document.getElementById('tabPlan');
+    var panelSesion = document.getElementById('panelSesion');
+    var panelPlan = document.getElementById('panelPlan');
+    var fotosSlider = document.getElementById('fotosSlider');
+    var fotosValue = document.getElementById('fotosValue');
+    var planFotosSlider = document.getElementById('planFotosSlider');
+    var planFotosValue = document.getElementById('planFotosValue');
+    var durChips = document.querySelectorAll('.dur-chip');
+    var videoCheckbox = document.getElementById('videoCheckbox');
+    var videoCheckSquare = document.getElementById('videoCheckSquare');
+    var reelsBlock = document.getElementById('reelsBlock');
+    var reelsSlider = document.getElementById('reelsSlider');
+    var reelsValue = document.getElementById('reelsValue');
+    var paqueteLabel = document.getElementById('paqueteLabel');
+    var paqueteName = document.getElementById('paqueteName');
+    var precioValue = document.getElementById('precioValue');
+    var precioNum = document.getElementById('precioNum');
+    var precioUnit = precioValue.querySelector('.price-unit');
+    var precioActual = null; // último valor numérico mostrado (null = aún no animó)
+    var precioRAF = null;
+    var precioReduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Anima el número del precio tipo odómetro (de precioActual al nuevo valor).
+    // Respeta prefers-reduced-motion mostrando el valor final directo.
+    function animarPrecio(valorFinal, unitLabel) {
+      precioUnit.textContent = unitLabel;
+      if (precioActual === null || precioReduceMotion) {
+        precioActual = valorFinal;
+        precioNum.textContent = valorFinal;
+        return;
+      }
+      if (precioActual === valorFinal) return;
+      var start = precioActual;
+      var delta = valorFinal - start;
+      var startTime = null;
+      var duration = 420;
+      if (precioRAF) cancelAnimationFrame(precioRAF);
+      function frame(ts) {
+        if (startTime === null) startTime = ts;
+        var p = Math.min((ts - startTime) / duration, 1);
+        var eased = 1 - Math.pow(1 - p, 3); // ease-out cúbico
+        precioNum.textContent = Math.round(start + delta * eased);
+        if (p < 1) {
+          precioRAF = requestAnimationFrame(frame);
+        } else {
+          precioActual = valorFinal;
+          precioNum.textContent = valorFinal;
+        }
+      }
+      precioRAF = requestAnimationFrame(frame);
+    }
+
+    var extrasLine = document.getElementById('extrasLine');
+    var extrasList = document.getElementById('extrasList');
+    var benefitsList = document.getElementById('benefitsList');
+    var waLink = document.getElementById('calcWA');
+
+
+
+    // Pinta la lista de extras una sola vez; los "flat" son checkbox simple,
+    // "reels" (stepper) trae su propio selector de cantidad con − / +.
+    extrasList.innerHTML = EGPricing.EXTRAS.map(function (ex) {
+      var priceTag = ex.tipo === 'stepper'
+        ? '+Bs. ' + ex.precioUnidad + ' c/u'
+        : '+Bs. ' + ex.precio;
+      return '<div class="extra-row" data-extra="' + ex.id + '" data-tipo="' + ex.tipo + '">' +
+        '<span class="check-square">' + CHK + '</span>' +
+        '<span class="extra-copy"><span class="extra-name">' + ex.label + '</span>' +
+        '<span class="extra-desc">' + ex.desc + '</span></span>' +
+        (ex.tipo === 'stepper'
+          ? '<span class="extra-stepper" style="display:none">' +
+            '<button type="button" class="stepper-minus" data-extra="' + ex.id + '">−</button>' +
+            '<span class="qty" data-qty="' + ex.id + '">' + ex.min + '</span>' +
+            '<button type="button" class="stepper-plus" data-extra="' + ex.id + '">+</button></span>'
+          : '') +
+        '<span class="extra-price">' + priceTag + '</span></div>';
+    }).join('');
+
+    function trackExtra(id) {
+      if (window.EG) window.EG.trackEvent('CustomizeProduct', { content_name: 'Extra: ' + id, content_type: tipo, origen: 'ads' });
+    }
+
+    extrasList.querySelectorAll('.extra-row').forEach(function (row) {
+      var id = row.dataset.extra;
+      var ex = EGPricing.EXTRAS.find(function (e) { return e.id === id; });
+      row.addEventListener('click', function (e) {
+        // Los botones del stepper manejan su propio click más abajo; acá
+        // solo procesamos el toggle general de la fila (marcar/desmarcar).
+        if (e.target.closest('.extra-stepper')) return;
+        var activo = (extrasSeleccionados[id] || 0) > 0;
+        extrasSeleccionados[id] = activo ? 0 : (ex.tipo === 'stepper' ? ex.min : 1);
+        render();
+        trackExtra(id);
+      });
+    });
+    extrasList.querySelectorAll('.stepper-minus, .stepper-plus').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var id = btn.dataset.extra;
+        var ex = EGPricing.EXTRAS.find(function (e2) { return e2.id === id; });
+        var cant = extrasSeleccionados[id] || ex.min;
+        cant += btn.classList.contains('stepper-plus') ? 1 : -1;
+        if (cant < ex.min) cant = ex.min;
+        if (cant > ex.max) cant = ex.max;
+        extrasSeleccionados[id] = cant;
+        render();
+        trackExtra(id);
+      });
+    });
+
+    function switchTab(t) {
+      tipo = t;
+      tabSesion.classList.toggle('active', t === 'sesion');
+      tabPlan.classList.toggle('active', t === 'plan');
+      panelSesion.style.display = t === 'sesion' ? 'block' : 'none';
+      panelPlan.style.display = t === 'plan' ? 'block' : 'none';
+      render();
+    }
+    tabSesion.addEventListener('click', function () { switchTab('sesion'); });
+    tabPlan.addEventListener('click', function () { switchTab('plan'); });
+
+    fotosSlider.addEventListener('input', render);
+    planFotosSlider.addEventListener('input', render);
+    reelsSlider.addEventListener('input', render);
+
+    durChips.forEach(function (chip) {
+      chip.addEventListener('click', function () {
+        durChips.forEach(function (c) { c.classList.remove('active'); });
+        chip.classList.add('active');
+        duracion = parseInt(chip.dataset.dur, 10);
+        render();
+      });
+    });
+
+    videoCheckbox.addEventListener('click', function () {
+      addVideo = !addVideo;
+      videoCheckSquare.classList.toggle('active', addVideo);
+      reelsBlock.style.display = addVideo ? 'block' : 'none';
+      render();
+    });
+
+    function render() {
+      fotos = parseInt(fotosSlider.value, 10);
+      planFotos = parseInt(planFotosSlider.value, 10);
+      reels = parseInt(reelsSlider.value, 10);
+      fotosValue.textContent = fotos + ' fotos';
+      planFotosValue.textContent = planFotos + ' fotos/mes';
+      reelsValue.textContent = reels + ' reels/mes';
+
+      // Extras: reflejar estado activo (y cantidad, si aplica) en las filas.
+      extrasList.querySelectorAll('.extra-row').forEach(function (row) {
+        var id = row.dataset.extra;
+        var cant = extrasSeleccionados[id] || 0;
+        var active = cant > 0;
+        row.classList.toggle('active', active);
+        var sq = row.querySelector('.check-square');
+        sq.classList.toggle('active', active);
+        if (row.dataset.tipo === 'stepper') {
+          var stepperEl = row.querySelector('.extra-stepper');
+          stepperEl.style.display = active ? 'flex' : 'none';
+          var ex = EGPricing.EXTRAS.find(function (e) { return e.id === id; });
+          row.querySelector('.qty').textContent = cant || ex.min;
+          row.querySelector('.stepper-minus').disabled = cant <= ex.min;
+          row.querySelector('.stepper-plus').disabled = cant >= ex.max;
+        }
+      });
+      var extrasTotal = EGPricing.calcExtras(extrasSeleccionados);
+      var extrasNombres = EGPricing.EXTRAS.filter(function (ex) { return (extrasSeleccionados[ex.id] || 0) > 0; })
+        .map(function (ex) { return ex.tipo === 'stepper' ? (ex.label + ' x' + extrasSeleccionados[ex.id]) : ex.label; });
+      if (extrasTotal > 0) {
+        extrasLine.style.display = 'block';
+        extrasLine.innerHTML = extrasNombres.length + ' extra' + (extrasNombres.length > 1 ? 's' : '') + ': <b>+Bs. ' + extrasTotal + '</b>';
+      } else {
+        extrasLine.style.display = 'none';
+      }
+      precioValue.classList.remove('price-pop');
+      void precioValue.offsetWidth; // reinicia la animación en cada cambio
+      precioValue.classList.add('price-pop');
+
+      if (tipo === 'sesion') {
+        var data = EGPricing.calcSesion(fotos);
+        var precioFinal = data.precio + extrasTotal;
+        var benefits = EGPricing.sesionBenefits(fotos).concat(extrasNombres);
+        paqueteLabel.textContent = 'Sesión ' + data.paquete;
+        paqueteName.textContent = 'Paquete ' + data.paquete;
+        animarPrecio(precioFinal, 'pago único');
+        benefitsList.innerHTML = benefits.map(function (b) { return '<li><span class="check">' + CHK + '</span><span>' + b + '</span></li>'; }).join('');
+
+        var extrasWA = extrasNombres.length ? ('\n- Extras: ' + extrasNombres.join(', ')) : '';
+        var textoWA = '¡Hola, Estudio Graphica! Vi su anuncio. Quiero una *Sesión de Fotos*:\n- Paquete ' + data.paquete + '\n- ' + fotos + ' fotos' + extrasWA + '\n- Bs. ' + precioFinal + '\n\n¿Cuándo agendamos? 📸';
+        waLink.href = 'https://api.whatsapp.com/send?phone=59169422335&text=' + encodeURIComponent(textoWA);
+        waLink.setAttribute('data-wa-value', precioFinal);
+      } else {
+        var pdata = EGPricing.calcPlan(planFotos, duracion, addVideo, reels);
+        var pPrecioFinal = pdata.precio + extrasTotal;
+        var pbenefits = EGPricing.planBenefits(planFotos, duracion, addVideo, reels).concat(extrasNombres);
+        paqueteLabel.textContent = 'Plan ' + pdata.paquete;
+        paqueteName.textContent = 'Plan ' + pdata.paquete;
+        animarPrecio(pPrecioFinal, '/mes');
+        benefitsList.innerHTML = pbenefits.map(function (b) { return '<li><span class="check">' + CHK + '</span><span>' + b + '</span></li>'; }).join('');
+
+        var extrasWA2 = extrasNombres.length ? ('\n- Extras: ' + extrasNombres.join(', ')) : '';
+        var textoWA2 = '¡Hola, Estudio Graphica! Vi su anuncio. Quiero un *Plan Mensual*:\n- Paquete ' + pdata.paquete + '\n- ' + planFotos + ' fotos/mes' + (addVideo ? (' + ' + reels + ' reels/mes') : '') + extrasWA2 + '\n- Duración: ' + duracion + ' mes' + (duracion > 1 ? 'es' : '') + '\n- Bs. ' + pPrecioFinal + '/mes\n\n¿Cuándo agendamos? 📸';
+        waLink.href = 'https://api.whatsapp.com/send?phone=59169422335&text=' + encodeURIComponent(textoWA2);
+        waLink.setAttribute('data-wa-value', pPrecioFinal);
+      }
+    }
+
+
+    render();
+  })();
 });
 </script>
 </section>
