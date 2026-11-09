@@ -107,5 +107,12 @@ window.EG_BLOG_POSTS = [
     "excerpt": "Cuánto cuesta cada formato, la cuenta por foto y cuándo conviene elegir cada uno.",
     "img": "https://res.cloudinary.com/dplhu2z6j/image/upload/v1791601945/_MG_5822_syndep.jpg",
     "eyebrow": "Guías · Planes"
+  },
+  {
+    "slug": "cuantas-fotos-necesita-un-restaurante",
+    "title": "Cuántas fotos necesita un restaurante: guía para tu carta",
+    "excerpt": "Una foto por plato para el menú y ángulos extra para redes: la cuenta y el paquete que te toca.",
+    "img": "https://res.cloudinary.com/dplhu2z6j/image/upload/v1791601517/IMG_2390__jtz75e.jpg",
+    "eyebrow": "Guías · Fotos de menú"
   }
 ];
