@@ -41,7 +41,7 @@ exports.handler = async (event) => {
     return { statusCode: 400, body: JSON.stringify({ error: 'JSON inválido' }) };
   }
 
-  const { event_name, event_id, event_source_url, fbp, fbc, custom_data } = body;
+  const { event_name, event_id, event_source_url, fbp, fbc, custom_data, external_id } = body;
 
   // Nombre de evento: letras, números y guion bajo, como los que usa el sitio.
   if (!event_name || !/^[A-Za-z0-9_]{2,50}$/.test(event_name) || !event_id || String(event_id).length > 120) {
@@ -63,6 +63,10 @@ exports.handler = async (event) => {
   };
   if (fbp) userData.fbp = String(fbp);
   if (fbc) userData.fbc = String(fbc);
+  // external_id: id anónimo del visitante, hasheado como pide Meta.
+  if (external_id && /^[\w-]{6,64}$/.test(String(external_id))) {
+    userData.external_id = [require('crypto').createHash('sha256').update(String(external_id)).digest('hex')];
+  }
 
   // custom_data: solo valores simples (texto, número, booleano), para no
   // reenviar nada raro a Meta.

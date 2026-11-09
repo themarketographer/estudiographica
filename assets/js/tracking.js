@@ -71,15 +71,36 @@ window.EG = window.EG || {};
     return getCookie('_fbp');
   }
 
+  // fbc: cookie _fbc, o el ?fbclid= de la URL. Se guarda 90 días (como hace
+  // Meta) para que siga disponible cuando el visitante navega a otra página
+  // del sitio, donde la URL ya no trae el fbclid.
   function getFbc() {
     var fbc = getCookie('_fbc');
     if (fbc) return fbc;
     try {
-      var params = new URLSearchParams(window.location.search);
-      var fbclid = params.get('fbclid');
-      if (fbclid) return 'fb.1.' + Date.now() + '.' + fbclid;
+      var fbclid = new URLSearchParams(window.location.search).get('fbclid');
+      if (fbclid) {
+        fbc = 'fb.1.' + Date.now() + '.' + fbclid;
+        localStorage.setItem('eg_fbc', JSON.stringify({ v: fbc, t: Date.now() }));
+        return fbc;
+      }
+      var saved = JSON.parse(localStorage.getItem('eg_fbc') || 'null');
+      if (saved && saved.v && Date.now() - saved.t < 90 * 864e5) return saved.v;
     } catch (e) { /* silencioso */ }
     return null;
+  }
+
+  // Id anónimo propio del visitante (no es dato personal). Meta lo usa como
+  // external_id para emparejar sus visitas entre páginas y dispositivos.
+  function getExternalId() {
+    try {
+      var id = localStorage.getItem('eg_xid');
+      if (!id) {
+        id = Date.now().toString(36) + Math.random().toString(36).slice(2, 12);
+        localStorage.setItem('eg_xid', id);
+      }
+      return id;
+    } catch (e) { return null; }
   }
 
   // ─────────────────────────────────────────────
@@ -104,7 +125,8 @@ window.EG = window.EG || {};
           event_source_url: window.location.href,
           custom_data: params || undefined,
           fbp: getFbp(),
-          fbc: getFbc()
+          fbc: getFbc(),
+          external_id: getExternalId()
         })
       }).catch(function () {});
     } catch (e) { /* silencioso */ }
