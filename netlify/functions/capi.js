@@ -15,7 +15,7 @@ function normalizePhone(phone) {
   return phone.replace(/[^\d]/g, '');
 }
 
-async function sendCapiEvent({ eventName, eventId, email, phone, sourceUrl, eventTime }) {
+async function sendCapiEvent({ eventName, eventId, email, phone, sourceUrl, eventTime, actionSource, extraUserData, customData }) {
   if (!PIXEL_ID || !ACCESS_TOKEN) {
     throw new Error('Faltan META_PIXEL_ID o META_ACCESS_TOKEN en las variables de entorno.');
   }
@@ -25,6 +25,7 @@ async function sendCapiEvent({ eventName, eventId, email, phone, sourceUrl, even
   const hashedPhone = sha256(normalizePhone(phone));
   if (hashedEmail) userData.em = [hashedEmail];
   if (hashedPhone) userData.ph = [hashedPhone];
+  Object.assign(userData, extraUserData || {});
   
   const payload = {
     data: [
@@ -32,11 +33,13 @@ async function sendCapiEvent({ eventName, eventId, email, phone, sourceUrl, even
         event_name: eventName,
         event_time: eventTime || Math.floor(Date.now() / 1000),
         event_id: eventId,
-        action_source: 'system_generated',
+        action_source: actionSource || 'system_generated',
         event_source_url: sourceUrl || undefined,
         user_data: userData,
+        ...(customData ? { custom_data: customData } : {}),
       },
       ],
+    ...(process.env.META_TEST_EVENT_CODE ? { test_event_code: process.env.META_TEST_EVENT_CODE } : {}),
   };
   
   const url = `https://graph.facebook.com/${GRAPH_VERSION}/${PIXEL_ID}/events?access_token=${ACCESS_TOKEN}`;
