@@ -114,5 +114,12 @@ window.EG_BLOG_POSTS = [
     "excerpt": "Una foto por plato para el menú y ángulos extra para redes: la cuenta y el paquete que te toca.",
     "img": "https://res.cloudinary.com/dplhu2z6j/image/upload/v1791601517/IMG_2390__jtz75e.jpg",
     "eyebrow": "Guías · Fotos de menú"
+  },
+  {
+    "slug": "fotos-anuncios-restaurante-instagram-facebook",
+    "title": "Fotos para anuncios de restaurante en Instagram",
+    "excerpt": "Qué foto necesita un anuncio de restaurante, cuántas piezas rotar y qué errores te hacen pagar de más.",
+    "img": "https://res.cloudinary.com/dplhu2z6j/image/upload/v1791601618/_MG_4717_qhqotn.jpg",
+    "eyebrow": "Guías · Anuncios"
   }
 ];
