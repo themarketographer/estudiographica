@@ -121,5 +121,12 @@ window.EG_BLOG_POSTS = [
     "excerpt": "Qué foto necesita un anuncio de restaurante, cuántas piezas rotar y qué errores te hacen pagar de más.",
     "img": "https://res.cloudinary.com/dplhu2z6j/image/upload/v1791601618/_MG_4717_qhqotn.jpg",
     "eyebrow": "Guías · Anuncios"
+  },
+  {
+    "slug": "fotografia-para-cafeterias-cochabamba",
+    "title": "Fotografía para cafeterías en Cochabamba: qué fotografiar",
+    "excerpt": "Qué fotografiar entre bebidas, repostería y ambiente, cuántas fotos necesitas y cuánto cuesta la sesión.",
+    "img": "https://res.cloudinary.com/dplhu2z6j/image/upload/v1745819075/2_ylgf7o.jpg",
+    "eyebrow": "Guías · Cafeterías"
   }
 ];
