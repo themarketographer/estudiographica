@@ -128,5 +128,12 @@ window.EG_BLOG_POSTS = [
     "excerpt": "Qué fotografiar entre bebidas, repostería y ambiente, cuántas fotos necesitas y cuánto cuesta la sesión.",
     "img": "https://res.cloudinary.com/dplhu2z6j/image/upload/v1745819075/2_ylgf7o.jpg",
     "eyebrow": "Guías · Cafeterías"
+  },
+  {
+    "slug": "menu-digital-qr-fotos-restaurante-cochabamba",
+    "title": "Menú digital con QR: cómo usar fotos en tu restaurante",
+    "excerpt": "Qué fotos necesita cada plato de tu menú digital, cómo prepararlas para que carguen rápido y cuánto cuesta la sesión.",
+    "img": "https://res.cloudinary.com/dplhu2z6j/image/upload/v1791601945/_MG_5822_syndep.jpg",
+    "eyebrow": "Guías · Menú digital"
   }
 ];
