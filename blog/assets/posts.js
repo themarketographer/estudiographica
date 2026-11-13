@@ -135,5 +135,12 @@ window.EG_BLOG_POSTS = [
     "excerpt": "Qué fotos necesita cada plato de tu menú digital, cómo prepararlas para que carguen rápido y cuánto cuesta la sesión.",
     "img": "https://res.cloudinary.com/dplhu2z6j/image/upload/v1791601945/_MG_5822_syndep.jpg",
     "eyebrow": "Guías · Menú digital"
+  },
+  {
+    "slug": "fotos-almuerzo-menu-del-dia-restaurante-cochabamba",
+    "title": "Fotos del menú del día para tu restaurante en Cochabamba",
+    "excerpt": "Cómo armar una biblioteca de fotos para tu menú del día, qué platos fotografiar primero y cuánto cuesta la sesión.",
+    "img": "https://res.cloudinary.com/dplhu2z6j/image/upload/v1791601618/_MG_4717_qhqotn.jpg",
+    "eyebrow": "Guías · Menú del día"
   }
 ];
