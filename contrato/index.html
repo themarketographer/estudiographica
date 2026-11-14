@@ -557,6 +557,14 @@ const contratoConfig = [
   var hoyISO = new Date().toISOString().split('T')[0];
   var fechaParam = new URLSearchParams(location.search).get('fecha');
   if (fechaParam) inputs.fecha.value = fechaParam;
+  // Si no viene ?fecha=, usa el día de la reserva que Cal reenvió (startTime).
+  if (!inputs.fecha.value) {
+    try {
+      var ini = JSON.parse(localStorage.getItem('eg_reunion_v1') || '{}').inicio;
+      var di = ini && new Date(ini);
+      if (di && !isNaN(di)) inputs.fecha.value = di.toLocaleDateString('en-CA', { timeZone: 'America/La_Paz' });
+    } catch (e) {}
+  }
   inputs.fecha.min = hoyISO;
 
   function guardarBorrador() {

@@ -557,6 +557,7 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
         config['metadata[ua]'] = String(navigator.userAgent || '').slice(0, 450);
         config['metadata[pagina]'] = (location.origin + location.pathname).slice(0, 450);
       }
+      if (window.EG) window.EG.prefillCal(config, tipo === 'sesion' ? 'aiAgentCallPhoneNumber' : 'Whatsapp');
       btnReservar.setAttribute('data-cal-config', JSON.stringify(config));
       // La barra de precio fija (celular) reserva exactamente igual: mismos
       // atributos data-cal-*, así el embed de Cal.com la reconoce como

@@ -135,3 +135,10 @@ body.pg-gracias>.wrap{position:relative;z-index:1}
   .gx-track li[aria-hidden]{display:none}
   .pg-gracias .card .price{-webkit-text-fill-color:var(--ink);background:none}
 }
+
+/* /gracias-reunion: detalles de la reserva y WhatsApp flotante */
+.gr-det{display:grid;grid-template-columns:auto 1fr;gap:10px 18px;font-size:15px;line-height:1.4}
+.gr-det dt{color:var(--mute,#6b6660);font-weight:600}
+.gr-det dd{margin:0;font-weight:600;overflow-wrap:anywhere;text-transform:none}
+.pg-gracias .btn-wa--float{position:fixed;left:16px;right:16px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:50;max-width:520px;margin:0 auto;min-height:64px;font-size:17px;font-weight:700;box-shadow:0 18px 40px -10px rgba(37,211,102,.8)}
+.pg-gracias:has(.btn-wa--float) .wrap{padding-bottom:120px}

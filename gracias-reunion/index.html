@@ -74,6 +74,11 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
     <p class="sub" id="eg-gr-sub">Te llegó un correo de Cal.com con tu reserva. Cuando la confirme, recibes el link de Zoom o el lugar donde nos vemos. Mientras tanto, esto te ayuda a aprovecharla:</p>
   </div>
 
+  <div class="card rv" id="gr-detalles" hidden>
+    <h2>Tu reserva</h2>
+    <dl class="gr-det" id="gr-det"></dl>
+  </div>
+
   <div class="card rv">
     <h2 id="eg-gr-card-h2">Cómo aprovechar la reunión</h2>
     <ul class="checklist gx-list">
@@ -90,7 +95,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
     <p id="eg-gr-dark-p2">Si tienes dudas antes de la reunión, o necesitas mover el horario, escríbeme directo.</p>
   </div>
 
-  <a class="btn-wa track-wa-confirm" id="eg-gr-wa-btn"
+  <a class="btn-wa btn-wa--float track-wa-confirm" id="eg-gr-wa-btn"
      href="https://api.whatsapp.com/send?phone=+59169422335&text=%C2%A1Hola%2C%20Pablo!%20Agend%C3%A9%20una%20reuni%C3%B3n%20de%20diagn%C3%B3stico%20en%20Cal.com%20y%20quiero%20confirmar%20mi%20asistencia%20%E2%98%95"
      target="_blank" rel="noopener">
     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
@@ -157,6 +162,39 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
     set('eg-gr-wa-btn-text', t.botonWhatsapp);
     set('eg-gr-micro', t.micro);
     set('eg-gr-back-link', t.volverInicio);
+  })();
+
+  // Datos que el cliente ya escribió en Cal.com: se guardan para el contrato
+  // y se muestran aquí; el mensaje de WhatsApp sale con su nombre y la hora.
+  (function () {
+    if (window.EG && window.EG.guardarPrefillContratoDesdeURL) window.EG.guardarPrefillContratoDesdeURL();
+    var c = (window.EG && window.EG.getCliente()) || {};
+    var r = {};
+    try { r = JSON.parse(localStorage.getItem('eg_reunion_v1') || '{}'); } catch (e) {}
+    var cuando = '';
+    if (r.inicio) {
+      var d = new Date(r.inicio);
+      if (!isNaN(d)) {
+        cuando = d.toLocaleString('es-BO', { weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit', timeZone: 'America/La_Paz' });
+      }
+    }
+    var filas = [['Nombre', c.nombre], ['Negocio', c.negocio], ['Correo', c.email], ['Cuándo', cuando], ['Dónde', c.direccion]]
+      .filter(function (f) { return f[1]; });
+    if (filas.length) {
+      var dl = document.getElementById('gr-det');
+      filas.forEach(function (f) {
+        var dt = document.createElement('dt'); dt.textContent = f[0];
+        var dd = document.createElement('dd'); dd.textContent = f[1];
+        dl.appendChild(dt); dl.appendChild(dd);
+      });
+      document.getElementById('gr-detalles').hidden = false;
+    }
+    var wa = document.getElementById('eg-gr-wa-btn');
+    if (wa && (c.nombre || cuando)) {
+      var txt = '¡Hola, Pablo! ' + (c.nombre ? 'Soy ' + c.nombre + (c.negocio ? ' de ' + c.negocio : '') + '. ' : '') +
+        'Agendé una reunión de diagnóstico' + (cuando ? ' para el ' + cuando : '') + ' y quiero confirmar mi asistencia ☕';
+      wa.href = 'https://api.whatsapp.com/send?phone=+59169422335&text=' + encodeURIComponent(txt);
+    }
   })();
 
   // El evento de conversión "Lead" (Cliente potencial, booking de

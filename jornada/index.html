@@ -216,6 +216,7 @@ Cal.ns.jornada("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-brand":"#
         config['metadata[ua]'] = String(navigator.userAgent || '').slice(0, 450);
         config['metadata[pagina]'] = (location.origin + location.pathname).slice(0, 450);
       }
+      if (window.EG) window.EG.prefillCal(config, 'Whatsapp');
       btnReservar.setAttribute('data-cal-config', JSON.stringify(config));
       return eventId;
     }

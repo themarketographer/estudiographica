@@ -254,7 +254,7 @@ window.EG = window.EG || {};
   // pedírselo otra vez en /contrato/. Guardamos lo que llegue en el mismo
   // localStorage que ya usa /contrato/ para restaurar un borrador
   // (eg_contrato_v1), así ese formulario lo recoge solo, sin tocar su
-  // código. Nunca pisa un campo que el cliente ya haya escrito a mano ahí.
+  // código. Lo que llega de Cal pisa el borrador anterior (es la reserva más reciente).
   //
   // OJO: los nombres exactos de estos parámetros dependen de cómo Cal.com
   // serializa cada tipo de pregunta — quedan confirmados recién con una
@@ -283,11 +283,14 @@ window.EG = window.EG || {};
 
       var datos = {
         nombre: primero('name'),
-        negocio: primero('title'),
+        negocio: primero('marca', 'Nombre-de-la-Marca', 'title'),
         email: primero('email'),
         direccion: primero('location'),
         whatsapp: soloNumeroLocal(primero('aiAgentCallPhoneNumber', 'Whatsapp', 'whatsapp', 'attendeePhoneNumber')),
       };
+      // Hora de la reunión (solo para mostrarla en /gracias-reunion).
+      var inicio = primero('startTime', 'start');
+      if (inicio) { try { localStorage.setItem('eg_reunion_v1', JSON.stringify({ inicio: inicio })); } catch (e) {} }
       // Si Cal.com no mandó nada útil (visita directa, sin reserva recién
       // hecha), no tocamos el localStorage para nada.
       var hayAlgo = Object.keys(datos).some(function (k) { return datos[k]; });
@@ -296,11 +299,71 @@ window.EG = window.EG || {};
       var actual = {};
       try { actual = JSON.parse(localStorage.getItem('eg_contrato_v1') || '{}'); } catch (e) {}
       Object.keys(datos).forEach(function (k) {
-        if (datos[k] && !actual[k]) actual[k] = datos[k];
+        // Lo que acaba de mandar Cal es lo más reciente: pisa lo guardado de una reserva anterior.
+        actual[k] = datos[k]; // incluso vacío: una reserva nueva no hereda la ubicación/negocio de la anterior
       });
       localStorage.setItem('eg_contrato_v1', JSON.stringify(actual));
     } catch (e) { /* silencioso: esto es una comodidad, no algo crítico */ }
   }
+
+  // ─────────────────────────────────────────────
+  // Datos del cliente: se piden UNA sola vez (en Cal.com) y se reusan
+  // ─────────────────────────────────────────────
+  // getCliente(): lo que ya sabemos de él (guardado por
+  // guardarPrefillContratoDesdeURL en eg_contrato_v1).
+  function getCliente() {
+    try { return JSON.parse(localStorage.getItem('eg_contrato_v1') || '{}') || {}; } catch (e) { return {}; }
+  }
+
+  // Texto de las notas de la reserva con lo que eligió en /precios o
+  // /jornada (eg_paquete_v1). Es lo que Cal.com muestra en el evento.
+  function notasReserva() {
+    try {
+      var k = JSON.parse(localStorage.getItem('eg_paquete_v1') || 'null');
+      if (!k || !k.precio) return '';
+      var l = [];
+      var nombre = k.tipo === 'plan' ? 'Plan Mensual' : k.tipo === 'jornada' ? 'Jornada' : 'Sesión de fotos';
+      l.push(nombre + (k.paquete ? ' · ' + k.paquete : ''));
+      if (k.tipo === 'jornada' && k.horas) l.push(k.horas + ' hora' + (k.horas > 1 ? 's' : ''));
+      if (k.fotos) l.push(k.fotos + (k.tipo === 'plan' ? ' fotos/mes' : ' fotos'));
+      if (k.reels) l.push(k.reels + ' reels/mes');
+      if (k.tipo === 'plan' && k.duracion) l.push('Duración: ' + k.duracion + ' mes' + (k.duracion > 1 ? 'es' : ''));
+      if (k.extras) l.push('Extras: ' + k.extras);
+      l.push('Bs. ' + k.precio + (k.tipo === 'plan' ? '/mes' : ''));
+      return l.join('\n');
+    } catch (e) { return ''; }
+  }
+
+  // Agrega a la config del embed de Cal: notas con el paquete elegido y,
+  // si ya sabemos quién es, su nombre y correo (así no los reescribe).
+  function prefillCal(config, slugWhatsapp) {
+    var notas = notasReserva();
+    if (notas) config.notes = notas;
+    var c = getCliente();
+    if (c.nombre) config.name = c.nombre;
+    if (c.email) config.email = c.email;
+    if (c.negocio) config.title = c.negocio;
+    if (c.direccion) config.location = c.direccion;
+    // El slug del campo WhatsApp cambia por evento (sesion: aiAgentCallPhoneNumber, plan/jornada: Whatsapp).
+    if (c.whatsapp && slugWhatsapp) config[slugWhatsapp] = (c.whatsappPais || '+591') + c.whatsapp;
+    return config;
+  }
+
+  // ?debug=1 en cualquier /gracias-*: muestra los parámetros que reenvió Cal.com
+  // (para confirmar los nombres reales de los campos con una reserva real).
+  function mostrarDebugParams() {
+    try {
+      var p = new URLSearchParams(window.location.search);
+      if (p.get('debug') !== '1') return;
+      var box = document.createElement('pre');
+      box.style.cssText = 'position:fixed;top:0;left:0;right:0;max-height:40vh;overflow:auto;margin:0;padding:10px;background:#000;color:#0f0;font:12px/1.4 monospace;z-index:99999;white-space:pre-wrap';
+      var l = [];
+      p.forEach(function (v, k) { l.push(k + ' = ' + v); });
+      box.textContent = l.join('\n') || '(sin parámetros)';
+      document.body.appendChild(box);
+    } catch (e) {}
+  }
+  document.addEventListener('DOMContentLoaded', mostrarDebugParams);
 
   // ─────────────────────────────────────────────
   // Detección de origen "vino del blog"
@@ -346,5 +409,8 @@ window.EG = window.EG || {};
   EG.cameFromBlog = cameFromBlog;
   EG.trackBlogReferrerIfApplicable = trackBlogReferrerIfApplicable;
   EG.guardarPrefillContratoDesdeURL = guardarPrefillContratoDesdeURL;
+  EG.getCliente = getCliente;
+  EG.notasReserva = notasReserva;
+  EG.prefillCal = prefillCal;
 
 })(window.EG);
