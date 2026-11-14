@@ -130,7 +130,7 @@ exports.handler = async (event) => {
     return { statusCode: 400, body: 'Body invalido' };
   }
 
-  if (payload.triggerEvent !== 'BOOKING_CREATED') {
+  if (payload.triggerEvent !== 'BOOKING_CREATED' && payload.triggerEvent !== 'BOOKING_REQUESTED') {
     return { statusCode: 200, body: 'Evento ignorado (no es booking created)' };
   }
 
@@ -141,6 +141,28 @@ exports.handler = async (event) => {
   }
 
   const booking = payload.payload || {};
+
+  // Cal.com no reenvía la marca ni el WhatsApp en la redirección: se guardan aquí
+  // por uid y las páginas /gracias-* los piden con /.netlify/functions/reserva.
+  try {
+    const resp = booking.responses || {};
+    const val = (r) => { const v = r && typeof r === 'object' ? r.value : r; return typeof v === 'string' ? v : ''; };
+    const marca = val(resp.marca) || val(resp.title);
+    const tel = extraerTelefono(resp) || '';
+    if (booking.uid && (marca || tel)) {
+      const { getStore, connectLambda } = require('@netlify/blobs');
+      connectLambda(event);
+      await getStore({ name: 'cal-reservas' }).setJSON(booking.uid, { marca, whatsapp: tel });
+    }
+  } catch (err) {
+    console.error('No se pudo guardar la reserva para las páginas de gracias:', err.message);
+  }
+
+  // Meta (CAPI) sigue contando solo BOOKING_CREATED, como antes.
+  if (payload.triggerEvent !== 'BOOKING_CREATED') {
+    return { statusCode: 200, body: 'Reserva guardada (pendiente de confirmar)' };
+  }
+
   const attendee = (booking.attendees && booking.attendees[0]) || {};
   const email = attendee.email || booking.email;
   // El WhatsApp se pide como pregunta propia del formulario de Cal.com

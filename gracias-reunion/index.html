@@ -167,7 +167,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
   // Datos que el cliente ya escribió en Cal.com: se guardan para el contrato
   // y se muestran aquí; el mensaje de WhatsApp sale con su nombre y la hora.
   (function () {
-    if (window.EG && window.EG.guardarPrefillContratoDesdeURL) window.EG.guardarPrefillContratoDesdeURL();
+    function pintar() {
     var c = (window.EG && window.EG.getCliente()) || {};
     var r = {};
     try { r = JSON.parse(localStorage.getItem('eg_reunion_v1') || '{}'); } catch (e) {}
@@ -182,6 +182,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
       .filter(function (f) { return f[1]; });
     if (filas.length) {
       var dl = document.getElementById('gr-det');
+      dl.innerHTML = '';
       filas.forEach(function (f) {
         var dt = document.createElement('dt'); dt.textContent = f[0];
         var dd = document.createElement('dd'); dd.textContent = f[1];
@@ -195,6 +196,10 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
         'Agendé una reunión de diagnóstico' + (cuando ? ' para el ' + cuando : '') + ' y quiero confirmar mi asistencia ☕';
       wa.href = 'https://api.whatsapp.com/send?phone=+59169422335&text=' + encodeURIComponent(txt);
     }
+    }
+    if (window.EG && window.EG.guardarPrefillContratoDesdeURL) window.EG.guardarPrefillContratoDesdeURL();
+    pintar();
+    window.addEventListener('eg-cliente', pintar);
   })();
 
   // El evento de conversión "Lead" (Cliente potencial, booking de

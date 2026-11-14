@@ -260,6 +260,24 @@ window.EG = window.EG || {};
   // serializa cada tipo de pregunta — quedan confirmados recién con una
   // reserva real después de desplegar esto. Por eso se prueban varios
   // nombres candidatos por campo.
+  // Marca y WhatsApp los guarda cal-webhook.js por uid; el webhook puede tardar
+  // unos segundos en llegar, por eso se reintenta (5 veces, cada 1.5 s).
+  function completarDesdeServidor(uid, intento) {
+    intento = intento || 0;
+    if (!uid || intento > 4) return;
+    fetch('/.netlify/functions/reserva?uid=' + encodeURIComponent(uid), { cache: 'no-store' })
+      .then(function (r) { return r.json(); })
+      .then(function (r) {
+        if (!r || (!r.marca && !r.whatsapp)) throw new Error('aun no');
+        var c = getCliente();
+        if (r.marca) c.negocio = r.marca;
+        if (r.whatsapp) c.whatsapp = String(r.whatsapp).replace(/[^\d+]/g, '').replace(/^\+?591/, '');
+        localStorage.setItem('eg_contrato_v1', JSON.stringify(c));
+        window.dispatchEvent(new Event('eg-cliente'));
+      })
+      .catch(function () { setTimeout(function () { completarDesdeServidor(uid, intento + 1); }, 1500); });
+  }
+
   function guardarPrefillContratoDesdeURL() {
     try {
       var p = new URLSearchParams(window.location.search);
@@ -282,8 +300,9 @@ window.EG = window.EG || {};
       }
 
       var datos = {
-        nombre: primero('name'),
-        negocio: primero('marca', 'Nombre-de-la-Marca', 'title'),
+        // Cal reenvía el nombre como attendeeName y pisa 'title' con el título de la reserva (no es la marca).
+        nombre: primero('attendeeName', 'name'),
+        negocio: primero('marca', 'Nombre-de-la-Marca'),
         email: primero('email'),
         direccion: primero('location'),
         whatsapp: soloNumeroLocal(primero('aiAgentCallPhoneNumber', 'Whatsapp', 'whatsapp', 'attendeePhoneNumber')),
@@ -303,6 +322,8 @@ window.EG = window.EG || {};
         actual[k] = datos[k]; // incluso vacío: una reserva nueva no hereda la ubicación/negocio de la anterior
       });
       localStorage.setItem('eg_contrato_v1', JSON.stringify(actual));
+      // Cal no reenvía la marca ni el WhatsApp: los pedimos al servidor por el uid de la reserva.
+      completarDesdeServidor(p.get('uid'));
     } catch (e) { /* silencioso: esto es una comodidad, no algo crítico */ }
   }
 
