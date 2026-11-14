@@ -322,7 +322,16 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
       });
     });
 
+    // La cantidad de fotos que el cliente eligió en una pestaña se mantiene en la otra.
+    var ultimoSlider = null;
+    fotosSlider.addEventListener('input', function () { ultimoSlider = fotosSlider; });
+    planFotosSlider.addEventListener('input', function () { ultimoSlider = planFotosSlider; });
+
     function switchTab(t) {
+      if (ultimoSlider) {
+        var otro = ultimoSlider === fotosSlider ? planFotosSlider : fotosSlider;
+        otro.value = Math.min(Math.max(parseInt(ultimoSlider.value, 10), parseInt(otro.min, 10)), parseInt(otro.max, 10));
+      }
       tipo = t;
       tabSesion.classList.toggle('active', t === 'sesion');
       tabPlan.classList.toggle('active', t === 'plan');

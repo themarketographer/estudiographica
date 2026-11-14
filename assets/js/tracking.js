@@ -261,10 +261,10 @@ window.EG = window.EG || {};
   // reserva real después de desplegar esto. Por eso se prueban varios
   // nombres candidatos por campo.
   // Marca y WhatsApp los guarda cal-webhook.js por uid; el webhook puede tardar
-  // unos segundos en llegar, por eso se reintenta (5 veces, cada 1.5 s).
+  // unos segundos en llegar, por eso se reintenta (8 veces, cada 1.5 s).
   function completarDesdeServidor(uid, intento) {
     intento = intento || 0;
-    if (!uid || intento > 4) return;
+    if (!uid || intento > 7) return;
     fetch('/.netlify/functions/reserva?uid=' + encodeURIComponent(uid), { cache: 'no-store' })
       .then(function (r) { return r.json(); })
       .then(function (r) {

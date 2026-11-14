@@ -152,7 +152,17 @@ exports.handler = async (event) => {
     if (booking.uid && (marca || tel)) {
       const { getStore, connectLambda } = require('@netlify/blobs');
       connectLambda(event);
-      await getStore({ name: 'cal-reservas' }).setJSON(booking.uid, { marca, whatsapp: tel });
+      const a0 = (booking.attendees && booking.attendees[0]) || {};
+      // Registro completo de la reserva (se ve en Netlify > Blobs > cal-reservas). Las páginas de gracias solo leen marca y whatsapp.
+      await getStore({ name: 'cal-reservas' }).setJSON(booking.uid, {
+        marca, whatsapp: tel,
+        nombre: a0.name || '', email: a0.email || '',
+        servicio: extraerSlug(payload), estado: payload.triggerEvent === 'BOOKING_CREATED' ? 'confirmada' : 'pendiente de confirmar',
+        inicio: booking.startTime || '', ubicacion: typeof booking.location === 'string' ? booking.location : '',
+        paquete: booking.additionalNotes || val(resp.notes) || '',
+        origen: (booking.metadata && booking.metadata.origen) || '',
+        guardadoEn: new Date().toISOString(),
+      });
     }
   } catch (err) {
     console.error('No se pudo guardar la reserva para las páginas de gracias:', err.message);

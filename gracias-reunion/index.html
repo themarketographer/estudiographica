@@ -175,7 +175,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
     if (r.inicio) {
       var d = new Date(r.inicio);
       if (!isNaN(d)) {
-        cuando = d.toLocaleString('es-BO', { weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit', timeZone: 'America/La_Paz' });
+        cuando = d.toLocaleString('es-BO', { weekday: 'long', day: 'numeric', month: 'long', hour: 'numeric', minute: '2-digit', timeZone: 'America/La_Paz' });
       }
     }
     var filas = [['Nombre', c.nombre], ['Negocio', c.negocio], ['Correo', c.email], ['Cuándo', cuando], ['Dónde', c.direccion]]
@@ -189,12 +189,6 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
         dl.appendChild(dt); dl.appendChild(dd);
       });
       document.getElementById('gr-detalles').hidden = false;
-    }
-    var wa = document.getElementById('eg-gr-wa-btn');
-    if (wa && (c.nombre || cuando)) {
-      var txt = '¡Hola, Pablo! ' + (c.nombre ? 'Soy ' + c.nombre + (c.negocio ? ' de ' + c.negocio : '') + '. ' : '') +
-        'Agendé una reunión de diagnóstico' + (cuando ? ' para el ' + cuando : '') + ' y quiero confirmar mi asistencia ☕';
-      wa.href = 'https://api.whatsapp.com/send?phone=+59169422335&text=' + encodeURIComponent(txt);
     }
     }
     if (window.EG && window.EG.guardarPrefillContratoDesdeURL) window.EG.guardarPrefillContratoDesdeURL();
@@ -225,5 +219,6 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 
   <script src="/assets/js/button-states.js" defer></script>
 <script src="/assets/js/eg-ui.js" defer></script>
+<script src="/assets/js/gracias-cliente.js" defer></script>
 </body>
 </html>

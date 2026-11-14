@@ -1179,5 +1179,34 @@ const contratoConfig = [
 </script>
 <script src="/assets/js/button-states.js" defer></script>
 <script src="/assets/js/eg-ui.js" defer></script>
+<script>
+  // Menos scroll en celular: resumen del paquete plegado y botón flotante "Ir a firmar".
+  (function () {
+    var movil = window.matchMedia('(max-width:720px)').matches;
+    var desc = document.getElementById('resumenDesc');
+    if (movil && desc && desc.textContent.length > 90) {
+      desc.classList.add('eg-clamp');
+      var t = document.createElement('button');
+      t.type = 'button'; t.className = 'eg-toggle'; t.textContent = 'Ver todo lo que incluye';
+      t.onclick = function () { var c = desc.classList.toggle('eg-clamp'); t.classList.toggle('abierto', !c); t.textContent = c ? 'Ver todo lo que incluye' : 'Ver menos'; };
+      desc.parentNode.insertBefore(t, desc.nextSibling);
+    }
+    var btn = document.getElementById('btnFirmar'), firmando = document.getElementById('firmando');
+    if (!btn) return;
+    var bar = document.createElement('div');
+    bar.className = 'eg-float-cta'; bar.hidden = true;
+    var b = document.createElement('button');
+    b.type = 'button'; b.textContent = 'Ir a firmar \u2193';
+    b.onclick = function () { btn.scrollIntoView({ behavior: 'smooth', block: 'center' }); };
+    bar.appendChild(b); document.body.appendChild(bar);
+    var firmaVisible = false;
+    function pintar() { bar.hidden = firmaVisible || (firmando && firmando.style.display === 'none'); }
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (es) { firmaVisible = es[0].isIntersecting; pintar(); }).observe(document.getElementById('sigPad') || btn);
+    }
+    if (firmando && window.MutationObserver) new MutationObserver(pintar).observe(firmando, { attributes: true, attributeFilter: ['style'] });
+    pintar();
+  })();
+</script>
 </body>
 </html>
