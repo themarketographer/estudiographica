@@ -142,5 +142,12 @@ window.EG_BLOG_POSTS = [
     "excerpt": "Cómo armar una biblioteca de fotos para tu menú del día, qué platos fotografiar primero y cuánto cuesta la sesión.",
     "img": "https://res.cloudinary.com/dplhu2z6j/image/upload/v1791601618/_MG_4717_qhqotn.jpg",
     "eyebrow": "Guías · Menú del día"
+  },
+  {
+    "slug": "lanzar-plato-nuevo-restaurante-fotos-cochabamba",
+    "title": "Cómo lanzar un plato nuevo en tu restaurante con fotos",
+    "excerpt": "Cuándo fotografiar un plato nuevo, en qué canales publicarlo el mismo día y cuánto cuesta la sesión corta.",
+    "img": "https://res.cloudinary.com/dplhu2z6j/image/upload/v1791601517/IMG_2390__jtz75e.jpg",
+    "eyebrow": "Guías · Lanzamientos"
   }
 ];
