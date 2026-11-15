@@ -8,6 +8,7 @@
   --t-xs:.8125rem; --t-sm:.9375rem; --t-md:1rem; --t-lg:1.25rem; --t-xl:clamp(1.5rem,1.1rem + 1.6vw,2.125rem); --t-2xl:clamp(2rem,1.3rem + 3vw,3.25rem);
 }
 *,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
 html{-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--bg);color:var(--text);font:400 var(--t-md)/1.55 var(--font-body);-webkit-font-smoothing:antialiased}
 ::selection{background:var(--accent);color:var(--on-accent)}
