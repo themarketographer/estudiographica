@@ -1,0 +1,20 @@
+{
+  "_readme": "Valores BASE extraídos de assets/js/pricing-logic.js (fuente única de verdad del cálculo en producción). Por diseño, assets/js/pricing-logic.js NO se modifica (la lógica de cálculo debe permanecer intacta byte a byte), así que este archivo hoy es una copia editorial de referencia para el panel de Decap CMS, todavía no está conectado como fuente de datos del calculador en vivo. Ver nota en el reporte del build sobre este límite conocido.",
+  "sesion": {
+    "basico": { "precioBase": 680, "cantidadBase": 8, "incrementoPorFoto": 65, "rangoMin": 8, "rangoMax": 10 },
+    "estandar": { "precioBase": 820, "cantidadBase": 10, "incrementoPorFoto": 40, "rangoMin": 11, "rangoMax": 18 },
+    "premium": { "precioBase": 1150, "cantidadBase": 18, "incrementoPorFoto": 55, "rangoMin": 19, "rangoMax": 24 }
+  },
+  "plan": {
+    "basico": { "precioBase": 580, "cantidadBase": 12, "incrementoPorFoto": 50, "rangoMin": 12, "rangoMax": 14 },
+    "estandar": { "precioBase": 680, "cantidadBase": 14, "incrementoPorFoto": 33, "rangoMin": 15, "rangoMax": 20 },
+    "premium": { "precioBase": 880, "cantidadBase": 20, "incrementoPorFoto": 33, "rangoMin": 21, "rangoMax": 26 },
+    "descuento6meses": 0.9,
+    "descuento12meses": 0.82
+  },
+  "videoAdicional": {
+    "duracion3meses": { "reels4": 1900, "reels8": 2900, "reels12": 3400 },
+    "duracion6meses": { "reels4": 1850, "reels8": 2750, "reels12": 3000 },
+    "duracion12meses": { "reels4": 1750, "reels8": 2600, "reels12": 2800 }
+  }
+}

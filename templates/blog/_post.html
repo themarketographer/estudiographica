@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>{{post.pageTitle}}</title>
+<meta name="description" content="{{post.description}}" />
+<meta name="robots" content="index,follow" />
+<meta name="theme-color" content="#181818" />
+<link rel="canonical" href="{{post.canonicalUrl}}" />
+
+<meta property="og:type" content="article" />
+<meta property="og:title" content="{{post.ogTitle}}" />
+<meta property="og:description" content="{{post.ogDescription}}" />
+<meta property="og:image" content="{{post.cover}}" />
+<meta property="og:url" content="{{post.canonicalUrl}}" />
+<meta property="article:published_time" content="{{post.date}}" />
+<meta property="article:author" content="Pablo Villarroel" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="{{post.twitterTitle}}" />
+<meta name="twitter:image" content="{{post.cover}}" />
+
+<link rel="icon" href="/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+
+<!-- ═══════════ PIXEL + GA4 ═══════════ -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-9H6Z8N5DTP"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){ dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-9H6Z8N5DTP');
+</script>
+<script>
+  !(function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)})(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  fbq('set', 'autoConfig', false, '1059099676340072');
+  fbq('init', '1059099676340072');
+  fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=1059099676340072&ev=PageView&noscript=1"/></noscript>
+<script src="/assets/js/tracking.js"></script>
+<!-- ═══════════════════════════════════════════════════ -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&family=Playfair+Display:ital,wght@1,700&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/blog/assets/style.css" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "{{post.ldHeadline}}",
+  "description": "{{post.ldDescription}}",
+  "image": "{{post.cover}}",
+  "author": { "@type": "Person", "name": "Pablo Villarroel", "url": "https://estudiographica.com/#sobre" },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Estudio Graphica",
+    "logo": { "@type": "ImageObject", "url": "https://res.cloudinary.com/dplhu2z6j/image/upload/v1777509513/Logo_B_S_F_kdolev.png" }
+  },
+  "datePublished": "{{post.date}}",
+  "dateModified": "{{post.dateModified}}",
+  "mainEntityOfPage": "{{post.canonicalUrl}}"
+}
+</script>
+{{post.faqJsonLd}}<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://estudiographica.com/" },
+    { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://estudiographica.com/blog" },
+    { "@type": "ListItem", "position": 3, "name": "{{post.title}}", "item": "{{post.canonicalUrl}}" }
+  ]
+}
+</script>
+</head>
+<body>
+
+<nav>
+  <div class="inner">
+    <a href="/"><img src="https://estudiographica.com/assets/logo-black.png" alt="Estudio Graphica" /></a>
+    <a class="back" href="/blog">← Blog</a>
+  </div>
+</nav>
+
+<p class="breadcrumb"><a href="/">Inicio</a> · <a href="/blog">Blog</a> · {{post.breadcrumb}}</p>
+
+<div class="post-hero">
+  <div class="post-hero-text">
+    <p class="eyebrow">{{post.eyebrow}}</p>
+    <h1>{{post.title}}</h1>
+    <p class="meta">
+      <span>Por Pablo Villarroel</span><span>·</span><span>{{post.dateFormatted}}</span><span>·</span><span>{{post.readingTime}}</span>
+    </p>
+  </div>
+  <div class="post-hero-img-wrap">
+    <img class="hero-img" src="{{post.cover}}" alt="{{post.heroAlt}}" />
+  </div>
+</div>
+
+<article>
+{{post.bodyHtml}}
+</article>
+
+<footer>
+  <p>© 2026 Estudio Graphica · Cochabamba, Bolivia</p>
+  <p style="margin-top: 8px;"><a href="/blog">← Volver al blog</a> · <a href="/">Inicio</a> · <a href="/privacidad">Privacidad</a></p>
+</footer>
+
+<script>
+  if (window.EG) {
+    window.EG.trackEvent('ViewContent', { content_name: '{{post.contentName}}', content_type: 'blog_post' });
+    window.EG.trackCustomEvent('ver_blog', { content_name: 'Blog', post_slug: '{{post.slug}}', origen: window.EG.getOrigen() });
+  }
+</script>
+
+</body>
+</html>

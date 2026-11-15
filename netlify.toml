@@ -1,4 +1,5 @@
 [build]
+command = "node scripts/build.js"
 functions = "netlify/functions"
 
 [functions]

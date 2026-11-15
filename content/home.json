@@ -1,0 +1,7 @@
+{
+  "hero": {
+    "headline": "Fotos que hacen{' '}\n            <span style={heroStyles.accentWord}>\n              salivar\n              <span style={heroStyles.accentUnderline}></span>\n            </span>{' '}\n            a tus <span style={heroStyles.cursive}>clientes</span>.",
+    "subheadline": "Sesiones de fotografía gastronómica con foodstyling, entrega en 24 horas y planes mensuales de contenido para tu restaurante.",
+    "cta": "Agendar tu llamada de diagnóstico gratuita"
+  }
+}
