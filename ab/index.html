@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Pruebas A/B</title>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="ui.css">
+<style>
+  main{padding-block:var(--s6) var(--s8)}
+  .verdict{font-weight:600}
+  .bar{height:8px;border-radius:4px;background:var(--surface-2);overflow:hidden;min-width:80px}
+  .bar i{display:block;height:100%;background:var(--text)}
+  .test+.test{margin-top:var(--s6)}
+  @media (max-width:560px){.bar-cell{display:none}.table th,.table td{padding-inline:var(--s3)}}
+</style>
+</head>
+<body>
+<main class="wrap stack-lg">
+  <header class="stack">
+    <h1>Pruebas A/B</h1>
+    <p class="muted">Visitantes únicos y conversiones por variante. El veredicto aparece recién cuando se cumple la muestra mínima, para no decidir con ruido.</p>
+  </header>
+
+  <form id="login" class="card stack" style="max-width:420px">
+    <div class="field">
+      <label for="token">Clave del panel</label>
+      <input class="input" id="token" type="password" autocomplete="current-password" required>
+      <span class="hint">Es el valor de AB_ADMIN_TOKEN en Netlify.</span>
+    </div>
+    <button class="btn btn-primary" type="submit">Ver resultados</button>
+    <p class="field-error" id="loginError" role="alert" hidden></p>
+  </form>
+
+  <section id="results" hidden></section>
+
+  <details class="card">
+    <summary><strong>Reglas con las que se decide</strong></summary>
+    <ul id="rules" class="stack" style="margin-top:var(--s4)"></ul>
+  </details>
+</main>
+<script src="stats.js"></script>
+<script>
+(function () {
+  var R = ABStats.RULES, $ = function (s) { return document.querySelector(s); };
+  $('#rules').innerHTML = [
+    'Duración mínima: ' + R.minDays + ' días corridos, para cubrir dos semanas completas con sus fines de semana.',
+    'Muestra mínima por variante: ' + R.minViews + ' visitantes y ' + R.minConversions + ' conversiones.',
+    'Hay ganador solo si la diferencia tiene menos de ' + (R.alpha * 100) + '% de probabilidad de ser azar (prueba z de dos proporciones).',
+    'A los ' + R.maxDays + ' días sin ganador, el resultado es "sin conclusión": queda la versión original y se pasa a la siguiente prueba.',
+    'Mirar el panel antes de tiempo no cambia nada: hasta cumplir los mínimos solo dice "juntando datos".'
+  ].map(function (t) { return '<li>' + t + '</li>'; }).join('');
+
+  function pct(x) { return (x * 100).toFixed(1).replace('.', ',') + '%'; }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+
+  function render(data) {
+    var ids = Object.keys(data.tests).sort(), html = '';
+    if (!ids.length) {
+      html = '<div class="empty"><strong>Todavía no hay datos</strong><span>Los resultados aparecen cuando llegue el primer visitante a una página con una prueba activa.</span></div>';
+    }
+    ids.forEach(function (id) {
+      var t = data.tests[id], vs = Object.keys(t.variants).sort();
+      var days = t.firstSeen ? Math.floor((data.now - t.firstSeen) / 864e5) : 0;
+      var goals = {};
+      vs.forEach(function (v) { Object.keys(t.variants[v].goals).forEach(function (g) { goals[g] = 1; }); });
+      var goalList = Object.keys(goals); if (!goalList.length) goalList = ['principal'];
+      html += '<article class="test stack"><h2>' + esc(id) + '</h2><p class="muted">Día ' + days + ' de la prueba' +
+        (t.firstSeen ? ', empezó el ' + new Date(t.firstSeen).toLocaleDateString('es-BO', { day: 'numeric', month: 'long' }) : '') + '.</p>';
+      goalList.forEach(function (g) {
+        var row = function (v) { var x = t.variants[v] || { views: 0, goals: {} }; return { views: x.views, conv: x.goals[g] || 0 }; };
+        var a = row('a'), b = row('b'), vd = ABStats.verdict(a, b, days), max = Math.max(vd.rateA, vd.rateB) || 1;
+        var cls = vd.state.indexOf('gana') === 0 ? 'alert-ok' : vd.state === 'sin-conclusion' ? 'alert-warn' : '';
+        html += '<h3>Objetivo: ' + esc(g) + '</h3><div class="table-wrap"><table class="table"><thead><tr><th>Variante</th><th class="r">Visitantes</th><th class="r">Conversiones</th><th class="r">Tasa</th><th class="bar-cell"></th></tr></thead><tbody>' +
+          [['A (original)', a, vd.rateA], ['B', b, vd.rateB]].map(function (r) {
+            return '<tr><td>' + r[0] + '</td><td class="r">' + r[1].views + '</td><td class="r">' + r[1].conv + '</td><td class="r">' + pct(r[2]) + '</td><td class="bar-cell"><div class="bar"><i style="width:' + (r[2] / max * 100) + '%"></i></div></td></tr>';
+          }).join('') + '</tbody></table></div><p class="alert verdict ' + cls + '">' + esc(vd.text) + '</p>';
+      });
+      html += '</article>';
+    });
+    $('#results').innerHTML = html; $('#results').hidden = false; $('#login').hidden = true;
+  }
+
+  function load(token) {
+    return fetch('/.netlify/functions/ab-results', { headers: { Authorization: 'Bearer ' + token } })
+      .then(function (r) { return r.json().catch(function () { return { ok: false, error: 'El servidor no respondió. Revisa tu conexión y vuelve a intentar.' }; }); });
+  }
+  $('#login').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var token = $('#token').value.trim(), err = $('#loginError');
+    err.hidden = true;
+    load(token).then(function (d) {
+      if (!d.ok) { err.textContent = d.error || 'No se pudo entrar.'; err.hidden = false; return; }
+      try { sessionStorage.setItem('ab-token', token); } catch (e) {}
+      render(d);
+    }).catch(function () { err.textContent = 'Sin conexión. Vuelve a intentar.'; err.hidden = false; });
+  });
+  var saved = null; try { saved = sessionStorage.getItem('ab-token'); } catch (e) {}
+  if (saved) load(saved).then(function (d) { if (d.ok) render(d); });
+})();
+</script>
+</body>
+</html>

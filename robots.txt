@@ -1,5 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /ab/
 Disallow: /gracias-reunion
 Disallow: /gracias-sesion
 Disallow: /gracias-plan
@@ -7,6 +8,7 @@ Disallow: /gracias-jornada
 Disallow: /contrato
 Disallow: /cotizacion
 Disallow: /api/
+Disallow: /assets/js/PIXEL_SNIPPET.html
 Disallow: /menu/zona-0/panel/
 Disallow: /menu/zona-0/cocina/
 

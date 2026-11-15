@@ -75,6 +75,7 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
 <link rel="stylesheet" href="/assets/css/eg-ui.css" />
 <link rel="stylesheet" href="/assets/css/eg-pages.css" />
 <link rel="stylesheet" href="/assets/css/funnel-ux.css" />
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Service","name":"Fotografía gastronómica para restaurantes","serviceType":"Fotografía gastronómica","areaServed":{"@type":"City","name":"Cochabamba"},"provider":{"@type":"LocalBusiness","name":"Estudio Graphica","url":"https://estudiographica.com/"},"url":"https://estudiographica.com/precios/","hasOfferCatalog":{"@type":"OfferCatalog","name":"Paquetes","itemListElement":[{"@type":"Offer","name":"Sesión de fotos (desde 8 fotos)","priceCurrency":"BOB","price":680,"url":"https://estudiographica.com/precios/"},{"@type":"Offer","name":"Plan mensual de fotos (desde 8 fotos al mes)","priceCurrency":"BOB","price":730,"url":"https://estudiographica.com/precios/"}]}}</script>
 </head>
 <body class="pg pg-precios">
 
@@ -107,7 +108,7 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
             <span class="slider-label">Cantidad de fotos</span>
             <span class="slider-value" id="fotosValue">15 fotos</span>
           </div>
-          <input type="range" id="fotosSlider" min="8" max="24" step="1" value="15" />
+          <input type="range" id="fotosSlider" aria-label="Cantidad de fotos" min="8" max="24" step="1" value="15" />
           <div class="range-labels"><span>8</span><span>24</span></div>
         </div>
       </div>
