@@ -508,9 +508,18 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
       });
       g.fillStyle = 'rgba(248,248,248,.5)'; g.font = '500 22px ' + f;
       g.fillText('Precio referencial. Se confirma en tu sesión.', pad, H - 50);
-      var a = document.createElement('a');
-      a.download = 'resumen-' + paqueteName.textContent.toLowerCase().replace(/\s+/g, '-') + '.png';
-      a.href = c.toDataURL('image/png'); a.click();
+      var nombre = 'resumen-' + paqueteName.textContent.toLowerCase().replace(/\s+/g, '-') + '.png';
+      var ios = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+      // iOS Safari ignora "download": se abre la imagen en pestaña nueva (mantener presionada → Guardar).
+      // La pestaña se abre ya, dentro del toque, porque después del toBlob Safari la bloquearía.
+      var win = ios ? window.open('', '_blank') : null;
+      c.toBlob(function (blob) {
+        var url = URL.createObjectURL(blob);
+        if (win) { win.location.href = url; return; }
+        var a = document.createElement('a');
+        a.download = nombre; a.href = url; a.click();
+        setTimeout(function () { URL.revokeObjectURL(url); }, 10000);
+      }, 'image/png');
     });
 
     render();
