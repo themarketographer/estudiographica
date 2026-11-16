@@ -64,7 +64,8 @@ async function bump(event) {
   } catch (e) { console.error('zona0 bump:', e && e.message); }
 }
 async function ping(event) {
-  return { v: Date.now(), open: await isOpen(event) };
+  // DIAGNOSTICO TEMPORAL (quitar): qué datos hay en el entorno para borrar la caché
+  return { v: Date.now(), open: await isOpen(event), dbg: { tok: !!process.env.NETLIFY_PURGE_API_TOKEN, site: !!process.env.SITE_ID, ctx: process.env.CONTEXT || '', fn: !!process.env.NETLIFY_LOCAL } };
 }
 
 async function changedSince(event, since) {
