@@ -58,6 +58,6 @@ Editar `menu.json`: categorías (cada una dice si es `bebida` o `comida`, que de
 - Conexión con una plataforma de delivery, cuando se sepa cuál usan.
 
 ## Timbre (ahorro de llamadas a funciones)
-La cocina y el panel preguntan cada 10 s a `/api/zona0/ping/<hash de la clave>`. Esa respuesta la guarda la red de Netlify 2 minutos y se borra sola
+La cocina y el panel preguntan cada 10 s a `/api/zona0/ping/<hash de la clave>`. Esa respuesta la guarda la red de Netlify 10 minutos y se borra sola
 (`purgeCache`) cuando entra un pedido o cambia uno, así que casi no gasta funciones. Solo si el timbre cambia (o cada 5 min por seguridad) se piden los pedidos.
 Si el timbre no responde, las pantallas vuelven a consultar de la forma clásica, más lenta. Código: `netlify/functions/zona0-ping.js`, `bump()` en `lib-zona0/store.js`, `js/ping.js`.

@@ -1,4 +1,4 @@
-/* Zona 0 · timbre. Pregunta "¿hay algo nuevo?" a una dirección que la red de Netlify guarda 2 minutos
+/* Zona 0 · timbre. Pregunta "¿hay algo nuevo?" a una dirección que la red de Netlify guarda 10 minutos
    y borra sola cuando entra un pedido o cambia uno. Esas visitas no gastan llamadas a funciones.
    Z0Ping.check() devuelve { v, open }, o null si no hay timbre (entonces la pantalla consulta de la forma clásica, más lenta). */
 (function () {
