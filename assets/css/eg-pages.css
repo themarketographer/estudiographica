@@ -61,29 +61,28 @@ body.pg .foot{margin-top:auto}
 .extras-block{margin-top:26px}
 .extras-title{font-size:15px;font-weight:700;margin-bottom:4px;max-width:none}
 .extras-note{font-size:12.5px;color:var(--muted);margin-top:2px}
-.extra-row{display:flex;align-items:center;gap:14px;padding:15px 18px;margin-top:10px;border-radius:22px;border:1.5px solid var(--hair);background:#fff;cursor:pointer;user-select:none;transition:border-color .3s,background .35s var(--ease),transform .3s var(--ease)}
+.extra-row{display:grid;grid-template-columns:auto auto 1fr auto;grid-template-areas:"chk ico copy price" ". . step step";column-gap:14px;align-items:start;padding:16px 18px;margin-top:10px;border-radius:22px;border:1.5px solid var(--hair);background:#fff;cursor:pointer;user-select:none;transition:border-color .3s,background .35s var(--ease),transform .3s var(--ease)}
+.extra-row>.check-square{grid-area:chk;margin-top:7px}
+.extra-ico{grid-area:ico;width:40px;height:40px;border-radius:13px;background:var(--y-soft);color:var(--ink);display:grid;place-items:center;transition:background .3s}
+.extra-row.active .extra-ico{background:var(--y)}
+.extra-ico svg{width:21px;height:21px}
+.extra-copy{grid-area:copy;display:flex;flex-direction:column;align-items:flex-start;min-width:0}
+.extra-name{font-size:16px;font-weight:700;line-height:1.25;letter-spacing:-.01em;padding-top:2px}
+.extra-desc{font-size:13.5px;color:var(--muted);line-height:1.5;margin-top:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.extra-row.open .extra-desc{display:block;-webkit-line-clamp:unset}
+.extra-more{margin-top:4px;padding:2px 0;border:0;background:none;font:600 12.5px/1.2 var(--f);color:var(--ink);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.extra-price{grid-area:price;font-size:15px;font-weight:700;line-height:1.25;white-space:nowrap;text-align:right;padding-top:2px;font-variant-numeric:tabular-nums}
+.extra-stepper{grid-area:step;justify-self:start;display:flex;align-items:center;gap:6px;margin-top:12px}
+@media(max-width:380px){.extra-ico{display:none}.extra-row{grid-template-columns:auto 1fr auto;grid-template-areas:"chk copy price" ". step step"}}
 .extra-row:hover{border-color:var(--ink);transform:translateY(-1px)}
 .extra-row.active{background:var(--y-soft);border-color:var(--ink)}
-.extra-copy{flex:1;display:flex;flex-direction:column;min-width:0}
-.extra-name{font-size:14.5px;font-weight:600;line-height:1.3}
-.extra-desc{font-size:12.5px;color:var(--muted);line-height:1.4;margin-top:2px}
-.extra-price{font-size:13.5px;font-weight:600;white-space:nowrap;font-variant-numeric:tabular-nums}
-.extra-stepper{display:flex;align-items:center;gap:6px}
 .extra-stepper button{width:32px;height:32px;border-radius:11px;border:1.5px solid var(--ink);background:#fff;font:600 17px/1 var(--f);display:grid;place-items:center;padding:0;transition:background .25s,color .25s,transform .2s var(--ease)}
 .extra-stepper button:hover:not(:disabled){background:var(--ink);color:var(--y)}
 .extra-stepper button:active:not(:disabled){transform:scale(.9)}
 .extra-stepper button:disabled{opacity:.3;cursor:not-allowed}
 .qty{min-width:24px;text-align:center;font-weight:700;font-variant-numeric:tabular-nums}
 .extra-price small{font-weight:500;font-size:.85em;color:var(--muted)}
-@media(max-width:560px){
-  .extra-row{display:grid;grid-template-columns:auto 1fr auto;grid-template-areas:"chk name price" ". desc desc" ". step step";column-gap:14px;row-gap:0;align-items:start;padding:16px}
-  .extra-row>.check-square{grid-area:chk;margin-top:1px}
-  .extra-copy{display:contents}
-  .extra-name{grid-area:name;font-size:16px;font-weight:700;line-height:1.25;letter-spacing:-.01em}
-  .extra-price{grid-area:price;font-size:15px;font-weight:700;line-height:1.25;text-align:right}
-  .extra-desc{grid-area:desc;font-size:12.5px;line-height:1.45;margin-top:5px;max-width:34ch}
-  .extra-stepper{grid-area:step;justify-self:start;margin-top:12px}
-}
+
 
 /* Panel de precio */
 .right-col{background:var(--ink);color:var(--paper);border-radius:28px;padding:clamp(24px,3vw,34px);align-self:start;position:sticky;top:92px;overflow:hidden;isolation:isolate}
