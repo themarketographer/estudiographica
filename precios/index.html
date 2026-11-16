@@ -24,7 +24,6 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 
 <!-- ═══════════ PIXEL + GA4 (reemplazar IDs) ═══════════ -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-9H6Z8N5DTP"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){ dataLayer.push(arguments); }
@@ -32,10 +31,7 @@
   gtag('config', 'G-9H6Z8N5DTP');
 </script>
 <script>
-  !(function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
-  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
-  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)})(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  !function(f){if(f.fbq)return;var n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];}(window);
   fbq('set', 'autoConfig', false, '1059099676340072');
   fbq('init', '1059099676340072');
   fbq('track', 'PageView');
@@ -50,8 +46,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 ;n.type="text/javascript",n.async=!0,n.src=r+"?sdkid="+e+"&lib="+t;e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(n,e)};
 
 
-  ttq.load('DA6J3MJC77UC8FLJ47I0');
-  ttq.page();
+  window.__ttq = function () { ttq.load('DA6J3MJC77UC8FLJ47I0'); ttq.page(); };
 }(window, document, 'ttq');
 </script>
 <!-- TikTok Pixel Code End -->
@@ -77,6 +72,14 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
 <link rel="stylesheet" href="/assets/css/funnel-ux.css" />
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Service","name":"Fotografía gastronómica para restaurantes","serviceType":"Fotografía gastronómica","areaServed":{"@type":"City","name":"Cochabamba"},"provider":{"@type":"LocalBusiness","name":"Estudio Graphica","url":"https://estudiographica.com/"},"url":"https://estudiographica.com/precios/","hasOfferCatalog":{"@type":"OfferCatalog","name":"Paquetes","itemListElement":[{"@type":"Offer","name":"Sesión de fotos (desde 8 fotos)","priceCurrency":"BOB","price":680,"url":"https://estudiographica.com/precios/"},{"@type":"Offer","name":"Plan mensual de fotos (desde 8 fotos al mes)","priceCurrency":"BOB","price":730,"url":"https://estudiographica.com/precios/"}]}}</script>
 <style>.btn-img{position:absolute;top:18px;right:18px;width:34px;height:34px;border-radius:50%;border:0;background:rgba(255,255,255,.12);color:#f8f8f8;display:grid;place-items:center;cursor:pointer;transition:background .2s}.btn-img:hover{background:rgba(255,221,90,.3);color:#ffdd5a}</style>
+<script>
+/* Las librerías de medición cargan al primer toque o 2,5 s después de cargar la página. Los eventos quedan en cola y no se pierden. */
+(function(){var ya=false;function cargar(){if(ya)return;ya=true;
+  ['https://www.googletagmanager.com/gtag/js?id=G-9H6Z8N5DTP','https://connect.facebook.net/en_US/fbevents.js'].forEach(function(u){var s=document.createElement('script');s.async=true;s.src=u;document.head.appendChild(s);});
+  if(window.__ttq)window.__ttq();}
+['pointerdown','keydown','scroll','touchstart'].forEach(function(e){addEventListener(e,cargar,{once:true,passive:true});});
+addEventListener('load',function(){setTimeout(cargar,2500);});})();
+</script>
 </head>
 <body class="pg pg-precios">
 

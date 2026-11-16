@@ -56,7 +56,6 @@
 
 
 <!-- ═══════════ PIXEL + GA4 (reemplazar IDs) ═══════════ -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-9H6Z8N5DTP"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){ dataLayer.push(arguments); }
@@ -64,10 +63,7 @@
   gtag('config', 'G-9H6Z8N5DTP');
 </script>
 <script>
-  !(function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
-  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
-  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)})(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  !function(f){if(f.fbq)return;var n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];}(window);
   fbq('set', 'autoConfig', false, '1059099676340072');
   fbq('init', '1059099676340072');
   fbq('track', 'PageView');
@@ -82,8 +78,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 ;n.type="text/javascript",n.async=!0,n.src=r+"?sdkid="+e+"&lib="+t;e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(n,e)};
 
 
-  ttq.load('DA6J3MJC77UC8FLJ47I0');
-  ttq.page();
+  window.__ttq = function () { ttq.load('DA6J3MJC77UC8FLJ47I0'); ttq.page(); };
 }(window, document, 'ttq');
 </script>
 <!-- TikTok Pixel Code End -->
@@ -158,6 +153,14 @@ window.egOpt = function (url, w) {
 <link rel="stylesheet" href="/assets/css/eg-ui.css" />
 <link rel="stylesheet" href="/assets/css/eg-home.css" />
 <script type="application/ld+json" id="eg-faq-ld">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"¿Cuánto cuesta una sesión de fotos?","acceptedAnswer":{"@type":"Answer","text":"Depende de la cantidad de fotos y la duración que elijas, los paquetes empiezan en Bs. 680. Puedes armar tu paquete y ver el precio en la calculadora de esta página."}},{"@type":"Question","name":"¿En cuánto tiempo recibo las fotos?","acceptedAnswer":{"@type":"Answer","text":"Según el paquete: los más chicos se entregan en menos de 72 horas, los intermedios en menos de 48, y los más grandes en menos de 24 horas. Le damos prioridad a los clientes que nos confían más trabajo"}},{"@type":"Question","name":"¿Tengo que preparar el estilismo de la comida?","acceptedAnswer":{"@type":"Answer","text":"¡Ni te preocupes por eso!. El foodstyling (armar y acomodar los platillos para que se vean bien en cámara) va incluido siempre, en todos los paquetes."}},{"@type":"Question","name":"¿Dónde se hacen las sesiones?","acceptedAnswer":{"@type":"Answer","text":"Coordinamos el lugar por WhatsApp, normalmente en tu restaurante o local, aquí en Cercado. Ir a la Zona Sud, Sacaba, Quillacollo o a otras zonas tiene un costo extra."}},{"@type":"Question","name":"¿Cómo empiezo?","acceptedAnswer":{"@type":"Answer","text":"Nos escribes por WhatsApp, sin compromiso. Ahí revisamos tu marca y armamos el paquete que te conviene."}},{"@type":"Question","name":"¿En qué zona atiendes?","acceptedAnswer":{"@type":"Answer","text":"Zona norte, Cochabamba"}}]}</script>
+<script>
+/* Las librerías de medición cargan al primer toque o 2,5 s después de cargar la página. Los eventos quedan en cola y no se pierden. */
+(function(){var ya=false;function cargar(){if(ya)return;ya=true;
+  ['https://www.googletagmanager.com/gtag/js?id=G-9H6Z8N5DTP','https://connect.facebook.net/en_US/fbevents.js'].forEach(function(u){var s=document.createElement('script');s.async=true;s.src=u;document.head.appendChild(s);});
+  if(window.__ttq)window.__ttq();}
+['pointerdown','keydown','scroll','touchstart'].forEach(function(e){addEventListener(e,cargar,{once:true,passive:true});});
+addEventListener('load',function(){setTimeout(cargar,2500);});})();
+</script>
 </head>
 <body class="has-dock" data-eg-hash="184i519">
 <nav class="nav" id="nav" aria-label="Principal">
