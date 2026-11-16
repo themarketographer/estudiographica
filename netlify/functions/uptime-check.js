@@ -1,5 +1,5 @@
 // Monitoreo de caidas de estudiographica.com.
-// Netlify ejecuta esta funcion sola cada 15 min (ver netlify.toml). Si el
+// Netlify ejecuta esta funcion sola cada hora (ver netlify.toml). Si el
 // sitio no responde bien, manda un aviso a ntfy.sh: un servicio gratis de
 // notificaciones push que NO pide cuenta ni contrasena, solo un "topic"
 // (como un canal). No cuesta nada y no guarda datos de nadie.

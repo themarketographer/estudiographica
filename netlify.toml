@@ -4,11 +4,14 @@ functions = "netlify/functions"
 [functions]
 node_bundler = "esbuild"
 
-# Monitoreo de caidas: corre netlify/functions/uptime-check.js sola cada 15
-# minutos y avisa por ntfy.sh si el sitio no responde. Ver el comentario
-# dentro de ese archivo para saber como recibir el aviso en el celular.
+# Monitoreo de caidas: corre netlify/functions/uptime-check.js sola cada hora
+# y avisa por ntfy.sh si el sitio no responde. Ver el comentario dentro de ese
+# archivo para saber como recibir el aviso en el celular.
+# Cada corrida gasta 1 llamada a funciones: cada 15 min eran ~2.900 al mes (cerca
+# del 15% del uso); cada hora son ~720. Para avisos mas rapidos sin gastar
+# llamadas, usa un monitor externo gratis (por ejemplo UptimeRobot) y borra esto.
 [functions."uptime-check"]
-  schedule = "*/15 * * * *"
+  schedule = "0 * * * *"
 
 # Las fuentes (Izmir) las usa tambien el panel del CMS, que vive en otro
 # dominio. Sin esta cabecera el navegador bloquea la carga entre dominios.
