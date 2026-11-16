@@ -1,5 +1,5 @@
 /* Zona 0 · cocina. Lista las comandas aceptadas, separadas en Comidas y Bebidas, y deja marcar cada plato cuando se prepara.
-   Pregunta al timbre cada 10 s y trae las comandas solo si hay cambios (ver ping.js). Marcar un plato se ve al instante y se confirma en segundo plano. */
+   Pregunta al timbre cada 10 s y trae las comandas solo si hay cambios (ver ping.js). Cada consulta repasa los últimos 90 s por si Netlify tardó en mostrar algo. Marcar un plato se ve al instante y se confirma en segundo plano. */
 (function () {
   'use strict';
   var $ = function (s, r) { return (r || document).querySelector(s); };
@@ -21,7 +21,7 @@
   function beep() { try { audio = audio || new (window.AudioContext || window.webkitAudioContext)(); [700, 940].forEach(function (f, i) { var o = audio.createOscillator(), g = audio.createGain(), t0 = audio.currentTime + i * 0.18; o.type = 'sine'; o.frequency.value = f; g.gain.setValueAtTime(0.0001, t0); g.gain.exponentialRampToValueAtTime(0.35, t0 + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.25); o.connect(g); g.connect(audio.destination); o.start(t0); o.stop(t0 + 0.28); }); } catch (e) {} }
 
   function load() {
-    var url = lastNow ? '?since=' + Math.max(0, lastNow - 20000) : '?days=1', t0 = Date.now();
+    var url = lastNow ? '?since=' + Math.max(0, lastNow - 90000) : '?days=1', t0 = Date.now();
     return api('GET', null, url).then(function (d) {
       var fresh = 0, changed = false;
       d.orders.forEach(function (o) { if (pend[o.key] > 0 || (mutAt[o.key] || 0) >= t0) return; var old = orders[o.key]; if (!old) { changed = true; if (!first) { fresh++; o._new = true; } } else if (JSON.stringify(old) !== JSON.stringify(o)) changed = true; orders[o.key] = o; });
@@ -121,7 +121,7 @@
 
   function enter() {
     $('#login').hidden = true; $('#app').hidden = false; $('#tools').hidden = false; n = 0; clearInterval(timer); clearInterval(tick);
-    var lastV = null, lastFull = Date.now();
+    var st = { v: null, full: Date.now(), at: 0, settle: 0 };
     Z0Ping.setToken(token);
     /* Cada 10 s pregunta al timbre (no gasta funciones). Solo trae comandas si el timbre cambió, o cada 5 min por seguridad (15 min si el local está cerrado).
        Sin timbre: consulta clásica, cada 10 s con movimiento y cada 90 s si nada cambia. */
@@ -130,8 +130,10 @@
       n++;
       Z0Ping.check().then(function (p) {
         if (!p) { if (n % (idle >= 6 ? 9 : 1)) return; return load(); }
-        if (p.v === lastV && Date.now() - lastFull < (p.open === false ? 900000 : 300000)) return;
-        return load().then(function () { lastV = p.v; lastFull = Date.now(); });
+        var plan = Z0Ping.plan(st, p);
+        if (!plan) return;
+        if (plan === 'full') lastNow = 0;
+        return load().then(function () { Z0Ping.done(st, p, plan); });
       }).catch(function (e) { if (e.auth) leave(e.message); else setLive(false); });
     }, 10000);
     tick = setInterval(function () { if (!document.hidden) render(); }, 60000);

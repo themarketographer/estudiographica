@@ -11,6 +11,17 @@
       if (!t || !window.crypto || !crypto.subtle) return Promise.resolve();
       return crypto.subtle.digest('SHA-256', new TextEncoder().encode(String(t).trim())).then(function (b) { key = hex(b); }).catch(function () {});
     },
+    /* Decide qué hacer tras preguntar al timbre. st = { v, full, at, settle } (estado de la pantalla), p = respuesta del timbre.
+       Netlify puede tardar hasta ~60 s en mostrar datos recién guardados, así que después de cada cambio se sigue consultando cada 15 s durante 65 s.
+       Devuelve '' (nada), 'load' (traer lo nuevo) o 'full' (recargar todo, cada 5 min por seguridad; 15 min si el local está cerrado). */
+    plan: function (st, p) {
+      var now = Date.now(), changed = p.v !== st.v;
+      if (changed) st.settle = now + 65000;
+      if (now - st.full >= (p.open === false ? 900000 : 300000)) return 'full';
+      if (changed || (now < st.settle && now - st.at >= 14000)) return 'load';
+      return '';
+    },
+    done: function (st, p, plan) { st.v = p.v; st.at = Date.now(); if (plan === 'full') st.full = st.at; },
     check: function () {
       if (!key) return Promise.resolve(null);
       return fetch('/api/zona0/ping/' + key, { cache: 'no-store' })

@@ -46,7 +46,7 @@
     return { fresh: fresh, changed: changed };
   }
   function load(days) {
-    var url = days || !lastNow ? '?days=' + (days || 2) : '?since=' + Math.max(0, lastNow - 20000);
+    var url = days || !lastNow ? '?days=' + (days || 2) : '?since=' + Math.max(0, lastNow - 90000);
     return api('GET', null, url).then(function (d) {
       var m = merge(d.orders); (d.gone || []).forEach(function (k) { if (orders[k]) { delete orders[k]; m.changed = true; } }); lastNow = d.now; if (d.days) loadedDays = d.days; loadedAt = Date.now();
       open = d.open !== false; paintOpen(); setLive(true);
@@ -784,7 +784,7 @@
     /* Cada 10 s pregunta al timbre (no gasta funciones) y solo trae pedidos si cambió, o cada 5 min por seguridad (15 min si el local está cerrado).
        Sin timbre: consulta clásica, cada 20 s con movimiento y cada 90 s si nada cambia. Con la pestaña oculta no consulta.
        Sin actividad por 15 minutos y con el sonido apagado, se pausa hasta que alguien toque la pantalla. */
-    var lastV = null, lastFull = Date.now();
+    var st = { v: null, full: Date.now(), at: 0, settle: 0 };
     Z0Ping.setToken(token);
     timer = setInterval(function () {
       if (document.hidden) return;
@@ -792,8 +792,9 @@
       n++;
       Z0Ping.check().then(function (p) {
         if (!p) { if (n % (idle >= 6 ? 9 : 2)) return; return load(); }
-        if (p.v === lastV && Date.now() - lastFull < (p.open === false ? 900000 : 300000)) return;
-        return load().then(function () { lastV = p.v; lastFull = Date.now(); });
+        var plan = Z0Ping.plan(st, p);
+        if (!plan) return;
+        return load(plan === 'full' ? 2 : 0).then(function () { Z0Ping.done(st, p, plan); });
       }).catch(function (e) { if (e.auth) leave(e.message); else setLive(false); });
     }, 10000);
     tick = setInterval(function () { if (!document.hidden && !$('#app').hidden && !pending) render(); }, 60000);
