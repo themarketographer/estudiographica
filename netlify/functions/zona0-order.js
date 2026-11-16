@@ -33,7 +33,7 @@ exports.handler = async function (event) {
   let payload;
   try { payload = JSON.parse(event.body || '{}'); } catch (e) { return reply(400, { ok: false, error: 'No pudimos leer el pedido.' }); }
 
-  const menu = Pricing.applyExtras(JSON.parse(JSON.stringify(baseMenu)), await Store.getMenuExtra(event), Pricing.boliviaDate(new Date()).key);
+  const menu = Pricing.applyExtras(structuredClone(baseMenu), await Store.getMenuExtra(event), Pricing.boliviaDate(new Date()).key);
   const check = Pricing.validateOrder(menu, payload, { staff });
   if (!check.ok) return reply(422, { ok: false, error: check.error, field: check.field || null });
 

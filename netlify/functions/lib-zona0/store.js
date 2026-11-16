@@ -44,8 +44,29 @@ function hourKey(ms) { return new Date(ms).toISOString().slice(0, 13); }
 async function touch(event, key, gone) {
   try {
     const now = Date.now();
-    await open(event).setJSON('ev/' + hourKey(now) + '/' + now + '-' + Math.random().toString(36).slice(2, 6), (gone ? { k: key, del: 1 } : { k: key }));
+    await Promise.all([
+      open(event).setJSON('ev/' + hourKey(now) + '/' + now + '-' + Math.random().toString(36).slice(2, 6), (gone ? { k: key, del: 1 } : { k: key })),
+      bump(event)
+    ]);
   } catch (e) { console.error('zona0 touch:', e && e.message); }
+}
+
+// "Timbre" para las pantallas: /api/zona0/ping/<sha256 de la clave> responde la versión actual y se guarda 2 minutos en la red de Netlify
+// (esas visitas no gastan llamadas a funciones). Cada cambio sube la versión y borra esa copia guardada, así que el aviso llega al instante.
+// Si el borrado fallara, lo peor es esperar los 2 minutos que dura la copia (TTL de zona0-ping.js).
+function sha256(t) { return require('crypto').createHash('sha256').update(String(t)).digest('hex'); }
+function pingKeys() { return [process.env.ZONA0_ADMIN_TOKEN, process.env.ZONA0_KITCHEN_TOKEN].map((t) => String(t || '').trim()).filter(Boolean).map(sha256); }
+function pingTag(k) { return 'z0ping-' + String(k).slice(0, 16); }
+async function bump(event) {
+  try {
+    await open(event).setJSON('cfg/ver', { v: Date.now() });
+    const tags = pingKeys().map(pingTag);
+    if (tags.length) await require('@netlify/functions').purgeCache({ tags });
+  } catch (e) { console.error('zona0 bump:', e && e.message); }
+}
+async function ping(event) {
+  const [ver, isOp] = await Promise.all([open(event).get('cfg/ver', { type: 'json', consistency: 'strong' }).catch(() => null), isOpen(event)]);
+  return { v: (ver && ver.v) || 0, open: isOp };
 }
 
 async function changedSince(event, since) {
@@ -195,7 +216,7 @@ async function settleParts(event, keys, parts) {
       if (left[i].c === 0) i++;
     }
     const arr = Object.keys(mine).map((m) => ({ method: m, amount: mine[m] / 100 }));
-    const main = arr.slice().sort((a, b) => b.amount - a.amount)[0];
+    const main = arr.toSorted((a, b) => b.amount - a.amount)[0];
     rec.payment = Object.assign({}, rec.payment, { status: 'pagado', method: main ? main.method : 'efectivo', parts: arr, split: parts.length, updatedAt: now });
     rec.status = afterPay(rec); rec.updatedAt = now;
     await store.setJSON(k, rec); await touch(event, k);
@@ -258,7 +279,8 @@ async function isOpen(event) {
 }
 async function setOpen(event, open_) {
   await open(event).setJSON('cfg/open', { open: !!open_, at: new Date().toISOString() });
+  await bump(event);
   return !!open_;
 }
 
-module.exports = { isProd, storeName, STATUSES, keyFor, saveNumbered, touch, changedSince, listDays, getOrder, setStatus, deleteOrder, setPayment, isOpen, setOpen, setLineDone, settle, lineKinds, lineDone, ledgerAdd, ledgerRange, ledgerVoid, importRecords, settleParts, getMenuExtra, setMenuExtra };
+module.exports = { pingKeys, pingTag, ping, isProd, storeName, STATUSES, keyFor, saveNumbered, touch, changedSince, listDays, getOrder, setStatus, deleteOrder, setPayment, isOpen, setOpen, setLineDone, settle, lineKinds, lineDone, ledgerAdd, ledgerRange, ledgerVoid, importRecords, settleParts, getMenuExtra, setMenuExtra };

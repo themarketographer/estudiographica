@@ -1070,7 +1070,7 @@
     emit: emit,
     open: function () { if (menu) openCart(); },
     cart: {
-      lines: function () { return JSON.parse(JSON.stringify(lines)); },
+      lines: function () { return structuredClone(lines); },
       total: function () { return totals().total; },
       count: function () { return totals().count; },
       add: function (id, portion, sel, qty, note) { if (menu) addToCart({ id: id, portion: portion, sel: sel || {}, qty: qty || 1, note: note || '' }); },

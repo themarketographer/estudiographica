@@ -23,7 +23,7 @@ function cleanOrder(o) {
     mode: o.mode === 'mesa' ? 'mesa' : 'recojo',
     customer: { name: txt(c.name, 50), phone: '', mode: o.mode === 'mesa' ? 'mesa' : 'recojo', mesa: txt(c.mesa, 8), address: '', zone: '', zoneName: '', notes: '' },
     lines, subtotal: num(o.subtotal) || 0, deliveryFee: 0, total, count: lines.reduce((s, l) => s + l.qty, 0), currency: 'Bs',
-    mozo: txt(o.mozo, 30), payment: { method: parts.length ? parts.slice().sort((a, b) => b.amount - a.amount)[0].method : 'efectivo', status: 'pagado', updatedAt: at, parts },
+    mozo: txt(o.mozo, 30), payment: { method: parts.length ? parts.toSorted((a, b) => b.amount - a.amount)[0].method : 'efectivo', status: 'pagado', updatedAt: at, parts },
     legacy: { ticket: parseInt(o.number, 10) || 0 }
   };
   if (o.discount > 0) rec.discount = num(o.discount);

@@ -79,7 +79,7 @@
   /* Una mesa, un registro: los pedidos de la misma mesa cobrados juntos (separados por menos de 2 minutos) se muestran como una sola cuenta. */
   function mk(m) { return String(m == null ? '' : m).trim().toLowerCase().replace(/^0+(?=\d)/, ''); }
   function groupMesa(rows) {
-    var asc = rows.slice().sort(function (a, b) { return String(a.at).localeCompare(String(b.at)); }), groups = [];
+    var asc = rows.toSorted(function (a, b) { return String(a.at).localeCompare(String(b.at)); }), groups = [];
     asc.forEach(function (x) {
       var o = x.o, g = null;
       if (o.mode === 'mesa' && o.customer && o.customer.mesa) {
@@ -101,7 +101,7 @@
     var os = items.map(function (x) { return x.o; }), by = {}, lines = [];
     os.forEach(function (o) { parts(o).forEach(function (q) { by[q.method] = (by[q.method] || 0) + q.amount; }); (o.lines || []).forEach(function (l) { lines.push(l); }); });
     var arr = Object.keys(by).map(function (m) { return { method: m, amount: Math.round(by[m] * 100) / 100 }; });
-    var main = arr.slice().sort(function (a, b) { return b.amount - a.amount; })[0], first = os[0], at = items[items.length - 1].at;
+    var main = arr.toSorted(function (a, b) { return b.amount - a.amount; })[0], first = os[0], at = items[items.length - 1].at;
     var ids = os.map(function (o, i) { return i ? String(o.orderId).split('-')[0] : o.orderId; });
     return { at: at, day: items[0].day, o: {
       key: first.key, keys: os.map(function (o) { return o.key; }), orderId: ids.join(' + '), createdAt: first.createdAt, mode: 'mesa', customer: first.customer, mozo: first.mozo,
@@ -338,7 +338,7 @@
     var pr = el('label', 'mprice'); pr.appendChild(el('span', '', 'Bs'));
     var inp = el('input'); inp.type = 'number'; inp.inputMode = 'decimal'; inp.min = '0'; inp.step = '0.5'; inp.value = String(p.price); inp.disabled = !!p.hidden; inp.setAttribute('aria-label', 'Precio de ' + p.title);
     var save = function () { var v = Math.round(Number(inp.value) * 100) / 100; if (!(v > 0)) { inp.value = String(p.price); return; } if (v === p.price) return; menuCall(p.custom ? { update: p.id, patch: { price: v } } : { over: p.id, patch: { price: v } }).catch(function () { inp.value = String(p.price); }); };
-    inp.addEventListener('change', save); inp.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); inp.blur(); } });
+    inp.addEventListener('change', save); inp.addEventListener('keydown', function (e) { if (e.key === 'Enter' && !e.isComposing) { e.preventDefault(); inp.blur(); } });
     pr.appendChild(inp); t.appendChild(pr);
     return t;
   }

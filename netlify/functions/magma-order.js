@@ -64,8 +64,6 @@ exports.handler = async function (event) {
   const hook = process.env.ORDER_WEBHOOK_URL;
   if (hook) {
     try {
-      const ctrl = new AbortController();
-      const timer = setTimeout(() => ctrl.abort(), 2500);
       await fetch(hook, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -78,9 +76,8 @@ exports.handler = async function (event) {
           message: order.message,
           createdAt
         }),
-        signal: ctrl.signal
+        signal: AbortSignal.timeout(2500)
       });
-      clearTimeout(timer);
     } catch (e) {
       // Si el aviso interno falla, el cliente igual puede pedir por WhatsApp.
       console.error('magma-order webhook:', e && e.message);

@@ -101,6 +101,12 @@ body.pg-gracias>.wrap{position:relative;z-index:1}
 .gx-list .check{animation:okPop .6s var(--ease) backwards;animation-delay:inherit}
 .gx-list li:nth-child(1) .check{animation-delay:.55s}.gx-list li:nth-child(2) .check{animation-delay:.7s}.gx-list li:nth-child(3) .check{animation-delay:.85s}.gx-list li:nth-child(4) .check{animation-delay:1s}
 
+@supports (top:calc(sibling-index()*1px)){
+  .pg-gracias .card .benefits li{animation-delay:min(.7s,calc(.1s + sibling-index()*.1s))}
+  .gx-list li{animation-delay:calc(.15s + sibling-index()*.15s)}
+  .gx-list li .check{animation-delay:calc(.4s + sibling-index()*.15s)}
+}
+
 /* ---------- Tira de trabajos ---------- */
 .gx-strip{position:relative;z-index:1;overflow:hidden;margin:clamp(28px,5vw,48px) 0 8px;-webkit-mask:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent);mask:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent)}
 .gx-track{display:flex;gap:14px;width:max-content;list-style:none;padding:6px 0;margin:0;animation:gxMarq 46s linear infinite}

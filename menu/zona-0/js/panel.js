@@ -452,7 +452,7 @@
   $('#csv').addEventListener('click', csv);
   $('#moreDays').addEventListener('click', function () { var b = this; b.disabled = true; load(14).then(function () { openHist(); toast('Pedidos de los últimos 14 días cargados'); }).catch(function (e) { toast(e.message); }).then(function () { b.disabled = false; }); });
   $$('[data-close]').forEach(function (b) { b.addEventListener('click', function () { b.closest('dialog').close(); }); });
-  $$('dialog').forEach(function (d) { d.addEventListener('click', function (e) { if (e.target === d) d.close(); }); });
+  $$('dialog').forEach(function (d) { if ('closedBy' in d) d.closedBy = 'any'; else d.addEventListener('click', function (e) { if (e.target === d) d.close(); }); });
 
   /* ---------- Secciones ---------- */
   function go(t) {
@@ -623,7 +623,7 @@
         var setD = function (v) { v = Math.max(0, Math.min(90, Math.round(Number(v) || 0))); if (v) it.raw.disc = v; else delete it.raw.disc; it.line = P.resolveLine(menu, it.raw, { staff: true }).line; it.dopen = false; posLines(); };
         [20, 25, 50].forEach(function (v) { var b = el('button', 'chip' + (l.disc === v ? ' on' : ''), '-' + v + '%'); b.type = 'button'; b.addEventListener('click', function () { setD(v); }); dr.appendChild(b); });
         var inp = el('input'); inp.type = 'number'; inp.min = 1; inp.max = 90; inp.inputMode = 'numeric'; inp.placeholder = 'Otro %'; inp.value = l.disc && [20, 25, 50].indexOf(l.disc) < 0 ? l.disc : '';
-        inp.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); setD(inp.value); } });
+        inp.addEventListener('keydown', function (e) { if (e.key === 'Enter' && !e.isComposing) { e.preventDefault(); setD(inp.value); } });
         inp.addEventListener('change', function () { setD(inp.value); });
         dr.appendChild(inp);
         if (l.disc) { var q = el('button', 'chip', 'Quitar'); q.type = 'button'; q.addEventListener('click', function () { setD(0); }); dr.appendChild(q); }
@@ -781,14 +781,21 @@
   function enter() {
     $('#login').hidden = true; $('#app').hidden = false; $('#tools').hidden = false; $('#moreBtn').hidden = false; $('#tabs').hidden = false; go(ls('z0.tab') || 'mesas');
     var n = 0; clearInterval(timer); clearInterval(tick);
-    /* Cada 20 s mientras hay movimiento. Si pasan 6 consultas sin cambios, cada 60 s. Con la pestaña oculta no consulta.
+    /* Cada 10 s pregunta al timbre (no gasta funciones) y solo trae pedidos si cambió, o cada 5 min por seguridad (15 min si el local está cerrado).
+       Sin timbre: consulta clásica, cada 20 s con movimiento y cada 90 s si nada cambia. Con la pestaña oculta no consulta.
        Sin actividad por 15 minutos y con el sonido apagado, se pausa hasta que alguien toque la pantalla. */
+    var lastV = null, lastFull = Date.now();
+    Z0Ping.setToken(token);
     timer = setInterval(function () {
       if (document.hidden) return;
       if (!soundOn && Date.now() - lastAct > 900000) { if (!paused) { paused = true; setLive(false, 'En pausa por inactividad. Toca la pantalla para seguir'); } return; }
-      n++; if (idle >= 6 && n % 3) return;
-      load().catch(function (e) { if (e.auth) leave(e.message); else setLive(false); });
-    }, 20000);
+      n++;
+      Z0Ping.check().then(function (p) {
+        if (!p) { if (n % (idle >= 6 ? 9 : 2)) return; return load(); }
+        if (p.v === lastV && Date.now() - lastFull < (p.open === false ? 900000 : 300000)) return;
+        return load().then(function () { lastV = p.v; lastFull = Date.now(); });
+      }).catch(function (e) { if (e.auth) leave(e.message); else setLive(false); });
+    }, 10000);
     tick = setInterval(function () { if (!document.hidden && !$('#app').hidden && !pending) render(); }, 60000);
   }
   function leave(msg) {

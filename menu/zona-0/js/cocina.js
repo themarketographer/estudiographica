@@ -1,5 +1,5 @@
 /* Zona 0 · cocina. Lista las comandas aceptadas, separadas en Comidas y Bebidas, y deja marcar cada plato cuando se prepara.
-   Consulta cada 10 s (cada 30 s si nada cambia). Marcar un plato se ve al instante y se confirma en segundo plano. */
+   Pregunta al timbre cada 10 s y trae las comandas solo si hay cambios (ver ping.js). Marcar un plato se ve al instante y se confirma en segundo plano. */
 (function () {
   'use strict';
   var $ = function (s, r) { return (r || document).querySelector(s); };
@@ -121,7 +121,19 @@
 
   function enter() {
     $('#login').hidden = true; $('#app').hidden = false; $('#tools').hidden = false; n = 0; clearInterval(timer); clearInterval(tick);
-    timer = setInterval(function () { if (document.hidden) return; n++; if (idle >= 6 && n % 3) return; load().catch(function (e) { if (e.auth) leave(e.message); else setLive(false); }); }, 10000);
+    var lastV = null, lastFull = Date.now();
+    Z0Ping.setToken(token);
+    /* Cada 10 s pregunta al timbre (no gasta funciones). Solo trae comandas si el timbre cambió, o cada 5 min por seguridad (15 min si el local está cerrado).
+       Sin timbre: consulta clásica, cada 10 s con movimiento y cada 90 s si nada cambia. */
+    timer = setInterval(function () {
+      if (document.hidden) return;
+      n++;
+      Z0Ping.check().then(function (p) {
+        if (!p) { if (n % (idle >= 6 ? 9 : 1)) return; return load(); }
+        if (p.v === lastV && Date.now() - lastFull < (p.open === false ? 900000 : 300000)) return;
+        return load().then(function () { lastV = p.v; lastFull = Date.now(); });
+      }).catch(function (e) { if (e.auth) leave(e.message); else setLive(false); });
+    }, 10000);
     tick = setInterval(function () { if (!document.hidden) render(); }, 60000);
   }
   function leave(msg) {

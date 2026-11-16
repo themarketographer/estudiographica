@@ -827,7 +827,7 @@ a{color:inherit}
   $('#csv').addEventListener('click', csvAll);
   $('#sumBtn').addEventListener('click', openSummary);
   $('#sClose').addEventListener('click', function () { $('#summary').close(); });
-  ['#detail', '#summary'].forEach(function (id) { $(id).addEventListener('click', function (e) { if (e.target === this) this.close(); }); });
+  ['#detail', '#summary'].forEach(function (id) { var d = $(id); if ('closedBy' in d) d.closedBy = 'any'; else d.addEventListener('click', function (e) { if (e.target === d) d.close(); }); });
   $('#detail').addEventListener('close', function () { openKey = ''; });
   $('#aud').addEventListener('click', csvAudience);
   $('#q').addEventListener('input', function (e) { query = e.target.value; render(); });

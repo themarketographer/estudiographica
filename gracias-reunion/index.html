@@ -182,7 +182,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
       .filter(function (f) { return f[1]; });
     if (filas.length) {
       var dl = document.getElementById('gr-det');
-      dl.innerHTML = '';
+      dl.replaceChildren();
       filas.forEach(function (f) {
         var dt = document.createElement('dt'); dt.textContent = f[0];
         var dd = document.createElement('dd'); dd.textContent = f[1];

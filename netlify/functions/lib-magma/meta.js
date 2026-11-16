@@ -52,12 +52,9 @@ async function sendEvent(eventName, rec, sourceUrl, prod) {
   };
   if (process.env.MAGMA_META_TEST_CODE) body.test_event_code = process.env.MAGMA_META_TEST_CODE;
   try {
-    const ctrl = new AbortController();
-    const t = setTimeout(() => ctrl.abort(), 3500);
     const res = await fetch('https://graph.facebook.com/v21.0/' + encodeURIComponent(pixel) + '/events?access_token=' + encodeURIComponent(token), {
-      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body), signal: ctrl.signal
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body), signal: AbortSignal.timeout(3500)
     });
-    clearTimeout(t);
     if (!res.ok) {
       const txt = (await res.text()).slice(0, 200);
       console.error('magma meta', eventName, res.status, txt);

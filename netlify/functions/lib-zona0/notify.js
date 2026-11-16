@@ -23,13 +23,10 @@ async function newOrder(record, prod) {
   if (!token || !chat) return { skipped: 'sin configurar' };
   if (!prod && !process.env.ZONA0_NOTIFY_TEST) return { skipped: 'no es producción' };
   try {
-    const ctrl = new AbortController();
-    const timer = setTimeout(() => ctrl.abort(), 2500);
     const res = await fetch('https://api.telegram.org/bot' + token + '/sendMessage', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ chat_id: chat, text: texto(record), disable_web_page_preview: true }), signal: ctrl.signal
+      body: JSON.stringify({ chat_id: chat, text: texto(record), disable_web_page_preview: true }), signal: AbortSignal.timeout(2500)
     });
-    clearTimeout(timer);
     return { ok: res.ok, status: res.status };
   } catch (e) {
     console.error('zona0 notify:', e && e.message);
