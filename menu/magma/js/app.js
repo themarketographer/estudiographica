@@ -936,7 +936,6 @@
       qr && unsaved ? h('div', { id: 'payBox' }) : null,
       h('div', { class: 'stack' },
         h('a', { class: 'btn btn--wa btn--block', href: o.whatsappUrl, rel: 'noopener', onclick: function () { emit('whatsapp_click', { source: 'done', orderId: o.orderId }); } }, icon('i-wa'), 'Abrir WhatsApp'),
-        unsaved ? null : h('a', { class: 'btn btn--ghost btn--block', href: 'pedido/', onclick: function () { emit('track_open', { orderId: o.orderId }); } }, icon('i-clock'), 'Seguir mi pedido'),
         h('button', { class: 'btn btn--ghost btn--block', type: 'button', onclick: function () { copyText(o.message); } }, icon('i-copy'), 'Copiar mensaje'),
         unsaved ? null : null)));
     foot.appendChild(h('button', { class: 'btn btn--ghost btn--block', type: 'button', onclick: function () { closeSheet($('#cartDlg')); } }, icon('i-x'), 'Cerrar'));

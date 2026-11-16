@@ -9,7 +9,6 @@ Todo el contenido vive en `menu.json`. Cambiar un precio, agregar una salsa o ma
 | Campo | Para qué sirve |
 |---|---|
 | `brand.whatsapp` | Número que recibe los pedidos, con código de país y sin `+` |
-| `brand.trackUrl` | Dirección de la página de seguimiento. Se agrega al final del mensaje de WhatsApp con el número del pedido. Vacío, no se agrega |
 | `payment` | Formas de pago: `methods` (`cash`, `qr`), `cashNote` y `qr` (`image`, `holder`, `note`). Con una sola forma, el cliente no elige. Para quitar el QR, deja `["cash"]` |
 | `service.prepMin` y `zones[].travelMin` | Minutos de preparación y de viaje. El seguimiento los suma para decir "llega en unos X min" |
 | `hours` | `null`, o `{ "text": "Lun a dom, 12:00 a 22:00", "tz": "America/La_Paz", "days": { "0": [["12:00","22:00"]] } }`. Con `days` y `tz` aparece "Abierto ahora" |
@@ -96,9 +95,11 @@ El primer pedido de cada día es el `#01`, el segundo el `#02`, y así. Después
 
 El cliente que elige entrega escoge su zona y ve el costo antes de enviar. El servidor calcula el envío igual que el total de productos (nunca confía en el navegador). Si los productos superan `freeDeliveryFrom`, el envío sale gratis en las zonas con tarifa. Una zona con `fee: null` deja el envío por confirmar y el mensaje de WhatsApp lo dice.
 
-## Seguimiento del pedido para el cliente
+## Página del pedido (solo para el comprobante de pago)
 
-**/menu/magma/pedido/**. El cliente escribe el número (`07-24OCT`) y los últimos 4 dígitos de su celular, y ve en qué estado va su pedido (recibido, en la freidora, listo o en camino, entregado). La página se abre sola con el último pedido hecho desde ese mismo teléfono y se actualiza cada 15 segundos. La API es `GET /api/magma/track?n=07-24OCT&p=0828` y solo devuelve el estado, nunca datos personales. Un pedido que no se pudo guardar (`#T1432-24OCT`) no tiene seguimiento.
+**/menu/magma/pedido/**. Ya no se ofrece como "seguimiento": no hay botón ni enlace en el pedido ni en el mensaje de WhatsApp, y la página no se actualiza sola.
+Solo existe para que el cliente suba o vuelva a subir el comprobante del QR: el mensaje del panel le manda ese enlace cuando el pago está pendiente o fue rechazado.
+El cliente escribe el número (`07-24OCT`) y los últimos 4 dígitos de su celular. Para volver a ofrecer el seguimiento, pon `brand.trackUrl` en `menu.json` y vuelve a agregar el botón "Seguir mi pedido" en `js/app.js`.
 
 ## Avisos y respaldo (variables en Netlify)
 

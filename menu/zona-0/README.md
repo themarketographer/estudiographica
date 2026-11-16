@@ -38,7 +38,6 @@ Es sondeo (consulta periódica), no tiempo real puro. El retraso normal es de ha
 
 - Estilos y código salen del CDN con caché (ver `netlify.toml`).
 - Sin timbre, el panel baja a una consulta cada 90 segundos si no hay movimiento. Nunca consulta con la pestaña oculta y se pausa tras 15 minutos sin tocarlo (salvo que el sonido esté activado).
-- El seguimiento del cliente se espacia hasta 40 segundos, y se detiene al entregar o pasadas 3 horas.
 - El interruptor "Recibiendo pedidos" del panel cierra los pedidos del celular fuera de horario.
 
 ## Datos de clientes

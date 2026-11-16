@@ -494,7 +494,7 @@ a{color:inherit}
     var link = location.origin + '/menu/magma/pedido/?n=' + id.replace(/^#/, '');
     if (o.payment && o.payment.method === 'qr' && o.payment.status === 'rechazado') return 'Hola ' + n + ', no pudimos confirmar el pago de tu pedido ' + id + '. ¿Puedes subir de nuevo el comprobante aquí? ' + link;
     if (o.payment && o.payment.method === 'qr' && o.payment.status === 'pendiente' && o.status === 'nuevo') return 'Hola ' + n + ', recibimos tu pedido ' + id + '. Falta tu comprobante de pago por QR, puedes subirlo aquí: ' + link;
-    return msgBase(o) + (o.number && o.status !== 'entregado' ? '\nSigue tu pedido: ' + link : '');
+    return msgBase(o);
   }
   function msgBase(o) {
     var c = o.customer, n = c.firstName || c.name, id = o.orderId;

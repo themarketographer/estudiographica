@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Sigue tu pedido | Magma Wings</title>
+<title>Tu pedido | Magma Wings</title>
 <meta name="robots" content="noindex">
 <meta name="theme-color" content="#260c0d">
 <link rel="preload" href="../fonts/bricolage-grotesque.woff2" as="font" type="font/woff2" crossorigin>
@@ -62,7 +62,7 @@
 </defs></svg>
 <main class="tk" id="tk">
   <div class="tk-top"><img src="../images/logo-alpha.webp" alt="Magma Wings" width="531" height="208"><a href="../"><svg class="ic" aria-hidden="true"><use href="#i-back"/></svg>Volver al menú</a></div>
-  <h1 class="display">Sigue tu pedido</h1>
+  <h1 class="display">Tu pedido</h1>
   <p class="lead">Escribe el número de tu pedido y los últimos 4 dígitos del celular con el que pediste.</p>
   <form class="tk-form" id="f" novalidate>
     <div class="f"><label for="n">Número de pedido</label><div class="inp"><input id="n" name="n" inputmode="text" autocapitalize="characters" autocomplete="off" placeholder="07-24OCT" maxlength="12"></div></div>
@@ -124,7 +124,7 @@
       eta.appendChild(document.createTextNode(d.status === 'listo' ? (d.mode === 'delivery' ? 'Tu pedido va en camino.' : 'Ya puedes pasar a recogerlo.') : left > 2 ? (d.mode === 'delivery' ? 'Llega en unos ' : 'Estará listo en unos ') + left + ' min' : 'Está por salir, gracias por esperar.'));
       card.appendChild(eta);
     }
-    var live = el('div', 'tk-live'); live.appendChild(el('i')); live.appendChild(document.createTextNode(d.status === 'entregado' ? 'Pedido cerrado' : 'Se actualiza solo cada medio minuto')); card.appendChild(live);
+    var live = el('div', 'tk-live'); live.appendChild(el('i')); live.appendChild(document.createTextNode(d.status === 'entregado' ? 'Pedido cerrado' : '')); if (d.status !== 'entregado') { var rb = document.createElement('button'); rb.type = 'button'; rb.className = 'btn'; rb.style.minHeight = '44px'; rb.textContent = 'Actualizar estado'; rb.addEventListener('click', function () { check(cur.n, cur.p); }); live.appendChild(rb); } card.appendChild(live);
     var acts = el('div', 'tk-actions');
     var a = el('a', 'btn btn--wa'); a.href = 'https://wa.me/' + cfg.wa + '?text=' + encodeURIComponent('Hola, consulto por mi pedido ' + d.orderId); a.target = '_blank'; a.rel = 'noopener';
     a.appendChild(svg('i-wa')); a.appendChild(document.createTextNode('Escribir al local')); acts.appendChild(a); card.appendChild(acts);
@@ -144,17 +144,6 @@
         if (!x.d.ok) { if (!quiet) showErr(x.d.error || 'No pudimos buscar el pedido.'); return; }
         showErr(''); cur = { n: n, p: p }; draw(x.d);
         $('#f').hidden = true; document.querySelector('.lead').hidden = true;
-        clearInterval(timer);
-        if (x.d.status !== 'entregado' && x.d.status !== 'cancelado') {
-          /* Cada 30 s los primeros 10 minutos, después cada 60 s, y se detiene a los 20 minutos. Con la pestaña oculta no consulta. */
-          var t0 = Date.now(), last = '';
-          timer = setInterval(function () {
-            var age = Date.now() - t0;
-            if (age > 20 * 60000) { clearInterval(timer); var lv = $('.tk-live'); if (lv) { lv.textContent = ''; var rb = document.createElement('button'); rb.type = 'button'; rb.className = 'btn'; rb.style.minHeight = '44px'; rb.textContent = 'Actualizar estado'; rb.addEventListener('click', function () { check(cur.n, cur.p); }); lv.appendChild(rb); } return; }
-            if (document.hidden || (age > 10 * 60000 && Math.round(age / 30000) % 2)) return;
-            check(cur.n, cur.p, true);
-          }, 30000);
-        }
       })
       .catch(function () { if (!quiet) showErr('Sin conexión. Intenta otra vez en un momento.'); });
   }
