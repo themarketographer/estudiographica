@@ -74,7 +74,16 @@ body.pg .foot{margin-top:auto}
 .extra-stepper button:active:not(:disabled){transform:scale(.9)}
 .extra-stepper button:disabled{opacity:.3;cursor:not-allowed}
 .qty{min-width:24px;text-align:center;font-weight:700;font-variant-numeric:tabular-nums}
-@media(max-width:560px){.extra-row{flex-wrap:wrap}.extra-price{margin-left:36px}}
+.extra-price small{font-weight:500;font-size:.85em;color:var(--muted)}
+@media(max-width:560px){
+  .extra-row{display:grid;grid-template-columns:auto 1fr auto;grid-template-areas:"chk name price" ". desc desc" ". step step";column-gap:14px;row-gap:0;align-items:start;padding:16px}
+  .extra-row>.check-square{grid-area:chk;margin-top:1px}
+  .extra-copy{display:contents}
+  .extra-name{grid-area:name;font-size:16px;font-weight:700;line-height:1.25;letter-spacing:-.01em}
+  .extra-price{grid-area:price;font-size:15px;font-weight:700;line-height:1.25;text-align:right}
+  .extra-desc{grid-area:desc;font-size:12.5px;line-height:1.45;margin-top:5px;max-width:34ch}
+  .extra-stepper{grid-area:step;justify-self:start;margin-top:12px}
+}
 
 /* Panel de precio */
 .right-col{background:var(--ink);color:var(--paper);border-radius:28px;padding:clamp(24px,3vw,34px);align-self:start;position:sticky;top:92px;overflow:hidden;isolation:isolate}

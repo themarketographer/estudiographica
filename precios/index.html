@@ -280,7 +280,7 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
     // "reels" (stepper) trae su propio selector de cantidad con − / +.
     extrasList.innerHTML = EGPricing.EXTRAS.map(function (ex) {
       var priceTag = ex.tipo === 'stepper'
-        ? '+Bs. ' + ex.precioUnidad + ' c/u'
+        ? '+Bs. ' + ex.precioUnidad + ' <small>c/u</small>'
         : '+Bs. ' + ex.precio;
       return '<div class="extra-row" data-extra="' + ex.id + '" data-tipo="' + ex.tipo + '">' +
         '<span class="check-square">' + CHK + '</span>' +
