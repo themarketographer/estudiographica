@@ -76,6 +76,7 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
 <link rel="stylesheet" href="/assets/css/eg-pages.css" />
 <link rel="stylesheet" href="/assets/css/funnel-ux.css" />
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Service","name":"Fotografía gastronómica para restaurantes","serviceType":"Fotografía gastronómica","areaServed":{"@type":"City","name":"Cochabamba"},"provider":{"@type":"LocalBusiness","name":"Estudio Graphica","url":"https://estudiographica.com/"},"url":"https://estudiographica.com/precios/","hasOfferCatalog":{"@type":"OfferCatalog","name":"Paquetes","itemListElement":[{"@type":"Offer","name":"Sesión de fotos (desde 8 fotos)","priceCurrency":"BOB","price":680,"url":"https://estudiographica.com/precios/"},{"@type":"Offer","name":"Plan mensual de fotos (desde 8 fotos al mes)","priceCurrency":"BOB","price":730,"url":"https://estudiographica.com/precios/"}]}}</script>
+<style>.btn-img{position:absolute;top:18px;right:18px;width:34px;height:34px;border-radius:50%;border:0;background:rgba(255,255,255,.12);color:#f8f8f8;display:grid;place-items:center;cursor:pointer;transition:background .2s}.btn-img:hover{background:rgba(255,221,90,.3);color:#ffdd5a}</style>
 </head>
 <body class="pg pg-precios">
 
@@ -137,8 +138,8 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
         </div>
         <div class="slider-block" id="reelsBlock" style="display:none; margin-top:18px;">
           <div class="slider-head">
-            <span class="slider-label">Reels mensuales</span>
-            <span class="slider-value" id="reelsValue">4 reels/mes</span>
+            <span class="slider-label">Videos publicitarios por mes</span>
+            <span class="slider-value" id="reelsValue">4 videos publicitarios por mes</span>
           </div>
           <input type="range" id="reelsSlider" min="4" max="12" step="1" value="4" />
           <div class="range-labels"><span>4</span><span>12</span></div>
@@ -153,6 +154,7 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
     </div>
 
     <div class="right-col">
+      <button type="button" id="btnImg" class="btn-img" title="Descargar resumen como imagen" aria-label="Descargar resumen como imagen"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></svg></button>
       <div class="paquete-label" id="paqueteLabel">Sesión Estándar</div>
       <div class="paquete-name" id="paqueteName">Paquete Estándar</div>
       <div class="price" id="precioValue">Bs. <span id="precioNum">1020</span><span class="price-unit">pago único</span></div>
@@ -206,24 +208,25 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
     var precioNum = document.getElementById('precioNum');
     var precioUnit = precioValue.querySelector('.price-unit');
     var precioActual = null; // último valor numérico mostrado (null = aún no animó)
-    var precioRAF = null;
+    var precioRAF = null, precioTimer = null;
     var precioReduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     // Anima el número del precio tipo odómetro (de precioActual al nuevo valor).
     // Respeta prefers-reduced-motion mostrando el valor final directo.
     function animarPrecio(valorFinal, unitLabel) {
       precioUnit.textContent = unitLabel;
-      if (precioActual === null || precioReduceMotion) {
+      if (precioRAF) cancelAnimationFrame(precioRAF); // siempre cortar la animación en curso
+      clearTimeout(precioTimer);
+      precioTimer = setTimeout(function () { precioActual = valorFinal; precioNum.textContent = valorFinal; }, 480); // seguro: si la animación se pausa (pestaña oculta) igual queda el precio real
+      var start = parseInt(precioNum.textContent, 10);
+      if (precioActual === null || precioReduceMotion || isNaN(start) || start === valorFinal) {
         precioActual = valorFinal;
         precioNum.textContent = valorFinal;
         return;
       }
-      if (precioActual === valorFinal) return;
-      var start = precioActual;
       var delta = valorFinal - start;
       var startTime = null;
       var duration = 420;
-      if (precioRAF) cancelAnimationFrame(precioRAF);
       function frame(ts) {
         if (startTime === null) startTime = ts;
         var p = Math.min((ts - startTime) / duration, 1);
@@ -369,11 +372,13 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
       reels = parseInt(reelsSlider.value, 10);
       fotosValue.textContent = fotos + ' fotos';
       planFotosValue.textContent = planFotos + ' fotos/mes';
-      reelsValue.textContent = reels + ' reels/mes';
+      reelsValue.textContent = reels + ' videos publicitarios por mes';
 
       // Extras: reflejar estado activo (y cantidad, si aplica) en las filas.
       extrasList.querySelectorAll('.extra-row').forEach(function (row) {
         var id = row.dataset.extra;
+        var ex0 = EGPricing.EXTRAS.find(function (e) { return e.id === id; });
+        row.style.display = (ex0.solo && ex0.solo !== tipo) ? 'none' : '';
         var cant = extrasSeleccionados[id] || 0;
         var active = cant > 0;
         row.classList.toggle('active', active);
@@ -388,8 +393,8 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
           row.querySelector('.stepper-plus').disabled = cant >= ex.max;
         }
       });
-      var extrasTotal = EGPricing.calcExtras(extrasSeleccionados);
-      var extrasNombres = EGPricing.EXTRAS.filter(function (ex) { return (extrasSeleccionados[ex.id] || 0) > 0; })
+      var extrasTotal = EGPricing.calcExtras(extrasSeleccionados, tipo);
+      var extrasNombres = EGPricing.EXTRAS.filter(function (ex) { return (extrasSeleccionados[ex.id] || 0) > 0 && (!ex.solo || ex.solo === tipo); })
         .map(function (ex) { return ex.tipo === 'stepper' ? (ex.label + ' x' + extrasSeleccionados[ex.id]) : ex.label; });
       if (extrasTotal > 0) {
         extrasLine.style.display = 'block';
@@ -435,7 +440,7 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
         egStickyPrice.textContent = 'Bs. ' + pPrecioFinal + '/mes';
 
         var extrasWA2 = extrasNombres.length ? ('\n- Extras: ' + extrasNombres.join(', ')) : '';
-        var textoWA2 = '¡Hola, Estudio Graphica! Quiero un *Plan Mensual*:\n- Paquete ' + pdata.paquete + '\n- ' + planFotos + ' fotos/mes' + (addVideo ? (' + ' + reels + ' reels/mes') : '') + extrasWA2 + '\n- Duración: ' + duracion + ' mes' + (duracion > 1 ? 'es' : '') + '\n- Bs. ' + pPrecioFinal + '/mes\n\n¿Cuándo agendamos? 📸';
+        var textoWA2 = '¡Hola, Estudio Graphica! Quiero un *Plan Mensual*:\n- Paquete ' + pdata.paquete + '\n- ' + planFotos + ' fotos/mes' + (addVideo ? (' + ' + reels + ' videos publicitarios por mes') : '') + extrasWA2 + '\n- Duración: ' + duracion + ' mes' + (duracion > 1 ? 'es' : '') + '\n- Bs. ' + pPrecioFinal + '/mes\n\n¿Cuándo agendamos? 📸';
         waLink.href = 'https://api.whatsapp.com/send?phone=+59169422335&text=' + encodeURIComponent(textoWA2);
 
         guardarPaquete({ tipo: 'plan', paquete: pdata.paquete, precio: pPrecioFinal, fotos: planFotos, duracion: duracion, reels: addVideo ? reels : 0, extras: extrasNombres.join(', ') });
@@ -479,6 +484,33 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
           reelsBlock.style.display = addVideo ? 'block' : 'none';
       }
     } catch (e) {}
+
+    // ── Descargar resumen como imagen (PNG dibujado en canvas, sin librerías) ──
+    document.getElementById('btnImg').addEventListener('click', function () {
+      var W = 900, pad = 64, f = getComputedStyle(document.body).fontFamily || 'sans-serif';
+      var items = Array.prototype.map.call(benefitsList.querySelectorAll('li'), function (li) { return li.textContent.trim(); });
+      var H = 330 + items.length * 56 + 130;
+      var c = document.createElement('canvas'); c.width = W * 2; c.height = H * 2;
+      var g = c.getContext('2d'); g.scale(2, 2);
+      g.fillStyle = '#111'; g.fillRect(0, 0, W, H);
+      g.textBaseline = 'alphabetic';
+      g.fillStyle = '#ffdd5a'; g.font = '600 24px ' + f; g.fillText('ESTUDIO GRAPHICA', pad, 90);
+      g.fillStyle = '#f8f8f8'; g.font = '700 54px ' + f; g.fillText(paqueteName.textContent, pad, 170);
+      g.fillStyle = '#ffdd5a'; g.font = '700 84px ' + f; g.fillText('Bs. ' + precioNum.textContent, pad, 270);
+      var pw = g.measureText('Bs. ' + precioNum.textContent).width;
+      g.fillStyle = 'rgba(248,248,248,.65)'; g.font = '500 26px ' + f; g.fillText(precioUnit.textContent, pad + pw + 18, 270);
+      g.font = '500 28px ' + f;
+      items.forEach(function (t, i) {
+        var y = 350 + i * 56;
+        g.fillStyle = '#ffdd5a'; g.fillText('✓', pad, y);
+        g.fillStyle = '#f8f8f8'; g.fillText(t, pad + 44, y);
+      });
+      g.fillStyle = 'rgba(248,248,248,.5)'; g.font = '500 22px ' + f;
+      g.fillText('Precio referencial. Se confirma en tu sesión.', pad, H - 50);
+      var a = document.createElement('a');
+      a.download = 'resumen-' + paqueteName.textContent.toLowerCase().replace(/\s+/g, '-') + '.png';
+      a.href = c.toDataURL('image/png'); a.click();
+    });
 
     render();
 

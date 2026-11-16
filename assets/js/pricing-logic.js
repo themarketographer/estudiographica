@@ -102,6 +102,14 @@ window.EGPricing = (function () {
     "max": 8
   },
   {
+    "id": "videoPublicitario",
+    "tipo": "flat",
+    "solo": "sesion",
+    "label": "Video publicitario",
+    "desc": "Video de tu local o platos con guion, concepto creativo y música con licencia",
+    "precio": 500
+  },
+  {
     "id": "menuDigital",
     "tipo": "flat",
     "label": "Menú animado para pantallas",
@@ -182,15 +190,17 @@ window.EGPricing = (function () {
     ];
     b.push(t.beneficioAsesoria);
     if (duracion >= 3 && planFotos >= 16) b.push(t.beneficioPaginaWeb);
-    if (addVideo) b.push(reels + ' reels/mes', t.beneficioGuion, t.beneficioMusica);
+    if (addVideo) b.push(reels + ' videos publicitarios por mes', t.beneficioGuion, t.beneficioMusica);
     return b;
   }
 
   // seleccion: { [id]: cantidad }. Para los "flat" cualquier cantidad > 0
   // cuenta como una sola vez (el precio no cambia con la cantidad).
-  function calcExtras(seleccion) {
+  // tipo ('sesion'|'plan'): ignora los extras exclusivos de la otra pestaña.
+  function calcExtras(seleccion, tipo) {
     seleccion = seleccion || {};
     return EXTRAS.reduce(function (sum, ex) {
+      if (tipo && ex.solo && ex.solo !== tipo) return sum;
       var cant = seleccion[ex.id] || 0;
       if (cant <= 0) return sum;
       return sum + (ex.tipo === 'stepper' ? ex.precioUnidad * cant : ex.precio);
