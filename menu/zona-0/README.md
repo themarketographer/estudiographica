@@ -26,7 +26,7 @@ Sin `ZONA0_ADMIN_TOKEN` el panel responde "Falta configurar ZONA0_ADMIN_TOKEN" y
 
 1. El celular manda el pedido a `/api/zona0/order`. El servidor recalcula el total con `menu.json` (nunca confía en el precio que manda el celular), reserva el número del día (`#07-30OCT`) y lo guarda en Netlify Blobs.
 2. El panel pregunta cada 20 segundos por lo que cambió (`?since=`). Entra el pedido, suena el aviso y aparece la tarjeta.
-3. El personal mueve el pedido: Nuevo, En cocina, Listo, Entregado. El celular del cliente lo ve en su pantalla de seguimiento (consulta cada 10 a 40 segundos).
+3. El personal mueve el pedido: Nuevo, En cocina, Listo, Entregado. Ya no hay seguimiento para el cliente.
 4. **Mesas** es la vista principal. Se toca una mesa, se agregan productos y hay dos caminos: "Enviar a cocina" deja la cuenta abierta (pendiente de cobro) y se pueden sumar más rondas después, o "Cobrar" cierra la mesa con efectivo, QR o tarjeta. Los pedidos de la app del celular que dicen "mesa" se suman a la cuenta de esa mesa.
 5. **Cocina** ve dos columnas, Comidas y Bebidas. Cada comanda muestra la mesa en grande y cada plato tiene su casilla. Al marcar el último plato de un pedido, la mesa se pone en verde en el panel ("Lista para servir"). Los combos de desayuno aparecen en las dos columnas y cada estación marca su parte.
 6. **Ventas** lista los cobros de un día, por medio de pago y lo más vendido, con CSV.
@@ -42,7 +42,7 @@ Es sondeo (consulta periódica), no tiempo real puro. El retraso normal es de ha
 
 ## Datos de clientes
 
-- Cada pedido guarda nombre y celular. El seguimiento público pide número de pedido y los últimos 4 dígitos del celular, y solo devuelve estados, nunca datos personales.
+- Cada pedido guarda nombre y celular.
 - El panel exige la clave. No hay datos de clientes en el repositorio.
 - Conviene avisar en el local qué datos se guardan y para qué.
 

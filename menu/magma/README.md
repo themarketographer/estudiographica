@@ -10,7 +10,7 @@ Todo el contenido vive en `menu.json`. Cambiar un precio, agregar una salsa o ma
 |---|---|
 | `brand.whatsapp` | Número que recibe los pedidos, con código de país y sin `+` |
 | `payment` | Formas de pago: `methods` (`cash`, `qr`), `cashNote` y `qr` (`image`, `holder`, `note`). Con una sola forma, el cliente no elige. Para quitar el QR, deja `["cash"]` |
-| `service.prepMin` y `zones[].travelMin` | Minutos de preparación y de viaje. El seguimiento los suma para decir "llega en unos X min" |
+| `service.prepMin` y `zones[].travelMin` | Minutos de preparación y de viaje. El mensaje al cliente los suma para decir "llega en unos X min" |
 | `hours` | `null`, o `{ "text": "Lun a dom, 12:00 a 22:00", "tz": "America/La_Paz", "days": { "0": [["12:00","22:00"]] } }`. Con `days` y `tz` aparece "Abierto ahora" |
 | `service.pickup` / `service.delivery` / `service.minOrder` | Recojo, entrega y pedido mínimo (`null` desactiva el mínimo) |
 | `service.zones` | Zonas de entrega: `{ id, name, fee }`. `fee: null` significa "se confirma por chat". Sin zonas, no se pide zona |
@@ -134,7 +134,6 @@ Lo que más gasta en un sitio con anuncios son las ejecuciones de funciones y el
 - **Logo en WebP** (22 KB en vez de 55 KB por visita).
 - **Un pedido cuesta pocas operaciones**: una función, la lectura de la lista del día para dar el número, la escritura del pedido y una marca de cambio. El comprobante QR suma una escritura más.
 - **El panel no relee los pedidos en cada vuelta.** Al abrir trae hoy y ayer. Después pregunta cada 30 segundos solo qué cambió (una marca por cambio) y lee únicamente esos pedidos. Si pasan 6 consultas sin novedades, baja a una cada 90 segundos. Con la pestaña oculta no consulta. "Cargar pedidos anteriores" y "Resumen" traen más días solo cuando se piden.
-- **El seguimiento** consulta cada 30 segundos los primeros 10 minutos, después cada 60, y se detiene a los 40 minutos.
 - **Marcas de cambio:** viven en el almacén de pedidos con la forma `ev/<hora>/<ms>-<azar>`. Son diminutas y no hace falta borrarlas.
 - **Deploys.** Cada publicación a producción gasta créditos de build. Conviene juntar los cambios en una sola publicación y, si no se usan, desactivar los deploys de ramas y de previews en Netlify (Site configuration, Build and deploy, Branches and deploy contexts).
 
@@ -147,4 +146,4 @@ El pedido tiene 4 pasos: Pedido, Datos, Pago y Listo. En **Pago** el cliente deb
 - Fotos recodificadas (calidad 72, WebP): de 198 KB a 140 KB y de 149 KB a 106 KB las grandes, de 72 KB a 51 KB y de 53 KB a 35 KB las de celular.
 - Comprobantes reducidos a 1.000 px antes de subir.
 - El panel deja de consultar tras 10 minutos sin tocar la pantalla, salvo que el sonido esté encendido (en ese caso el panel es el aviso del local). Al tocar la pantalla se reanuda.
-- El seguimiento deja de consultar a los 20 minutos y ofrece un botón "Actualizar estado".
+- La página del pedido no consulta sola: tiene un botón "Actualizar estado".
