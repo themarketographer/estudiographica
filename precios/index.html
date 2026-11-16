@@ -293,18 +293,18 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
         : '+Bs. ' + ex.precio;
       return '<div class="extra-row" data-extra="' + ex.id + '" data-tipo="' + ex.tipo + '">' +
         '<span class="check-square">' + CHK + '</span>' +
-        '<span class="extra-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + (ICO[ex.id] || ICO_DEF) + '</svg></span>' +
-        '<span class="extra-copy"><span class="extra-name">' + ex.label + '</span>' +
+        '<span class="extra-head"><span class="extra-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + (ICO[ex.id] || ICO_DEF) + '</svg></span>' +
+        '<span class="extra-name">' + ex.label + '</span></span>' +
         '<span class="extra-desc">' + ex.desc + '</span>' +
-        '<button type="button" class="extra-more" hidden>Ver más</button></span>' +
-        '<span class="extra-price">' + priceTag + '</span>' +
+        '<button type="button" class="extra-more" hidden>Ver más</button>' +
+        '<span class="extra-foot"><span class="extra-price">' + priceTag + '</span>' +
         (ex.tipo === 'stepper'
           ? '<span class="extra-stepper" style="display:none">' +
             '<button type="button" class="stepper-minus" data-extra="' + ex.id + '">−</button>' +
             '<span class="qty" data-qty="' + ex.id + '">' + ex.min + '</span>' +
             '<button type="button" class="stepper-plus" data-extra="' + ex.id + '">+</button></span>'
           : '') +
-        '</div>';
+        '</span></div>';
     }).join('');
 
     // "Ver más": la descripción se corta a 2 líneas; el botón solo aparece si de verdad hay texto oculto.
