@@ -64,7 +64,7 @@ body.pg .foot{margin-top:auto}
 .extra-row{display:grid;grid-template-columns:auto 1fr;grid-template-areas:"chk head" ". desc" ". more" ". foot";column-gap:14px;align-items:start;padding:18px;margin-top:10px;border-radius:22px;border:1.5px solid var(--hair);background:#fff;cursor:pointer;user-select:none;transition:border-color .3s,background .35s var(--ease),transform .3s var(--ease)}
 .extra-row>.check-square{grid-area:chk;margin-top:-1px}
 .extra-head{grid-area:head;display:flex;align-items:flex-start;gap:10px;min-width:0}
-.extra-ico{flex:none;width:22px;height:22px;display:grid;place-items:center;color:var(--ink);margin-top:-1px}
+.extra-ico{flex:none;width:22px;height:22px;display:grid;place-items:center;color:var(--ink)}
 .extra-ico svg{width:22px;height:22px}
 .extra-name{font-size:17px;font-weight:700;line-height:1.3;letter-spacing:-.015em}
 .extra-desc{grid-area:desc;font-size:14px;color:var(--muted);line-height:1.5;margin-top:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
