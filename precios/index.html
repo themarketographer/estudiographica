@@ -336,6 +336,7 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
         var otro = ultimoSlider === fotosSlider ? planFotosSlider : fotosSlider;
         otro.value = Math.min(Math.max(parseInt(ultimoSlider.value, 10), parseInt(otro.min, 10)), parseInt(otro.max, 10));
       }
+      if (window.EGUI) EGUI.syncRanges(); // repinta el relleno de la barra tras copiar el valor por código
       tipo = t;
       tabSesion.classList.toggle('active', t === 'sesion');
       tabPlan.classList.toggle('active', t === 'plan');
