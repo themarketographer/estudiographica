@@ -175,8 +175,8 @@ window.EGPricing = (function () {
     return [
       t.beneficioSesion1,
       t.beneficioSesion2,
-      fotos <= 10 ? 'Entrega en menos de 72h' : fotos <= 18 ? 'Entrega en menos de 48h' : 'Entrega en menos de 24h',
-      fotos <= 10 ? 'Edición básica' : 'Edición profesional',
+      'Entrega en 48h',
+      'Edición profesional',
       fotos + ' fotos en alta calidad',
     ];
   }
@@ -187,8 +187,8 @@ window.EGPricing = (function () {
       planFotos + ' fotos/mes',
       t.beneficioPlan1,
       t.beneficioPlan2,
-      planFotos <= 14 ? 'Entrega en 72h' : planFotos <= 20 ? 'Entrega en 48h' : 'Entrega en 24h',
-      planFotos <= 14 ? 'Edición básica' : 'Edición profesional',
+      'Entrega en 48h',
+      'Edición profesional',
     ];
     b.push(t.beneficioAsesoria);
     if (duracion >= 3 && planFotos >= 16) b.push(t.beneficioPaginaWeb);
