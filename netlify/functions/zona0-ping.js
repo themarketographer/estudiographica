@@ -1,5 +1,5 @@
 // Timbre de Zona 0: GET /api/zona0/ping/<sha256 de la clave>  ->  { ok, v, open }
-// "v" cambia con cada pedido o cambio de estado. La respuesta se guarda 2 minutos en la red de Netlify y se borra
+// "v" es la hora en que se generó la respuesta. Netlify la guarda 10 minutos y la borra
 // sola al haber cambios (ver bump en lib-zona0/store.js), así las pantallas lo revisan sin gastar llamadas a funciones.
 // No lleva datos de pedidos. Solo responde si la dirección contiene el hash de una clave válida.
 const Store = require('./lib-zona0/store.js');
@@ -16,7 +16,7 @@ exports.handler = async function (event) {
     const p = await Store.ping(event);
     return reply(200, { ok: true, v: p.v, open: p.open }, {
       'Cache-Control': 'public, max-age=0, must-revalidate',
-      'Netlify-CDN-Cache-Control': 'public, s-maxage=120',
+      'Netlify-CDN-Cache-Control': 'public, s-maxage=600, durable',
       'Netlify-Cache-Tag': Store.pingTag(k)
     });
   } catch (e) {

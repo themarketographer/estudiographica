@@ -51,22 +51,20 @@ async function touch(event, key, gone) {
   } catch (e) { console.error('zona0 touch:', e && e.message); }
 }
 
-// "Timbre" para las pantallas: /api/zona0/ping/<sha256 de la clave> responde la versión actual y se guarda 2 minutos en la red de Netlify
-// (esas visitas no gastan llamadas a funciones). Cada cambio sube la versión y borra esa copia guardada, así que el aviso llega al instante.
-// Si el borrado fallara, lo peor es esperar los 2 minutos que dura la copia (TTL de zona0-ping.js).
+// "Timbre" para las pantallas: /api/zona0/ping/<sha256 de la clave> responde la hora en que se generó (v) y Netlify guarda esa respuesta 10 minutos
+// (esas visitas no gastan llamadas a funciones). Cada cambio borra la copia guardada; la siguiente visita la vuelve a generar con otra hora
+// y las pantallas ven que "v" cambió. Si el borrado fallara, las pantallas igual piden los pedidos cada 5 minutos por seguridad.
 function sha256(t) { return require('crypto').createHash('sha256').update(String(t)).digest('hex'); }
 function pingKeys() { return [process.env.ZONA0_ADMIN_TOKEN, process.env.ZONA0_KITCHEN_TOKEN].map((t) => String(t || '').trim()).filter(Boolean).map(sha256); }
 function pingTag(k) { return 'z0ping-' + String(k).slice(0, 16); }
 async function bump(event) {
   try {
-    await open(event).setJSON('cfg/ver', { v: Date.now() });
     const tags = pingKeys().map(pingTag);
     if (tags.length) await require('@netlify/functions').purgeCache({ tags });
   } catch (e) { console.error('zona0 bump:', e && e.message); }
 }
 async function ping(event) {
-  const [ver, isOp] = await Promise.all([open(event).get('cfg/ver', { type: 'json', consistency: 'strong' }).catch(() => null), isOpen(event)]);
-  return { v: (ver && ver.v) || 0, open: isOp };
+  return { v: Date.now(), open: await isOpen(event) };
 }
 
 async function changedSince(event, since) {
