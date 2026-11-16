@@ -90,7 +90,7 @@ body.pg .foot{margin-top:auto}
 .paquete-label{display:inline-block;padding:6px 14px;border-radius:999px;background:rgba(255,221,90,.16);color:var(--y);font-size:12.5px;font-weight:600}
 .paquete-name{font:700 clamp(26px,3vw,34px)/1.1 var(--f);letter-spacing:-.035em;margin-top:14px}
 .price{font:700 clamp(42px,4.8vw,56px)/1 var(--f);letter-spacing:-.045em;margin-top:18px;color:var(--y);font-variant-numeric:tabular-nums}
-.price-unit{display:block;font:500 14px/1.3 var(--f);letter-spacing:0;color:rgba(248,248,248,.62);margin-top:8px}
+.price-unit{display:block;font:600 17px/1.3 var(--f);letter-spacing:0;color:rgba(248,248,248,.92);margin-top:8px}
 .price-extras-line{font-size:13.5px;color:rgba(248,248,248,.78);margin-top:12px}
 .price-extras-line b{color:var(--y);font-weight:600}
 .price-pop{animation:pricePop .5s var(--ease)}

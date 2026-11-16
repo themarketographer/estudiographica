@@ -191,7 +191,6 @@ window.EGPricing = (function () {
       'Edición profesional',
     ];
     b.push(t.beneficioAsesoria);
-    if (duracion >= 3 && planFotos >= 16) b.push(t.beneficioPaginaWeb);
     if (addVideo) b.push(reels + ' videos publicitarios por mes', t.beneficioGuion, t.beneficioMusica);
     return b;
   }

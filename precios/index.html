@@ -382,16 +382,11 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
       });
     });
 
-    // La cantidad de fotos que el cliente eligió en una pestaña se mantiene en la otra.
-    var ultimoSlider = null;
-    fotosSlider.addEventListener('input', function () { ultimoSlider = fotosSlider; });
-    planFotosSlider.addEventListener('input', function () { ultimoSlider = planFotosSlider; });
-
+    // La cantidad de fotos se conserva al cambiar de pestaña: siempre se copia desde la pestaña que se deja.
     function switchTab(t) {
-      if (ultimoSlider) {
-        var otro = ultimoSlider === fotosSlider ? planFotosSlider : fotosSlider;
-        otro.value = Math.min(Math.max(parseInt(ultimoSlider.value, 10), parseInt(otro.min, 10)), parseInt(otro.max, 10));
-      }
+      var origen = tipo === 'sesion' ? fotosSlider : planFotosSlider;
+      var otro = origen === fotosSlider ? planFotosSlider : fotosSlider;
+      otro.value = Math.min(Math.max(parseInt(origen.value, 10), parseInt(otro.min, 10)), parseInt(otro.max, 10));
       if (window.EGUI) EGUI.syncRanges(); // repinta el relleno de la barra tras copiar el valor por código
       tipo = t;
       tabSesion.classList.toggle('active', t === 'sesion');
@@ -467,18 +462,19 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
         var data = EGPricing.calcSesion(fotos);
         var precioFinal = data.precio + extrasTotal;
         var benefits = EGPricing.sesionBenefits(fotos).concat(extrasNombres);
-        paqueteLabel.textContent = 'Sesión ' + data.paquete;
-        paqueteName.textContent = 'Paquete ' + data.paquete;
+        var sesionNombre = 'Sesión de fotos ' + ({ 'Básico': 'básica', 'Estándar': 'estándar', 'Premium': 'premium' }[data.paquete] || data.paquete);
+        paqueteLabel.textContent = 'Sesión puntual';
+        paqueteName.textContent = sesionNombre;
         animarPrecio(precioFinal, 'pago único');
         benefitsList.innerHTML = benefits.map(function (b) { return '<li><span class="check">' + CHK + '</span><span>' + b + '</span></li>'; }).join('');
 
         btnReservar.setAttribute('data-cal-namespace', 'sesion');
         btnReservar.setAttribute('data-cal-link', 'themarketographer/sesion');
-        egStickyName.textContent = 'Sesión ' + data.paquete;
+        egStickyName.textContent = sesionNombre;
         egStickyPrice.textContent = 'Bs. ' + precioFinal;
 
         var extrasWA = extrasNombres.length ? ('\n- Extras: ' + extrasNombres.join(', ')) : '';
-        var textoWA = '¡Hola, Estudio Graphica! Quiero una *Sesión de Fotos*:\n- Paquete ' + data.paquete + '\n- ' + fotos + ' fotos' + extrasWA + '\n- Bs. ' + precioFinal + '\n\n¿Cuándo agendamos? 📸';
+        var textoWA = '¡Hola, Estudio Graphica! Quiero una *' + sesionNombre + '*:\n- ' + fotos + ' fotos' + extrasWA + '\n- Bs. ' + precioFinal + '\n\n¿Cuándo agendamos? 📸';
         waLink.href = 'https://api.whatsapp.com/send?phone=+59169422335&text=' + encodeURIComponent(textoWA);
 
         guardarPaquete({ tipo: 'sesion', paquete: data.paquete, precio: precioFinal, fotos: fotos, extras: extrasNombres.join(', ') });
@@ -596,8 +592,8 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
         g.fillStyle = '#f8f8f8'; g.font = '700 56px ' + F; g.fillText(paqueteName.textContent, x, y);
         y += 40 + 92;
         g.fillStyle = '#ffdd5a'; g.font = '700 92px ' + F; g.fillText('Bs. ' + precioObjetivo, x, y);
-        y += 38;
-        g.fillStyle = 'rgba(248,248,248,.62)'; g.font = '500 25px ' + F; g.fillText(precioUnit.textContent, x, y);
+        y += 42;
+        g.fillStyle = 'rgba(248,248,248,.92)'; g.font = '600 30px ' + F; g.fillText(precioUnit.textContent, x, y);
         y += 36; g.fillStyle = 'rgba(248,248,248,.55)'; g.font = '500 22px ' + F;
         g.fillText('Precio referencial. Se confirma en tu sesión.', x, y);
         y += 40;
