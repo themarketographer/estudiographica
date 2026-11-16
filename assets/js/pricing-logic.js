@@ -103,11 +103,13 @@ window.EGPricing = (function () {
   },
   {
     "id": "videoPublicitario",
-    "tipo": "flat",
+    "tipo": "stepper",
     "solo": "sesion",
     "label": "Video publicitario",
     "desc": "Video de tu local o platos con guion, concepto creativo y música con licencia",
-    "precio": 500
+    "precioUnidad": 500,
+    "min": 1,
+    "max": 8
   },
   {
     "id": "menuDigital",
