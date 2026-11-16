@@ -548,7 +548,9 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
       // La pestaña se abre ya, dentro del toque, porque después de esperar Safari la bloquearía.
       var win = ios ? window.open('', '_blank') : null;
       var F = '"Izmir", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif';
-      Promise.all([document.fonts.load('700 20px Izmir'), document.fonts.load('500 20px Izmir'), document.fonts.load('600 20px Izmir')])
+      var logo = new Image();
+      var logoListo = new Promise(function (res) { logo.onload = res; logo.onerror = res; logo.src = '/assets/logo-mark-white.png'; });
+      Promise.all([logoListo, document.fonts.load('700 20px Izmir'), document.fonts.load('500 20px Izmir'), document.fonts.load('600 20px Izmir')])
         .catch(function () {}).then(function () {
         var items = Array.prototype.map.call(benefitsList.querySelectorAll('li'), function (li) { return li.textContent.trim(); });
         var cuando = new Date().toLocaleString('es-BO', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false });
@@ -583,6 +585,8 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
         g.restore();
         g.textBaseline = 'alphabetic';
         var x = M + P, y = M + P;
+        // isotipo de Estudio Graphica en blanco, arriba a la derecha sobre el halo
+        if (logo.naturalWidth) { var lh = 64, lw2 = lh * logo.naturalWidth / logo.naturalHeight; g.drawImage(logo, M + CW - P - lw2, M + P - 7, lw2, lh); }
         // ceja del paquete
         g.font = '600 22px ' + F;
         var lab = paqueteLabel.textContent, lw = g.measureText(lab).width + 50;
