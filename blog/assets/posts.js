@@ -149,5 +149,12 @@ window.EG_BLOG_POSTS = [
     "excerpt": "Cuándo fotografiar un plato nuevo, en qué canales publicarlo el mismo día y cuánto cuesta la sesión corta.",
     "img": "https://res.cloudinary.com/dplhu2z6j/image/upload/v1791601517/IMG_2390__jtz75e.jpg",
     "eyebrow": "Guías · Lanzamientos"
+  },
+  {
+    "slug": "menu-fin-de-ano-restaurante-fotos-cochabamba",
+    "title": "Menú de fin de año para tu restaurante: guía de fotos",
+    "excerpt": "Qué platos fotografiar, cuándo agendar la sesión antes de las fiestas y dónde publicar el menú de fin de año de tu restaurante.",
+    "img": "https://res.cloudinary.com/dplhu2z6j/image/upload/v1791601945/_MG_5822_syndep.jpg",
+    "eyebrow": "Guías · Temporada"
   }
 ];
