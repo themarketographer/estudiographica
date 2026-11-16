@@ -59,13 +59,17 @@ function pingKeys() { return [process.env.ZONA0_ADMIN_TOKEN, process.env.ZONA0_K
 function pingTag(k) { return 'z0ping-' + String(k).slice(0, 16); }
 async function bump(event) {
   try {
-    const tags = pingKeys().map(pingTag);
-    if (tags.length) await require('@netlify/functions').purgeCache({ tags });
+    const secret = String(process.env.ZONA0_ADMIN_TOKEN || process.env.ZONA0_KITCHEN_TOKEN || '').trim();
+    const h = (event && event.headers) || {};
+    const host = String(h['x-forwarded-host'] || h.host || '').split(',')[0].trim().toLowerCase();
+    // La clave solo se manda a nuestros propios dominios.
+    if (!secret || !/^([a-z0-9-]+\.)*(estudiographica\.com|netlify\.app)$/.test(host)) return;
+    const r = await fetch('https://' + host + '/.netlify/functions/zona0-purge', { method: 'POST', headers: { 'x-z0': sha256(secret + ':purge') }, signal: AbortSignal.timeout(4000) });
+    if (!r.ok) console.error('zona0 bump: purge respondió', r.status);
   } catch (e) { console.error('zona0 bump:', e && e.message); }
 }
 async function ping(event) {
-  // DIAGNOSTICO TEMPORAL (quitar): qué datos hay en el entorno para borrar la caché
-  return { v: Date.now(), open: await isOpen(event), dbg: { tok: !!process.env.NETLIFY_PURGE_API_TOKEN, site: !!process.env.SITE_ID, ctx: process.env.CONTEXT || '', fn: !!process.env.NETLIFY_LOCAL } };
+  return { v: Date.now(), open: await isOpen(event) };
 }
 
 async function changedSince(event, since) {

@@ -14,7 +14,7 @@ exports.handler = async function (event) {
   if (!/^[a-f0-9]{64}$/.test(k) || Store.pingKeys().indexOf(k) === -1) return reply(401, { ok: false });
   try {
     const p = await Store.ping(event);
-    return reply(200, { ok: true, v: p.v, open: p.open, dbg: p.dbg }, {
+    return reply(200, { ok: true, v: p.v, open: p.open }, {
       'Cache-Control': 'public, max-age=0, must-revalidate',
       'Netlify-CDN-Cache-Control': 'public, s-maxage=600, durable',
       'Netlify-Cache-Tag': Store.pingTag(k)
