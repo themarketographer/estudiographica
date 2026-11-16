@@ -208,13 +208,14 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
     var precioNum = document.getElementById('precioNum');
     var precioUnit = precioValue.querySelector('.price-unit');
     var precioActual = null; // último valor numérico mostrado (null = aún no animó)
-    var precioRAF = null, precioTimer = null;
+    var precioRAF = null, precioTimer = null, precioObjetivo = 0;
     var precioReduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     // Anima el número del precio tipo odómetro (de precioActual al nuevo valor).
     // Respeta prefers-reduced-motion mostrando el valor final directo.
     function animarPrecio(valorFinal, unitLabel) {
       precioUnit.textContent = unitLabel;
+      precioObjetivo = valorFinal;
       if (precioRAF) cancelAnimationFrame(precioRAF); // siempre cortar la animación en curso
       clearTimeout(precioTimer);
       precioTimer = setTimeout(function () { precioActual = valorFinal; precioNum.textContent = valorFinal; }, 480); // seguro: si la animación se pausa (pestaña oculta) igual queda el precio real
@@ -487,39 +488,87 @@ Cal.ns["plan-mensual"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-b
     } catch (e) {}
 
     // ── Descargar resumen como imagen (PNG dibujado en canvas, sin librerías) ──
+    // Replica la tarjeta oscura: halo amarillo, "ceja" del paquete y checks amarillos.
     document.getElementById('btnImg').addEventListener('click', function () {
-      var W = 900, pad = 64, f = getComputedStyle(document.body).fontFamily || 'sans-serif';
-      var items = Array.prototype.map.call(benefitsList.querySelectorAll('li'), function (li) { return li.textContent.trim(); });
-      var H = 330 + items.length * 56 + 130;
-      var c = document.createElement('canvas'); c.width = W * 2; c.height = H * 2;
-      var g = c.getContext('2d'); g.scale(2, 2);
-      g.fillStyle = '#111'; g.fillRect(0, 0, W, H);
-      g.textBaseline = 'alphabetic';
-      g.fillStyle = '#ffdd5a'; g.font = '600 24px ' + f; g.fillText('ESTUDIO GRAPHICA', pad, 90);
-      g.fillStyle = '#f8f8f8'; g.font = '700 54px ' + f; g.fillText(paqueteName.textContent, pad, 170);
-      g.fillStyle = '#ffdd5a'; g.font = '700 84px ' + f; g.fillText('Bs. ' + precioNum.textContent, pad, 270);
-      var pw = g.measureText('Bs. ' + precioNum.textContent).width;
-      g.fillStyle = 'rgba(248,248,248,.65)'; g.font = '500 26px ' + f; g.fillText(precioUnit.textContent, pad + pw + 18, 270);
-      g.font = '500 28px ' + f;
-      items.forEach(function (t, i) {
-        var y = 350 + i * 56;
-        g.fillStyle = '#ffdd5a'; g.fillText('✓', pad, y);
-        g.fillStyle = '#f8f8f8'; g.fillText(t, pad + 44, y);
-      });
-      g.fillStyle = 'rgba(248,248,248,.5)'; g.font = '500 22px ' + f;
-      g.fillText('Precio referencial. Se confirma en tu sesión.', pad, H - 50);
       var nombre = 'resumen-' + paqueteName.textContent.toLowerCase().replace(/\s+/g, '-') + '.png';
       var ios = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
       // iOS Safari ignora "download": se abre la imagen en pestaña nueva (mantener presionada → Guardar).
-      // La pestaña se abre ya, dentro del toque, porque después del toBlob Safari la bloquearía.
+      // La pestaña se abre ya, dentro del toque, porque después de esperar Safari la bloquearía.
       var win = ios ? window.open('', '_blank') : null;
-      c.toBlob(function (blob) {
-        var url = URL.createObjectURL(blob);
-        if (win) { win.location.href = url; return; }
-        var a = document.createElement('a');
-        a.download = nombre; a.href = url; a.click();
-        setTimeout(function () { URL.revokeObjectURL(url); }, 10000);
-      }, 'image/png');
+      var F = '"Izmir", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif';
+      Promise.all([document.fonts.load('700 20px Izmir'), document.fonts.load('500 20px Izmir'), document.fonts.load('600 20px Izmir')])
+        .catch(function () {}).then(function () {
+        var items = Array.prototype.map.call(benefitsList.querySelectorAll('li'), function (li) { return li.textContent.trim(); });
+        var extras = extrasLine.style.display !== 'none' ? extrasLine.textContent.trim() : '';
+        var cuando = new Date().toLocaleString('es-BO', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false });
+        var aviso = 'Válido por 24 horas desde el ' + cuando + '. Sujeto a actualizaciones: para precios actualizados, revisa estudiographica.com/precios';
+        var M = 40, W = 900, CW = W - M * 2, P = 56, TW = CW - P * 2;
+        var m = document.createElement('canvas').getContext('2d');
+        function wrap(ctx, text, max) {
+          var out = [], line = '';
+          text.split(' ').forEach(function (w) {
+            var t = line ? line + ' ' + w : w;
+            if (ctx.measureText(t).width > max && line) { out.push(line); line = w; } else line = t;
+          });
+          if (line) out.push(line);
+          return out;
+        }
+        m.font = '500 26px ' + F;
+        var rows = items.map(function (t) { return wrap(m, t, TW - 43 - 20); });
+        m.font = '500 22px ' + F;
+        var avisoL = wrap(m, aviso, TW);
+        var H = M + P + 50 + 24 + 64 + 40 + 92 + 28 + (extras ? 40 : 0) + 22 + 34
+          + rows.reduce(function (a, r) { return a + Math.max(43, r.length * 34) + 22; }, 0)
+          + 30 + 36 + avisoL.length * 30 + P - 6 + M;
+        var c = document.createElement('canvas'); c.width = W * 2; c.height = H * 2;
+        var g = c.getContext('2d'); g.scale(2, 2);
+        g.fillStyle = '#f8f8f8'; g.fillRect(0, 0, W, H);
+        // tarjeta oscura con halo amarillo
+        g.save(); g.beginPath(); g.roundRect(M, M, CW, H - M * 2, 50); g.clip();
+        g.fillStyle = '#181818'; g.fillRect(M, M, CW, H - M * 2);
+        var gl = g.createRadialGradient(M + CW - 88, M + 44, 0, M + CW - 88, M + 44, 330);
+        gl.addColorStop(0, 'rgba(255,221,90,.34)'); gl.addColorStop(.68, 'rgba(255,221,90,0)');
+        g.fillStyle = gl; g.fillRect(M, M, CW, H - M * 2);
+        g.restore();
+        g.textBaseline = 'alphabetic';
+        var x = M + P, y = M + P;
+        // ceja del paquete
+        g.font = '600 22px ' + F;
+        var lab = paqueteLabel.textContent, lw = g.measureText(lab).width + 50;
+        g.fillStyle = 'rgba(255,221,90,.16)'; g.beginPath(); g.roundRect(x, y, lw, 50, 25); g.fill();
+        g.fillStyle = '#ffdd5a'; g.fillText(lab, x + 25, y + 33);
+        y += 50 + 24 + 50;
+        g.fillStyle = '#f8f8f8'; g.font = '700 56px ' + F; g.fillText(paqueteName.textContent, x, y);
+        y += 40 + 92;
+        g.fillStyle = '#ffdd5a'; g.font = '700 92px ' + F; g.fillText('Bs. ' + precioObjetivo, x, y);
+        y += 38;
+        g.fillStyle = 'rgba(248,248,248,.62)'; g.font = '500 25px ' + F; g.fillText(precioUnit.textContent, x, y);
+        if (extras) { y += 40; g.fillStyle = 'rgba(248,248,248,.78)'; g.font = '500 24px ' + F; g.fillText(extras, x, y); }
+        y += 36; g.fillStyle = 'rgba(248,248,248,.55)'; g.font = '500 22px ' + F;
+        g.fillText('Precio referencial. Se confirma en tu sesión.', x, y);
+        y += 40;
+        // beneficios con check amarillo
+        rows.forEach(function (lines) {
+          g.fillStyle = '#ffdd5a'; g.beginPath(); g.roundRect(x, y, 43, 43, 14); g.fill();
+          g.save(); var sc = 13 * 1.8 / 24; g.translate(x + (43 - 24 * sc) / 2, y + (43 - 24 * sc) / 2); g.scale(sc, sc);
+          g.strokeStyle = '#181818'; g.lineWidth = 3.2; g.lineCap = 'round'; g.lineJoin = 'round';
+          g.stroke(new Path2D('M5 12.5l4.5 4.5L19 7.5')); g.restore();
+          g.fillStyle = 'rgba(248,248,248,.9)'; g.font = '500 26px ' + F;
+          lines.forEach(function (l, k) { g.fillText(l, x + 43 + 20, y + 30 + k * 34); });
+          y += Math.max(43, lines.length * 34) + 22;
+        });
+        // aviso de vigencia
+        y += 8; g.fillStyle = 'rgba(248,248,248,.18)'; g.fillRect(x, y, TW, 2);
+        y += 40; g.fillStyle = 'rgba(248,248,248,.62)'; g.font = '500 22px ' + F;
+        avisoL.forEach(function (l, k) { g.fillText(l, x, y + k * 30); });
+        c.toBlob(function (blob) {
+          var url = URL.createObjectURL(blob);
+          if (win) { win.location.href = url; return; }
+          var a = document.createElement('a');
+          a.download = nombre; a.href = url; a.click();
+          setTimeout(function () { URL.revokeObjectURL(url); }, 10000);
+        }, 'image/png');
+      });
     });
 
     render();
