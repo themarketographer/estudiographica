@@ -36,8 +36,8 @@ Es sondeo (consulta periódica), no tiempo real puro. El retraso normal es de ha
 
 ## Cuidado de créditos de Netlify
 
-- Menú, estilos y código salen del CDN con caché (ver `netlify.toml`).
-- El panel baja a una consulta cada 60 segundos si no hay movimiento, no consulta con la pestaña oculta y se pausa tras 15 minutos sin tocarlo (salvo que el sonido esté activado).
+- Estilos y código salen del CDN con caché (ver `netlify.toml`).
+- Sin timbre, el panel baja a una consulta cada 90 segundos si no hay movimiento. Nunca consulta con la pestaña oculta y se pausa tras 15 minutos sin tocarlo (salvo que el sonido esté activado).
 - El seguimiento del cliente se espacia hasta 40 segundos, y se detiene al entregar o pasadas 3 horas.
 - El interruptor "Recibiendo pedidos" del panel cierra los pedidos del celular fuera de horario.
 
@@ -59,5 +59,5 @@ Editar `menu.json`: categorías (cada una dice si es `bebida` o `comida`, que de
 
 ## Timbre (ahorro de llamadas a funciones)
 La cocina y el panel preguntan cada 10 s a `/api/zona0/ping/<hash de la clave>`. Esa respuesta la guarda la red de Netlify 10 minutos y se borra sola
-(`purgeCache`) cuando entra un pedido o cambia uno, así que casi no gasta funciones. Solo si el timbre cambia (o cada 5 min por seguridad) se piden los pedidos.
-Si el timbre no responde, las pantallas vuelven a consultar de la forma clásica, más lenta. Código: `netlify/functions/zona0-ping.js`, `bump()` en `lib-zona0/store.js`, `js/ping.js`.
+(`purgeCache`, desde la función `zona0-purge.mjs`: las funciones clásicas no reciben ese permiso de Netlify) cuando entra un pedido o cambia uno, así que casi no gasta funciones. Solo si el timbre cambia (o cada 5 min por seguridad) se piden los pedidos.
+Si el timbre no responde, las pantallas vuelven a consultar de la forma clásica, más lenta. Código: `netlify/functions/zona0-ping.js`, `netlify/functions/zona0-purge.mjs`, `bump()` en `lib-zona0/store.js`, `js/ping.js`.
