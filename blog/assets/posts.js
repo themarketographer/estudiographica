@@ -156,5 +156,12 @@ window.EG_BLOG_POSTS = [
     "excerpt": "Qué platos fotografiar, cuándo agendar la sesión antes de las fiestas y dónde publicar el menú de fin de año de tu restaurante.",
     "img": "https://res.cloudinary.com/dplhu2z6j/image/upload/v1791601945/_MG_5822_syndep.jpg",
     "eyebrow": "Guías · Temporada"
+  },
+  {
+    "slug": "fotos-emprendimiento-comida-cochabamba",
+    "title": "Fotos para tu emprendimiento de comida en Cochabamba",
+    "excerpt": "Qué productos fotografiar primero, dónde usarlas y cuánto cuesta la sesión para tu emprendimiento de comida en Cochabamba.",
+    "img": "https://res.cloudinary.com/dplhu2z6j/image/upload/v1791601668/_MG_2824_a4hpsv.jpg",
+    "eyebrow": "Guías · Marcas de comida"
   }
 ];
