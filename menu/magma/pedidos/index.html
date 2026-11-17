@@ -348,6 +348,7 @@ a{color:inherit}
 </dialog>
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
+<script src="../js/ping.js?v=20261116c"></script>
 <script>
 (function () {
   'use strict';
@@ -797,15 +798,23 @@ a{color:inherit}
     $('#login').hidden = true; $('#panel').hidden = false;
     ['#sound', '#sumBtn', '#refresh', '#logout'].forEach(function (s) { $(s).hidden = false; });
     clearInterval(timer); clearInterval(tick);
-    /* Cada 30 s mientras haya movimiento; si pasan 6 consultas sin cambios, cada 90 s. Con la pestaña oculta no consulta. */
-    var n = 0;
-    /* Sin actividad por 10 minutos y con el sonido apagado, deja de consultar hasta que alguien toque la pantalla.
+    /* Cada 10 s pregunta al timbre (no gasta funciones) y solo trae pedidos si cambió, o cada 5 min por seguridad.
+       Sin timbre: consulta clásica, cada 30 s con movimiento y cada 90 s si pasan 6 sin cambios. Con la pestaña oculta no consulta.
+       Sin actividad por 10 minutos y con el sonido apagado, deja de consultar hasta que alguien toque la pantalla.
        Con el sonido encendido el panel es el aviso del local y sigue consultando. */
+    var n = 0, st = { v: null, full: Date.now(), at: 0, settle: 0 };
+    MgPing.setToken(token);
     timer = setInterval(function () {
       if (document.hidden) return;
       if (!soundOn && Date.now() - lastAct > 600000) { if (!paused) { paused = true; setPaused(); } return; }
-      n++; if (idle >= 6 && n % 3) return; load().catch(function () {});
-    }, 30000);
+      n++;
+      MgPing.check().then(function (p) {
+        if (!p) { if (n % (idle >= 6 ? 9 : 3)) return; return load(); }
+        var plan = MgPing.plan(st, p);
+        if (!plan) return;
+        return load(plan === 'full' ? 2 : 0).then(function () { MgPing.done(st, p, plan); });
+      }).catch(function (e) { setLive(false); });
+    }, 10000);
     tick = setInterval(function () { if (!document.hidden && !$('#panel').hidden) { render(); var s = Math.round((Date.now() - loadedAt) / 1000); if (s > 150 && !paused) setLive(false); } }, 60000);
   }
   function leave(msg) {

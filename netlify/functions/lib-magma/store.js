@@ -51,11 +51,26 @@ async function saveNumbered(event, dateKey, build) {
 // El panel pregunta solo por las marcas recientes y lee únicamente los pedidos que cambiaron, en vez de
 // releer todos en cada consulta. Cada marca es una clave nueva, así que nunca hay choques entre escrituras.
 function hourKey(ms) { return new Date(ms).toISOString().slice(0, 13); }
+function sha256(t) { return require('crypto').createHash('sha256').update(String(t)).digest('hex'); }
+function pingKeys() { const t = String(process.env.MAGMA_ADMIN_TOKEN || '').trim(); return t ? [sha256(t)] : []; }
+function pingTag(k) { return 'mgping-' + String(k).slice(0, 16); }
+// Timbre (igual que Zona 0): borra la copia guardada en la red de Netlify para que el panel vea que algo cambió sin gastar llamadas.
+async function bump(event) {
+  try {
+    const secret = String(process.env.MAGMA_ADMIN_TOKEN || '').trim();
+    const h = (event && event.headers) || {};
+    const host = String(h['x-forwarded-host'] || h.host || '').split(',')[0].trim().toLowerCase();
+    if (!secret || !/^([a-z0-9-]+\.)*(estudiographica\.com|netlify\.app)$/.test(host)) return;
+    const r = await fetch('https://' + host + '/.netlify/functions/magma-purge', { method: 'POST', headers: { 'x-mg': sha256(secret + ':purge') }, signal: AbortSignal.timeout(4000) });
+    if (!r.ok) console.error('magma bump: purge respondió', r.status);
+  } catch (e) { console.error('magma bump:', e && e.message); }
+}
 async function touch(event, key) {
   try {
     const now = Date.now();
     await open(event).setJSON('ev/' + hourKey(now) + '/' + now + '-' + Math.random().toString(36).slice(2, 6), { k: key });
   } catch (e) { console.error('magma touch:', e && e.message); }
+  await bump(event);
 }
 
 // Pedidos cambiados desde "since" (ms). Devuelve { now, orders }.
@@ -142,4 +157,4 @@ async function setPayment(event, key, status, extra) {
   return rec;
 }
 
-module.exports = { isProd, forceProd, touch, changedSince, listDays, saveProof, getProof, setPayment, getOrder, listSince, saveRecord, STATUSES, storeName, keyFor, saveNumbered, listOrders, setStatus };
+module.exports = { pingKeys, pingTag, isProd, forceProd, touch, changedSince, listDays, saveProof, getProof, setPayment, getOrder, listSince, saveRecord, STATUSES, storeName, keyFor, saveNumbered, listOrders, setStatus };
