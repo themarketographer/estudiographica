@@ -163,5 +163,12 @@ window.EG_BLOG_POSTS = [
     "excerpt": "Qué productos fotografiar primero, dónde usarlas y cuánto cuesta la sesión para tu emprendimiento de comida en Cochabamba.",
     "img": "https://res.cloudinary.com/dplhu2z6j/image/upload/v1791601668/_MG_2824_a4hpsv.jpg",
     "eyebrow": "Guías · Marcas de comida"
+  },
+  {
+    "slug": "reels-para-restaurantes-cochabamba",
+    "title": "Reels para restaurantes en Cochabamba: qué grabar",
+    "excerpt": "Las 5 tomas que dan hambre, cómo preparar el plato y cuánto cuesta sumar video a las fotos de tu restaurante.",
+    "img": "https://res.cloudinary.com/dplhu2z6j/image/upload/v1791601618/_MG_4717_qhqotn.jpg",
+    "eyebrow": "Guías · Reels"
   }
 ];
