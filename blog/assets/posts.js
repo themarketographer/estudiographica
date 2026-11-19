@@ -170,5 +170,12 @@ window.EG_BLOG_POSTS = [
     "excerpt": "Las 5 tomas que dan hambre, cómo preparar el plato y cuánto cuesta sumar video a las fotos de tu restaurante.",
     "img": "https://res.cloudinary.com/dplhu2z6j/image/upload/v1791601618/_MG_4717_qhqotn.jpg",
     "eyebrow": "Guías · Reels"
+  },
+  {
+    "slug": "fotos-restaurante-poco-presupuesto-cochabamba",
+    "title": "Fotos para restaurante con poco presupuesto en Cochabamba",
+    "excerpt": "Qué platos fotografiar primero, dónde usar cada foto y cuánto cuesta empezar con fotos profesionales en tu restaurante.",
+    "img": "https://res.cloudinary.com/dplhu2z6j/image/upload/v1791601945/_MG_5822_syndep.jpg",
+    "eyebrow": "Guías · Precios"
   }
 ];
