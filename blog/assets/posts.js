@@ -177,5 +177,12 @@ window.EG_BLOG_POSTS = [
     "excerpt": "Qué platos fotografiar primero, dónde usar cada foto y cuánto cuesta empezar con fotos profesionales en tu restaurante.",
     "img": "https://res.cloudinary.com/dplhu2z6j/image/upload/v1791601945/_MG_5822_syndep.jpg",
     "eyebrow": "Guías · Precios"
+  },
+  {
+    "slug": "cuanto-dura-sesion-fotos-restaurante-cochabamba",
+    "title": "Cuánto dura una sesión de fotos de restaurante",
+    "excerpt": "Cuántas horas ocupa la sesión según los platos, cuándo llegan las fotos editadas y cómo preparar la cocina para que rinda.",
+    "img": "https://res.cloudinary.com/dplhu2z6j/image/upload/v1791601517/IMG_2390__jtz75e.jpg",
+    "eyebrow": "Guías · Sesión de fotos"
   }
 ];
