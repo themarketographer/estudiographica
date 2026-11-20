@@ -334,6 +334,39 @@
       return { img: o.toDataURL('image/png'), n: n2, simplified: true, from: res.n, orig: res.n };
     }).catch(function (e) { res.why = 'no cargó el lector (' + (e && e.message ? e.message : 'error') + ')'; return res; });
   }
+  /* Busca el QR dentro de la imagen tal como viene (captura de pantalla, foto, con márgenes o textos alrededor). */
+  function qrDecodeAny(im) {
+    var ks = [1, 0.6, 1.6, 0.4, 0.25];
+    for (var i = 0; i < ks.length; i++) {
+      var w = Math.round(im.width * ks[i]), h = Math.round(im.height * ks[i]);
+      if (w < 80 || h < 80 || w > 2400 || h > 2400) continue;
+      var cv = document.createElement('canvas'); cv.width = w; cv.height = h; var g = cv.getContext('2d', { willReadFrequently: true });
+      g.fillStyle = '#fff'; g.fillRect(0, 0, w, h); g.drawImage(im, 0, 0, w, h);
+      var hit = window.jsQR(g.getImageData(0, 0, w, h).data, w, h, { inversionAttempts: 'attemptBoth' });
+      if (hit && hit.data) return hit;
+    }
+    return null;
+  }
+  function qrReencode(text, from) {
+    if (!text || /[^\x20-\x7e]/.test(text)) return null;
+    var q = window.qrcode(0, 'L'); q.addData(text, 'Byte'); q.make();
+    var n2 = q.getModuleCount(), mat2 = []; for (var r = 0; r < n2; r++) { mat2.push([]); for (var c = 0; c < n2; c++) mat2[r].push(q.isDark(r, c)); }
+    var chk = drawMat(mat2, 6, 24), back = window.jsQR(chk.data.data, chk.cv.width, chk.cv.width);
+    if (!back || back.data !== text) return null;
+    return { img: drawMat(mat2, 1, 0).cv.toDataURL('image/png'), n: n2, simplified: true, from: from || n2 };
+  }
+  /* Camino completo: leer el QR de la imagen y volver a dibujarlo más simple. Si no se logra, se guarda reconstruido o tal cual. */
+  function qrProcess(im) {
+    return Promise.all([loadJs('../js/vendor/jsQR.js'), loadJs('../js/vendor/qrcode.js')]).then(function () {
+      var hit = qrDecodeAny(im), why = 'no se encontró un QR legible en la imagen';
+      if (hit) {
+        var r = qrReencode(hit.data, hit.version ? 17 + 4 * hit.version : 0);
+        if (r) return r;
+        why = 'el texto del QR tiene símbolos que no se pueden redibujar';
+      }
+      return qrSimplify(qrRebuild(im)).then(function (r2) { if (!r2.simplified) r2.why = why + '; ' + (r2.why || ''); return r2; });
+    }).catch(function (e) { var r3 = qrRebuild(im); r3.why = 'no cargó el lector (' + (e && e.message ? e.message : 'error') + ')'; return r3; });
+  }
   function qrCard() {
     var c = el('div', 'bcard qrc'), q = Z.qr();
     var info = el('div', 'qrt');
@@ -355,7 +388,7 @@
       im.onload = function () {
         URL.revokeObjectURL(url);
         Z.toast('Leyendo el QR…');
-        qrSimplify(qrRebuild(im)).then(function (r) {
+        qrProcess(im).then(function (r) {
           return Z.saveQr({ img: r.img, n: r.n, s: r.simplified ? r.from : 0, mode: q ? q.mode : 'unpaid' }).then(function () { Z.toast(r.simplified ? 'QR guardado y simplificado (' + r.from + ' a ' + r.n + ' puntos por lado)' : 'QR guardado sin simplificar: ' + (r.why || 'motivo desconocido')); refresh(); });
         }).catch(function (e) { Z.toast(e.message); });
       };
