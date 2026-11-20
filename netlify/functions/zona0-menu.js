@@ -38,7 +38,7 @@ exports.handler = async function (event) {
       if (b.qr === null) return reply(200, { ok: true, qr: await Store.setQr(event, null) });
       const img = b.qr && b.qr.img;
       if (typeof img !== 'string' || !/^data:image\/(png|jpeg);base64,[A-Za-z0-9+/=]+$/.test(img) || img.length > 200000) return reply(422, { ok: false, error: 'La imagen del QR no es válida o pesa demasiado.' });
-      return reply(200, { ok: true, qr: await Store.setQr(event, { img, n: Number.isInteger(b.qr.n) && b.qr.n >= 21 && b.qr.n <= 177 ? b.qr.n : 0, mode: b.qr.mode }) });
+      return reply(200, { ok: true, qr: await Store.setQr(event, { img, n: Number.isInteger(b.qr.n) && b.qr.n >= 21 && b.qr.n <= 177 ? b.qr.n : 0, s: Number.isInteger(b.qr.s) && b.qr.s >= 21 && b.qr.s <= 177 ? b.qr.s : 0, mode: b.qr.mode }) });
     }
     const extra = await Store.getMenuExtra(event);
     const cats = (base.categories || []).map((c) => c.id);

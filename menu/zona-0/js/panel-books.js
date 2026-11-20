@@ -321,18 +321,18 @@
      corrección de errores más baja, que usa menos módulos y deja puntos más grandes: se lee mejor en papel térmico.
      Si algo falla en el camino se queda con el QR original reconstruido. */
   function qrSimplify(res) {
-    if (!res.n || !res.mat) return Promise.resolve(res);
+    if (!res.n || !res.mat) { res.why = 'no se reconoció la cuadrícula del QR'; return Promise.resolve(res); }
     return Promise.all([loadJs('../js/vendor/jsQR.js'), loadJs('../js/vendor/qrcode.js')]).then(function () {
       var hit = window.jsQR(drawMat(res.mat, 6, 24).data.data, res.n * 6 + 48, res.n * 6 + 48);
-      if (!hit || !hit.data || /[^\x20-\x7e]/.test(hit.data)) return res;
+      if (!hit || !hit.data || /[^\x20-\x7e]/.test(hit.data)) { res.why = 'no se pudo leer el texto del QR'; return res; }
       var q = window.qrcode(0, 'L'); q.addData(hit.data, 'Byte'); q.make();
-      var n2 = q.getModuleCount(); if (n2 >= res.n) return res;
+      var n2 = q.getModuleCount(); if (n2 >= res.n) { res.why = 'ya era lo más simple posible'; return res; }
       var mat2 = []; for (var r = 0; r < n2; r++) { mat2.push([]); for (var c = 0; c < n2; c++) mat2[r].push(q.isDark(r, c)); }
       var chk = drawMat(mat2, 6, 24), back = window.jsQR(chk.data.data, chk.cv.width, chk.cv.width);
-      if (!back || back.data !== hit.data) return res;
+      if (!back || back.data !== hit.data) { res.why = 'la verificación no coincidió'; return res; }
       var o = drawMat(mat2, 1, 0).cv;
-      return { img: o.toDataURL('image/png'), n: n2, simplified: true, from: res.n };
-    }).catch(function () { return res; });
+      return { img: o.toDataURL('image/png'), n: n2, simplified: true, from: res.n, orig: res.n };
+    }).catch(function (e) { res.why = 'no cargó el lector (' + (e && e.message ? e.message : 'error') + ')'; return res; });
   }
   function qrCard() {
     var c = el('div', 'bcard qrc'), q = Z.qr();
@@ -345,7 +345,7 @@
     if (q) {
       var sel = el('select'); sel.setAttribute('aria-label', 'Cuándo imprimir el QR');
       [['unpaid', 'Solo en cuentas por cobrar'], ['all', 'En todos los tickets']].forEach(function (o) { var op = el('option', '', o[1]); op.value = o[0]; if (q.mode === o[0]) op.selected = true; sel.appendChild(op); });
-      sel.addEventListener('change', function () { Z.saveQr({ img: q.img, n: q.n, mode: sel.value }).then(function () { Z.toast('Listo, guardado'); }).catch(function (e) { Z.toast(e.message); }); });
+      sel.addEventListener('change', function () { Z.saveQr({ img: q.img, n: q.n, s: q.s, mode: sel.value }).then(function () { Z.toast('Listo, guardado'); }).catch(function (e) { Z.toast(e.message); }); });
       acts.appendChild(sel);
       acts.appendChild(btn('Quitar', 'mini', function () { Z.saveQr(null).then(function () { Z.toast('QR quitado'); refresh(); }).catch(function (e) { Z.toast(e.message); }); }));
     }
@@ -356,7 +356,7 @@
         URL.revokeObjectURL(url);
         Z.toast('Leyendo el QR…');
         qrSimplify(qrRebuild(im)).then(function (r) {
-          return Z.saveQr({ img: r.img, n: r.n, mode: q ? q.mode : 'unpaid' }).then(function () { Z.toast(r.simplified ? 'QR guardado y simplificado (' + r.from + ' a ' + r.n + ' puntos por lado)' : 'QR guardado'); refresh(); });
+          return Z.saveQr({ img: r.img, n: r.n, s: r.simplified ? r.from : 0, mode: q ? q.mode : 'unpaid' }).then(function () { Z.toast(r.simplified ? 'QR guardado y simplificado (' + r.from + ' a ' + r.n + ' puntos por lado)' : 'QR guardado sin simplificar: ' + (r.why || 'motivo desconocido')); refresh(); });
         }).catch(function (e) { Z.toast(e.message); });
       };
       im.onerror = function () { URL.revokeObjectURL(url); Z.toast('No se pudo leer la imagen.'); };
@@ -364,6 +364,7 @@
     });
     function refresh() { var n = qrCard(); c.parentNode.replaceChild(n, c); }
     if (q) { var pv = el('img', 'qrp'); pv.src = q.img; pv.alt = 'QR de pago guardado'; c.appendChild(pv); }
+    if (q) info.appendChild(el('small', 'qrs', q.s ? 'Estado: simplificado, ' + q.n + ' puntos por lado (el original tenía ' + q.s + '). Es más fácil de leer en papel térmico.' : q.n ? 'Estado: ' + q.n + ' puntos por lado, sin simplificar. Sube de nuevo la imagen para intentarlo otra vez.' : 'Estado: imagen simple, sin reconstruir.'));
     info.appendChild(acts); c.appendChild(info); c.appendChild(file);
     return c;
   }

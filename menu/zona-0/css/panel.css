@@ -567,3 +567,4 @@ body{background:var(--paper);min-height:100dvh}
 /* Aviso de versión de prueba */
 .testbar{position:sticky;top:0;z-index:60;background:#b3261e;color:#fff;padding:8px 14px;font-size:14px;line-height:1.35;text-align:center}
 .testbar b{letter-spacing:.04em;margin-right:6px}
+.qrc .qrs{color:#555;line-height:1.35}
