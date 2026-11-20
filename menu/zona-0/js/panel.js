@@ -31,7 +31,7 @@
   function qrOn(o) { return !!(qr && qr.img && (qr.mode === 'all' || !(o.payment && o.payment.status === 'pagado'))); }
   function loadQr() {
     return fetch('/api/zona0/menu?qr=1', { headers: { Authorization: 'Bearer ' + token }, cache: 'no-store' }).then(function (r) { return r.ok ? r.json() : null; })
-      .then(function (d) { if (d && d.ok) setQr(d.qr); }).catch(function () {});
+      .then(function (d) { if (d && d.ok) { setQr(d.qr); if (tab === 'menu') go('menu'); } }).catch(function () {});
   }
   function saveQr(q) {
     return fetch('/api/zona0/menu', { method: 'POST', headers: { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' }, body: JSON.stringify({ qr: q }) })
@@ -798,6 +798,11 @@
   /* ---------- Entrar, consultar y salir ---------- */
   function enter() {
     loadQr();
+    /* Fuera de las direcciones reales el panel trabaja con datos de prueba: se avisa para no guardar ahí lo que debe ir al local. */
+    if (['estudiographica.com', 'www.estudiographica.com', 'estudiographica.netlify.app'].indexOf(location.hostname) < 0 && !$('#testbar')) {
+      var tb = el('div', 'testbar'); tb.id = 'testbar'; tb.appendChild(el('b', '', 'VERSIÓN DE PRUEBA')); tb.appendChild(document.createTextNode(' Estos datos no son los del local. Para trabajar de verdad entra por estudiographica.com/menu/zona-0/panel/'));
+      document.body.insertBefore(tb, document.body.firstChild); document.title = '[PRUEBA] ' + document.title;
+    }
     $('#login').hidden = true; $('#app').hidden = false; $('#tools').hidden = false; $('#moreBtn').hidden = false; $('#tabs').hidden = false; go(ls('z0.tab') || 'mesas');
     var n = 0; clearInterval(timer); clearInterval(tick);
     /* Cada 10 s pregunta al timbre (no gasta funciones) y solo trae pedidos si cambió, o cada 5 min por seguridad (15 min si el local está cerrado).

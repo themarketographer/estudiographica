@@ -563,3 +563,7 @@ body{background:var(--paper);min-height:100dvh}
 .qrc .qra{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .qrc select{min-height:44px;border:2px solid #111;border-radius:8px;padding:0 10px;font:inherit;background:#fff}
 #prtTicket .qrpay{display:block;width:58mm;height:58mm;margin:2mm auto;image-rendering:pixelated}
+
+/* Aviso de versión de prueba */
+.testbar{position:sticky;top:0;z-index:60;background:#b3261e;color:#fff;padding:8px 14px;font-size:14px;line-height:1.35;text-align:center}
+.testbar b{letter-spacing:.04em;margin-right:6px}
