@@ -279,10 +279,47 @@
      Tocar una tarjeta abre todo lo editable (nombre, precio, agotado, quitar). El precio también se cambia ahí mismo. */
   var mc = 'todo', mq = '';
   var norm = function (t) { return String(t || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); };
+  /* QR de pago que se imprime en el recibo: se sube una vez y queda guardado para todos los dispositivos. */
+  function qrCard() {
+    var c = el('div', 'bcard qrc'), q = Z.qr();
+    var info = el('div', 'qrt');
+    info.appendChild(el('b', '', 'QR de pago en el recibo'));
+    info.appendChild(el('small', '', q ? 'Se imprime debajo del total para que el cliente pague escaneando.' : 'Sube la imagen del QR del banco y saldrá impreso en el recibo.'));
+    var file = el('input'); file.type = 'file'; file.accept = 'image/*'; file.hidden = true;
+    var acts = el('div', 'qra');
+    acts.appendChild(btn(q ? 'Cambiar QR' : 'Subir QR', 'btn', function () { file.click(); }, 'plus'));
+    if (q) {
+      var sel = el('select'); sel.setAttribute('aria-label', 'Cuándo imprimir el QR');
+      [['unpaid', 'Solo en cuentas por cobrar'], ['all', 'En todos los tickets']].forEach(function (o) { var op = el('option', '', o[1]); op.value = o[0]; if (q.mode === o[0]) op.selected = true; sel.appendChild(op); });
+      sel.addEventListener('change', function () { Z.saveQr({ img: q.img, mode: sel.value }).then(function () { Z.toast('Listo, guardado'); }).catch(function (e) { Z.toast(e.message); }); });
+      acts.appendChild(sel);
+      acts.appendChild(btn('Quitar', 'mini', function () { Z.saveQr(null).then(function () { Z.toast('QR quitado'); refresh(); }).catch(function (e) { Z.toast(e.message); }); }));
+    }
+    file.addEventListener('change', function () {
+      var f = file.files && file.files[0]; if (!f) return;
+      var url = URL.createObjectURL(f), im = new Image();
+      im.onload = function () {
+        var S = 420, k = Math.min(S / im.width, S / im.height, 1), w = Math.round(im.width * k), h = Math.round(im.height * k);
+        var cv = document.createElement('canvas'); cv.width = w; cv.height = h; var g = cv.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, w, h); g.drawImage(im, 0, 0, w, h);
+        URL.revokeObjectURL(url);
+        var d = g.getImageData(0, 0, w, h), px = d.data;
+        for (var i = 0; i < px.length; i += 4) { var v = (px[i] * 0.3 + px[i + 1] * 0.59 + px[i + 2] * 0.11) < 140 ? 0 : 255; px[i] = px[i + 1] = px[i + 2] = v; px[i + 3] = 255; }
+        g.putImageData(d, 0, 0);
+        Z.saveQr({ img: cv.toDataURL('image/png'), mode: q ? q.mode : 'unpaid' }).then(function () { Z.toast('QR guardado'); refresh(); }).catch(function (e) { Z.toast(e.message); });
+      };
+      im.onerror = function () { URL.revokeObjectURL(url); Z.toast('No se pudo leer la imagen.'); };
+      im.src = url;
+    });
+    function refresh() { var n = qrCard(); c.parentNode.replaceChild(n, c); }
+    if (q) { var pv = el('img', 'qrp'); pv.src = q.img; pv.alt = 'QR de pago guardado'; c.appendChild(pv); }
+    info.appendChild(acts); c.appendChild(info); c.appendChild(file);
+    return c;
+  }
   function renderMenu() {
     var m = Z.menu(), box = $('#v-menu'); if (!m) return; box.textContent = '';
     var open = el('a', 'tool dark'); open.href = '../'; open.target = '_blank'; open.rel = 'noopener'; open.appendChild(Z0Icon('arrow')); open.appendChild(el('span', '', 'Ver menú del cliente'));
     box.appendChild(head('Menú', [btn('Agregar producto', 'btn', function () { prodDialog(null, mc !== 'todo' ? mc : ''); }, 'plus'), open]));
+    box.appendChild(qrCard());
     var bar = el('div', 'mbar'), q = el('input', 'msearch'); q.type = 'search'; q.placeholder = 'Buscar producto…'; q.value = mq; q.setAttribute('aria-label', 'Buscar producto');
     q.addEventListener('input', function () { mq = q.value; menuBody(); });
     bar.appendChild(Z0Icon('list')); bar.appendChild(q); box.appendChild(bar);

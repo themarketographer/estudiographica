@@ -273,6 +273,18 @@ async function setMenuExtra(event, extra) {
   return extra;
 }
 
+// QR de pago que se imprime en el recibo: { img: data URL, mode: 'unpaid' | 'all' }.
+async function getQr(event) {
+  try { const c = await open(event).get('cfg/qr', { type: 'json' }); return c && c.img ? { img: c.img, mode: c.mode === 'all' ? 'all' : 'unpaid' } : null; }
+  catch (e) { return null; }
+}
+async function setQr(event, q) {
+  const store = open(event);
+  if (!q) { await store.delete('cfg/qr'); return null; }
+  await store.setJSON('cfg/qr', { img: q.img, mode: q.mode === 'all' ? 'all' : 'unpaid', at: new Date().toISOString() });
+  return { img: q.img, mode: q.mode === 'all' ? 'all' : 'unpaid' };
+}
+
 // Interruptor "recibiendo pedidos". Por defecto abierto.
 async function isOpen(event) {
   try {
@@ -286,4 +298,4 @@ async function setOpen(event, open_) {
   return !!open_;
 }
 
-module.exports = { pingKeys, pingTag, ping, isProd, storeName, STATUSES, keyFor, saveNumbered, touch, changedSince, listDays, getOrder, setStatus, deleteOrder, setPayment, isOpen, setOpen, setLineDone, settle, lineKinds, lineDone, ledgerAdd, ledgerRange, ledgerVoid, importRecords, settleParts, getMenuExtra, setMenuExtra };
+module.exports = { pingKeys, pingTag, ping, isProd, storeName, STATUSES, keyFor, saveNumbered, touch, changedSince, listDays, getOrder, setStatus, deleteOrder, setPayment, isOpen, setOpen, setLineDone, settle, lineKinds, lineDone, ledgerAdd, ledgerRange, ledgerVoid, importRecords, settleParts, getMenuExtra, setMenuExtra, getQr, setQr };

@@ -555,3 +555,11 @@ body{background:var(--paper);min-height:100dvh}
 /* Cuenta abierta desde ayer: se nota sin gritar */
 .tile.stale{border-style:dashed}
 .tile.stale .ta{color:var(--red,#b3261e);font-weight:700}
+
+/* QR de pago en el recibo */
+.qrc{display:flex;gap:16px;align-items:center;flex-wrap:wrap;padding:14px 16px;margin:0 0 14px}
+.qrc .qrp{width:96px;height:96px;image-rendering:pixelated;border:2px solid #111;border-radius:6px;background:#fff}
+.qrc .qrt{display:flex;flex-direction:column;gap:6px;min-width:220px;flex:1}
+.qrc .qra{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.qrc select{min-height:44px;border:2px solid #111;border-radius:8px;padding:0 10px;font:inherit;background:#fff}
+#prtTicket .qrpay{display:block;width:42mm;height:42mm;margin:2mm auto;image-rendering:pixelated}

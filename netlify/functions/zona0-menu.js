@@ -5,6 +5,7 @@
 //        { over:id, patch:{ price?, title?, sub?, reset? } }                  cambia precio o nombre de un producto del menú base
 //        { hide:id, value:true|false }                                        quita o restaura un producto del menú base
 //        { remove:id }                                                         quita un producto agregado
+//        { qr:{ img:'data:image/png;base64,...', mode:'unpaid'|'all' } | null }  guarda o quita el QR de pago del recibo (GET ?qr=1, solo personal)
 //        { off:id, value:true|false }                                          marca cualquier producto como agotado o disponible
 const Store = require('./lib-zona0/store.js');
 const Pricing = require('../../menu/zona-0/js/pricing.js');
@@ -21,6 +22,10 @@ exports.handler = async function (event) {
   const today = Pricing.boliviaDate(new Date()).key;
   try {
     if (event.httpMethod === 'GET') {
+      if (event.queryStringParameters && event.queryStringParameters.qr) {
+        if (!authorized(event)) return reply(401, { ok: false, error: 'Clave incorrecta.' });
+        return reply(200, { ok: true, qr: await Store.getQr(event) });
+      }
       const extra = await Store.getMenuExtra(event);
       return reply(200, { ok: true, extra, today });
     }
@@ -29,6 +34,12 @@ exports.handler = async function (event) {
     if (!authorized(event)) return reply(401, { ok: false, error: 'Clave incorrecta.' });
     let b;
     try { b = JSON.parse(event.body || '{}'); } catch (e) { return reply(400, { ok: false, error: 'Dato ilegible.' }); }
+    if (Object.prototype.hasOwnProperty.call(b, 'qr')) {
+      if (b.qr === null) return reply(200, { ok: true, qr: await Store.setQr(event, null) });
+      const img = b.qr && b.qr.img;
+      if (typeof img !== 'string' || !/^data:image\/(png|jpeg);base64,[A-Za-z0-9+/=]+$/.test(img) || img.length > 200000) return reply(422, { ok: false, error: 'La imagen del QR no es válida o pesa demasiado.' });
+      return reply(200, { ok: true, qr: await Store.setQr(event, { img, mode: b.qr.mode }) });
+    }
     const extra = await Store.getMenuExtra(event);
     const cats = (base.categories || []).map((c) => c.id);
 

@@ -22,6 +22,22 @@
     t.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(function () { t.classList.remove('on'); }, label ? 7000 : 3200);
   }
 
+  /* ---------- QR de pago del recibo ---------- */
+  var qr = null, qrImg = null;
+  function setQr(q) {
+    qr = q && q.img ? q : null; qrImg = null;
+    if (qr) { var im = new Image(); im.onload = function () { qrImg = im; if (prt && prt.o && $('#prt').open) prtPaint(); }; im.src = qr.img; }
+  }
+  function qrOn(o) { return !!(qr && qr.img && (qr.mode === 'all' || !(o.payment && o.payment.status === 'pagado'))); }
+  function loadQr() {
+    return fetch('/api/zona0/menu?qr=1', { headers: { Authorization: 'Bearer ' + token }, cache: 'no-store' }).then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (d) { if (d && d.ok) setQr(d.qr); }).catch(function () {});
+  }
+  function saveQr(q) {
+    return fetch('/api/zona0/menu', { method: 'POST', headers: { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' }, body: JSON.stringify({ qr: q }) })
+      .then(function (r) { return r.json(); }).then(function (d) { if (!d.ok) throw new Error(d.error || 'No se pudo guardar el QR.'); setQr(d.qr); return d.qr; });
+  }
+
   /* ---------- API ---------- */
   function api(method, body, qs) {
     return fetch('/api/zona0/orders' + (qs || ''), { method: method, headers: { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' }, body: body ? JSON.stringify(body) : undefined, cache: 'no-store' })
@@ -260,6 +276,7 @@
     var tt = el('div', 'r tot'); tt.appendChild(el('b', 'rn', 'TOTAL')); tt.appendChild(el('b', 'num rp', money(o.total))); t.appendChild(tt);
     t.appendChild(el('p', 'c', payText(o)));
     if (cu.notes) { t.appendChild(document.createElement('hr')); t.appendChild(el('p', '', 'Notas: ' + cu.notes)); }
+    if (qrOn(o)) { t.appendChild(document.createElement('hr')); t.appendChild(el('p', 'c', 'Escanea para pagar')); var qi = el('img', 'qrpay'); qi.src = qr.img; qi.alt = 'QR de pago'; t.appendChild(qi); }
     t.appendChild(document.createElement('hr')); t.appendChild(el('p', 'c', 'Gracias por rodar con nosotros'));
   }
   /* Ticket en texto plano (para pegar en el Bloc de notas e imprimir como cualquier documento) */
@@ -346,6 +363,7 @@
       if (o.discount) two('Descuento', '-' + o.discount, '700', 26);
       two('TOTAL', money(o.total), '900', 44); y += 6;
       block(payText(o), 26);
+      if (qrOn(o) && qrImg) { y += 8; line('ESCANEA PARA PAGAR', '800', 24, 'center', 4); var QS = 320; if (draw) g.drawImage(qrImg, (PX - QS) / 2, y, QS, QS); y += QS + 10; }
       if (cu.notes) line('Notas: ' + cu.notes, '600', 22, 'left', 4);
       rule(false);
       line('¡Gracias por rodar con nosotros!', '800', 26, 'center', 0);
@@ -394,7 +412,7 @@
     '#ticket h1{font-size:20pt;text-align:center;letter-spacing:-.03em;margin:0}#ticket p{margin:0}#ticket .c{text-align:center}' +
     '#ticket hr{border:0;border-top:1.5px dashed #000;margin:3mm 0}#ticket .r{display:flex;justify-content:space-between;gap:8px}' +
     '#ticket .rn{min-width:0;flex:1}#ticket .rp{white-space:nowrap}#ticket .tot{font-size:15pt}' +
-    '#ticket .big{font-size:26pt;font-weight:800;text-align:center;line-height:1}#ticket small{font-weight:500;font-size:10pt;display:block;padding-left:5mm}';
+    '#ticket .big{font-size:26pt;font-weight:800;text-align:center;line-height:1}#ticket small{font-weight:500;font-size:10pt;display:block;padding-left:5mm}#ticket .qrpay{display:block;width:44mm;height:44mm;margin:2mm auto}';
   $('#prtGo').addEventListener('click', function () {
     var tmp = document.createElement('div'); buildTicket(prt.o, tmp, false);
     var w = window.open('', 'z0ticket', 'width=420,height=720');
@@ -779,6 +797,7 @@
 
   /* ---------- Entrar, consultar y salir ---------- */
   function enter() {
+    loadQr();
     $('#login').hidden = true; $('#app').hidden = false; $('#tools').hidden = false; $('#moreBtn').hidden = false; $('#tabs').hidden = false; go(ls('z0.tab') || 'mesas');
     var n = 0; clearInterval(timer); clearInterval(tick);
     /* Cada 10 s pregunta al timbre (no gasta funciones) y solo trae pedidos si cambió, o cada 5 min por seguridad (15 min si el local está cerrado).
@@ -814,6 +833,7 @@
   });
 
   window.Z0Panel = {
+    qr: function () { return qr; }, saveQr: saveQr,
     P: P, S: S, $: $, $$: $$, el: el, ls: ls, money: money, toast: toast, hm: hm, today: today, list: list, token: function () { return token; }, menu: function () { return menu; },
     printTicket: printTicket, lineDoneAll: lineDoneAll, tab: function () { return tab; }, onChange: function (f) { listeners.push(f); },
     ensureDays: function (n) { return loadedDays >= n ? Promise.resolve() : load(n); }, leave: leave,
