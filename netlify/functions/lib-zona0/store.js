@@ -275,14 +275,14 @@ async function setMenuExtra(event, extra) {
 
 // QR de pago que se imprime en el recibo: { img: data URL, mode: 'unpaid' | 'all' }.
 async function getQr(event) {
-  try { const c = await open(event).get('cfg/qr', { type: 'json' }); return c && c.img ? { img: c.img, mode: c.mode === 'all' ? 'all' : 'unpaid' } : null; }
+  try { const c = await open(event).get('cfg/qr', { type: 'json' }); return c && c.img ? { img: c.img, n: c.n || 0, mode: c.mode === 'all' ? 'all' : 'unpaid' } : null; }
   catch (e) { return null; }
 }
 async function setQr(event, q) {
   const store = open(event);
   if (!q) { await store.delete('cfg/qr'); return null; }
-  await store.setJSON('cfg/qr', { img: q.img, mode: q.mode === 'all' ? 'all' : 'unpaid', at: new Date().toISOString() });
-  return { img: q.img, mode: q.mode === 'all' ? 'all' : 'unpaid' };
+  await store.setJSON('cfg/qr', { img: q.img, n: q.n || 0, mode: q.mode === 'all' ? 'all' : 'unpaid', at: new Date().toISOString() });
+  return { img: q.img, n: q.n || 0, mode: q.mode === 'all' ? 'all' : 'unpaid' };
 }
 
 // Interruptor "recibiendo pedidos". Por defecto abierto.

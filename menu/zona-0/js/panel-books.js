@@ -280,6 +280,33 @@
   var mc = 'todo', mq = '';
   var norm = function (t) { return String(t || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); };
   /* QR de pago que se imprime en el recibo: se sube una vez y queda guardado para todos los dispositivos. */
+  /* Reconstruye el QR módulo por módulo: lee la cuadrícula de la imagen y la guarda como una imagen de N x N puntos.
+     Así se imprime con módulos de tamaño entero (nítidos y escaneables) aunque el QR del banco sea muy denso. */
+  function qrRebuild(im) {
+    var W = Math.min(im.width, 1400), k0 = W / im.width, w = Math.round(im.width * k0), h = Math.round(im.height * k0);
+    var cv = document.createElement('canvas'); cv.width = w; cv.height = h; var g = cv.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, w, h); g.drawImage(im, 0, 0, w, h);
+    var px = g.getImageData(0, 0, w, h).data, dark = function (x, y) { var i = (y * w + x) * 4; return (px[i] * 0.3 + px[i + 1] * 0.59 + px[i + 2] * 0.11) < 140; };
+    var x0 = w, x1 = -1, y0 = h, y1 = -1, x, y;
+    for (y = 0; y < h; y++) for (x = 0; x < w; x++) if (dark(x, y)) { if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; }
+    var plain = function () {
+      var S = 520, k = Math.min(S / im.width, S / im.height, 1), pw = Math.round(im.width * k), ph = Math.round(im.height * k);
+      var c2 = document.createElement('canvas'); c2.width = pw; c2.height = ph; var g2 = c2.getContext('2d'); g2.fillStyle = '#fff'; g2.fillRect(0, 0, pw, ph); g2.drawImage(im, 0, 0, pw, ph);
+      var d = g2.getImageData(0, 0, pw, ph), q2 = d.data;
+      for (var i = 0; i < q2.length; i += 4) { var v = (q2[i] * 0.3 + q2[i + 1] * 0.59 + q2[i + 2] * 0.11) < 140 ? 0 : 255; q2[i] = q2[i + 1] = q2[i + 2] = v; q2[i + 3] = 255; }
+      g2.putImageData(d, 0, 0); return { img: c2.toDataURL('image/png'), n: 0 };
+    };
+    if (x1 < 0 || (x1 - x0) < 40 || Math.abs((x1 - x0) - (y1 - y0)) > 6) return plain();
+    var run = 0; for (x = x0; x <= x1 && dark(x, y0); x++) run++;
+    var m = run / 7, N = Math.round((x1 - x0 + 1) / m);
+    if (!(N >= 21 && N <= 177 && (N - 17) % 4 === 0)) return plain();
+    var m2 = (x1 - x0 + 1) / N, out = document.createElement('canvas'); out.width = N; out.height = N; var go = out.getContext('2d'); go.fillStyle = '#fff'; go.fillRect(0, 0, N, N); go.fillStyle = '#000';
+    for (var r = 0; r < N; r++) for (var c = 0; c < N; c++) {
+      var cx = Math.round(x0 + (c + 0.5) * m2), cy = Math.round(y0 + (r + 0.5) * m2), n = 0, t = 0;
+      for (var dy = -1; dy <= 1; dy++) for (var dx = -1; dx <= 1; dx++) { var xx = cx + dx, yy = cy + dy; if (xx >= 0 && yy >= 0 && xx < w && yy < h) { t++; if (dark(xx, yy)) n++; } }
+      if (n * 2 > t) go.fillRect(c, r, 1, 1);
+    }
+    return { img: out.toDataURL('image/png'), n: N };
+  }
   function qrCard() {
     var c = el('div', 'bcard qrc'), q = Z.qr();
     var info = el('div', 'qrt');
@@ -291,7 +318,7 @@
     if (q) {
       var sel = el('select'); sel.setAttribute('aria-label', 'Cuándo imprimir el QR');
       [['unpaid', 'Solo en cuentas por cobrar'], ['all', 'En todos los tickets']].forEach(function (o) { var op = el('option', '', o[1]); op.value = o[0]; if (q.mode === o[0]) op.selected = true; sel.appendChild(op); });
-      sel.addEventListener('change', function () { Z.saveQr({ img: q.img, mode: sel.value }).then(function () { Z.toast('Listo, guardado'); }).catch(function (e) { Z.toast(e.message); }); });
+      sel.addEventListener('change', function () { Z.saveQr({ img: q.img, n: q.n, mode: sel.value }).then(function () { Z.toast('Listo, guardado'); }).catch(function (e) { Z.toast(e.message); }); });
       acts.appendChild(sel);
       acts.appendChild(btn('Quitar', 'mini', function () { Z.saveQr(null).then(function () { Z.toast('QR quitado'); refresh(); }).catch(function (e) { Z.toast(e.message); }); }));
     }
@@ -299,13 +326,9 @@
       var f = file.files && file.files[0]; if (!f) return;
       var url = URL.createObjectURL(f), im = new Image();
       im.onload = function () {
-        var S = 420, k = Math.min(S / im.width, S / im.height, 1), w = Math.round(im.width * k), h = Math.round(im.height * k);
-        var cv = document.createElement('canvas'); cv.width = w; cv.height = h; var g = cv.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, w, h); g.drawImage(im, 0, 0, w, h);
         URL.revokeObjectURL(url);
-        var d = g.getImageData(0, 0, w, h), px = d.data;
-        for (var i = 0; i < px.length; i += 4) { var v = (px[i] * 0.3 + px[i + 1] * 0.59 + px[i + 2] * 0.11) < 140 ? 0 : 255; px[i] = px[i + 1] = px[i + 2] = v; px[i + 3] = 255; }
-        g.putImageData(d, 0, 0);
-        Z.saveQr({ img: cv.toDataURL('image/png'), mode: q ? q.mode : 'unpaid' }).then(function () { Z.toast('QR guardado'); refresh(); }).catch(function (e) { Z.toast(e.message); });
+        var r = qrRebuild(im);
+        Z.saveQr({ img: r.img, n: r.n, mode: q ? q.mode : 'unpaid' }).then(function () { Z.toast(r.n ? 'QR guardado (' + r.n + ' módulos)' : 'QR guardado'); refresh(); }).catch(function (e) { Z.toast(e.message); });
       };
       im.onerror = function () { URL.revokeObjectURL(url); Z.toast('No se pudo leer la imagen.'); };
       im.src = url;

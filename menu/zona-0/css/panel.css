@@ -562,4 +562,4 @@ body{background:var(--paper);min-height:100dvh}
 .qrc .qrt{display:flex;flex-direction:column;gap:6px;min-width:220px;flex:1}
 .qrc .qra{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .qrc select{min-height:44px;border:2px solid #111;border-radius:8px;padding:0 10px;font:inherit;background:#fff}
-#prtTicket .qrpay{display:block;width:42mm;height:42mm;margin:2mm auto;image-rendering:pixelated}
+#prtTicket .qrpay{display:block;width:58mm;height:58mm;margin:2mm auto;image-rendering:pixelated}

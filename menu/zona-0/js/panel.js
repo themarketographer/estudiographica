@@ -363,7 +363,7 @@
       if (o.discount) two('Descuento', '-' + o.discount, '700', 26);
       two('TOTAL', money(o.total), '900', 44); y += 6;
       block(payText(o), 26);
-      if (qrOn(o) && qrImg) { y += 8; line('ESCANEA PARA PAGAR', '800', 24, 'center', 4); var QS = 320; if (draw) g.drawImage(qrImg, (PX - QS) / 2, y, QS, QS); y += QS + 10; }
+      if (qrOn(o) && qrImg) { y += 8; line('ESCANEA PARA PAGAR', '800', 24, 'center', 4); var N = qr.n || 0, QS = N ? N * Math.max(2, Math.floor((N <= 60 ? 340 : IW) / N)) : 320; if (draw) { g.imageSmoothingEnabled = !N; g.drawImage(qrImg, Math.round((PX - QS) / 2), y, QS, QS); g.imageSmoothingEnabled = true; } y += QS + 10; }
       if (cu.notes) line('Notas: ' + cu.notes, '600', 22, 'left', 4);
       rule(false);
       line('¡Gracias por rodar con nosotros!', '800', 26, 'center', 0);
@@ -412,7 +412,7 @@
     '#ticket h1{font-size:20pt;text-align:center;letter-spacing:-.03em;margin:0}#ticket p{margin:0}#ticket .c{text-align:center}' +
     '#ticket hr{border:0;border-top:1.5px dashed #000;margin:3mm 0}#ticket .r{display:flex;justify-content:space-between;gap:8px}' +
     '#ticket .rn{min-width:0;flex:1}#ticket .rp{white-space:nowrap}#ticket .tot{font-size:15pt}' +
-    '#ticket .big{font-size:26pt;font-weight:800;text-align:center;line-height:1}#ticket small{font-weight:500;font-size:10pt;display:block;padding-left:5mm}#ticket .qrpay{display:block;width:44mm;height:44mm;margin:2mm auto}';
+    '#ticket .big{font-size:26pt;font-weight:800;text-align:center;line-height:1}#ticket small{font-weight:500;font-size:10pt;display:block;padding-left:5mm}#ticket .qrpay{display:block;width:58mm;height:58mm;margin:2mm auto;image-rendering:pixelated}';
   $('#prtGo').addEventListener('click', function () {
     var tmp = document.createElement('div'); buildTicket(prt.o, tmp, false);
     var w = window.open('', 'z0ticket', 'width=420,height=720');
