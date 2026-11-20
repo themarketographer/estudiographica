@@ -305,7 +305,34 @@
       for (var dy = -1; dy <= 1; dy++) for (var dx = -1; dx <= 1; dx++) { var xx = cx + dx, yy = cy + dy; if (xx >= 0 && yy >= 0 && xx < w && yy < h) { t++; if (dark(xx, yy)) n++; } }
       if (n * 2 > t) go.fillRect(c, r, 1, 1);
     }
-    return { img: out.toDataURL('image/png'), n: N };
+    var od = go.getImageData(0, 0, N, N).data, mat = []; for (var rr = 0; rr < N; rr++) { mat.push([]); for (var cc = 0; cc < N; cc++) mat[rr].push(od[(rr * N + cc) * 4] < 128); }
+    return { img: out.toDataURL('image/png'), n: N, mat: mat };
+  }
+  function loadJs(src) {
+    return new Promise(function (ok, no) { var sc = document.createElement('script'); sc.src = src; sc.onload = ok; sc.onerror = function () { no(new Error('No cargó ' + src)); }; document.head.appendChild(sc); });
+  }
+  function drawMat(mat, K, B) {
+    var N = mat.length, W = N * K + B * 2, cv = document.createElement('canvas'); cv.width = cv.height = W;
+    var g = cv.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, W, W); g.fillStyle = '#000';
+    for (var r = 0; r < N; r++) for (var c = 0; c < N; c++) if (mat[r][c]) g.fillRect(B + c * K, B + r * K, K, K);
+    return { cv: cv, data: g.getImageData(0, 0, W, W) };
+  }
+  /* El QR del banco trae mucha información y es denso (puntos diminutos). Se lee su texto y se vuelve a dibujar con la
+     corrección de errores más baja, que usa menos módulos y deja puntos más grandes: se lee mejor en papel térmico.
+     Si algo falla en el camino se queda con el QR original reconstruido. */
+  function qrSimplify(res) {
+    if (!res.n || !res.mat) return Promise.resolve(res);
+    return Promise.all([loadJs('../js/vendor/jsQR.js'), loadJs('../js/vendor/qrcode.js')]).then(function () {
+      var hit = window.jsQR(drawMat(res.mat, 6, 24).data.data, res.n * 6 + 48, res.n * 6 + 48);
+      if (!hit || !hit.data || /[^\x20-\x7e]/.test(hit.data)) return res;
+      var q = window.qrcode(0, 'L'); q.addData(hit.data, 'Byte'); q.make();
+      var n2 = q.getModuleCount(); if (n2 >= res.n) return res;
+      var mat2 = []; for (var r = 0; r < n2; r++) { mat2.push([]); for (var c = 0; c < n2; c++) mat2[r].push(q.isDark(r, c)); }
+      var chk = drawMat(mat2, 6, 24), back = window.jsQR(chk.data.data, chk.cv.width, chk.cv.width);
+      if (!back || back.data !== hit.data) return res;
+      var o = drawMat(mat2, 1, 0).cv;
+      return { img: o.toDataURL('image/png'), n: n2, simplified: true, from: res.n };
+    }).catch(function () { return res; });
   }
   function qrCard() {
     var c = el('div', 'bcard qrc'), q = Z.qr();
@@ -327,8 +354,10 @@
       var url = URL.createObjectURL(f), im = new Image();
       im.onload = function () {
         URL.revokeObjectURL(url);
-        var r = qrRebuild(im);
-        Z.saveQr({ img: r.img, n: r.n, mode: q ? q.mode : 'unpaid' }).then(function () { Z.toast(r.n ? 'QR guardado (' + r.n + ' módulos)' : 'QR guardado'); refresh(); }).catch(function (e) { Z.toast(e.message); });
+        Z.toast('Leyendo el QR…');
+        qrSimplify(qrRebuild(im)).then(function (r) {
+          return Z.saveQr({ img: r.img, n: r.n, mode: q ? q.mode : 'unpaid' }).then(function () { Z.toast(r.simplified ? 'QR guardado y simplificado (' + r.from + ' a ' + r.n + ' puntos por lado)' : 'QR guardado'); refresh(); });
+        }).catch(function (e) { Z.toast(e.message); });
       };
       im.onerror = function () { URL.revokeObjectURL(url); Z.toast('No se pudo leer la imagen.'); };
       im.src = url;

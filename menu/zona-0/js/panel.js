@@ -363,7 +363,7 @@
       if (o.discount) two('Descuento', '-' + o.discount, '700', 26);
       two('TOTAL', money(o.total), '900', 44); y += 6;
       block(payText(o), 26);
-      if (qrOn(o) && qrImg) { y += 8; line('ESCANEA PARA PAGAR', '800', 24, 'center', 4); var N = qr.n || 0, QS = N ? N * Math.max(2, Math.floor((N <= 60 ? 340 : IW) / N)) : 320; if (draw) { g.imageSmoothingEnabled = !N; g.drawImage(qrImg, Math.round((PX - QS) / 2), y, QS, QS); g.imageSmoothingEnabled = true; } y += QS + 10; }
+      if (qrOn(o) && qrImg) { y += 8; line('ESCANEA PARA PAGAR', '800', 24, 'center', 4); y += 12; var N = qr.n || 0, QS = N ? N * Math.max(2, Math.floor((N <= 60 ? 340 : IW) / N)) : 320; if (draw) { g.imageSmoothingEnabled = !N; g.drawImage(qrImg, Math.round((PX - QS) / 2), y, QS, QS); g.imageSmoothingEnabled = true; } y += QS + 26; }
       if (cu.notes) line('Notas: ' + cu.notes, '600', 22, 'left', 4);
       rule(false);
       line('¡Gracias por rodar con nosotros!', '800', 26, 'center', 0);
@@ -379,8 +379,8 @@
   }
   /* Ticket para papel de 80 x 210 mm con 4 mm de margen. Se ve antes de imprimir y se puede achicar o agrandar. */
   var PAPER_H = 210, MARGIN = 4, PX_MM = 96 / 25.4;
-  var prt = { o: null, auto: true, scale: 1, logo: false, compat: false };
-  try { var sv = JSON.parse(ls('z0.prt') || '{}'); if (sv.scale >= 0.5 && sv.scale <= 1.5) prt.scale = sv.scale; if (sv.auto === false) prt.auto = false; if (sv.v === 5 && sv.logo === true) prt.logo = true; if (sv.v === 5 && sv.compat === true) prt.compat = true; } catch (e) {}
+  var prt = { o: null, auto: true, scale: 1, logo: false, compat: false, real: false };
+  try { var sv = JSON.parse(ls('z0.prt') || '{}'); if (sv.scale >= 0.5 && sv.scale <= 1.5) prt.scale = sv.scale; if (sv.auto === false) prt.auto = false; if (sv.v === 5 && sv.logo === true) prt.logo = true; if (sv.real === true) prt.real = true; if (sv.v === 5 && sv.compat === true) prt.compat = true; } catch (e) {}
   var lastTicket = null;
   function prtFit() {
     var t = $('#prtTicket'); t.style.setProperty('--ts', '1'); var h = t.getBoundingClientRect().height / PX_MM, room = PAPER_H - MARGIN * 2 - 8;
@@ -392,10 +392,10 @@
     t.style.setProperty('--ts', String(prt.scale));
     var h = t.getBoundingClientRect().height / PX_MM, fits = h <= PAPER_H - MARGIN * 2; prt.h = h;
     $('#prtPct').textContent = Math.round(prt.scale * 100) + '%';
-    $('#prtAuto').checked = prt.auto; $('#prtLogo').checked = prt.logo;
+    $('#prtAuto').checked = prt.auto; $('#prtLogo').checked = prt.logo; $('#prtReal').checked = prt.real;
     $('#prtInfo').textContent = prt.compat ? 'Al imprimir, elige el papel 80 x 210 y Márgenes: Ninguno.' : 'Al imprimir, elige el papel 80 x 210 y Márgenes: Ninguno.';
     $('#prtInfo').classList.toggle('bad', !fits);
-    ls('z0.prt', JSON.stringify({ auto: prt.auto, scale: prt.scale, logo: prt.logo, compat: prt.compat, v: 5 }));
+    ls('z0.prt', JSON.stringify({ auto: prt.auto, scale: prt.scale, logo: prt.logo, compat: prt.compat, real: prt.real, v: 5 }));
   }
   function printTicket(o) {
     lastTicket = o; prt.o = o; $('#prtT').textContent = o.orderId ? 'Ticket ' + o.orderId : 'Cuenta de la mesa ' + ((o.customer || {}).mesa || '');
@@ -405,6 +405,7 @@
   $('#prtPlus').addEventListener('click', function () { prt.auto = false; prt.scale = Math.min(1.5, Math.round((prt.scale + 0.05) * 100) / 100); prtPaint(); });
   $('#prtAuto').addEventListener('change', function () { prt.auto = this.checked; prtPaint(); });
   $('#prtLogo').addEventListener('change', function () { prt.logo = this.checked; prtPaint(); });
+  $('#prtReal').addEventListener('change', function () { prt.real = this.checked; prtPaint(); });
   /* Imprimir: en una ventana aparte y limpia, solo con el ticket y los mismos estilos de la versión que sí imprimió
      en la MJ809 (sin ventana modal encima, sin estilos del panel, sin zoom ni tamaño de hoja forzado). */
   var PRINT_CSS = '@page{size:80mm auto;margin:0}html,body{margin:0;padding:0;background:#fff}' +
@@ -434,10 +435,23 @@
     setTimeout(function () { URL.revokeObjectURL(u); }, 4000);
     $('#prtTxtMsg').textContent = 'PDF descargado. Ábrelo con Edge o Adobe Reader e imprime con Ctrl+P, papel 80 x 210.';
   });
+  /* Marca la imagen como de 203 puntos por pulgada (los de la impresora de 80 mm): 576 puntos miden 72 mm y Paint la imprime
+     sin reescalar. Reescalar un ticket de puntos negros y blancos lo emborrona, y más aún al QR. */
+  function crc32(b) { var c, n, k, t = crc32.t; if (!t) { t = crc32.t = []; for (n = 0; n < 256; n++) { c = n; for (k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; } } c = 0xFFFFFFFF; for (n = 0; n < b.length; n++) c = t[(c ^ b[n]) & 255] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0; }
+  function pngWithDpi(url, dpi) {
+    try {
+      var bin = atob(url.split(',')[1]), src = new Uint8Array(bin.length), i; for (i = 0; i < bin.length; i++) src[i] = bin.charCodeAt(i);
+      var ppm = Math.round(dpi / 0.0254), body = new Uint8Array(13), dv = new DataView(body.buffer);
+      body.set([112, 72, 89, 115], 0); dv.setUint32(4, ppm); dv.setUint32(8, ppm); body[12] = 1;
+      var ck = new Uint8Array(21), cd = new DataView(ck.buffer); cd.setUint32(0, 9); ck.set(body, 4); cd.setUint32(17, crc32(body));
+      var out = new Uint8Array(src.length + 21); out.set(src.subarray(0, 33), 0); out.set(ck, 33); out.set(src.subarray(33), 54);
+      var s2 = ''; for (i = 0; i < out.length; i++) s2 += String.fromCharCode(out[i]); return 'data:image/png;base64,' + btoa(s2);
+    } catch (e) { return url; }
+  }
   $('#prtImg').addEventListener('click', function () {
     var o = prt.o;
     var a = document.createElement('a');
-    a.href = ticketPng(o); a.download = 'ticket-' + (o.orderId || ('mesa-' + ((o.customer || {}).mesa || ''))) + '.png'; document.body.appendChild(a); a.click(); a.remove();
+    a.href = prt.real ? pngWithDpi(ticketPng(o), 203) : ticketPng(o); a.download = 'ticket-' + (o.orderId || ('mesa-' + ((o.customer || {}).mesa || ''))) + '.png'; document.body.appendChild(a); a.click(); a.remove();
     $('#prtTxtMsg').textContent = 'Descargado. Ábrelo con Paint, Ctrl+P, papel 80 x 210.';
   });
   $('#reprint').addEventListener('click', function () {
