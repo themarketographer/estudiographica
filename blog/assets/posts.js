@@ -184,5 +184,12 @@ window.EG_BLOG_POSTS = [
     "excerpt": "Cuántas horas ocupa la sesión según los platos, cuándo llegan las fotos editadas y cómo preparar la cocina para que rinda.",
     "img": "https://res.cloudinary.com/dplhu2z6j/image/upload/v1791601517/IMG_2390__jtz75e.jpg",
     "eyebrow": "Guías · Sesión de fotos"
+  },
+  {
+    "slug": "como-reservar-sesion-fotos-restaurante-cochabamba",
+    "title": "Cómo reservar una sesión de fotos de restaurante",
+    "excerpt": "Los cuatro pasos para apartar tu fecha con Estudio Graphica, qué llevar a la llamada y cuánto margen dejar antes de un lanzamiento.",
+    "img": "https://res.cloudinary.com/dplhu2z6j/image/upload/v1791601668/_MG_2824_a4hpsv.jpg",
+    "eyebrow": "Guías · Reservas"
   }
 ];
