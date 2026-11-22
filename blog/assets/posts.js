@@ -191,5 +191,12 @@ window.EG_BLOG_POSTS = [
     "excerpt": "Los cuatro pasos para apartar tu fecha con Estudio Graphica, qué llevar a la llamada y cuánto margen dejar antes de un lanzamiento.",
     "img": "https://res.cloudinary.com/dplhu2z6j/image/upload/v1791601668/_MG_2824_a4hpsv.jpg",
     "eyebrow": "Guías · Reservas"
+  },
+  {
+    "slug": "que-platos-fotografiar-primero-restaurante-cochabamba",
+    "title": "Qué platos fotografiar primero en tu restaurante",
+    "excerpt": "Tres listas para elegir tus platos estrella, qué dejar para una segunda ronda y cuántas fotos suma cada decisión.",
+    "img": "https://res.cloudinary.com/dplhu2z6j/image/upload/v1791601517/IMG_2390__jtz75e.jpg",
+    "eyebrow": "Guías · Menú"
   }
 ];
