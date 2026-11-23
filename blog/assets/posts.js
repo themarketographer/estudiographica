@@ -198,5 +198,12 @@ window.EG_BLOG_POSTS = [
     "excerpt": "Tres listas para elegir tus platos estrella, qué dejar para una segunda ronda y cuántas fotos suma cada decisión.",
     "img": "https://res.cloudinary.com/dplhu2z6j/image/upload/v1791601517/IMG_2390__jtz75e.jpg",
     "eyebrow": "Guías · Menú"
+  },
+  {
+    "slug": "donde-usar-fotos-restaurante-despues-de-la-sesion",
+    "title": "Dónde usar las fotos de tu restaurante tras la sesión",
+    "excerpt": "Los seis lugares donde rinden tus fotos de restaurante, qué recorte pide cada uno y cómo ordenar la carpeta el día de la entrega.",
+    "img": "https://res.cloudinary.com/dplhu2z6j/image/upload/v1791601945/_MG_5822_syndep.jpg",
+    "eyebrow": "Guías · Uso de fotos"
   }
 ];
