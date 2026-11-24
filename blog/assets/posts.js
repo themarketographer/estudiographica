@@ -205,5 +205,12 @@ window.EG_BLOG_POSTS = [
     "excerpt": "Los seis lugares donde rinden tus fotos de restaurante, qué recorte pide cada uno y cómo ordenar la carpeta el día de la entrega.",
     "img": "https://res.cloudinary.com/dplhu2z6j/image/upload/v1791601945/_MG_5822_syndep.jpg",
     "eyebrow": "Guías · Uso de fotos"
+  },
+  {
+    "slug": "foto-no-se-parece-al-plato-restaurante",
+    "title": "Foto que no se parece al plato: cómo evitar reclamos",
+    "excerpt": "Por qué la foto de tu plato no coincide con lo que recibe el cliente, los cinco desfases más comunes y cómo corregirlos sin perder antojo.",
+    "img": "https://res.cloudinary.com/dplhu2z6j/image/upload/v1745819075/2_ylgf7o.jpg",
+    "eyebrow": "Errores comunes · Fotos reales"
   }
 ];
