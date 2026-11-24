@@ -1,0 +1,9 @@
+Fotos de la página. Súbelas a esta carpeta con estos nombres exactos y aparecen solas, sin tocar el HTML.
+
+retrato-hero.jpg         Vertical 4:5, mínimo 1600 px de alto. Retrato de Aldo en el consultorio.
+detalle-consultorio.jpg  Vertical 4:5, mínimo 1200 px de ancho. Un rincón del consultorio, sin personas.
+consultorio.jpg          Horizontal 3:2, mínimo 1800 px de ancho. El consultorio completo, sin personas.
+aldo-charla.jpg          Horizontal 3:2, mínimo 1800 px de ancho. Aldo dando una charla o clase.
+og-image.jpg             1200 x 630 px. Imagen que se ve al compartir el link por WhatsApp.
+
+Peso recomendado: menos de 300 KB por foto (JPG, calidad 80).
