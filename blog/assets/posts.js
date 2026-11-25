@@ -212,5 +212,12 @@ window.EG_BLOG_POSTS = [
     "excerpt": "Por qué la foto de tu plato no coincide con lo que recibe el cliente, los cinco desfases más comunes y cómo corregirlos sin perder antojo.",
     "img": "https://res.cloudinary.com/dplhu2z6j/image/upload/v1745819075/2_ylgf7o.jpg",
     "eyebrow": "Errores comunes · Fotos reales"
+  },
+  {
+    "slug": "fotos-combos-promociones-restaurante-cochabamba",
+    "title": "Fotos de combos y promociones para tu restaurante",
+    "excerpt": "Cómo fotografiar un combo armado, qué hacer con las promociones que cambian cada semana y cuántas fotos necesitas para tu carta.",
+    "img": "https://res.cloudinary.com/dplhu2z6j/image/upload/v1791601428/a4441ef4-e729-46ff-9fd3-97237319ae89_cwgrka.jpg",
+    "eyebrow": "Guías · Combos y promociones"
   }
 ];
