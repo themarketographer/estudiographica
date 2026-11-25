@@ -417,10 +417,16 @@ h3.sub{font-size:1.625rem;}
 .breath{display:flex;align-items:center;gap:20px;appearance:none;background:none;border:0;padding:8px;margin:-8px;font:inherit;color:inherit;text-align:left;cursor:pointer;border-radius:28px;-webkit-tap-highlight-color:transparent;}
 .breath .orbe{position:relative;width:96px;height:96px;flex:none;display:grid;place-items:center;}
 .breath .orbe::before,.breath .orbe::after{content:"";position:absolute;border-radius:50%;}
-.breath .orbe::before{inset:0;border:1.5px solid rgba(157,191,175,.55);animation:aire 10s var(--ease-io) infinite;}
-.breath .orbe::after{inset:20px;background:radial-gradient(circle at 34% 28%,#fff 0,#E3EFE9 14%,var(--celadon) 58%,var(--sage) 100%);box-shadow:0 0 46px 6px rgba(157,191,175,.38),inset -9px -12px 20px rgba(27,47,55,.28),inset 5px 6px 12px rgba(255,255,255,.55);animation:aire2 10s var(--ease-io) infinite;}
-@keyframes aire{0%,100%{transform:scale(.8);}45%,55%{transform:scale(1.12);}}
-@keyframes aire2{0%,100%{transform:scale(.75);}45%,55%{transform:scale(1.25);}}
+.breath .orbe::before{inset:-22%;background:radial-gradient(circle,rgba(169,205,190,.30),rgba(169,205,190,0) 68%);animation:aire 10s var(--ease-io) infinite;}
+.breath .orbe::after{inset:34%;z-index:1;background:radial-gradient(circle at 40% 36%,#FFFBF2 0,#F3EEDF 30%,#CFE3D8 72%,#B9D4C6 100%);box-shadow:0 0 34px 8px rgba(243,238,223,.26);animation:aire2 10s var(--ease-io) infinite;}
+.breath .petalo{position:absolute;left:50%;top:50%;width:58%;height:58%;margin:-29% 0 0 -29%;border-radius:50%;background:radial-gradient(circle,rgba(205,228,215,.95) 0,rgba(169,205,190,.62) 50%,rgba(157,191,175,0) 74%);transform:rotate(var(--a)) translateY(-8%) scale(.8);animation:abre 10s var(--ease-io) infinite;}
+@keyframes abre{0%,100%{transform:rotate(var(--a)) translateY(-8%) scale(.8);}45%,55%{transform:rotate(var(--a)) translateY(-34%) scale(1.15);}}
+.breath .pts{display:none;gap:7px;margin-top:12px;}
+.breath.guiado .pts{display:flex;}
+.breath .pts i{width:9px;height:9px;border-radius:50%;background:rgba(157,191,175,.28);transition:background .5s var(--ease-out),transform .5s var(--ease-out);}
+.breath .pts i.on{background:#F3EEDF;transform:scale(1.15);}
+@keyframes aire{0%,100%{transform:scale(.8);opacity:.7;}45%,55%{transform:scale(1.1);opacity:1;}}
+@keyframes aire2{0%,100%{transform:scale(.8);}45%,55%{transform:scale(1.2);}}
 .breath .txt{display:block;font-size:.9375rem;color:var(--soft);max-width:14em;}
 .breath b{display:block;color:#fff;font-family:var(--serif);font-weight:700;font-size:1.5rem;line-height:1.1;letter-spacing:-.01em;}
 .breath .lbl{display:grid;justify-items:start;}
@@ -431,25 +437,14 @@ h3.sub{font-size:1.625rem;}
 .breath.guiado .w1,.breath.guiado .w2{display:none;}
 .breath.guiado .wj{display:block;}
 .breath .brtxt{display:block;}
-.breath .tap{display:inline-block;margin-top:14px;padding:7px 14px;border-radius:100px;font-size:.8125rem;font-weight:600;letter-spacing:.02em;color:#DDEBE4;background:rgba(157,191,175,.13);box-shadow:inset 0 0 0 1px rgba(157,191,175,.34);transition:background .2s var(--ease-out),transform .16s var(--ease-out);}
-.breath:active .tap{transform:scale(.97);}
-.breath .r{position:absolute;inset:14px;border-radius:50%;border:1px solid rgba(157,191,175,.5);opacity:0;animation:onda 10s var(--ease-out) infinite;pointer-events:none;}
-.breath .r2{animation-delay:.9s;}
-@keyframes onda{0%{transform:scale(.7);opacity:0;}8%{opacity:.55;}46%{transform:scale(1.55);opacity:0;}100%{transform:scale(1.55);opacity:0;}}
-.breath .arco{position:absolute;inset:-14px;width:calc(100% + 28px);height:calc(100% + 28px);transform:rotate(-90deg);overflow:visible;pointer-events:none;}
-.breath .pista,.breath .avance{fill:none;stroke-width:2;}
-.breath .pista{stroke:rgba(157,191,175,.16);}
-.breath .avance{stroke:var(--celadon);stroke-linecap:round;stroke-dasharray:100;stroke-dashoffset:100;opacity:0;filter:drop-shadow(0 0 4px rgba(157,191,175,.7));}
-.breath.guiado .avance{opacity:1;animation:progreso 30s linear forwards;}
-@keyframes progreso{to{stroke-dashoffset:0;}}
-.breath .play{position:absolute;z-index:1;width:26px;height:26px;margin-left:3px;fill:var(--deep);opacity:.62;transition:opacity .3s var(--ease-out),transform .3s var(--ease-out);pointer-events:none;}
-.breath.guiado .play{opacity:0;transform:scale(.7);}
+.breath .tap{display:block;margin-top:12px;font-size:.875rem;font-weight:600;color:#DDEBE4;text-decoration:underline;text-decoration-color:rgba(221,235,228,.4);text-underline-offset:5px;transition:color .2s var(--ease-out);}
+.breath.guiado .tap{text-decoration:none;margin-top:8px;}
 .breath .wj.cambia{animation:palabra .5s var(--ease-out);}
 @keyframes palabra{from{opacity:0;transform:translateY(6px);filter:blur(2px);}to{opacity:1;transform:none;filter:none;}}
-@media(hover:hover) and (pointer:fine){.breath:hover .tap{background:rgba(157,191,175,.24);}.breath:not(.guiado):hover .play{opacity:.85;}}
+@media(hover:hover) and (pointer:fine){.breath:hover .tap{color:#fff;}}
 .breath .orbe{transition:transform .16s var(--ease-out);}
 .breath:active .orbe{transform:scale(.96);}
-.breath.reinicio .orbe::before,.breath.reinicio .orbe::after,.breath.reinicio .w1,.breath.reinicio .w2,.breath.reinicio .r,.breath.reinicio .avance{animation:none;}
+.breath.reinicio .orbe::before,.breath.reinicio .orbe::after,.breath.reinicio .w1,.breath.reinicio .w2,.breath.reinicio .petalo{animation:none;}
 @media(hover:hover) and (pointer:fine){.breath:hover .orbe::before{border-color:rgba(157,191,175,.9);}}
 @keyframes w1{0%{opacity:1;}50%{opacity:0;}100%{opacity:1;}}
 @keyframes w2{0%{opacity:0;}50%{opacity:1;}100%{opacity:0;}}
@@ -457,12 +452,9 @@ h3.sub{font-size:1.625rem;}
   .cta-card{padding:84px 72px;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:64px;}
   .breath{flex-direction:column;text-align:center;gap:18px;}
   .breath .lbl{justify-items:center;}
+  .breath .pts{justify-content:center;}
   .breath .txt{max-width:11em;}
   .breath .orbe{width:150px;height:150px;}
-  .breath .orbe::after{inset:32px;}
-  .breath .r{inset:24px;}
-  .breath .arco{inset:-18px;width:calc(100% + 36px);height:calc(100% + 36px);}
-  .breath .play{width:32px;height:32px;margin-left:4px;}
 }
 .hint{font-size:.8125rem;color:var(--muted);}
 
@@ -501,9 +493,8 @@ html:not(.js) .reveal{opacity:1;transform:none;}
   .wa-fixed .btn::before{animation:none;}
   .orb,.rings i,.chip,.breath .orbe::before,.breath .orbe::after,.breath .w1,.breath .w2{animation:none;}
   .breath .w2{opacity:0;}
-  .breath .orbe,.breath .play,.breath .tap{transition:none;}
-  .breath .r,.breath .wj.cambia,.breath.guiado .avance{animation:none;}
-  .breath.guiado .avance{stroke-dashoffset:0;}
+  .breath .orbe,.breath .tap{transition:none;}
+  .breath .petalo,.breath .wj.cambia{animation:none;}
   .js .w,.js .hero .lead,.js .hero-cta,.js .hero-note,.js .hero-fig,.js .facts li{animation:none;opacity:1;transform:none;}
   .js .mark::after{animation:none;transform:none;}
   .reveal{opacity:1;transform:none;transition:none;}
@@ -921,12 +912,8 @@ html:not(.js) .reveal{opacity:1;transform:none;}
         </div>
       </div>
       <button class="breath" id="breath" type="button" aria-label="Respiración guiada de tres ciclos. Toca para empezar.">
-        <span class="orbe" aria-hidden="true">
-          <svg class="arco" viewBox="0 0 100 100"><circle class="pista" cx="50" cy="50" r="48" pathLength="100"/><circle class="avance" cx="50" cy="50" r="48" pathLength="100"/></svg>
-          <i class="r r1"></i><i class="r r2"></i>
-          <svg class="play" viewBox="0 0 24 24"><path d="M8 5.6v12.8a1 1 0 0 0 1.5.86l10.2-6.4a1 1 0 0 0 0-1.72L9.5 4.74A1 1 0 0 0 8 5.6z"/></svg>
-        </span>
-        <span class="txt"><b class="lbl"><span class="w1">Inhala</span><span class="w2">Exhala</span><span class="wj" id="breath-w"></span></b><span class="brtxt">Respira. Tómate el tiempo que necesites.</span><span class="tap" id="breath-tap">Toca el círculo y respira conmigo</span></span>
+        <span class="orbe" aria-hidden="true"><i class="petalo" style="--a:0deg"></i><i class="petalo" style="--a:72deg;animation-delay:.12s"></i><i class="petalo" style="--a:144deg;animation-delay:.24s"></i><i class="petalo" style="--a:216deg;animation-delay:.12s"></i><i class="petalo" style="--a:288deg;animation-delay:.24s"></i></span>
+        <span class="txt"><b class="lbl"><span class="w1">Inhala</span><span class="w2">Exhala</span><span class="wj" id="breath-w"></span></b><span class="brtxt">Respira. Tómate el tiempo que necesites.</span><span class="pts" id="breath-pts" aria-hidden="true"><i></i><i></i><i></i></span><span class="tap" id="breath-tap">Toca y respira conmigo</span></span>
       </button>
     </div>
   </div>
@@ -1109,12 +1096,13 @@ var PUBLICACIONES = [
       if(brW.textContent !== w){ brW.textContent = w; brW.classList.remove('cambia'); void brW.offsetWidth; brW.classList.add('cambia'); }
       brTap.textContent = tap;
     }
+    function brDots(n){ Array.prototype.forEach.call(document.querySelectorAll('#breath-pts i'), function(d, k){ d.classList.toggle('on', k < n); }); }
     function brClear(){ brT.forEach(clearTimeout); brT = []; }
     function brIdle(){
       brClear(); brOn = false;
       br.classList.remove('guiado');
       br.setAttribute('aria-label', 'Respiración guiada de tres ciclos. Toca para empezar.');
-      brTap.textContent = 'Toca el círculo y respira conmigo';
+      brTap.textContent = 'Toca y respira conmigo'; brDots(0);
     }
     function brStart(){
       brClear(); brOn = true;
@@ -1124,13 +1112,13 @@ var PUBLICACIONES = [
       br.classList.add('reinicio'); void br.offsetWidth; br.classList.remove('reinicio');
       for(var c = 0; c < CICLOS; c++){
         (function(c){
-          brT.push(setTimeout(function(){ brSet('Inhala', 'Ciclo ' + (c + 1) + ' de ' + CICLOS); }, c * 2 * MITAD));
+          brT.push(setTimeout(function(){ brSet('Inhala', 'Ciclo ' + (c + 1) + ' de ' + CICLOS); brDots(c); }, c * 2 * MITAD));
           brT.push(setTimeout(function(){ brSet('Exhala', 'Ciclo ' + (c + 1) + ' de ' + CICLOS); }, c * 2 * MITAD + MITAD));
         })(c);
       }
       brT.push(setTimeout(function(){
         brOn = false;
-        brSet('Bien hecho', 'Toca para repetir');
+        brSet('Bien hecho', 'Toca para repetir'); brDots(CICLOS);
         br.setAttribute('aria-label', 'Respiración terminada. Toca para repetir.');
       }, CICLOS * 2 * MITAD));
     }
