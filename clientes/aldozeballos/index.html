@@ -394,56 +394,57 @@ h3.sub{font-size:1.625rem;}
 .panel .bloque-h:not(:first-child){margin-top:48px;}
 
 /* contacto */
-.contact-grid{display:grid;gap:48px;}
-@media(min-width:900px){.contact-grid{grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:88px;align-items:start;}}
-.contact-direct{margin-top:30px;display:grid;gap:12px;font-size:.9375rem;}
-.contact-direct .btn{justify-self:start;}
-.breath{margin-top:44px;display:flex;align-items:center;gap:20px;}
-.breath .orbe{position:relative;width:84px;height:84px;flex:none;display:grid;place-items:center;}
+.cta-card{position:relative;overflow:clip;isolation:isolate;border-radius:40px;padding:48px 28px;background:linear-gradient(145deg,#1B2F37,#243C46 60%,#2B4A52);color:var(--mist);box-shadow:0 50px 90px -48px rgba(20,33,42,.8),inset 0 0 0 1px rgba(232,238,235,.1);display:grid;gap:40px;}
+.cta-card .orb{z-index:-1;}
+.cta-card .orb.o1{width:460px;height:460px;right:-140px;top:-160px;}
+.cta-card .orb.o2{width:380px;height:380px;left:-120px;bottom:-160px;}
+.cta-card h2{color:#fff;max-width:14em;}
+.cta-card .lead{margin-top:24px;max-width:26em;color:#D3DFDA;}
+.cta-row{margin-top:34px;display:grid;gap:14px;justify-items:start;}
+.btn-lg{min-height:62px;padding:0 38px;font-size:1.125rem;}
+.btn-lg .i{width:24px;height:24px;}
+.cta-card .hint{color:var(--soft);font-size:.9375rem;}
+.cta-pts{list-style:none;margin:30px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:10px;}
+.cta-pts li{display:flex;align-items:center;gap:10px;padding:10px 16px 10px 12px;border-radius:100px;background:rgba(255,255,255,.07);box-shadow:inset 0 0 0 1px rgba(232,238,235,.16);font-size:.9375rem;color:#E4ECE8;}
+.cta-pts .i{color:var(--celadon);width:20px;height:20px;}
+.breath{display:flex;align-items:center;gap:20px;}
+.breath .orbe{position:relative;width:96px;height:96px;flex:none;display:grid;place-items:center;}
 .breath .orbe::before,.breath .orbe::after{content:"";position:absolute;border-radius:50%;}
-.breath .orbe::before{inset:0;border:1.5px solid rgba(111,154,140,.5);animation:aire 10s var(--ease-io) infinite;}
-.breath .orbe::after{inset:18px;background:radial-gradient(circle at 35% 30%,#fff,var(--celadon) 60%,var(--sage));animation:aire2 10s var(--ease-io) infinite;}
+.breath .orbe::before{inset:0;border:1.5px solid rgba(157,191,175,.55);animation:aire 10s var(--ease-io) infinite;}
+.breath .orbe::after{inset:20px;background:radial-gradient(circle at 35% 30%,#fff,var(--celadon) 60%,var(--sage));animation:aire2 10s var(--ease-io) infinite;}
 @keyframes aire{0%,100%{transform:scale(.8);}45%,55%{transform:scale(1.12);}}
 @keyframes aire2{0%,100%{transform:scale(.75);}45%,55%{transform:scale(1.25);}}
-.breath p{font-size:.9375rem;color:var(--muted);max-width:18em;}
-.breath b{display:block;color:var(--ink);font-family:var(--serif);font-size:1.1875rem;}
+.breath p{font-size:.9375rem;color:var(--soft);max-width:14em;}
+.breath b{display:block;color:#fff;font-family:var(--serif);font-size:1.25rem;}
 .breath .w1,.breath .w2{display:inline-block;}
 .breath .w1{animation:w1 10s steps(1) infinite;}
 .breath .w2{animation:w2 10s steps(1) infinite;position:absolute;opacity:0;}
 @keyframes w1{0%{opacity:1;}50%{opacity:0;}100%{opacity:1;}}
 @keyframes w2{0%{opacity:0;}50%{opacity:1;}100%{opacity:0;}}
 .breath .lbl{position:relative;display:block;}
-form{display:grid;gap:22px;background:#fff;padding:34px 30px;border-radius:30px;box-shadow:0 36px 70px -40px rgba(20,33,42,.55),0 0 0 1px rgba(20,33,42,.06);}
-.field{display:grid;gap:8px;}
-label,.legend{font-weight:700;font-size:.9375rem;}
-input[type=text],textarea{width:100%;font:400 1rem/1.4 var(--sans);color:var(--ink);background:var(--paper);border:1px solid rgba(20,33,42,.22);border-radius:14px;padding:15px 16px;transition:border-color .15s var(--ease-out),box-shadow .15s var(--ease-out),background-color .15s var(--ease-out);accent-color:var(--deep);}
-input[type=text]:focus,textarea:focus{outline:none;border-color:var(--deep);background:#fff;box-shadow:0 0 0 4px rgba(157,191,175,.6);}
-textarea{resize:vertical;min-height:90px;max-height:220px;}
-.pills{display:flex;flex-wrap:wrap;gap:10px;border:0;padding:0;margin:0;}
-.pills label{font-weight:500;position:relative;}
-.pills input{position:absolute;opacity:0;inset:0;}
-.pills span{display:inline-flex;align-items:center;min-height:44px;padding:0 18px;border-radius:100px;border:1px solid rgba(20,33,42,.24);background:var(--paper);cursor:pointer;transition:background-color .15s var(--ease-out),color .15s var(--ease-out),border-color .15s var(--ease-out),transform .15s var(--ease-out);}
-.pills label:active span{transform:scale(.97);}
-.pills input:checked+span{background:var(--deep);color:var(--mist);border-color:var(--deep);}
-.pills input:focus-visible+span{outline:2px solid var(--deep);outline-offset:3px;}
+@media(min-width:900px){
+  .cta-card{padding:84px 72px;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:64px;}
+  .breath{flex-direction:column;text-align:center;gap:18px;}
+  .breath p{max-width:11em;}
+  .breath .orbe{width:150px;height:150px;}
+  .breath .orbe::after{inset:32px;}
+}
 .hint{font-size:.8125rem;color:var(--muted);}
-.form-msg{padding:16px 18px;border-radius:14px;background:var(--mist);font-size:.9375rem;}
-.form-msg[hidden]{display:none;}
-.btn-send{background:var(--deep);color:var(--mist);justify-self:start;}
-@media(hover:hover) and (pointer:fine){.btn-send:hover{background:var(--ink);transform:translateY(-2px);}.btn-send:active{transform:scale(.97);}}
-.hp{position:absolute;left:-9999px;}
 
 /* footer */
-.foot{position:relative;background:var(--ink);color:var(--soft);padding:calc(var(--wave) + 40px) 0 104px;font-size:.875rem;}
+.foot{position:relative;background:var(--ink);color:var(--soft);padding:calc(var(--wave) + 40px) 0 112px;font-size:.875rem;}
 .foot b{color:#fff;font-family:var(--serif);font-weight:700;font-size:1.25rem;display:block;margin-bottom:8px;}
 .foot p+p{margin-top:10px;max-width:46em;}
-@media(min-width:900px){.foot{padding-bottom:56px;}}
+@media(min-width:900px){.foot{padding-bottom:120px;}}
 
 /* WhatsApp fijo en celular */
 .wa-fixed{position:fixed;right:16px;bottom:16px;z-index:70;opacity:0;transform:translateY(12px);pointer-events:none;transition:opacity .25s var(--ease-out),transform .25s var(--ease-out);}
 .wa-fixed.show{opacity:1;transform:none;pointer-events:auto;}
 .wa-fixed .btn{box-shadow:0 16px 32px -10px rgba(0,0,0,.5);}
-@media(min-width:900px){.wa-fixed{display:none;}}
+@media(min-width:900px){.wa-fixed{right:32px;bottom:32px;}}
+.wa-fixed .btn{position:relative;min-height:58px;padding:0 28px;}
+.wa-fixed .btn::before{content:"";position:absolute;inset:0;border-radius:100px;background:var(--wa);z-index:-1;animation:halo 3.2s var(--ease-out) 1.2s 3;}
+@keyframes halo{0%{transform:scale(1);opacity:.55;}100%{transform:scale(1.35,1.6);opacity:0;}}
 
 /* entradas */
 .js .w{display:inline-block;opacity:0;transform:translateY(.5em);animation:wordIn .8s var(--ease-out) forwards;animation-delay:calc(var(--i) * 55ms + 120ms);}
@@ -462,6 +463,7 @@ html:not(.js) .reveal{opacity:1;transform:none;}
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto;}
   .thread{scroll-behavior:auto;}
+  .wa-fixed .btn::before{animation:none;}
   .orb,.rings i,.chip,.breath .orbe::before,.breath .orbe::after,.breath .w1,.breath .w2{animation:none;}
   .breath .w2{opacity:0;}
   .js .w,.js .hero .lead,.js .hero-cta,.js .hero-note,.js .hero-fig,.js .facts li{animation:none;opacity:1;transform:none;}
@@ -871,48 +873,31 @@ html:not(.js) .reveal{opacity:1;transform:none;}
 <section class="sec on-paper on-light" id="contacto" aria-labelledby="h-contacto">
   <div class="wave w-d flip"><svg viewBox="0 0 1440 90" preserveAspectRatio="none"><path d="M0 0H1440V38C1290 82 1130 84 960 56 790 28 630 20 460 48 300 76 140 70 0 36Z"/></svg></div>
   <svg class="deco deco-r" aria-hidden="true"><use href="#deco-leaves" width="100%" height="100%"/></svg>
-  <div class="wrap contact-grid">
-    <div>
-      <h2 id="h-contacto" class="reveal">Escríbeme y coordinamos tu primera consulta</h2>
-      <p class="lead muted reveal" style="margin-top:26px;max-width:28em;--d:80ms">Cuéntame en una línea el motivo y acordamos día, hora y modalidad.</p>
-      <div class="contact-direct reveal" style="--d:120ms">
-        <a class="btn btn-wa" data-wa="consulta" href="#contacto">
-          <svg class="i" aria-hidden="true"><use href="#i-wa"/></svg>
-          Escribir por WhatsApp
-        </a>
-        <p class="hint" id="email-line" hidden>Correo profesional: <a class="link" id="email-link" href="#"></a></p>
+  <div class="wrap">
+    <div class="cta-card reveal">
+      <span class="orb o1" aria-hidden="true"></span>
+      <span class="orb o2" aria-hidden="true"></span>
+      <div class="cta-in">
+        <h2 id="h-contacto">Escríbeme y coordinamos tu primera consulta</h2>
+        <p class="lead">Cuéntame en una línea el motivo y acordamos día, hora y modalidad.</p>
+        <div class="cta-row">
+          <a class="btn btn-wa btn-lg" data-wa="consulta" href="#contacto">
+            <svg class="i" aria-hidden="true"><use href="#i-wa"/></svg>
+            Escribir por WhatsApp
+          </a>
+          <p class="hint" id="email-line" hidden>Correo profesional: <a class="link" id="email-link" href="#"></a></p>
+        </div>
+        <ul class="cta-pts">
+          <li><svg class="i" aria-hidden="true"><use href="#i-pin"/></svg>Presencial en Cochabamba</li>
+          <li><svg class="i" aria-hidden="true"><use href="#i-video"/></svg>Online por Google Meet</li>
+          <li><svg class="i" aria-hidden="true"><use href="#i-lock"/></svg>Confidencial</li>
+        </ul>
       </div>
-      <div class="breath reveal" style="--d:160ms" aria-hidden="true">
+      <div class="breath" aria-hidden="true">
         <span class="orbe"></span>
         <p><b class="lbl"><span class="w1">Inhala</span><span class="w2">Exhala</span></b>Tómate un respiro antes de escribir.</p>
       </div>
     </div>
-    <form name="contacto-aldozeballos" method="POST" action="/" data-netlify="true" netlify-honeypot="bot-field" id="form" class="reveal" style="--d:100ms">
-      <input type="hidden" name="form-name" value="contacto-aldozeballos">
-      <p class="hp"><label>No llenar este campo <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
-      <div class="field">
-        <label for="nombre">Tu nombre</label>
-        <input type="text" id="nombre" name="nombre" autocomplete="name" required>
-      </div>
-      <div class="field">
-        <label for="contacto-dato">WhatsApp o correo</label>
-        <input type="text" id="contacto-dato" name="contacto" autocomplete="off" inputmode="email" required>
-      </div>
-      <fieldset class="pills" aria-label="Modalidad">
-        <legend class="legend" style="margin-bottom:8px">Modalidad</legend>
-        <label><input type="radio" name="modalidad" value="Presencial"><span>Presencial</span></label>
-        <label><input type="radio" name="modalidad" value="Online"><span>Online</span></label>
-        <label><input type="radio" name="modalidad" value="Aún no lo sé" checked><span>Aún no lo sé</span></label>
-      </fieldset>
-      <div class="field">
-        <label for="motivo">Motivo general (opcional)</label>
-        <textarea id="motivo" name="motivo" rows="3" maxlength="400" placeholder="Con una línea es suficiente"></textarea>
-        <span class="hint">Sin información clínica detallada, eso lo conversamos en la consulta.</span>
-      </div>
-      <div class="form-msg" id="form-ok" role="status" hidden>Recibí tu mensaje. Te respondo por el medio que dejaste.</div>
-      <div class="form-msg" id="form-err" role="alert" hidden>No se pudo enviar. Escríbeme directo por WhatsApp.</div>
-      <button class="btn btn-send" type="submit">Enviar mensaje</button>
-    </form>
   </div>
 </section>
 
@@ -923,7 +908,7 @@ html:not(.js) .reveal{opacity:1;transform:none;}
   <div class="wrap">
     <b>Consultorio Aldo Zeballos</b>
     <p>Lic. Aldo Zeballos, psicólogo clínico y psicoanalista. Matrícula profesional 0776-AZ-17. Cochabamba, Bolivia.</p>
-    <p>La información de este sitio no reemplaza una consulta profesional. Los datos del formulario se usan solo para responderte. Sitio web: Estudio Graphica.</p>
+    <p>La información de este sitio no reemplaza una consulta profesional. Sitio web: Estudio Graphica.</p>
   </div>
 </footer>
 
@@ -1084,17 +1069,6 @@ var PUBLICACIONES = [
   window.addEventListener('resize', onScroll);
   frame();
 
-  // formulario (Netlify Forms)
-  var form = document.getElementById('form');
-  form.addEventListener('submit', function(ev){
-    ev.preventDefault();
-    var ok = document.getElementById('form-ok'), er = document.getElementById('form-err');
-    ok.hidden = true; er.hidden = true;
-    var data = new URLSearchParams(new FormData(form)).toString();
-    fetch('/', {method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body:data})
-      .then(function(r){ if(!r.ok) throw new Error(r.status); ok.hidden = false; form.reset(); })
-      .catch(function(){ er.hidden = false; });
-  });
 })();
 </script>
 </body>
