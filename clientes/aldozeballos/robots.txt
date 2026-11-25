@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://aldozeballos.estudiographica.com/sitemap.xml
+Sitemap: https://estudiographica.com/clientes/aldozeballos/sitemap.xml
