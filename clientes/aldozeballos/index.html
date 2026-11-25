@@ -63,7 +63,7 @@
       "name": "¿Qué pasa si no sé bien qué decir en la primera consulta?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "No necesitas llegar con el problema ordenado. Empiezo preguntándote qué te trae y vamos desde ahí, a tu ritmo."
+        "text": "No necesitas llegar con el problema ordenado. Empiezo preguntándote qué te trae y vamos desde ahí, sin apuro."
       }
     },
     {
@@ -87,7 +87,7 @@
       "name": "¿Lo que cuente queda en confidencialidad?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Sí. La confidencialidad es una condición de mi trabajo. Por eso tampoco necesitas enviarme información clínica por mensaje: eso lo conversamos en la consulta."
+        "text": "Sí. Lo que cuentes queda entre los dos. La confidencialidad es una condición de mi trabajo."
       }
     },
     {
@@ -234,7 +234,8 @@ h2.in-view::after{transform:none;}
 .hero::before{content:"";position:absolute;inset:0;z-index:0;background:
   radial-gradient(60% 55% at 82% 30%,rgba(157,191,175,.30),transparent 70%),
   radial-gradient(50% 50% at 8% 90%,rgba(111,154,140,.34),transparent 70%),
-  linear-gradient(180deg,#1B2F37 0,#16272E 100%);}
+  linear-gradient(180deg,#1B2F37 0,#1B2F37 100%);
+  -webkit-mask-image:linear-gradient(180deg,#000 0,#000 78%,transparent 100%);mask-image:linear-gradient(180deg,#000 0,#000 78%,transparent 100%);}
 .orb{position:absolute;z-index:0;border-radius:50%;pointer-events:none;background:radial-gradient(circle,rgba(157,191,175,.38),rgba(157,191,175,0) 66%);}
 .orb.o1{width:560px;height:560px;right:-120px;top:-100px;animation:drift 42s var(--ease-io) infinite alternate;}
 .orb.o2{width:420px;height:420px;left:-140px;bottom:60px;background:radial-gradient(circle,rgba(111,154,140,.42),rgba(111,154,140,0) 66%);animation:drift 56s var(--ease-io) -14s infinite alternate-reverse;}
@@ -675,15 +676,15 @@ html:not(.js) .reveal{opacity:1;transform:none;}
           <div class="msg pat">Quisiera saber si puede ayudarme con un problema de ansiedad.</div>
           <div class="msg out">Hola, gracias por escribirme. Dar este paso ya cuenta. Cuéntame en una línea desde cuándo la sientes y coordinamos un primer encuentro.</div>
           <div class="msg pat">Estoy atravesando una situación difícil y necesito ayuda psicológica.</div>
-          <div class="msg out">Lamento que estés pasando por esto, y me alegra que hayas escrito. Lo vas contando a tu ritmo, en la consulta. ¿Prefieres presencial o por videollamada?</div>
+          <div class="msg out">Lamento que estés pasando por esto, y me alegra que hayas escrito. Lo vas contando con calma, en la consulta. ¿Prefieres presencial o por videollamada?</div>
           <div class="msg pat">Tengo problemas con mi pareja y no sé qué hacer.</div>
           <div class="msg out">Cuando la relación duele, uno se llena de preguntas. Empezamos por lo que tú estás viviendo. ¿Qué día de esta semana te acomoda?</div>
           <div class="msg pat">Últimamente no me siento bien y quisiera comenzar una terapia.</div>
-          <div class="msg out">Qué bueno que lo notes y quieras hacer algo. Puedes empezar sin tener claro qué te pasa. Dime qué días te acomodan.</div>
+          <div class="msg out">Qué bueno que lo notes y quieras hacer algo. Puedes empezar sin tener claro qué te pasa. Escríbeme cuando quieras y lo organizamos.</div>
           <div class="msg pat">Quisiera saber cómo son las sesiones y cuánto cuestan.</div>
           <div class="msg out">Duran entre 30 y 45 minutos y la frecuencia la definimos juntos. Los honorarios los converso contigo de manera personal, según tus posibilidades.</div>
           <div class="msg pat">Necesito una consulta lo antes posible.</div>
-          <div class="msg out">Entiendo, lo vemos con prioridad. Cuéntame en una línea qué pasa y busco un horario cuanto antes. Si hay riesgo inmediato, llama a emergencias o ve al hospital.</div>
+          <div class="msg out">Entiendo, lo vemos con prioridad. Cuéntame qué pasa y busco un horario cuanto antes. Si hay riesgo inmediato, llama a emergencias o ve al hospital.</div>
         </div>
       </div>
     </div>
@@ -718,15 +719,15 @@ html:not(.js) .reveal{opacity:1;transform:none;}
   <div class="wrap split">
     <div>
       <h2 id="h-primera" class="reveal">Cómo es tu primera consulta</h2>
-      <p class="lead cierre reveal" style="--d:80ms">Es un primer encuentro para conocernos. No necesitas llegar con el problema ordenado.</p>
+      <p class="lead cierre reveal" style="--d:80ms">Un primer encuentro para conocernos y decidir juntos cómo seguir.</p>
     </div>
     <div class="panel reveal" style="--d:100ms">
       <ol class="steps">
         <li><span class="node"><svg class="i" aria-hidden="true"><use href="#i-ear"/></svg></span><h3>Escucho qué te trae</h3><p>Qué te motiva a consultar y qué esperas.</p></li>
-        <li><span class="node"><svg class="i" aria-hidden="true"><use href="#i-search"/></svg></span><h3>Entendemos qué te pasa</h3><p>Cómo se presenta y cómo afecta tu día a día.</p></li>
-        <li><span class="node"><svg class="i" aria-hidden="true"><use href="#i-book"/></svg></span><h3>Miramos tu historia</h3><p>Lo que importa, a tu ritmo.</p></li>
+        <li><span class="node"><svg class="i" aria-hidden="true"><use href="#i-search"/></svg></span><h3>Hablamos de lo que sientes</h3><p>Cómo se presenta y cómo afecta tu día a día.</p></li>
+        <li><span class="node"><svg class="i" aria-hidden="true"><use href="#i-book"/></svg></span><h3>Miramos tu historia</h3><p>Lo que ha pasado en tu vida y pesa hoy.</p></li>
         <li><span class="node"><svg class="i" aria-hidden="true"><use href="#i-target"/></svg></span><h3>Definimos lo principal</h3><p>Lo central del problema y qué atención necesita.</p></li>
-        <li><span class="node"><svg class="i" aria-hidden="true"><use href="#i-path"/></svg></span><h3>Acordamos cómo seguir</h3><p>Decidimos juntos cómo seguir.</p></li>
+        <li><span class="node"><svg class="i" aria-hidden="true"><use href="#i-path"/></svg></span><h3>Acordamos cómo seguir</h3><p>El tipo de tratamiento y cada cuánto nos vemos.</p></li>
       </ol>
     </div>
   </div>
@@ -740,7 +741,7 @@ html:not(.js) .reveal{opacity:1;transform:none;}
     <div class="faq reveal" style="--d:100ms">
       <div class="faq-item">
         <h3 style="font-size:inherit"><button class="faq-q" type="button" aria-expanded="false" aria-controls="faq-a0" id="faq-q0"><span>¿Qué pasa si no sé bien qué decir en la primera consulta?</span><span class="plus" aria-hidden="true"></span></button></h3>
-        <div class="faq-a" id="faq-a0" role="region" aria-labelledby="faq-q0"><div><p>No necesitas llegar con el problema ordenado. Empiezo preguntándote qué te trae y vamos desde ahí, a tu ritmo.</p></div></div>
+        <div class="faq-a" id="faq-a0" role="region" aria-labelledby="faq-q0"><div><p>No necesitas llegar con el problema ordenado. Empiezo preguntándote qué te trae y vamos desde ahí, sin apuro.</p></div></div>
       </div>
       <div class="faq-item">
         <h3 style="font-size:inherit"><button class="faq-q" type="button" aria-expanded="false" aria-controls="faq-a1" id="faq-q1"><span>¿Cuánto dura una sesión y cuántas sesiones hacen falta?</span><span class="plus" aria-hidden="true"></span></button></h3>
@@ -811,7 +812,7 @@ html:not(.js) .reveal{opacity:1;transform:none;}
     <div>
       <h2 id="h-tray" class="reveal">Quién te atiende</h2>
       <div class="exp reveal" style="--d:80ms">
-        <p>Llevo veinte años trabajando en la clínica: consulta privada, instituciones públicas y privadas y organizaciones sociales.</p>
+        <p>Trabajo en consulta privada, en instituciones públicas y privadas y en organizaciones sociales.</p>
         <p>He dado charlas en ONG, instituciones del Estado y universidades, he pasado por televisión y radio, y tengo publicaciones en revistas y periódicos nacionales.</p>
       </div>
       <div class="matriculas reveal" style="--d:120ms">
@@ -888,7 +889,7 @@ html:not(.js) .reveal{opacity:1;transform:none;}
       </div>
       <div class="breath" aria-hidden="true">
         <span class="orbe"></span>
-        <p><b class="lbl"><span class="w1">Inhala</span><span class="w2">Exhala</span></b>Respira. Con una línea basta para empezar.</p>
+        <p><b class="lbl"><span class="w1">Inhala</span><span class="w2">Exhala</span></b>Respira. Tómate el tiempo que necesites.</p>
       </div>
     </div>
   </div>
@@ -900,7 +901,7 @@ html:not(.js) .reveal{opacity:1;transform:none;}
   <div class="wave w-p"><svg viewBox="0 0 1440 90" preserveAspectRatio="none"><path d="M0 0H1440V34C1290 78 1130 84 960 58 790 32 630 22 460 50 300 76 140 68 0 36Z"/></svg></div>
   <div class="wrap">
     <b>Consultorio Aldo Zeballos</b>
-    <p>Lic. Aldo Zeballos, psicólogo clínico y psicoanalista. Cochabamba, Bolivia.</p>
+    <p>Cochabamba, Bolivia.</p>
     <p>La información de este sitio no reemplaza una consulta profesional. Sitio web: Estudio Graphica.</p>
   </div>
 </footer>
