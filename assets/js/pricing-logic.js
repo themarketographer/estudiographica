@@ -68,9 +68,9 @@ window.EGPricing = (function () {
 ];
 
   // ── Catálogo digital ──
-  // Entregable de sesión y plan mensual. El texto incluye "fotos" a propósito:
-  // /precios lo usa para elegir el ícono de la imagen descargable.
-  const BENEFICIO_CATALOGO = 'Catálogo digital: descarga tus fotos en máxima calidad por 2 años';
+  // Entregable de sesión y plan mensual. /precios elige el ícono de descarga
+  // cuando el texto contiene "catálogo" (ver iconoDe en precios/index.html).
+  const BENEFICIO_CATALOGO = 'Catálogo digital: descarga tus fotos en máxima calidad por 1 año';
 
   // ── Extras a la carta ──
   // Se suman al precio base (sesión o plan) sin importar cuál tab esté
