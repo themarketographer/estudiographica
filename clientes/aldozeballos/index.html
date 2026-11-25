@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Aldo Zeballos, psicólogo y psicoanalista en Cochabamba</title>
 <meta name="description" content="Consulta psicológica clínica de orientación psicoanalítica para adolescentes y adultos, en Cochabamba y online. Coordina tu primera consulta por WhatsApp.">
-<!-- BORRADOR EN REVISIÓN: noindex mientras la página vive en estudiographica.com/clientes/aldozeballos.
+<!-- NOINDEX temporal mientras la página vive en estudiographica.com/clientes/aldozeballos.
      Al publicar en aldozeballos.estudiographica.com, cambiar a "index,follow". -->
 <meta name="robots" content="noindex,nofollow">
 <meta name="theme-color" content="#14212A">
@@ -23,7 +23,8 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600&family=Spectral:wght@300;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=Spectral:wght@400;600;700&display=swap" rel="stylesheet">
+
 
 <script type="application/ld+json">
 {
@@ -117,6 +118,7 @@
 }
 </script>
 
+<script>document.documentElement.className+=' js';</script>
 <style>
 :root{
   --ink:#14212A;
@@ -125,375 +127,621 @@
   --mist:#E8EEEB;
   --paper:#F5F8F6;
   --celadon:#9DBFAF;
+  --sage:#6F9A8C;
   --soft:#A9BDB6;
   --muted:#46585F;
-  --line:rgba(20,33,42,.16);
-  --line-dark:rgba(232,238,235,.18);
+  --line:rgba(20,33,42,.14);
+  --line-dark:rgba(232,238,235,.16);
   --wa:#25D366;
   --wa-ink:#0B1F16;
   --serif:"Spectral",Georgia,"Times New Roman",serif;
   --sans:"Hanken Grotesk",system-ui,-apple-system,"Segoe UI",sans-serif;
   --ease-out:cubic-bezier(.23,1,.32,1);
+  --ease-io:cubic-bezier(.77,0,.175,1);
   --max:1180px;
-  --head:64px;
+  --head:68px;
+  --wave:clamp(34px,5.5vw,84px);
 }
 *,*::before,*::after{box-sizing:border-box;}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;scrollbar-color:var(--celadon) var(--ink);scrollbar-width:thin;}
-body{margin:0;font-family:var(--sans);font-size:1.0625rem;line-height:1.6;color:var(--ink);background:var(--paper);-webkit-font-smoothing:antialiased;caret-color:var(--celadon);}
+body{margin:0;font-family:var(--sans);font-size:1.0625rem;line-height:1.62;color:var(--ink);background:var(--paper);-webkit-font-smoothing:antialiased;caret-color:var(--sage);overflow-x:clip;}
 img{max-width:100%;display:block;}
 a{color:inherit;}
 ::selection{background:var(--celadon);color:var(--ink);}
 :focus-visible{outline:2px solid var(--celadon);outline-offset:3px;border-radius:4px;}
 .on-light :focus-visible{outline-color:var(--deep);}
-h1,h2,h3{font-family:var(--serif);margin:0;text-wrap:balance;}
-h1,h2{font-weight:300;letter-spacing:-.02em;line-height:1.08;}
-h3{font-weight:500;letter-spacing:-.005em;line-height:1.25;}
+h1,h2,h3,h4{font-family:var(--serif);margin:0;text-wrap:balance;}
+h1,h2{font-weight:700;letter-spacing:-.025em;line-height:1.05;}
+h3{font-weight:600;letter-spacing:-.01em;line-height:1.2;}
 p{margin:0;text-wrap:pretty;}
-.wrap{max-width:var(--max);margin:0 auto;padding:0 24px;}
-section{scroll-margin-top:var(--head);}
-.sec{padding:64px 0;}
-@media(min-width:900px){.sec{padding:104px 0;}}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 24px;position:relative;z-index:1;}
+section{scroll-margin-top:calc(var(--head) - 8px);}
+
+/* grano suave sobre toda la página */
+body::after{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;opacity:.05;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .9 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");}
+
+/* iconos */
+.i{width:1.3em;height:1.3em;flex:none;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;}
+.sprite{position:absolute;width:0;height:0;overflow:hidden;}
+
+/* secciones en capas */
+.sec{position:relative;overflow:clip;padding:calc(var(--wave) + 48px) 0 72px;}
+@media(min-width:900px){.sec{padding:calc(var(--wave) + 72px) 0 112px;}}
+.sec::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;-webkit-mask-image:linear-gradient(180deg,transparent 0,#000 16%,#000 84%,transparent 100%);mask-image:linear-gradient(180deg,transparent 0,#000 16%,#000 84%,transparent 100%);}
 .on-dark{background:var(--deep);color:var(--mist);}
+.on-dark::before{background:
+  radial-gradient(55% 45% at 88% 18%,rgba(157,191,175,.24),transparent 70%),
+  radial-gradient(50% 45% at 6% 88%,rgba(111,154,140,.30),transparent 70%);}
 .on-mist{background:var(--mist);}
+.on-mist::before{background:
+  radial-gradient(55% 45% at 92% 8%,rgba(157,191,175,.38),transparent 70%),
+  radial-gradient(45% 40% at 4% 92%,rgba(255,255,255,.75),transparent 70%);}
 .on-paper{background:var(--paper);}
-h2{font-size:clamp(2rem,4.4vw,3.35rem);}
-.lead{font-size:clamp(1.0625rem,1.5vw,1.25rem);line-height:1.55;}
+.on-paper::before{background:
+  radial-gradient(50% 42% at 0% 22%,rgba(157,191,175,.26),transparent 70%),
+  radial-gradient(42% 40% at 100% 88%,rgba(196,219,208,.55),transparent 70%);}
+.wave{position:absolute;top:-1px;left:0;width:100%;height:var(--wave);z-index:1;pointer-events:none;}
+.wave svg{display:block;width:100%;height:100%;fill:currentColor;}
+.wave.flip svg{transform:scaleX(-1);}
+.w-d{color:var(--deep);}.w-m{color:var(--mist);}.w-p{color:var(--paper);}
+.deco{position:absolute;z-index:0;pointer-events:none;width:clamp(220px,32vw,420px);height:auto;aspect-ratio:3/4;color:var(--sage);opacity:.16;}
+.on-dark .deco{color:var(--celadon);opacity:.14;}
+.deco-r{right:-40px;bottom:-30px;}
+.deco-l{left:-60px;top:18%;transform:scaleX(-1);}
+
+h2{font-size:clamp(2.1rem,4.8vw,3.6rem);}
+h2::after{content:"";display:block;width:64px;height:5px;border-radius:5px;margin-top:20px;background:linear-gradient(90deg,var(--sage),var(--celadon));transform:scaleX(0);transform-origin:left;transition:transform .8s var(--ease-out) .25s;}
+.on-dark h2{color:#fff;}
+h2.in-view::after{transform:none;}
+.lead{font-size:clamp(1.125rem,1.6vw,1.3125rem);line-height:1.55;}
 .muted{color:var(--muted);}
 .on-dark .muted{color:var(--soft);}
 
-/* borrador */
-.draft{background:#F3D9A4;color:#3a2a06;font-size:.8125rem;line-height:1.4;padding:8px 24px;text-align:center;}
-
 /* header */
-.site-head{position:sticky;top:0;z-index:50;height:var(--head);background:rgba(20,33,42,.96);color:var(--mist);border-bottom:1px solid var(--line-dark);}
-@supports (backdrop-filter:blur(1px)){.site-head{background:rgba(20,33,42,.86);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);}}
+.site-head{position:sticky;top:0;z-index:80;height:var(--head);background:rgba(20,33,42,.96);color:var(--mist);}
+@supports (backdrop-filter:blur(1px)){.site-head{background:rgba(20,33,42,.78);backdrop-filter:blur(18px) saturate(150%);-webkit-backdrop-filter:blur(18px) saturate(150%);}}
 .site-head .wrap{height:100%;display:flex;align-items:center;justify-content:space-between;gap:16px;}
-.brand{text-decoration:none;display:flex;flex-direction:column;line-height:1.1;}
-.brand b{font-family:var(--serif);font-weight:500;font-size:1.25rem;letter-spacing:-.01em;}
-.brand span{font-size:.75rem;color:var(--soft);letter-spacing:.02em;margin-top:2px;}
-.nav{display:none;gap:28px;font-size:.9375rem;}
-.nav a{text-decoration:none;color:var(--soft);padding:6px 0;transition:color .15s var(--ease-out);}
-@media(hover:hover) and (pointer:fine){.nav a:hover{color:var(--mist);}}
-@media(min-width:960px){.nav{display:flex;}}
+.prog{position:absolute;left:0;bottom:0;height:3px;width:100%;background:linear-gradient(90deg,var(--sage),var(--celadon));transform:scaleX(0);transform-origin:left;}
+.brand{text-decoration:none;display:flex;align-items:center;gap:12px;line-height:1.1;}
+.brand .mono{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,var(--celadon),var(--sage));color:var(--ink);font:700 1.0625rem/1 var(--serif);letter-spacing:-.02em;}
+.brand b{display:block;font-family:var(--serif);font-weight:700;font-size:1.25rem;letter-spacing:-.015em;}
+.brand small{display:block;font-size:.75rem;color:var(--soft);letter-spacing:.02em;margin-top:2px;}
+.nav{display:none;gap:26px;font-size:.9375rem;font-weight:500;}
+.nav a{text-decoration:none;color:var(--soft);padding:6px 0;position:relative;transition:color .15s var(--ease-out);}
+.nav a::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--celadon);transform:scaleX(0);transform-origin:left;transition:transform .25s var(--ease-out);}
+@media(hover:hover) and (pointer:fine){.nav a:hover{color:#fff;}.nav a:hover::after{transform:none;}}
+@media(min-width:1040px){.nav{display:flex;}}
+@media(max-width:420px){.brand small{display:none;}}
 
 /* botones */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:0 28px;border-radius:100px;border:0;font:600 1rem/1 var(--sans);cursor:pointer;text-decoration:none;transition:transform .16s var(--ease-out),box-shadow .2s var(--ease-out),background-color .2s var(--ease-out);}
-.btn svg{width:20px;height:20px;flex:none;}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:54px;padding:0 30px;border-radius:100px;border:0;font:700 1rem/1 var(--sans);cursor:pointer;text-decoration:none;transition:transform .16s var(--ease-out),box-shadow .2s var(--ease-out),background-color .2s var(--ease-out);}
+.btn .i{width:20px;height:20px;}
 .btn:active{transform:scale(.97);}
-.btn-wa{background:var(--wa);color:var(--wa-ink);box-shadow:0 10px 24px -10px rgba(37,211,102,.6);}
-@media(hover:hover) and (pointer:fine){.btn-wa:hover{transform:translateY(-2px);box-shadow:0 14px 28px -10px rgba(37,211,102,.7);}.btn-wa:active{transform:scale(.97);}}
+.btn-wa{background:var(--wa);color:var(--wa-ink);box-shadow:0 12px 26px -10px rgba(37,211,102,.65),inset 0 1px 0 rgba(255,255,255,.35);}
+@media(hover:hover) and (pointer:fine){.btn-wa:hover{transform:translateY(-2px);box-shadow:0 18px 32px -10px rgba(37,211,102,.75),inset 0 1px 0 rgba(255,255,255,.35);}.btn-wa:active{transform:scale(.97);}}
 .btn-sm{min-height:42px;padding:0 20px;font-size:.9375rem;}
-.btn-sm svg{width:18px;height:18px;}
-.btn-line{background:transparent;color:var(--ink);border:1.5px solid var(--ink);}
-.link{font-weight:600;text-decoration:underline;text-underline-offset:.28em;text-decoration-thickness:1.5px;text-decoration-color:currentColor;}
+.btn-sm .i{width:18px;height:18px;}
+.link{font-weight:700;text-decoration:underline;text-underline-offset:.28em;text-decoration-thickness:1.5px;text-decoration-color:currentColor;}
 
-/* placeholders de imagen */
-.ph{position:relative;aspect-ratio:var(--ar,4/5);overflow:hidden;border-radius:6px;margin:0;}
-.ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
-.ph-box{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;font-size:.8125rem;font-weight:600;line-height:1.5;color:var(--muted);border:2px dashed rgba(20,33,42,.38);background:repeating-linear-gradient(135deg,rgba(20,33,42,.06) 0 10px,rgba(20,33,42,.02) 10px 20px);}
-.ph-tag{display:block;font-size:.6875rem;letter-spacing:.08em;text-transform:uppercase;color:#B3321F;font-weight:600;margin-bottom:6px;}
-.on-dark .ph-box{color:var(--soft);border-color:rgba(232,238,235,.4);background:repeating-linear-gradient(135deg,rgba(255,255,255,.06) 0 10px,rgba(255,255,255,.02) 10px 20px);}
-.on-dark .ph-tag{color:#FF9A87;}
+/* placeholders ilustrados, reemplazables por foto */
+.ph{position:relative;aspect-ratio:var(--ar,4/5);overflow:hidden;border-radius:28px;margin:0;background:var(--mist);box-shadow:0 30px 60px -30px rgba(20,33,42,.5),0 0 0 1px rgba(20,33,42,.06);isolation:isolate;}
+.ph .scene{position:absolute;inset:0;width:100%;height:100%;}
+.ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;}
+.arch{border-radius:999px 999px 28px 28px;}
 
 /* hero */
-.hero{padding:40px 0 0;}
-.hero-grid{display:grid;gap:36px;}
-.hero h1{font-size:clamp(2.1rem,8vw,3rem);}
-.hero .lead{margin-top:24px;max-width:34em;color:#D3DFDA;}
-.hero-cta{margin-top:32px;display:flex;flex-wrap:wrap;align-items:center;gap:20px 28px;}
-.hero-note{margin-top:14px;font-size:.875rem;color:var(--soft);max-width:30em;}
-.hero-fig{width:min(100%,440px);}
-.hero-cap{margin-top:12px;font-size:.8125rem;color:var(--soft);}
-.hero-cap b{color:var(--mist);font-weight:600;}
-.facts{margin:48px 0 0;padding:0;list-style:none;display:grid;border-top:1px solid var(--line-dark);}
-.facts li{padding:18px 0;border-bottom:1px solid var(--line-dark);font-size:.9375rem;color:#D3DFDA;}
+.hero{position:relative;overflow:clip;padding:36px 0 0;background:var(--deep);color:var(--mist);}
+.hero::before{content:"";position:absolute;inset:0;z-index:0;background:
+  radial-gradient(60% 55% at 82% 30%,rgba(157,191,175,.30),transparent 70%),
+  radial-gradient(50% 50% at 8% 90%,rgba(111,154,140,.34),transparent 70%),
+  linear-gradient(180deg,#1B2F37 0,#16272E 100%);}
+.orb{position:absolute;z-index:0;border-radius:50%;pointer-events:none;background:radial-gradient(circle,rgba(157,191,175,.38),rgba(157,191,175,0) 66%);}
+.orb.o1{width:560px;height:560px;right:-120px;top:-100px;animation:drift 42s var(--ease-io) infinite alternate;}
+.orb.o2{width:420px;height:420px;left:-140px;bottom:60px;background:radial-gradient(circle,rgba(111,154,140,.42),rgba(111,154,140,0) 66%);animation:drift 56s var(--ease-io) -14s infinite alternate-reverse;}
+.orb.o3{width:260px;height:260px;left:38%;top:12%;background:radial-gradient(circle,rgba(232,238,235,.16),rgba(232,238,235,0) 66%);animation:drift 36s var(--ease-io) -6s infinite alternate;}
+@keyframes drift{from{transform:translate3d(0,0,0) scale(1);}to{transform:translate3d(46px,38px,0) scale(1.08);}}
+.hero-grid{display:grid;gap:44px;}
+.hero h1{font-size:clamp(2.3rem,9vw,3.3rem);color:#fff;}
+.hero .lead{margin-top:26px;max-width:33em;color:#D3DFDA;}
+.hero-cta{margin-top:34px;display:flex;flex-wrap:wrap;align-items:center;gap:20px 28px;}
+.hero-note{margin-top:16px;font-size:.9375rem;color:var(--soft);max-width:30em;}
+.link-claro{color:var(--mist);}
+.mark{position:relative;white-space:nowrap;}
+.mark::after{content:"";position:absolute;left:-2px;right:-2px;bottom:.04em;height:.2em;border-radius:6px;background:linear-gradient(90deg,var(--sage),var(--celadon));opacity:.85;z-index:-1;transform:scaleX(0);transform-origin:left;}
+.js .mark::after{animation:underline .9s var(--ease-out) 1.1s forwards;}
+html:not(.js) .mark::after{transform:none;}
+@keyframes underline{to{transform:none;}}
+.hero-fig{position:relative;margin:0;width:min(100%,420px);justify-self:center;}
+.rings{position:absolute;left:50%;top:50%;width:150%;aspect-ratio:1;transform:translate(-50%,-50%);pointer-events:none;z-index:0;}
+.rings i{position:absolute;inset:0;border-radius:50%;border:1px solid rgba(157,191,175,.35);animation:ring 9s var(--ease-io) infinite;}
+.rings i:nth-child(2){inset:12%;animation-delay:-3s;}
+.rings i:nth-child(3){inset:24%;animation-delay:-6s;}
+@keyframes ring{0%,100%{transform:scale(.94);opacity:.35;}50%{transform:scale(1.04);opacity:.9;}}
+.hero-fig .ph{position:relative;z-index:1;--ar:4/5.1;}
+.chip{position:absolute;z-index:2;left:-6px;bottom:36px;display:flex;align-items:center;gap:10px;padding:12px 18px 12px 14px;border-radius:100px;background:rgba(245,248,246,.82);color:var(--ink);font-size:.875rem;font-weight:600;line-height:1.25;box-shadow:0 18px 36px -14px rgba(0,0,0,.55);animation:bob 7s var(--ease-io) infinite alternate;}
+@supports (backdrop-filter:blur(1px)){.chip{background:rgba(245,248,246,.7);backdrop-filter:blur(14px) saturate(160%);-webkit-backdrop-filter:blur(14px) saturate(160%);}}
+.chip .i{color:var(--sage);width:22px;height:22px;}
+.chip.c2{left:auto;right:-4px;bottom:auto;top:44px;animation-delay:-3.5s;}
+@keyframes bob{from{transform:translateY(0);}to{transform:translateY(-8px);}}
+.hero-cap{margin-top:16px;text-align:center;font-size:.875rem;color:var(--soft);position:relative;z-index:1;}
+.hero-cap b{color:#fff;font-weight:700;font-family:var(--serif);font-size:1.0625rem;}
+.facts{margin:56px 0 0;padding:0;list-style:none;display:grid;position:relative;z-index:1;}
+.facts li{display:flex;gap:14px;align-items:flex-start;padding:18px 0;border-top:1px solid var(--line-dark);font-size:.9375rem;color:#D3DFDA;}
+.facts .i{color:var(--celadon);width:24px;height:24px;margin-top:2px;}
+.hero-end{height:calc(var(--wave) + 36px);}
 @media(min-width:900px){
-  .hero{padding:56px 0 0;}
-  .hero h1{font-size:clamp(2.9rem,4.1vw,4.1rem);}
+  .hero{padding:60px 0 0;}
+  .hero h1{font-size:clamp(3rem,4.6vw,4.6rem);}
   .hero-grid{grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:72px;align-items:center;}
   .hero-fig{justify-self:end;}
-  .facts{grid-template-columns:repeat(3,1fr);margin-top:72px;}
-  .facts li{padding:24px 28px 26px 0;border-bottom:0;}
-  .facts li+li{padding-left:28px;border-left:1px solid var(--line-dark);}
+  .facts{grid-template-columns:repeat(3,1fr);margin-top:80px;gap:0 28px;}
+  .facts li{border-top:0;border-left:1px solid var(--line-dark);padding:6px 0 6px 20px;}
+  .chip{left:-48px;}
+  .chip.c2{right:-32px;}
 }
 
-/* consultas y burbujas */
-.split{display:grid;gap:40px;}
+/* chat con respuestas */
+.split{display:grid;gap:44px;}
 @media(min-width:900px){.split{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:88px;align-items:start;}}
-.chat{margin-top:32px;display:flex;flex-direction:column;gap:12px;}
-.bubble{max-width:min(34ch,92%);background:#fff;border-radius:20px 20px 20px 5px;padding:14px 18px;font-size:1.0625rem;line-height:1.45;box-shadow:0 1px 0 rgba(20,33,42,.08),0 10px 22px -16px rgba(20,33,42,.35);opacity:0;transform:translateY(10px) scale(.97);transform-origin:left bottom;transition:opacity .45s var(--ease-out),transform .45s var(--ease-out);}
-.bubble.out{align-self:flex-end;background:var(--deep);color:var(--mist);border-radius:20px 20px 5px 20px;transform-origin:right bottom;margin-top:10px;}
-.chat.in-view .bubble{opacity:1;transform:none;}
-.chat-note{margin-top:20px;font-size:.875rem;}
-.motivos{list-style:none;margin:28px 0 0;padding:0;border-top:1px solid var(--line);}
-.motivos li{padding:15px 0;border-bottom:1px solid var(--line);}
-.after-list{margin-top:28px;}
+.chat-note{margin-top:22px;font-size:.9375rem;max-width:30em;}
+.phone{background:#fff;border-radius:34px;box-shadow:0 40px 70px -34px rgba(20,33,42,.55),0 0 0 1px rgba(20,33,42,.07);overflow:hidden;max-width:470px;justify-self:center;width:100%;}
+.phone-top{display:flex;align-items:center;gap:12px;padding:16px 20px;background:linear-gradient(135deg,var(--deep),var(--deep-2));color:var(--mist);}
+.avatar{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,var(--celadon),var(--sage));color:var(--ink);font:700 1rem/1 var(--serif);}
+.phone-top b{display:block;font-family:var(--serif);font-size:1.125rem;font-weight:700;line-height:1.15;}
+.phone-top small{display:block;font-size:.8125rem;color:var(--soft);}
+.thread{height:min(66vh,560px);overflow-y:auto;overscroll-behavior:contain;padding:20px 16px 24px;display:flex;flex-direction:column;gap:10px;background:
+  radial-gradient(70% 40% at 100% 0,rgba(157,191,175,.28),transparent 70%),
+  linear-gradient(180deg,#EEF3F0,#E4ECE8);scroll-behavior:smooth;}
+.msg{max-width:84%;padding:12px 16px;border-radius:20px 20px 20px 5px;background:#fff;font-size:1rem;line-height:1.45;box-shadow:0 1px 0 rgba(20,33,42,.06),0 10px 20px -16px rgba(20,33,42,.4);}
+.msg.out{align-self:flex-end;background:var(--deep);color:var(--mist);border-radius:20px 20px 5px 20px;}
+.js .msg{display:none;}
+.js .msg.show{display:block;animation:pop .5s var(--ease-out) both;transform-origin:left bottom;}
+.js .msg.out.show{transform-origin:right bottom;}
+@keyframes pop{from{opacity:0;transform:translateY(12px) scale(.96);}to{opacity:1;transform:none;}}
+.typing{display:flex!important;align-items:center;gap:5px;padding:16px 18px;}
+.typing i{width:7px;height:7px;border-radius:50%;background:var(--soft);animation:dot 1.1s var(--ease-io) infinite;}
+.typing i:nth-child(2){animation-delay:.16s;}
+.typing i:nth-child(3){animation-delay:.32s;}
+@keyframes dot{0%,60%,100%{transform:translateY(0);opacity:.5;}30%{transform:translateY(-5px);opacity:1;}}
+.motivos{list-style:none;margin:30px 0 0;padding:0;display:grid;gap:4px;}
+.motivos li{display:flex;gap:16px;align-items:center;padding:14px 16px;border-radius:18px;transition:background-color .2s var(--ease-out),transform .2s var(--ease-out);}
+.motivos .ic{flex:none;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.8);color:var(--deep);box-shadow:inset 0 0 0 1px rgba(111,154,140,.35);}
+@media(hover:hover) and (pointer:fine){.motivos li:hover{background:rgba(255,255,255,.7);transform:translateX(4px);}}
+.after-list{margin-top:26px;}
+h3.sub{font-size:1.625rem;}
 
 /* método */
-.metodo-grid{display:grid;gap:36px;}
+.metodo-grid{display:grid;gap:40px;}
 @media(min-width:900px){.metodo-grid{grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:96px;}.metodo-side{position:sticky;top:calc(var(--head) + 32px);align-self:start;}}
-.metodo-side .ph{margin-top:32px;max-width:380px;}
-.prose p+p{margin-top:1.25em;}
-.prose{max-width:34em;font-size:1.125rem;}
-.prose .amp{margin-top:2em;padding-top:1.25em;border-top:1px solid var(--line);font-size:.9375rem;color:var(--muted);}
+.metodo-side .ph{margin-top:36px;max-width:400px;}
+.prose{max-width:34em;font-size:1.1875rem;}
+.prose p+p{margin-top:1.3em;}
+.prose p:first-child{font-family:var(--serif);font-weight:600;font-size:1.5rem;line-height:1.35;letter-spacing:-.01em;}
+.prose .amp{margin-top:2em;padding:20px 22px;border-radius:20px;background:rgba(255,255,255,.7);box-shadow:inset 0 0 0 1px rgba(111,154,140,.3);font-size:.9375rem;color:var(--muted);display:flex;gap:14px;}
+.prose .amp .i{color:var(--sage);margin-top:3px;}
+.prose .amp p{margin:0;font-family:var(--sans);font-weight:400;font-size:inherit;line-height:1.55;letter-spacing:0;}
 
 /* primera consulta */
-.steps{list-style:none;margin:0;padding:0;counter-reset:s;}
-.steps li{position:relative;padding:0 0 28px 56px;counter-increment:s;}
-.steps li::before{content:counter(s);position:absolute;left:0;top:0;width:36px;height:36px;border-radius:50%;border:1.5px solid var(--celadon);color:var(--celadon);display:grid;place-items:center;font:500 1.0625rem/1 var(--serif);}
-.steps li::after{content:"";position:absolute;left:17.5px;top:44px;bottom:8px;width:1px;background:var(--line-dark);}
+.cierre{margin-top:28px;max-width:30em;color:#D3DFDA;}
+.panel{border-radius:30px;padding:34px 28px;background:rgba(255,255,255,.06);box-shadow:inset 0 0 0 1px rgba(232,238,235,.14),0 30px 60px -36px rgba(0,0,0,.6);}
+@supports (backdrop-filter:blur(1px)){.panel{backdrop-filter:blur(16px) saturate(140%);-webkit-backdrop-filter:blur(16px) saturate(140%);}}
+.steps{list-style:none;margin:0;padding:0;}
+.steps li{position:relative;padding:0 0 30px 68px;}
 .steps li:last-child{padding-bottom:0;}
+.steps .node{position:absolute;left:0;top:0;width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,var(--celadon),var(--sage));color:var(--ink);box-shadow:0 10px 22px -10px rgba(0,0,0,.6);}
+.steps .node .i{width:23px;height:23px;}
+.steps li::after{content:"";position:absolute;left:23.5px;top:54px;bottom:6px;width:1.5px;background:linear-gradient(180deg,var(--celadon),rgba(157,191,175,.1));transform:scaleY(0);transform-origin:top;transition:transform .8s var(--ease-out) .3s;}
+.steps li.in-view::after{transform:none;}
 .steps li:last-child::after{display:none;}
-.steps h3{font-size:1.25rem;margin-bottom:4px;}
+.steps h3{font-size:1.375rem;margin-bottom:4px;color:#fff;}
 .steps p{color:var(--soft);}
-.on-dark h2{color:var(--mist);}
-.cierre{margin-top:36px;max-width:30em;color:#D3DFDA;}
 
 /* faq */
-.faq{margin-top:40px;border-top:1px solid var(--line);max-width:820px;}
+.faq{margin-top:44px;max-width:840px;background:#fff;border-radius:28px;padding:8px 28px;box-shadow:0 30px 60px -38px rgba(20,33,42,.5),0 0 0 1px rgba(20,33,42,.06);}
 .faq-item{border-bottom:1px solid var(--line);}
-.faq-q{width:100%;display:flex;justify-content:space-between;align-items:center;gap:20px;background:none;border:0;padding:22px 0;font:500 1.25rem/1.3 var(--serif);text-align:left;color:var(--ink);cursor:pointer;}
-.faq-q .plus{flex:none;width:22px;height:22px;position:relative;transition:transform .25s var(--ease-out);}
-.faq-q .plus::before,.faq-q .plus::after{content:"";position:absolute;left:50%;top:50%;width:14px;height:1.5px;background:var(--deep);transform:translate(-50%,-50%);}
+.faq-item:last-child{border-bottom:0;}
+.faq-q{width:100%;display:flex;justify-content:space-between;align-items:center;gap:20px;background:none;border:0;padding:24px 0;font:600 1.3125rem/1.3 var(--serif);letter-spacing:-.01em;text-align:left;color:var(--ink);cursor:pointer;}
+.faq-q .plus{flex:none;width:34px;height:34px;border-radius:50%;background:var(--mist);position:relative;transition:transform .3s var(--ease-out),background-color .2s var(--ease-out);}
+.faq-q .plus::before,.faq-q .plus::after{content:"";position:absolute;left:50%;top:50%;width:13px;height:2px;border-radius:2px;background:var(--deep);transform:translate(-50%,-50%);}
 .faq-q .plus::after{transform:translate(-50%,-50%) rotate(90deg);}
-.faq-item.open .plus{transform:rotate(45deg);}
-.faq-a{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s var(--ease-out);}
+.faq-item.open .plus{transform:rotate(45deg);background:var(--celadon);}
+.faq-a{display:grid;grid-template-rows:0fr;transition:grid-template-rows .32s var(--ease-out);}
 .faq-item.open .faq-a{grid-template-rows:1fr;}
 .faq-a>div{overflow:hidden;}
-.faq-a p{padding:0 40px 24px 0;color:var(--muted);max-width:40em;}
+.faq-a p{padding:0 56px 26px 0;color:var(--muted);max-width:40em;}
 
 /* dónde */
-.modes{display:grid;margin-top:40px;border-top:1px solid var(--line);}
-.mode{padding:28px 0;border-bottom:1px solid var(--line);}
-.mode h3{font-size:1.5rem;margin-bottom:10px;}
+.modes{display:grid;margin-top:44px;gap:20px;}
+.mode{padding:28px 26px;border-radius:26px;background:rgba(255,255,255,.75);box-shadow:0 22px 44px -32px rgba(20,33,42,.45),0 0 0 1px rgba(20,33,42,.06);transition:transform .25s var(--ease-out),box-shadow .25s var(--ease-out);}
+@media(hover:hover) and (pointer:fine){.mode:hover{transform:translateY(-4px);box-shadow:0 30px 50px -30px rgba(20,33,42,.5),0 0 0 1px rgba(20,33,42,.06);}}
+.mode h3{font-size:1.5rem;display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+.mode h3 .ic{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,var(--celadon),var(--sage));color:var(--ink);flex:none;}
 .mode p+p{margin-top:12px;}
 .mode address{font-style:normal;}
-@media(min-width:900px){
-  .modes{grid-template-columns:repeat(3,1fr);}
-  .mode{padding:32px 32px 36px 0;border-bottom:0;}
-  .mode+.mode{padding-left:32px;border-left:1px solid var(--line);}
-}
-.sala{margin-top:48px;}
+@media(min-width:900px){.modes{grid-template-columns:repeat(3,1fr);gap:24px;}}
+.sala{margin-top:56px;}
 @media(min-width:900px){.sala{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:56px;align-items:end;}}
 .sala .ph{--ar:3/2;}
-.sala-text{margin-top:20px;max-width:26em;}
+.sala-text{margin-top:22px;max-width:24em;font-family:var(--serif);font-size:1.5rem;font-weight:600;line-height:1.3;letter-spacing:-.01em;}
 
 /* trayectoria */
-.cred{margin:0;display:grid;border-top:1px solid var(--line);}
-.cred>div{padding:18px 0;border-bottom:1px solid var(--line);}
-.cred dt{font:500 1.1875rem/1.3 var(--serif);}
-.cred dd{margin:4px 0 0;color:var(--muted);font-size:.9375rem;}
-.matriculas{margin-top:28px;display:grid;gap:12px;font-size:.9375rem;}
-.matriculas b{display:block;font-weight:600;}
 .exp{margin-top:32px;max-width:36em;}
 .exp p+p{margin-top:1em;}
-.tray-fig{margin-top:32px;}
-.tray-fig .ph{--ar:3/2;}
+.matriculas{margin-top:28px;display:flex;flex-wrap:wrap;gap:12px;font-size:.9375rem;}
+.matriculas p{display:flex;gap:12px;align-items:center;padding:12px 18px 12px 14px;border-radius:100px;background:#fff;box-shadow:0 0 0 1px rgba(111,154,140,.4);}
+.matriculas .i{color:var(--sage);}
+.matriculas b{display:block;font-weight:700;line-height:1.2;}
+.matriculas span{display:block;font-size:.875rem;color:var(--muted);line-height:1.25;}
+.tray-fig{margin-top:36px;--ar:3/2;}
+.cred{margin:0;background:#fff;border-radius:28px;padding:10px 28px;box-shadow:0 30px 60px -38px rgba(20,33,42,.5),0 0 0 1px rgba(20,33,42,.06);}
+.cred>div{display:flex;gap:16px;padding:20px 0;border-bottom:1px solid var(--line);}
+.cred>div:last-child{border-bottom:0;}
+.cred .i{color:var(--sage);margin-top:3px;}
+.cred dt{font:600 1.1875rem/1.3 var(--serif);letter-spacing:-.005em;}
+.cred dd{margin:4px 0 0;color:var(--muted);font-size:.9375rem;}
 
 /* formación */
-.temas{list-style:none;margin:28px 0 0;padding:0;border-top:1px solid var(--line-dark);}
-.temas li{padding:14px 0;border-bottom:1px solid var(--line-dark);color:#D3DFDA;}
-.bloque-h{margin-top:48px;font-size:1.5rem;}
-.lista-act{margin:20px 0 0;padding:0;list-style:none;border-top:1px solid var(--line-dark);}
-.lista-act li{padding:20px 0;border-bottom:1px solid var(--line-dark);}
-.lista-act h4{margin:0;font:500 1.25rem/1.3 var(--serif);}
-.lista-act .meta{margin-top:6px;font-size:.875rem;color:var(--soft);}
-.vacio{margin-top:20px;color:var(--soft);max-width:30em;}
+.temas{list-style:none;margin:30px 0 0;padding:0;display:grid;gap:2px;}
+.temas li{display:flex;gap:14px;align-items:center;padding:13px 0;color:#D3DFDA;}
+.temas .i{color:var(--celadon);}
+.bloque-h{font-size:1.625rem;color:#fff;}
+.lista-act{margin:20px 0 0;padding:0;list-style:none;}
+.lista-act li{padding:20px 0;border-top:1px solid var(--line-dark);}
+.lista-act h4{margin:0;font:600 1.25rem/1.3 var(--serif);color:#fff;}
+.lista-act .meta{margin-top:6px;font-size:.9375rem;color:var(--soft);}
+.vacio{margin-top:18px;color:var(--soft);max-width:30em;}
 .formacion-cta{margin-top:28px;}
-.link-claro{color:var(--mist);}
+.panel .bloque-h:not(:first-child){margin-top:48px;}
 
 /* contacto */
-.contact-grid{display:grid;gap:44px;}
-@media(min-width:900px){.contact-grid{grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:88px;}}
-.contact-direct{margin-top:28px;display:grid;gap:10px;font-size:.9375rem;}
+.contact-grid{display:grid;gap:48px;}
+@media(min-width:900px){.contact-grid{grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:88px;align-items:start;}}
+.contact-direct{margin-top:30px;display:grid;gap:12px;font-size:.9375rem;}
 .contact-direct .btn{justify-self:start;}
-form{display:grid;gap:20px;}
+.breath{margin-top:44px;display:flex;align-items:center;gap:20px;}
+.breath .orbe{position:relative;width:84px;height:84px;flex:none;display:grid;place-items:center;}
+.breath .orbe::before,.breath .orbe::after{content:"";position:absolute;border-radius:50%;}
+.breath .orbe::before{inset:0;border:1.5px solid rgba(111,154,140,.5);animation:aire 10s var(--ease-io) infinite;}
+.breath .orbe::after{inset:18px;background:radial-gradient(circle at 35% 30%,#fff,var(--celadon) 60%,var(--sage));animation:aire2 10s var(--ease-io) infinite;}
+@keyframes aire{0%,100%{transform:scale(.8);}45%,55%{transform:scale(1.12);}}
+@keyframes aire2{0%,100%{transform:scale(.75);}45%,55%{transform:scale(1.25);}}
+.breath p{font-size:.9375rem;color:var(--muted);max-width:18em;}
+.breath b{display:block;color:var(--ink);font-family:var(--serif);font-size:1.1875rem;}
+.breath .w1,.breath .w2{display:inline-block;}
+.breath .w1{animation:w1 10s steps(1) infinite;}
+.breath .w2{animation:w2 10s steps(1) infinite;position:absolute;opacity:0;}
+@keyframes w1{0%{opacity:1;}50%{opacity:0;}100%{opacity:1;}}
+@keyframes w2{0%{opacity:0;}50%{opacity:1;}100%{opacity:0;}}
+.breath .lbl{position:relative;display:block;}
+form{display:grid;gap:22px;background:#fff;padding:34px 30px;border-radius:30px;box-shadow:0 36px 70px -40px rgba(20,33,42,.55),0 0 0 1px rgba(20,33,42,.06);}
 .field{display:grid;gap:8px;}
-label,.legend{font-weight:600;font-size:.9375rem;}
-input[type=text],textarea{width:100%;font:400 1rem/1.4 var(--sans);color:var(--ink);background:#fff;border:1px solid rgba(20,33,42,.3);border-radius:10px;padding:14px 16px;transition:border-color .15s var(--ease-out),box-shadow .15s var(--ease-out);accent-color:var(--deep);}
-input[type=text]:focus,textarea:focus{outline:none;border-color:var(--deep);box-shadow:0 0 0 3px rgba(157,191,175,.7);}
-textarea{resize:vertical;min-height:84px;max-height:220px;}
+label,.legend{font-weight:700;font-size:.9375rem;}
+input[type=text],textarea{width:100%;font:400 1rem/1.4 var(--sans);color:var(--ink);background:var(--paper);border:1px solid rgba(20,33,42,.22);border-radius:14px;padding:15px 16px;transition:border-color .15s var(--ease-out),box-shadow .15s var(--ease-out),background-color .15s var(--ease-out);accent-color:var(--deep);}
+input[type=text]:focus,textarea:focus{outline:none;border-color:var(--deep);background:#fff;box-shadow:0 0 0 4px rgba(157,191,175,.6);}
+textarea{resize:vertical;min-height:90px;max-height:220px;}
 .pills{display:flex;flex-wrap:wrap;gap:10px;border:0;padding:0;margin:0;}
-.pills label{font-weight:400;position:relative;}
+.pills label{font-weight:500;position:relative;}
 .pills input{position:absolute;opacity:0;inset:0;}
-.pills span{display:inline-flex;align-items:center;min-height:44px;padding:0 18px;border-radius:100px;border:1px solid rgba(20,33,42,.3);background:#fff;cursor:pointer;transition:background-color .15s var(--ease-out),color .15s var(--ease-out),border-color .15s var(--ease-out);}
+.pills span{display:inline-flex;align-items:center;min-height:44px;padding:0 18px;border-radius:100px;border:1px solid rgba(20,33,42,.24);background:var(--paper);cursor:pointer;transition:background-color .15s var(--ease-out),color .15s var(--ease-out),border-color .15s var(--ease-out),transform .15s var(--ease-out);}
+.pills label:active span{transform:scale(.97);}
 .pills input:checked+span{background:var(--deep);color:var(--mist);border-color:var(--deep);}
 .pills input:focus-visible+span{outline:2px solid var(--deep);outline-offset:3px;}
 .hint{font-size:.8125rem;color:var(--muted);}
-.form-msg{padding:16px 18px;border-radius:10px;background:var(--mist);font-size:.9375rem;}
+.form-msg{padding:16px 18px;border-radius:14px;background:var(--mist);font-size:.9375rem;}
 .form-msg[hidden]{display:none;}
 .btn-send{background:var(--deep);color:var(--mist);justify-self:start;}
-@media(hover:hover) and (pointer:fine){.btn-send:hover{background:var(--ink);}}
+@media(hover:hover) and (pointer:fine){.btn-send:hover{background:var(--ink);transform:translateY(-2px);}.btn-send:active{transform:scale(.97);}}
 .hp{position:absolute;left:-9999px;}
 
 /* footer */
-.foot{background:var(--ink);color:var(--soft);padding:48px 0 96px;font-size:.875rem;}
-.foot b{color:var(--mist);font-family:var(--serif);font-weight:500;font-size:1.125rem;display:block;margin-bottom:6px;}
+.foot{position:relative;background:var(--ink);color:var(--soft);padding:calc(var(--wave) + 40px) 0 104px;font-size:.875rem;}
+.foot b{color:#fff;font-family:var(--serif);font-weight:700;font-size:1.25rem;display:block;margin-bottom:8px;}
 .foot p+p{margin-top:10px;max-width:46em;}
-@media(min-width:900px){.foot{padding-bottom:48px;}}
+@media(min-width:900px){.foot{padding-bottom:56px;}}
 
 /* WhatsApp fijo en celular */
-.wa-fixed{position:fixed;right:16px;bottom:16px;z-index:60;opacity:0;transform:translateY(12px);pointer-events:none;transition:opacity .25s var(--ease-out),transform .25s var(--ease-out);}
+.wa-fixed{position:fixed;right:16px;bottom:16px;z-index:70;opacity:0;transform:translateY(12px);pointer-events:none;transition:opacity .25s var(--ease-out),transform .25s var(--ease-out);}
 .wa-fixed.show{opacity:1;transform:none;pointer-events:auto;}
-.wa-fixed .btn{box-shadow:0 14px 30px -10px rgba(0,0,0,.5);}
+.wa-fixed .btn{box-shadow:0 16px 32px -10px rgba(0,0,0,.5);}
 @media(min-width:900px){.wa-fixed{display:none;}}
 
 /* entradas */
-@keyframes fade-up{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:none;}}
-.hero h1{animation:fade-up .8s var(--ease-out) both;}
-.hero .lead{animation:fade-up .8s var(--ease-out) .08s both;}
-.hero-cta{animation:fade-up .8s var(--ease-out) .16s both;}
-.hero-note{animation:fade-up .8s var(--ease-out) .22s both;}
-.hero-fig{animation:fade-up .9s var(--ease-out) .12s both;}
-.reveal{opacity:0;transform:translateY(16px);transition:opacity .6s var(--ease-out),transform .6s var(--ease-out);}
+.js .w{display:inline-block;opacity:0;transform:translateY(.5em);animation:wordIn .8s var(--ease-out) forwards;animation-delay:calc(var(--i) * 55ms + 120ms);}
+@keyframes wordIn{to{opacity:1;transform:none;}}
+@keyframes fade-up{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:none;}}
+.js .hero .lead{animation:fade-up .8s var(--ease-out) .75s both;}
+.js .hero-cta{animation:fade-up .8s var(--ease-out) .9s both;}
+.js .hero-note{animation:fade-up .8s var(--ease-out) 1s both;}
+.js .hero-fig{animation:fade-up 1s var(--ease-out) .3s both;}
+.js .facts li{animation:fade-up .7s var(--ease-out) calc(1.1s + var(--k) * 90ms) both;}
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .7s var(--ease-out) var(--d,0ms),transform .7s var(--ease-out) var(--d,0ms);}
+html:not(.js) .reveal{opacity:1;transform:none;}
 .reveal.in-view{opacity:1;transform:none;}
+[data-par]{will-change:transform;}
 
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto;}
-  .hero h1,.hero .lead,.hero-cta,.hero-note,.hero-fig{animation:none;}
+  .thread{scroll-behavior:auto;}
+  .orb,.rings i,.chip,.breath .orbe::before,.breath .orbe::after,.breath .w1,.breath .w2{animation:none;}
+  .breath .w2{opacity:0;}
+  .js .w,.js .hero .lead,.js .hero-cta,.js .hero-note,.js .hero-fig,.js .facts li{animation:none;opacity:1;transform:none;}
+  .js .mark::after{animation:none;transform:none;}
   .reveal{opacity:1;transform:none;transition:none;}
-  .bubble{opacity:1;transform:none;transition:none;}
-  .faq-a{transition:none;}
-  .btn,.wa-fixed{transition:none;}
+  h2::after,.steps li::after{transform:none;transition:none;}
+  .js .msg.show{animation:none;}
+  .faq-a,.btn,.wa-fixed,.motivos li,.mode{transition:none;}
+}
+@media(prefers-reduced-transparency:reduce){
+  .site-head{background:var(--ink);backdrop-filter:none;-webkit-backdrop-filter:none;}
+  .chip{background:var(--paper);backdrop-filter:none;-webkit-backdrop-filter:none;}
+  .panel{background:var(--deep-2);backdrop-filter:none;-webkit-backdrop-filter:none;}
 }
 @media(prefers-contrast:more){
   .site-head{background:var(--ink);backdrop-filter:none;}
-  .hero .lead,.facts li{color:var(--mist);}
+  .hero .lead,.facts li,.temas li{color:#fff;}
+  body::after{display:none;}
 }
 </style>
 </head>
 <body id="top">
 
-<div class="draft" id="draft" hidden>Borrador para revisión. Faltan: número de WhatsApp, correo profesional y fotos.</div>
+<!-- Sprite de iconos y escenas ilustradas -->
+<svg class="sprite" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id="g-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#D8E7E0"/><stop offset="1" stop-color="#86AE9F"/></linearGradient>
+    <linearGradient id="g-warm" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F3EEE4"/><stop offset="1" stop-color="#C9DDD3"/></linearGradient>
+    <linearGradient id="g-night" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2D4A55"/><stop offset="1" stop-color="#1B2F37"/></linearGradient>
+    <linearGradient id="g-floor" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#B7CFC4"/><stop offset="1" stop-color="#8FB1A2"/></linearGradient>
+    <radialGradient id="g-sun" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#FFFFFF" stop-opacity=".95"/><stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/></radialGradient>
+  </defs>
+
+  <symbol id="i-wa" viewBox="0 0 24 24"><path d="M12 3a9 9 0 0 0-7.8 13.5L3 21l4.6-1.2A9 9 0 1 0 12 3Z"/></symbol>
+  <symbol id="i-leaf" viewBox="0 0 24 24"><path d="M5 19C5 11 10 6 19 5c0 9-5 14-13 14"/><path d="M5 19l8-8"/></symbol>
+  <symbol id="i-drop" viewBox="0 0 24 24"><path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11Z"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/></symbol>
+  <symbol id="i-wind" viewBox="0 0 24 24"><path d="M3 9h10a3 3 0 1 0-3-3"/><path d="M3 14h14a3 3 0 1 1-3 3"/><path d="M3 19h5"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3 19a6 6 0 0 1 12 0"/><path d="M16 5.5a2.6 2.6 0 0 1 0 5"/><path d="M17.5 14a5 5 0 0 1 3.5 5"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v8a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-8Z"/><path d="M10 20v-6h4v6"/></symbol>
+  <symbol id="i-sprout" viewBox="0 0 24 24"><path d="M12 21v-9"/><path d="M12 12c0-4-3-6-7-6 0 4 3 6 7 6Z"/><path d="M12 15c0-3 2-5 6-5 0 3-2 5-6 5Z"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3Z"/><path d="M9 12l2 2 4-4"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-4 4v-4H4V5Z"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s7-6 7-11a7 7 0 0 0-14 0c0 5 7 11 7 11Z"/><circle cx="12" cy="10" r="2.5"/></symbol>
+  <symbol id="i-video" viewBox="0 0 24 24"><rect x="3" y="6" width="12" height="12" rx="3"/><path d="M15 10.5l6-3v9l-6-3"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+  <symbol id="i-ear" viewBox="0 0 24 24"><path d="M7 9a5 5 0 0 1 10 0c0 3-3 4-3 7a2.5 2.5 0 0 1-5 0"/><path d="M10 9a2 2 0 0 1 4 0c0 1-1 1.5-1.5 2.2"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5v-15Z"/><path d="M4 20.5A2.5 2.5 0 0 0 6.5 23H20"/></symbol>
+  <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r=".8"/></symbol>
+  <symbol id="i-path" viewBox="0 0 24 24"><circle cx="6" cy="18" r="2.2"/><circle cx="18" cy="6" r="2.2"/><path d="M8 18h6a3 3 0 0 0 0-6h-4a3 3 0 0 1 0-6h5.8"/></symbol>
+  <symbol id="i-cap" viewBox="0 0 24 24"><path d="M2 9l10-5 10 5-10 5L2 9Z"/><path d="M6 11.5V16c0 1.5 3 3 6 3s6-1.5 6-3v-4.5"/></symbol>
+  <symbol id="i-badge" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M8.5 14.5L7 21l5-2.5 5 2.5-1.5-6.5"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></symbol>
+  <symbol id="i-quote" viewBox="0 0 24 24"><path d="M6 17c0-4 1-7 4-9M14 17c0-4 1-7 4-9"/></symbol>
+
+  <!-- hojas decorativas de fondo -->
+  <symbol id="deco-leaves" viewBox="0 0 300 400" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M150 400C150 300 160 190 190 40"/>
+    <path d="M154 330c-36-6-62-30-70-66 36 4 64 28 70 66Z"/><path d="M158 290c40-8 66-34 72-72-40 6-68 32-72 72Z"/>
+    <path d="M164 230c-34-10-58-36-62-72 34 8 58 34 62 72Z"/><path d="M170 180c36-10 58-36 60-72-36 8-58 34-60 72Z"/>
+    <path d="M178 120c-26-12-44-34-46-62 28 8 44 32 46 62Z"/><path d="M186 76c26-8 42-28 44-52-26 6-42 26-44 52Z"/>
+  </symbol>
+
+  <!-- escena retrato: ventana en arco, luz y hojas -->
+  <symbol id="sc-a" viewBox="0 0 400 510" preserveAspectRatio="xMidYMid slice">
+    <rect width="400" height="510" fill="url(#g-sky)"/>
+    <path d="M90 330V170a110 110 0 0 1 220 0v160Z" fill="#EAF3EE" opacity=".62"/>
+    <path d="M200 60v270M90 200h220" stroke="#fff" stroke-width="3" opacity=".7"/>
+    <circle cx="262" cy="150" r="90" fill="url(#g-sun)"/>
+    <circle cx="262" cy="150" r="26" fill="#fff" opacity=".9"/>
+    <path d="M0 340c80-24 160-20 240 0s110 12 160-6V510H0Z" fill="#6F9A8C" opacity=".55"/>
+    <path d="M0 400c90-30 190-24 270 4s90 14 130 0V510H0Z" fill="#4F7F72" opacity=".7"/>
+    <g opacity=".34" fill="#1B2F37"><circle cx="200" cy="318" r="36"/><path d="M118 510c0-80 34-132 82-132s82 52 82 132Z"/></g>
+    <g fill="#2F5C50" opacity=".85"><path d="M40 510c-6-60 4-120 36-168 8 60-2 120-36 168Z"/><path d="M70 510c-4-44 6-88 34-122 4 46-6 88-34 122Z"/><path d="M360 510c8-56-2-112-32-158-10 56 0 110 32 158Z"/><path d="M332 510c4-40-6-80-30-112-6 42 4 80 30 112Z"/></g>
+  </symbol>
+
+  <!-- escena detalle: lámpara, mesa y planta -->
+  <symbol id="sc-b" viewBox="0 0 400 510" preserveAspectRatio="xMidYMid slice">
+    <rect width="400" height="510" fill="url(#g-warm)"/>
+    <path d="M250 80L420 520H80Z" fill="#fff" opacity=".28"/>
+    <circle cx="250" cy="150" r="120" fill="url(#g-sun)"/>
+    <rect y="400" width="400" height="110" fill="#8FB1A2" opacity=".55"/>
+    <rect x="236" y="196" width="4" height="170" fill="#4F7F72"/>
+    <path d="M208 196l28-56h28l28 56Z" fill="#F7F3E8"/>
+    <ellipse cx="238" cy="196" rx="30" ry="6" fill="#E3DCC8"/>
+    <ellipse cx="238" cy="372" rx="48" ry="10" fill="#3C655A" opacity=".5"/>
+    <ellipse cx="214" cy="400" rx="130" ry="18" fill="#2F5C50" opacity=".25"/>
+    <rect x="96" y="372" width="244" height="14" rx="7" fill="#D9C9A9"/>
+    <rect x="124" y="386" width="10" height="124" fill="#C4B38F"/><rect x="302" y="386" width="10" height="124" fill="#C4B38F"/>
+    <g fill="#2F5C50"><path d="M120 372c-30-30-34-80-8-130 26 40 30 90 8 130Z"/><path d="M130 372c10-40 40-70 80-86-8 46-36 76-80 86Z" opacity=".8"/><path d="M118 372c-20-20-56-26-86-14 24 22 60 28 86 14Z" opacity=".7"/></g>
+    <rect x="304" y="344" width="30" height="28" rx="8" fill="#fff" opacity=".85"/>
+  </symbol>
+
+  <!-- escena consultorio: ventana, luz sobre el piso, planta y repisa -->
+  <symbol id="sc-c" viewBox="0 0 600 400" preserveAspectRatio="xMidYMid slice">
+    <rect width="600" height="400" fill="url(#g-warm)"/>
+    <rect y="270" width="600" height="130" fill="url(#g-floor)"/>
+    <rect x="150" y="48" width="190" height="190" rx="6" fill="#EAF3EE"/>
+    <path d="M245 48v190M150 143h190" stroke="#fff" stroke-width="5"/>
+    <rect x="150" y="48" width="190" height="190" rx="6" fill="none" stroke="#C4D8CE" stroke-width="5"/>
+    <path d="M150 238h190l120 162H70Z" fill="#fff" opacity=".4"/>
+    <circle cx="245" cy="143" r="110" fill="url(#g-sun)"/>
+    <rect x="410" y="120" width="140" height="10" rx="5" fill="#D9C9A9"/>
+    <rect x="426" y="86" width="18" height="34" rx="4" fill="#fff"/><rect x="452" y="96" width="22" height="24" rx="4" fill="#6F9A8C"/>
+    <g fill="#2F5C50"><path d="M82 330c-26-28-30-76-8-122 22 38 26 84 8 122Z"/><path d="M92 330c8-38 34-66 70-80-6 42-30 70-70 80Z" opacity=".8"/><path d="M74 330c-18-18-48-22-72-10 20 20 50 26 72 10Z" opacity=".7"/></g>
+    <rect x="62" y="326" width="48" height="44" rx="10" fill="#E9E1CF"/>
+    <ellipse cx="440" cy="352" rx="120" ry="16" fill="#4F7F72" opacity=".3"/>
+    <rect x="380" y="316" width="120" height="30" rx="15" fill="#F7F3E8"/>
+  </symbol>
+
+  <!-- escena charla: atril, pantalla y luz -->
+  <symbol id="sc-d" viewBox="0 0 600 400" preserveAspectRatio="xMidYMid slice">
+    <rect width="600" height="400" fill="url(#g-night)"/>
+    <circle cx="460" cy="120" r="160" fill="url(#g-sun)" opacity=".4"/>
+    <rect x="220" y="56" width="300" height="170" rx="10" fill="#EAF3EE" opacity=".92"/>
+    <g fill="#6F9A8C"><rect x="248" y="84" width="150" height="12" rx="6"/><rect x="248" y="112" width="220" height="8" rx="4" opacity=".6"/><rect x="248" y="132" width="190" height="8" rx="4" opacity=".6"/><rect x="248" y="152" width="210" height="8" rx="4" opacity=".6"/></g>
+    <circle cx="470" cy="190" r="16" fill="#9DBFAF"/>
+    <rect y="300" width="600" height="100" fill="#142228"/>
+    <path d="M110 300V220l14-10h56l14 10v80Z" fill="#9DBFAF" opacity=".85"/>
+    <rect x="102" y="300" width="100" height="10" rx="5" fill="#6F9A8C"/>
+    <g fill="#142228" opacity=".9"><circle cx="86" cy="330" r="14"/><rect x="72" y="344" width="28" height="56" rx="12"/><circle cx="254" cy="334" r="14"/><rect x="240" y="348" width="28" height="52" rx="12"/><circle cx="330" cy="332" r="14"/><rect x="316" y="346" width="28" height="54" rx="12"/><circle cx="410" cy="336" r="14"/><rect x="396" y="350" width="28" height="50" rx="12"/></g>
+  </symbol>
+</svg>
 
 <header class="site-head">
   <div class="wrap">
     <a class="brand" href="#top" aria-label="Aldo Zeballos, inicio">
-      <b>Aldo Zeballos</b>
-      <span>Psicólogo clínico y psicoanalista</span>
+      <span class="mono" aria-hidden="true">AZ</span>
+      <span><b>Aldo Zeballos</b><small>Psicólogo clínico y psicoanalista</small></span>
     </a>
     <nav class="nav" aria-label="Secciones">
       <a href="#metodo">Cómo trabajo</a>
       <a href="#primera">Primera consulta</a>
+      <a href="#preguntas">Preguntas</a>
       <a href="#formacion">Formación</a>
       <a href="#contacto">Contacto</a>
     </nav>
     <a class="btn btn-wa btn-sm" data-wa="consulta" href="#contacto">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a9 9 0 0 0-7.8 13.5L3 21l4.6-1.2A9 9 0 1 0 12 3Z"/></svg>
+      <svg class="i" aria-hidden="true"><use href="#i-wa"/></svg>
       WhatsApp
     </a>
   </div>
+  <div class="prog" id="prog" aria-hidden="true"></div>
 </header>
 
 <main>
 
 <!-- HERO -->
-<section class="hero on-dark" aria-labelledby="titular">
+<section class="hero" aria-labelledby="titular">
+  <span class="orb o1" data-par="-.06" aria-hidden="true"></span>
+  <span class="orb o2" data-par=".05" aria-hidden="true"></span>
+  <span class="orb o3" aria-hidden="true"></span>
   <div class="wrap">
     <div class="hero-grid">
       <div>
-        <h1 id="titular">Cada persona sufre a su manera. Tu consulta empieza escuchando la tuya.</h1>
+        <h1 id="titular">Cada persona sufre a su manera. Tu consulta empieza escuchando <span class="mark">la tuya.</span></h1>
         <p class="lead">Soy Aldo Zeballos, psicólogo clínico y psicoanalista. Atiendo a adolescentes y adultos en Cochabamba y por videollamada, con veinte años de práctica clínica.</p>
         <div class="hero-cta">
           <a class="btn btn-wa" data-wa="consulta" href="#contacto">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a9 9 0 0 0-7.8 13.5L3 21l4.6-1.2A9 9 0 1 0 12 3Z"/></svg>
+            <svg class="i" aria-hidden="true"><use href="#i-wa"/></svg>
             Escribir por WhatsApp
           </a>
           <a class="link link-claro" href="#primera">Cómo es la primera consulta</a>
         </div>
-        <p class="hero-note">Cuéntame en una línea por qué consultas. No hace falta más para coordinar el primer encuentro.</p>
+        <p class="hero-note">Cuéntame en una línea por qué consultas. Con eso alcanza para coordinar el primer encuentro.</p>
       </div>
-      <figure class="hero-fig" style="margin:0">
-        <div class="ph" style="--ar:4/5">
-          <div class="ph-box"><span><span class="ph-tag">Falta foto</span>retrato-hero.jpg<br>Vertical 4:5, mínimo 1600 px de alto</span></div>
+      <figure class="hero-fig">
+        <div class="rings" aria-hidden="true"><i></i><i></i><i></i></div>
+        <div class="ph arch" data-par=".03">
+          <svg class="scene" aria-hidden="true" preserveAspectRatio="xMidYMid slice"><use href="#sc-a" width="100%" height="100%"/></svg>
           <img src="img/retrato-hero.jpg" alt="Lic. Aldo Zeballos, psicólogo clínico y psicoanalista, en su consultorio de Cochabamba" width="1200" height="1500" fetchpriority="high" onerror="this.remove()">
         </div>
+        <div class="chip"><svg class="i" aria-hidden="true"><use href="#i-leaf"/></svg><span>Consulta presencial<br>y online</span></div>
+        <div class="chip c2"><svg class="i" aria-hidden="true"><use href="#i-lock"/></svg><span>Confidencialidad<br>en cada sesión</span></div>
         <figcaption class="hero-cap"><b>Lic. Aldo Zeballos</b><br>Psicólogo clínico y psicoanalista</figcaption>
       </figure>
     </div>
     <ul class="facts">
-      <li>Consultorio en la zona norte de Cochabamba</li>
-      <li>Videollamada por Google Meet, desde cualquier ciudad o país</li>
-      <li>Atención de urgencia, previa valoración de cada situación</li>
+      <li style="--k:0"><svg class="i" aria-hidden="true"><use href="#i-pin"/></svg>Consultorio en la zona norte de Cochabamba</li>
+      <li style="--k:1"><svg class="i" aria-hidden="true"><use href="#i-video"/></svg>Videollamada por Google Meet, desde cualquier ciudad o país</li>
+      <li style="--k:2"><svg class="i" aria-hidden="true"><use href="#i-clock"/></svg>Atención de urgencia, previa valoración de cada situación</li>
     </ul>
+    <div class="hero-end"></div>
   </div>
 </section>
 
 <!-- CONSULTAS -->
 <section class="sec on-mist on-light" id="consultas" aria-labelledby="h-consultas">
+  <div class="wave w-d"><svg viewBox="0 0 1440 90" preserveAspectRatio="none"><path d="M0 0H1440V40C1290 84 1130 88 960 58 800 30 650 18 480 46 310 74 150 70 0 36Z"/></svg></div>
+  <svg class="deco deco-r" aria-hidden="true"><use href="#deco-leaves" width="100%" height="100%"/></svg>
   <div class="wrap split">
     <div>
-      <h2 id="h-consultas" class="reveal">Cómo suelen empezar los mensajes que recibo</h2>
-      <div class="chat" id="chat" role="list" aria-label="Frases con las que suelen escribirme por primera vez">
-        <p class="bubble" role="listitem">Quisiera saber si puede ayudarme con un problema de ansiedad.</p>
-        <p class="bubble" role="listitem">Estoy atravesando una situación difícil y necesito ayuda psicológica.</p>
-        <p class="bubble" role="listitem">Tengo problemas con mi pareja y no sé qué hacer.</p>
-        <p class="bubble" role="listitem">Últimamente no me siento bien y quisiera comenzar una terapia.</p>
-        <p class="bubble" role="listitem">Quisiera saber cómo son las sesiones y cuánto cuestan.</p>
-        <p class="bubble" role="listitem">Necesito una consulta lo antes posible.</p>
-        <p class="bubble out" role="listitem">Gracias por escribir. Cuéntame en una línea qué te trae y coordinamos tu primera consulta.</p>
-      </div>
-      <p class="chat-note muted">Son frases reales de primeros contactos, sin nombres.</p>
-    </div>
-    <div class="reveal">
-      <h3 style="font-size:1.5rem">Motivos de consulta frecuentes</h3>
-      <ul class="motivos">
-        <li>Ansiedad, angustia y depresión</li>
-        <li>Tristeza persistente, desánimo y pérdida de interés por la vida</li>
-        <li>Dificultades en la relación de pareja</li>
-        <li>Conflictos familiares y dificultades en los vínculos</li>
-        <li>Problemas emocionales y personales que afectan la vida cotidiana</li>
-        <li>Dificultades propias de la adolescencia</li>
-        <li>Experiencias traumáticas, pérdidas y acontecimientos difíciles</li>
-        <li>Problemas de conducta y de relación con otras personas</li>
+      <h2 id="h-consultas" class="reveal">Así suele empezar la conversación</h2>
+      <p class="lead muted reveal" style="margin-top:26px;max-width:26em;--d:80ms">Estas son frases con las que la gente me escribe por primera vez, y la respuesta con la que les abro la puerta.</p>
+      <ul class="motivos reveal" style="--d:120ms">
+        <li><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-wind"/></svg></span>Ansiedad, angustia y depresión</li>
+        <li><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-moon"/></svg></span>Tristeza persistente, desánimo y pérdida de interés por la vida</li>
+        <li><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-users"/></svg></span>Dificultades en la relación de pareja</li>
+        <li><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-home"/></svg></span>Conflictos familiares y dificultades en los vínculos</li>
+        <li><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-heart"/></svg></span>Problemas emocionales y personales que afectan la vida cotidiana</li>
+        <li><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-sprout"/></svg></span>Dificultades propias de la adolescencia</li>
+        <li><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-shield"/></svg></span>Experiencias traumáticas, pérdidas y acontecimientos difíciles</li>
+        <li><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-chat"/></svg></span>Problemas de conducta y de relación con otras personas</li>
       </ul>
-      <p class="after-list muted">Esta lista sirve de orientación. Lo que me interesa es entender qué le pasa a cada persona, cómo se le presenta el sufrimiento y qué circunstancias intervienen.</p>
+      <p class="after-list muted reveal">Esta lista sirve de orientación. Lo que me interesa es entender qué le pasa a cada persona, cómo se le presenta el sufrimiento y qué circunstancias intervienen.</p>
+    </div>
+    <div>
+      <div class="phone reveal" style="--d:100ms">
+        <div class="phone-top"><span class="avatar" aria-hidden="true">AZ</span><div><b>Aldo Zeballos</b><small>Psicólogo clínico</small></div></div>
+        <div class="thread" id="thread" role="log" tabindex="0" aria-label="Conversación de ejemplo entre una persona que consulta y Aldo">
+          <div class="msg pat">Quisiera saber si puede ayudarme con un problema de ansiedad.</div>
+          <div class="msg out">Hola, gracias por escribirme. La ansiedad se vive distinto en cada persona, y dar este paso ya cuenta. Si quieres, cuéntame en una línea desde cuándo la sientes y coordinamos un primer encuentro para conversarlo con calma.</div>
+          <div class="msg pat">Estoy atravesando una situación difícil y necesito ayuda psicológica.</div>
+          <div class="msg out">Lamento que estés pasando por esto, y me alegra que hayas escrito. No hace falta que me cuentes todo por acá: nos vemos y lo vas contando a tu ritmo. ¿Te queda mejor presencial o por videollamada?</div>
+          <div class="msg pat">Tengo problemas con mi pareja y no sé qué hacer.</div>
+          <div class="msg out">Cuando la relación duele, uno se llena de preguntas. Podemos empezar por lo que tú estás viviendo y desde ahí ver qué camino tiene sentido. ¿Qué día de esta semana te acomoda para una primera consulta?</div>
+          <div class="msg pat">Últimamente no me siento bien y quisiera comenzar una terapia.</div>
+          <div class="msg out">Qué bueno que lo notes y quieras hacer algo con eso. Puedes empezar sin tener claro qué te pasa, de eso nos ocupamos en la primera consulta. Dime qué días te acomodan y lo coordinamos.</div>
+          <div class="msg pat">Quisiera saber cómo son las sesiones y cuánto cuestan.</div>
+          <div class="msg out">Las sesiones duran entre 30 y 45 minutos, y la frecuencia la definimos juntos según tu caso. Los honorarios los converso contigo de manera personal, tomando en cuenta tus posibilidades. El dinero no tiene que ser lo que te frene.</div>
+          <div class="msg pat">Necesito una consulta lo antes posible.</div>
+          <div class="msg out">Entiendo, lo vemos con prioridad. Cuéntame en una línea qué está pasando para valorar la situación y buscar un horario cuanto antes. Si hay riesgo inmediato para ti o para alguien más, llama a emergencias o ve al hospital más cercano.</div>
+        </div>
+      </div>
+      <p class="chat-note muted reveal">Los mensajes de la izquierda son frases reales de primeros contactos, sin nombres. Las respuestas muestran el tono con el que conversamos.</p>
     </div>
   </div>
 </section>
 
 <!-- MÉTODO -->
 <section class="sec on-paper on-light" id="metodo" aria-labelledby="h-metodo">
+  <div class="wave w-m flip"><svg viewBox="0 0 1440 90" preserveAspectRatio="none"><path d="M0 0H1440V30C1270 76 1100 84 930 56 760 28 600 22 430 52 280 78 130 66 0 40Z"/></svg></div>
+  <svg class="deco deco-l" aria-hidden="true"><use href="#deco-leaves" width="100%" height="100%"/></svg>
   <div class="wrap metodo-grid">
     <div class="metodo-side">
       <h2 id="h-metodo" class="reveal">Psicología clínica con orientación psicoanalítica</h2>
-      <figure class="ph" style="--ar:4/5">
-        <div class="ph-box"><span><span class="ph-tag">Falta foto</span>detalle-consultorio.jpg<br>Vertical 4:5, mínimo 1200 px de ancho<br>Un rincón del consultorio, sin personas</span></div>
+      <figure class="ph reveal" style="--ar:4/5;--d:120ms">
+        <svg class="scene" aria-hidden="true" preserveAspectRatio="xMidYMid slice"><use href="#sc-b" width="100%" height="100%"/></svg>
         <img src="img/detalle-consultorio.jpg" alt="Rincón del consultorio de Aldo Zeballos con luz natural" width="1200" height="1500" loading="lazy" onerror="this.remove()">
       </figure>
     </div>
-    <div class="prose reveal">
+    <div class="prose reveal" style="--d:80ms">
       <p>Mi trabajo parte de la palabra. En la consulta hablas, yo escucho, y entre los dos vamos entendiendo qué le pasa a tu vida y por qué algo se repite.</p>
       <p>Dos personas pueden tener el mismo síntoma y necesitar caminos distintos. Por eso no uso una entrevista ni una explicación iguales para todos.</p>
       <p>Lo que se nota desde afuera, la angustia, el insomnio, la pelea de pareja, suele ser una parte. Atrás hay experiencias y formas de relacionarse con uno mismo y con los demás que se vuelven a poner en juego, y ahí también se trabaja.</p>
       <p>Un tratamiento puede ser corto y centrarse en una dificultad concreta, o puede ser un recorrido más largo. En los dos casos busco cambios que se noten en tu vida diaria.</p>
-      <p class="amp">Esta manera de trabajar sigue la orientación de la Asociación Mundial de Psicoanálisis (AMP), que entiende el psicoanálisis como una experiencia de la palabra y una posibilidad de saber algo sobre aquello que condiciona nuestra vida.</p>
+      <div class="amp"><svg class="i" aria-hidden="true"><use href="#i-book"/></svg><p>Esta manera de trabajar sigue la orientación de la Asociación Mundial de Psicoanálisis (AMP), que entiende el psicoanálisis como una experiencia de la palabra y una posibilidad de saber algo sobre aquello que condiciona nuestra vida.</p></div>
     </div>
   </div>
 </section>
 
 <!-- PRIMERA CONSULTA -->
 <section class="sec on-dark" id="primera" aria-labelledby="h-primera">
+  <div class="wave w-p"><svg viewBox="0 0 1440 90" preserveAspectRatio="none"><path d="M0 0H1440V44C1300 80 1150 86 990 60 830 34 660 16 490 44 320 72 150 74 0 38Z"/></svg></div>
+  <svg class="deco deco-r" aria-hidden="true"><use href="#deco-leaves" width="100%" height="100%"/></svg>
   <div class="wrap split">
     <div>
       <h2 id="h-primera" class="reveal">Cómo es tu primera consulta</h2>
-      <p class="cierre reveal">Es un espacio de encuentro y de evaluación clínica. No uso una entrevista idéntica para todos, y no tienes que llegar con el problema ordenado.</p>
+      <p class="lead cierre reveal" style="--d:80ms">Es un espacio de encuentro y de evaluación clínica. No uso una entrevista idéntica para todos, y no tienes que llegar con el problema ordenado.</p>
     </div>
-    <ol class="steps reveal">
-      <li><h3>Escucho qué te trae</h3><p>Qué motiva la consulta y qué esperas de la atención psicológica.</p></li>
-      <li><h3>Exploramos el malestar</h3><p>Cómo se presenta, desde cuándo está y cómo afecta tu día a día.</p></li>
-      <li><h3>Repasamos antecedentes</h3><p>Las circunstancias que importan, respetando tu ritmo.</p></li>
-      <li><h3>Identifico lo principal</h3><p>Los aspectos centrales del problema y qué tipo de atención necesita.</p></li>
-      <li><h3>Acordamos cómo seguir</h3><p>Conversamos sobre una posible dirección del tratamiento y decidimos juntos los pasos.</p></li>
-    </ol>
+    <div class="panel reveal" style="--d:100ms">
+      <ol class="steps">
+        <li><span class="node"><svg class="i" aria-hidden="true"><use href="#i-ear"/></svg></span><h3>Escucho qué te trae</h3><p>Qué motiva la consulta y qué esperas de la atención psicológica.</p></li>
+        <li><span class="node"><svg class="i" aria-hidden="true"><use href="#i-search"/></svg></span><h3>Exploramos el malestar</h3><p>Cómo se presenta, desde cuándo está y cómo afecta tu día a día.</p></li>
+        <li><span class="node"><svg class="i" aria-hidden="true"><use href="#i-book"/></svg></span><h3>Repasamos antecedentes</h3><p>Las circunstancias que importan, respetando tu ritmo.</p></li>
+        <li><span class="node"><svg class="i" aria-hidden="true"><use href="#i-target"/></svg></span><h3>Identifico lo principal</h3><p>Los aspectos centrales del problema y qué tipo de atención necesita.</p></li>
+        <li><span class="node"><svg class="i" aria-hidden="true"><use href="#i-path"/></svg></span><h3>Acordamos cómo seguir</h3><p>Conversamos sobre una posible dirección del tratamiento y decidimos juntos los pasos.</p></li>
+      </ol>
+    </div>
   </div>
 </section>
 
 <!-- FAQ -->
 <section class="sec on-mist on-light" id="preguntas" aria-labelledby="h-faq">
+  <div class="wave w-d flip"><svg viewBox="0 0 1440 90" preserveAspectRatio="none"><path d="M0 0H1440V36C1280 80 1120 82 950 56 780 30 620 20 450 50 290 78 140 68 0 34Z"/></svg></div>
   <div class="wrap">
     <h2 id="h-faq" class="reveal">Preguntas que suelen llegar antes de agendar</h2>
-    <div class="faq">
+    <div class="faq reveal" style="--d:100ms">
       <div class="faq-item">
         <h3 style="font-size:inherit"><button class="faq-q" type="button" aria-expanded="false" aria-controls="faq-a0" id="faq-q0"><span>¿Qué pasa si no sé bien qué decir en la primera consulta?</span><span class="plus" aria-hidden="true"></span></button></h3>
         <div class="faq-a" id="faq-a0" role="region" aria-labelledby="faq-q0"><div><p>No necesitas llegar con el problema ordenado. Empiezo preguntándote qué te trae y qué esperas de la atención psicológica, y vamos desde ahí, a tu ritmo.</p></div></div>
@@ -528,87 +776,92 @@ textarea{resize:vertical;min-height:84px;max-height:220px;}
 
 <!-- DÓNDE -->
 <section class="sec on-paper on-light" id="donde" aria-labelledby="h-donde">
+  <div class="wave w-m"><svg viewBox="0 0 1440 90" preserveAspectRatio="none"><path d="M0 0H1440V32C1290 78 1130 86 960 58 790 30 630 18 460 48 300 76 140 70 0 38Z"/></svg></div>
   <div class="wrap">
     <h2 id="h-donde" class="reveal">Dónde y cómo te atiendo</h2>
     <div class="modes">
-      <div class="mode">
-        <h3>En el consultorio</h3>
+      <div class="mode reveal">
+        <h3><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-pin"/></svg></span>En el consultorio</h3>
         <address>
           <p>Zona norte de Cochabamba.<br>Av. América, entre Enrique Arce y Simeón Roncal.<br>Torre B&amp;B, 4to piso, oficina E-01.</p>
         </address>
         <p><a class="link" href="https://www.google.com/maps/search/?api=1&amp;query=Torre+B%26B+Av.+Am%C3%A9rica+Cochabamba" target="_blank" rel="noopener">Ver en Google Maps</a></p>
       </div>
-      <div class="mode">
-        <h3>Por videollamada</h3>
+      <div class="mode reveal" style="--d:90ms">
+        <h3><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-video"/></svg></span>Por videollamada</h3>
         <p>Atiendo por Google Meet a personas que viven en otras ciudades o países. Coordinamos el enlace por WhatsApp antes de la sesión.</p>
       </div>
-      <div class="mode">
-        <h3>Si es urgente</h3>
+      <div class="mode reveal" style="--d:180ms">
+        <h3><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-clock"/></svg></span>Si es urgente</h3>
         <p>Atiendo urgencias, presenciales u online, cuando hay una crisis, una angustia intensa o un hecho que pide atención prioritaria. Lo coordinamos según la situación y mi disponibilidad.</p>
         <p>Si hay riesgo inmediato para la vida o la integridad de alguien, llama a emergencias o ve a un hospital.</p>
       </div>
     </div>
     <div class="sala">
-      <figure class="ph" style="--ar:3/2">
-        <div class="ph-box"><span><span class="ph-tag">Falta foto</span>consultorio.jpg<br>Horizontal 3:2, mínimo 1800 px de ancho<br>El consultorio completo, sin personas</span></div>
+      <figure class="ph reveal" style="--ar:3/2">
+        <svg class="scene" aria-hidden="true" preserveAspectRatio="xMidYMid slice"><use href="#sc-c" width="100%" height="100%"/></svg>
         <img src="img/consultorio.jpg" alt="Consultorio de Aldo Zeballos en la Torre B&amp;B, Cochabamba" width="1800" height="1200" loading="lazy" onerror="this.remove()">
       </figure>
-      <p class="sala-text muted">Un lugar tranquilo y reservado, pensado para que puedas hablar sin apuro.</p>
+      <p class="sala-text reveal" style="--d:120ms">Un lugar tranquilo y reservado, pensado para que puedas hablar sin apuro.</p>
     </div>
   </div>
 </section>
 
 <!-- TRAYECTORIA -->
 <section class="sec on-mist on-light" id="trayectoria" aria-labelledby="h-tray">
+  <div class="wave w-p flip"><svg viewBox="0 0 1440 90" preserveAspectRatio="none"><path d="M0 0H1440V40C1300 82 1140 84 970 56 800 28 640 20 470 48 310 76 150 68 0 34Z"/></svg></div>
+  <svg class="deco deco-r" aria-hidden="true"><use href="#deco-leaves" width="100%" height="100%"/></svg>
   <div class="wrap split">
     <div>
       <h2 id="h-tray" class="reveal">Formación y experiencia</h2>
-      <div class="exp reveal">
+      <div class="exp reveal" style="--d:80ms">
         <p>Tengo veinte años de trabajo en atención clínica, práctica privada, instituciones públicas y privadas, organizaciones sociales y proyectos de intervención psicológica y social.</p>
         <p>He dado charlas en organizaciones no gubernamentales, instituciones del Estado y universidades públicas y privadas, y he participado en medios de televisión y radio. Tengo publicaciones en revistas, memorias de simposios y periódicos nacionales.</p>
       </div>
-      <div class="matriculas reveal">
-        <p><b>Matrícula profesional</b>Colegio de Psicólogos de Cochabamba: 0776-AZ-17</p>
-        <p><b>Registro profesional</b>Ministerio de Salud de Bolivia: Z-3524898</p>
+      <div class="matriculas reveal" style="--d:120ms">
+        <p><svg class="i" aria-hidden="true"><use href="#i-badge"/></svg><span><b>Matrícula profesional</b>Colegio de Psicólogos de Cochabamba: 0776-AZ-17</span></p>
+        <p><svg class="i" aria-hidden="true"><use href="#i-badge"/></svg><span><b>Registro profesional</b>Ministerio de Salud de Bolivia: Z-3524898</span></p>
       </div>
-      <figure class="ph tray-fig" style="--ar:3/2">
-        <div class="ph-box"><span><span class="ph-tag">Falta foto</span>aldo-charla.jpg<br>Horizontal 3:2, mínimo 1800 px de ancho<br>Aldo dando una charla, clase o ponencia</span></div>
+      <figure class="ph tray-fig reveal" style="--ar:3/2;--d:140ms">
+        <svg class="scene" aria-hidden="true" preserveAspectRatio="xMidYMid slice"><use href="#sc-d" width="100%" height="100%"/></svg>
         <img src="img/aldo-charla.jpg" alt="Aldo Zeballos durante una charla profesional" width="1800" height="1200" loading="lazy" onerror="this.remove()">
       </figure>
     </div>
-    <dl class="cred reveal">
-      <div><dt>Licenciatura en Psicología</dt><dd>Universidad Mayor de San Simón (UMSS)</dd></div>
-      <div><dt>Estudios de maestría en Clínica Psicoanalítica</dt><dd>Universidad Nacional de San Martín (UNSAM), Buenos Aires</dd></div>
-      <div><dt>Estudios de maestría en Intervención Sistémica</dt><dd>Universidad Católica Boliviana (UCB), Cochabamba</dd></div>
-      <div><dt>Diplomado en atención a infantes y adolescentes en situación de agresión sexual</dt></div>
-      <div><dt>Formación clínica y psicoanalítica de orientación lacaniana</dt></div>
-      <div><dt>Formación y experiencia con hombres que ejercen violencia familiar o doméstica</dt></div>
+    <dl class="cred reveal" style="--d:100ms">
+      <div><svg class="i" aria-hidden="true"><use href="#i-cap"/></svg><div><dt>Licenciatura en Psicología</dt><dd>Universidad Mayor de San Simón (UMSS)</dd></div></div>
+      <div><svg class="i" aria-hidden="true"><use href="#i-cap"/></svg><div><dt>Estudios de maestría en Clínica Psicoanalítica</dt><dd>Universidad Nacional de San Martín (UNSAM), Buenos Aires</dd></div></div>
+      <div><svg class="i" aria-hidden="true"><use href="#i-cap"/></svg><div><dt>Estudios de maestría en Intervención Sistémica</dt><dd>Universidad Católica Boliviana (UCB), Cochabamba</dd></div></div>
+      <div><svg class="i" aria-hidden="true"><use href="#i-sprout"/></svg><div><dt>Diplomado en atención a infantes y adolescentes en situación de agresión sexual</dt></div></div>
+      <div><svg class="i" aria-hidden="true"><use href="#i-book"/></svg><div><dt>Formación clínica y psicoanalítica de orientación lacaniana</dt></div></div>
+      <div><svg class="i" aria-hidden="true"><use href="#i-shield"/></svg><div><dt>Formación y experiencia con hombres que ejercen violencia familiar o doméstica</dt></div></div>
     </dl>
   </div>
 </section>
 
 <!-- FORMACIÓN -->
 <section class="sec on-dark" id="formacion" aria-labelledby="h-form">
+  <div class="wave w-m"><svg viewBox="0 0 1440 90" preserveAspectRatio="none"><path d="M0 0H1440V34C1290 80 1130 86 960 58 790 30 630 20 460 50 300 78 140 68 0 36Z"/></svg></div>
+  <svg class="deco deco-l" aria-hidden="true"><use href="#deco-leaves" width="100%" height="100%"/></svg>
   <div class="wrap split">
     <div>
       <h2 id="h-form" class="reveal">Cursos, seminarios y talleres de formación</h2>
-      <p class="lead reveal" style="margin-top:24px;max-width:30em;color:#D3DFDA">Además de la clínica, dicto cursos de formación y actualización para profesionales. Estoy iniciando una línea de investigación sobre psicología clínica y psicoanálisis de orientación lacaniana.</p>
-      <ul class="temas reveal">
-        <li>Psicología clínica y modelos de intervención</li>
-        <li>Psicoterapia y práctica clínica</li>
-        <li>Psicoanálisis de orientación lacaniana</li>
-        <li>Problemas de pareja y relaciones contemporáneas</li>
-        <li>Intervención psicológica con hombres que ejercen violencia</li>
-        <li>Adolescencia, familia y problemáticas actuales</li>
+      <p class="lead reveal" style="margin-top:26px;max-width:30em;color:#D3DFDA;--d:80ms">Además de la clínica, dicto cursos de formación y actualización para profesionales. Estoy iniciando una línea de investigación sobre psicología clínica y psicoanálisis de orientación lacaniana.</p>
+      <ul class="temas reveal" style="--d:120ms">
+        <li><svg class="i" aria-hidden="true"><use href="#i-leaf"/></svg>Psicología clínica y modelos de intervención</li>
+        <li><svg class="i" aria-hidden="true"><use href="#i-leaf"/></svg>Psicoterapia y práctica clínica</li>
+        <li><svg class="i" aria-hidden="true"><use href="#i-leaf"/></svg>Psicoanálisis de orientación lacaniana</li>
+        <li><svg class="i" aria-hidden="true"><use href="#i-leaf"/></svg>Problemas de pareja y relaciones contemporáneas</li>
+        <li><svg class="i" aria-hidden="true"><use href="#i-leaf"/></svg>Intervención psicológica con hombres que ejercen violencia</li>
+        <li><svg class="i" aria-hidden="true"><use href="#i-leaf"/></svg>Adolescencia, familia y problemáticas actuales</li>
       </ul>
     </div>
-    <div class="reveal">
-      <h3 class="bloque-h" style="margin-top:0">Próximas actividades</h3>
+    <div class="panel reveal" style="--d:100ms">
+      <h3 class="bloque-h">Próximas actividades</h3>
       <ul class="lista-act" id="actividades" hidden></ul>
       <p class="vacio" id="actividades-vacio">Estoy armando el calendario de cursos y seminarios. Escríbeme y te aviso cuando haya fechas y modalidades.</p>
       <div class="formacion-cta">
         <a class="btn btn-wa" data-wa="formacion" href="#contacto">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a9 9 0 0 0-7.8 13.5L3 21l4.6-1.2A9 9 0 1 0 12 3Z"/></svg>
+          <svg class="i" aria-hidden="true"><use href="#i-wa"/></svg>
           Pedir información de formación
         </a>
       </div>
@@ -621,19 +874,25 @@ textarea{resize:vertical;min-height:84px;max-height:220px;}
 
 <!-- CONTACTO -->
 <section class="sec on-paper on-light" id="contacto" aria-labelledby="h-contacto">
+  <div class="wave w-d flip"><svg viewBox="0 0 1440 90" preserveAspectRatio="none"><path d="M0 0H1440V38C1290 82 1130 84 960 56 790 28 630 20 460 48 300 76 140 70 0 36Z"/></svg></div>
+  <svg class="deco deco-r" aria-hidden="true"><use href="#deco-leaves" width="100%" height="100%"/></svg>
   <div class="wrap contact-grid">
     <div>
       <h2 id="h-contacto" class="reveal">Escríbeme y coordinamos tu primera consulta</h2>
-      <p class="lead muted reveal" style="margin-top:20px;max-width:28em">La forma más simple es WhatsApp. Cuéntame en una línea el motivo general y acordamos día, hora y modalidad.</p>
-      <div class="contact-direct reveal">
+      <p class="lead muted reveal" style="margin-top:26px;max-width:28em;--d:80ms">La forma más simple es WhatsApp. Cuéntame en una línea el motivo general y acordamos día, hora y modalidad.</p>
+      <div class="contact-direct reveal" style="--d:120ms">
         <a class="btn btn-wa" data-wa="consulta" href="#contacto">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a9 9 0 0 0-7.8 13.5L3 21l4.6-1.2A9 9 0 1 0 12 3Z"/></svg>
+          <svg class="i" aria-hidden="true"><use href="#i-wa"/></svg>
           Escribir por WhatsApp
         </a>
         <p class="hint" id="email-line" hidden>Correo profesional: <a class="link" id="email-link" href="#"></a></p>
       </div>
+      <div class="breath reveal" style="--d:160ms" aria-hidden="true">
+        <span class="orbe"></span>
+        <p><b class="lbl"><span class="w1">Inhala</span><span class="w2">Exhala</span></b>Escribir el primer mensaje cuesta. Tómate un respiro antes.</p>
+      </div>
     </div>
-    <form name="contacto-aldozeballos" method="POST" action="/" data-netlify="true" netlify-honeypot="bot-field" id="form" class="reveal">
+    <form name="contacto-aldozeballos" method="POST" action="/" data-netlify="true" netlify-honeypot="bot-field" id="form" class="reveal" style="--d:100ms">
       <input type="hidden" name="form-name" value="contacto-aldozeballos">
       <p class="hp"><label>No llenar este campo <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
       <div class="field">
@@ -665,6 +924,7 @@ textarea{resize:vertical;min-height:84px;max-height:220px;}
 </main>
 
 <footer class="foot">
+  <div class="wave w-p"><svg viewBox="0 0 1440 90" preserveAspectRatio="none"><path d="M0 0H1440V34C1290 78 1130 84 960 58 790 32 630 22 460 50 300 76 140 68 0 36Z"/></svg></div>
   <div class="wrap">
     <b>Consultorio Aldo Zeballos</b>
     <p>Lic. Aldo Zeballos, psicólogo clínico y psicoanalista. Matrícula profesional 0776-AZ-17. Cochabamba, Bolivia.</p>
@@ -675,7 +935,7 @@ textarea{resize:vertical;min-height:84px;max-height:220px;}
 
 <div class="wa-fixed" id="wa-fixed">
   <a class="btn btn-wa" data-wa="consulta" href="#contacto">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a9 9 0 0 0-7.8 13.5L3 21l4.6-1.2A9 9 0 1 0 12 3Z"/></svg>
+    <svg class="i" aria-hidden="true"><use href="#i-wa"/></svg>
     WhatsApp
   </a>
 </div>
@@ -718,9 +978,6 @@ var PUBLICACIONES = [
     document.getElementById('email-line').hidden = false;
   }
 
-  // aviso de borrador
-  if(!waOk || !CONFIG.email){ document.getElementById('draft').hidden = false; }
-
   // listas de actividades y publicaciones
   function pintar(lista, items, mostrar){
     items.forEach(function(it){
@@ -739,19 +996,68 @@ var PUBLICACIONES = [
     pintar(la, ACTIVIDADES, function(){ la.hidden = false; document.getElementById('actividades-vacio').hidden = true; });
   }
 
-  // aparición al hacer scroll y burbujas
-  function observar(sel, fn, th){
+  // titular palabra por palabra
+  (function(){
+    var h1 = document.getElementById('titular');
+    if(reduce || !h1) return;
+    var i = 0, nodes = Array.prototype.slice.call(h1.childNodes);
+    h1.setAttribute('aria-label', h1.textContent);
+    h1.textContent = '';
+    nodes.forEach(function(n){
+      if(n.nodeType === 3){
+        n.textContent.split(/(\s+)/).forEach(function(t){
+          if(!t) return;
+          if(/^\s+$/.test(t)){ h1.appendChild(document.createTextNode(' ')); return; }
+          var s = document.createElement('span'); s.className = 'w'; s.style.setProperty('--i', i++); s.setAttribute('aria-hidden','true'); s.textContent = t; h1.appendChild(s);
+        });
+      } else { n.classList.add('w'); n.style.setProperty('--i', i++); n.setAttribute('aria-hidden','true'); h1.appendChild(n); }
+    });
+  })();
+  // aparicion al hacer scroll
+  function observar(sel, fn, th, margin){
     var els = document.querySelectorAll(sel);
     if(!('IntersectionObserver' in window)){ els.forEach(function(e){ fn(e); }); return; }
     var io = new IntersectionObserver(function(entries){
       entries.forEach(function(en){ if(en.isIntersecting){ fn(en.target); io.unobserve(en.target); } });
-    },{threshold:th});
+    },{threshold:th, rootMargin: margin || '0px 0px -6% 0px'});
     els.forEach(function(e){ io.observe(e); });
   }
-  observar('.reveal', function(e){ e.classList.add('in-view'); }, .12);
-  var bubbles = document.querySelectorAll('#chat .bubble');
-  bubbles.forEach(function(b,i){ b.style.transitionDelay = reduce ? '0ms' : (i*380)+'ms'; });
-  observar('#chat', function(e){ e.classList.add('in-view'); }, .2);
+  observar('.reveal, h2', function(e){ e.classList.add('in-view'); }, .12);
+  document.querySelectorAll('.steps li').forEach(function(li,i){ li.style.transitionDelay = ''; });
+  observar('.steps li', function(e){ e.classList.add('in-view'); }, .3);
+
+  // chat: cada mensaje recibe su respuesta
+  (function(){
+    var thread = document.getElementById('thread');
+    var msgs = Array.prototype.slice.call(thread.querySelectorAll('.msg'));
+    function bajar(){ thread.scrollTo({top: thread.scrollHeight}); }
+    if(reduce || !('IntersectionObserver' in window)){
+      msgs.forEach(function(m){ m.classList.add('show'); });
+      return;
+    }
+    function typing(){
+      var t = document.createElement('div'); t.className = 'msg out show typing'; t.setAttribute('aria-hidden','true');
+      t.innerHTML = '<i></i><i></i><i></i>'; thread.appendChild(t); bajar(); return t;
+    }
+    function paso(i){
+      if(i >= msgs.length) return;
+      var m = msgs[i];
+      if(m.classList.contains('out')){
+        var t = typing();
+        setTimeout(function(){
+          t.remove(); m.classList.add('show'); bajar();
+          setTimeout(function(){ paso(i+1); }, 1100);
+        }, 1300);
+      } else {
+        m.classList.add('show'); bajar();
+        setTimeout(function(){ paso(i+1); }, 650);
+      }
+    }
+    var io = new IntersectionObserver(function(en){
+      if(en[0].isIntersecting){ io.disconnect(); setTimeout(function(){ paso(0); }, 400); }
+    },{threshold:.35});
+    io.observe(thread);
+  })();
 
   // FAQ
   document.querySelectorAll('.faq-item').forEach(function(item){
@@ -764,15 +1070,25 @@ var PUBLICACIONES = [
     });
   });
 
-  // botón fijo en celular
-  var fijo = document.getElementById('wa-fixed'), contacto = document.getElementById('contacto');
-  function fijoEstado(){
-    var pasoHero = window.scrollY > window.innerHeight * .7;
+  // barra de progreso, boton fijo y paralaje suave
+  var fijo = document.getElementById('wa-fixed'), contacto = document.getElementById('contacto'), prog = document.getElementById('prog');
+  var par = Array.prototype.slice.call(document.querySelectorAll('[data-par]'));
+  var tick = false;
+  function frame(){
+    tick = false;
+    var y = window.scrollY, h = document.documentElement.scrollHeight - window.innerHeight;
+    prog.style.transform = 'scaleX(' + (h > 0 ? Math.min(1, y / h) : 0) + ')';
+    var pasoHero = y > window.innerHeight * .7;
     var r = contacto.getBoundingClientRect();
-    var enContacto = r.top < window.innerHeight * .6;
-    fijo.classList.toggle('show', pasoHero && !enContacto);
+    fijo.classList.toggle('show', pasoHero && !(r.top < window.innerHeight * .6));
+    if(!reduce && y < window.innerHeight * 1.5){
+      par.forEach(function(el){ el.style.transform = 'translate3d(0,' + (y * parseFloat(el.getAttribute('data-par'))).toFixed(1) + 'px,0)'; });
+    }
   }
-  window.addEventListener('scroll', fijoEstado, {passive:true}); fijoEstado();
+  function onScroll(){ if(!tick){ tick = true; requestAnimationFrame(frame); } }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  window.addEventListener('resize', onScroll);
+  frame();
 
   // formulario (Netlify Forms)
   var form = document.getElementById('form');
