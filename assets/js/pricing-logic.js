@@ -67,6 +67,11 @@ window.EGPricing = (function () {
   }
 ];
 
+  // ── Catálogo digital ──
+  // Entregable de sesión y plan mensual. El texto incluye "fotos" a propósito:
+  // /precios lo usa para elegir el ícono de la imagen descargable.
+  const BENEFICIO_CATALOGO = 'Catálogo digital: descarga tus fotos en máxima calidad por 2 años';
+
   // ── Extras a la carta ──
   // Se suman al precio base (sesión o plan) sin importar cuál tab esté
   // activo. Editables desde el panel: se pueden agregar, quitar o cambiar
@@ -178,6 +183,7 @@ window.EGPricing = (function () {
       'Entrega en 48h',
       'Edición profesional',
       fotos + ' fotos en alta calidad',
+      BENEFICIO_CATALOGO,
     ];
   }
 
@@ -189,6 +195,7 @@ window.EGPricing = (function () {
       t.beneficioPlan2,
       'Entrega en 48h',
       'Edición profesional',
+      BENEFICIO_CATALOGO,
     ];
     b.push(t.beneficioAsesoria);
     if (addVideo) b.push(reels + ' videos publicitarios por mes', t.beneficioGuion, t.beneficioMusica);
