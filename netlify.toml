@@ -21,6 +21,14 @@ node_bundler = "esbuild"
     Access-Control-Allow-Origin = "*"
     Cache-Control = "public, max-age=31536000, immutable"
 
+# Landing de Aldo Zeballos: el subdominio sirve la carpeta del cliente en la raiz.
+# El orden importa: va antes de las demas reglas y con force para ganar a cualquier archivo.
+[[redirects]]
+  from = "https://aldozeballos.estudiographica.com/*"
+  to = "/clientes/aldozeballos/:splat"
+  status = 200
+  force = true
+
 # Menu de Magma Wings: API publica del menu y recepcion de pedidos.
 # Ver menu/magma/README.md.
 [[redirects]]
