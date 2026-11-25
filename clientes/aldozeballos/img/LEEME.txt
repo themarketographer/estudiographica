@@ -4,6 +4,6 @@ retrato-hero.jpg         Vertical 4:5, mínimo 1600 px de alto. Retrato de Aldo 
 detalle-consultorio.jpg  Vertical 4:5, mínimo 1200 px de ancho. Un rincón del consultorio, sin personas.
 consultorio.jpg          Horizontal 3:2, mínimo 1800 px de ancho. El consultorio completo, sin personas.
 aldo-charla.jpg          Horizontal 3:2, mínimo 1800 px de ancho. Aldo dando una charla o clase.
-og-image.jpg             1200 x 630 px. Imagen que se ve al compartir el link por WhatsApp.
+og-image.jpg             Ya hay una generada (foto de Aldo + nombre). Se puede reemplazar con una propia de 1200 x 630 px.
 
 Peso recomendado: menos de 300 KB por foto (JPG, calidad 80).
