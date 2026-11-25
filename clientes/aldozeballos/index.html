@@ -414,25 +414,35 @@ h3.sub{font-size:1.625rem;}
 .cta-pts{list-style:none;margin:22px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:10px;}
 .cta-pts li{display:flex;align-items:center;gap:10px;padding:10px 16px 10px 12px;border-radius:100px;background:rgba(255,255,255,.07);box-shadow:inset 0 0 0 1px rgba(232,238,235,.16);font-size:.9375rem;color:#E4ECE8;}
 .cta-pts .i{color:var(--celadon);width:20px;height:20px;}
-.breath{display:flex;align-items:center;gap:20px;}
+.breath{display:flex;align-items:center;gap:20px;appearance:none;background:none;border:0;padding:8px;margin:-8px;font:inherit;color:inherit;text-align:left;cursor:pointer;border-radius:28px;-webkit-tap-highlight-color:transparent;}
 .breath .orbe{position:relative;width:96px;height:96px;flex:none;display:grid;place-items:center;}
 .breath .orbe::before,.breath .orbe::after{content:"";position:absolute;border-radius:50%;}
 .breath .orbe::before{inset:0;border:1.5px solid rgba(157,191,175,.55);animation:aire 10s var(--ease-io) infinite;}
 .breath .orbe::after{inset:20px;background:radial-gradient(circle at 35% 30%,#fff,var(--celadon) 60%,var(--sage));animation:aire2 10s var(--ease-io) infinite;}
 @keyframes aire{0%,100%{transform:scale(.8);}45%,55%{transform:scale(1.12);}}
 @keyframes aire2{0%,100%{transform:scale(.75);}45%,55%{transform:scale(1.25);}}
-.breath p{font-size:.9375rem;color:var(--soft);max-width:14em;}
+.breath .txt{display:block;font-size:.9375rem;color:var(--soft);max-width:14em;}
 .breath b{display:block;color:#fff;font-family:var(--serif);font-size:1.25rem;}
-.breath .w1,.breath .w2{display:inline-block;}
+.breath .lbl{display:grid;justify-items:start;}
+.breath .lbl>span{grid-area:1/1;}
 .breath .w1{animation:w1 10s steps(1) infinite;}
-.breath .w2{animation:w2 10s steps(1) infinite;position:absolute;opacity:0;}
+.breath .w2{animation:w2 10s steps(1) infinite;opacity:0;}
+.breath .wj{display:none;}
+.breath.guiado .w1,.breath.guiado .w2{display:none;}
+.breath.guiado .wj{display:block;}
+.breath .brtxt{display:block;}
+.breath .tap{display:block;margin-top:8px;font-size:.8125rem;font-weight:600;letter-spacing:.02em;color:var(--celadon);}
+.breath .orbe{transition:transform .16s var(--ease-out);}
+.breath:active .orbe{transform:scale(.96);}
+.breath.reinicio .orbe::before,.breath.reinicio .orbe::after,.breath.reinicio .w1,.breath.reinicio .w2{animation:none;}
+@media(hover:hover) and (pointer:fine){.breath:hover .orbe::before{border-color:rgba(157,191,175,.9);}}
 @keyframes w1{0%{opacity:1;}50%{opacity:0;}100%{opacity:1;}}
 @keyframes w2{0%{opacity:0;}50%{opacity:1;}100%{opacity:0;}}
-.breath .lbl{position:relative;display:block;}
 @media(min-width:900px){
   .cta-card{padding:84px 72px;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:64px;}
   .breath{flex-direction:column;text-align:center;gap:18px;}
-  .breath p{max-width:11em;}
+  .breath .lbl{justify-items:center;}
+  .breath .txt{max-width:11em;}
   .breath .orbe{width:150px;height:150px;}
   .breath .orbe::after{inset:32px;}
 }
@@ -473,6 +483,7 @@ html:not(.js) .reveal{opacity:1;transform:none;}
   .wa-fixed .btn::before{animation:none;}
   .orb,.rings i,.chip,.breath .orbe::before,.breath .orbe::after,.breath .w1,.breath .w2{animation:none;}
   .breath .w2{opacity:0;}
+  .breath .orbe{transition:none;}
   .js .w,.js .hero .lead,.js .hero-cta,.js .hero-note,.js .hero-fig,.js .facts li{animation:none;opacity:1;transform:none;}
   .js .mark::after{animation:none;transform:none;}
   .reveal{opacity:1;transform:none;transition:none;}
@@ -889,10 +900,10 @@ html:not(.js) .reveal{opacity:1;transform:none;}
           <p class="hint" id="email-line" hidden>Correo profesional: <a class="link" id="email-link" href="#"></a></p>
         </div>
       </div>
-      <div class="breath" aria-hidden="true">
-        <span class="orbe"></span>
-        <p><b class="lbl"><span class="w1">Inhala</span><span class="w2">Exhala</span></b>Respira. Tómate el tiempo que necesites.</p>
-      </div>
+      <button class="breath" id="breath" type="button" aria-label="Respiración guiada de tres ciclos. Toca para empezar.">
+        <span class="orbe" aria-hidden="true"></span>
+        <span class="txt"><b class="lbl"><span class="w1">Inhala</span><span class="w2">Exhala</span><span class="wj" id="breath-w"></span></b><span class="brtxt">Respira. Tómate el tiempo que necesites.</span><span class="tap" id="breath-tap">Toca el círculo y respira conmigo</span></span>
+      </button>
     </div>
   </div>
 </section>
@@ -1064,6 +1075,40 @@ var PUBLICACIONES = [
   window.addEventListener('scroll', onScroll, {passive:true});
   window.addEventListener('resize', onScroll);
   frame();
+
+  // respiracion guiada: 3 ciclos de 10 s (5 inhala, 5 exhala)
+  var br = document.getElementById('breath');
+  if(br){
+    var brW = document.getElementById('breath-w'), brTap = document.getElementById('breath-tap');
+    var brT = [], brOn = false, CICLOS = 3, MITAD = 5000;
+    function brSet(w, tap){ brW.textContent = w; brTap.textContent = tap; }
+    function brClear(){ brT.forEach(clearTimeout); brT = []; }
+    function brIdle(){
+      brClear(); brOn = false;
+      br.classList.remove('guiado');
+      br.setAttribute('aria-label', 'Respiración guiada de tres ciclos. Toca para empezar.');
+      brTap.textContent = 'Toca el círculo y respira conmigo';
+    }
+    function brStart(){
+      brClear(); brOn = true;
+      br.classList.add('guiado');
+      br.setAttribute('aria-label', 'Respiración guiada en curso. Toca para detenerla.');
+      // reinicia la animacion para que el primer inhalar coincida con el toque
+      br.classList.add('reinicio'); void br.offsetWidth; br.classList.remove('reinicio');
+      for(var c = 0; c < CICLOS; c++){
+        (function(c){
+          brT.push(setTimeout(function(){ brSet('Inhala', 'Ciclo ' + (c + 1) + ' de ' + CICLOS); }, c * 2 * MITAD));
+          brT.push(setTimeout(function(){ brSet('Exhala', 'Ciclo ' + (c + 1) + ' de ' + CICLOS); }, c * 2 * MITAD + MITAD));
+        })(c);
+      }
+      brT.push(setTimeout(function(){
+        brOn = false;
+        brSet('Bien hecho', 'Toca para repetir');
+        br.setAttribute('aria-label', 'Respiración terminada. Toca para repetir.');
+      }, CICLOS * 2 * MITAD));
+    }
+    br.addEventListener('click', function(){ if(brOn) brIdle(); else brStart(); });
+  }
 
 })();
 </script>
