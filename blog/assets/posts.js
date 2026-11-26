@@ -219,5 +219,12 @@ window.EG_BLOG_POSTS = [
     "excerpt": "Cómo fotografiar un combo armado, qué hacer con las promociones que cambian cada semana y cuántas fotos necesitas para tu carta.",
     "img": "https://res.cloudinary.com/dplhu2z6j/image/upload/v1791601428/a4441ef4-e729-46ff-9fd3-97237319ae89_cwgrka.jpg",
     "eyebrow": "Guías · Combos y promociones"
+  },
+  {
+    "slug": "fotos-bebidas-postres-restaurante-cochabamba",
+    "title": "Fotos de bebidas y postres para tu restaurante",
+    "excerpt": "Cómo fotografiar bebidas y postres, qué cuidar en cada foto y cuántas necesitas para que tu carta venda también lo que se pide al final.",
+    "img": "https://res.cloudinary.com/dplhu2z6j/image/upload/v1791601818/NZ5_7623_de_tama%C3%B1o_grande_fdy5kr.jpg",
+    "eyebrow": "Guías · Bebidas y postres"
   }
 ];
