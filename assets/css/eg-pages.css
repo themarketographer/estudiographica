@@ -660,11 +660,12 @@ body.con-barra .wrap{padding-bottom:110px}
 
 /* 19 · Jornada: el precio queda fijo arriba mientras eliges las horas */
 @media(max-width:880px){
-  .pg-jornada .container>.card:has(.left-col) .right-col{order:-1;position:sticky;top:8px;z-index:6;padding:12px 12px 12px 18px;border-radius:22px;display:grid;grid-template-columns:1fr auto;align-items:center;column-gap:12px}
+  .pg-jornada .container>.card:has(.left-col) .right-col{order:-1;position:sticky;top:76px;z-index:6;padding:12px 12px 12px 18px;border-radius:22px;display:grid;grid-template-columns:1fr auto;align-items:center;column-gap:12px}
   .pg-jornada .right-col .paquete-label,.pg-jornada .right-col .benefits,.pg-jornada .right-col .price-note,.pg-jornada .right-col .wa-link{display:none}
   .pg-jornada .right-col .paquete-name{grid-column:1;font-size:13px;margin:0}
   .pg-jornada .right-col .price{grid-column:1;margin:0;font-size:26px}
-  .pg-jornada .right-col #btnReservar{grid-column:2;grid-row:1/3;width:auto;min-height:48px;padding:0 20px;margin:0}
+  .pg-jornada .container>.card:has(.left-col) .right-col #btnReservar{display:inline-flex;grid-column:2;grid-row:1/3;width:auto;min-height:48px;padding:0 20px;margin:0}
+  .pg-jornada .container>.card:has(.left-col) .right-col .price-note,.pg-jornada .container>.card:has(.left-col) .right-col .benefits{display:none}
 }
 
 /* 38 · Foco visible para quien navega con teclado */
