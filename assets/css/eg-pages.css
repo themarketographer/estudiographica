@@ -694,3 +694,5 @@ body.con-barra .wrap{padding-bottom:110px}
 .extra-info{display:none;grid-area:info;place-items:center;width:36px;height:36px;border-radius:50%;border:1.5px solid var(--hair);background:#fff;color:var(--ink);font:italic 700 15px/1 Georgia,serif;padding:0;cursor:pointer;transition:background .18s cubic-bezier(.23,1,.32,1),border-color .18s cubic-bezier(.23,1,.32,1),color .18s cubic-bezier(.23,1,.32,1)}
 .extra-info:active{background:var(--ink);color:var(--y)}
 .extra-row.open .extra-info{background:var(--ink);color:var(--y);border-color:var(--ink)}
+
+@media(max-width:880px){.extra-info{display:grid}}
