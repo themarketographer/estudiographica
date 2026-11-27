@@ -15,7 +15,9 @@ function trazosValidos(t) {
     const s = [];
     for (const p of tr) {
       if (!p || typeof p.x !== 'number' || typeof p.y !== 'number') return null;
-      s.push({ x: Math.max(0, Math.min(1, +p.x.toFixed(4))), y: Math.max(0, Math.min(1, +p.y.toFixed(4))) });
+      const pt = { x: Math.max(0, Math.min(1, +p.x.toFixed(4))), y: Math.max(0, Math.min(1, +p.y.toFixed(4))) };
+      if (typeof p.w === 'number') pt.w = Math.max(0.4, Math.min(1.8, +p.w.toFixed(2)));   // grosor segun la velocidad del trazo
+      s.push(pt);
       if (++puntos > 6000) return null;
     }
     limpio.push(s);
@@ -44,7 +46,7 @@ exports.handler = async (event) => {
         if (s.estado !== 'esperando') return reply(409, { error: 'usado' });
         const trazos = trazosValidos(b.trazos);
         if (!trazos) return reply(400, { error: 'firma' });
-        await store.setJSON(t, { estado: 'lista', ratio: s.ratio, creado: s.creado, trazos });
+        await store.setJSON(t, { estado: 'lista', ratio: s.ratio, creado: s.creado, visto: true, trazos });
         return reply(200, { ok: true });
       }
       return reply(400, {});
@@ -58,7 +60,12 @@ exports.handler = async (event) => {
       await store.delete(t);
       return reply(200, { estado: 'lista', trazos: s.trazos });
     }
-    return reply(200, { estado: s.estado, ratio: s.ratio });
+    // El celular avisa que ya abrio la pagina de firma, para que el computador lo muestre.
+    if (q.celu === '1' && s.estado === 'esperando' && !s.visto) {
+      s.visto = true;
+      await store.setJSON(t, s);
+    }
+    return reply(200, { estado: s.estado, ratio: s.ratio, visto: !!s.visto });
   } catch (e) {
     return reply(500, { error: 'servidor' });
   }

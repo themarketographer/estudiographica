@@ -613,7 +613,20 @@ body.con-barra .wrap{padding-bottom:110px}
 .sig-zona:focus{border-color:var(--ink);background:var(--y-soft,#fff3c4)}
 .sig-zona img{max-width:100%;max-height:120px}
 .sig-iphone-link{background:none;border:0;padding:0;color:var(--muted);font:500 12.5px/1 var(--f);text-decoration:underline;text-underline-offset:3px;cursor:pointer;min-height:32px}
-.celu-qr{width:min(260px,70vw);margin:6px auto 14px;aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:18px;background:#fff;border:1px solid var(--hair);padding:8px}
-.celu-qr svg{width:100%;height:100%;display:block}
-/* Los dialogos quedaban pegados arriba a la izquierda: el reset global les quitaba el margin auto */
-.confirmar{margin:auto}
+.celu-qr{position:relative;isolation:isolate;width:min(260px,70vw);margin:10px auto 14px;aspect-ratio:1}
+.celu-qr svg{width:100%;height:100%;display:block;border-radius:18px;box-shadow:0 14px 34px -22px rgba(24,24,24,.55)}
+.celu-qr::before{content:"";position:absolute;z-index:-1;inset:-16px;border-radius:34px;background:radial-gradient(circle,rgba(255,221,90,.7),rgba(255,221,90,0) 70%);animation:haloQr 2.6s ease-in-out infinite alternate}
+.celu-qr svg .d{transform-box:fill-box;transform-origin:center;animation:puntoQr .22s cubic-bezier(.23,1,.32,1) backwards}
+.celu-qr svg .ojo,.celu-qr svg .logo{animation:ojoQr .32s cubic-bezier(.23,1,.32,1) .05s backwards}
+.celu-qr.sale svg .d{animation:puntoFuera .22s cubic-bezier(.23,1,.32,1) forwards;animation-delay:0ms!important}
+.celu-qr.sale::before{animation:none;opacity:0;transition:opacity .25s}
+@keyframes puntoQr{from{opacity:0;transform:scale(.4)}}
+@keyframes puntoFuera{to{opacity:0;transform:scale(.4)}}
+@keyframes ojoQr{from{opacity:0}}
+@keyframes haloQr{from{opacity:.45;transform:scale(.96)}to{opacity:1;transform:scale(1.04)}}
+.celu-estado{display:flex;align-items:center;justify-content:center;gap:8px;margin:0 0 6px;font:600 14px/1.2 var(--f)}
+.celu-estado .pto{width:9px;height:9px;border-radius:50%;background:var(--y);box-shadow:0 0 0 0 rgba(255,221,90,.7);animation:ptoQr 1.6s ease-out infinite}
+.celu-estado .pto.ok{background:var(--ok,#2e9e5b);animation:none}
+.celu-estado .pto.off{background:var(--muted);animation:none}
+@keyframes ptoQr{70%{box-shadow:0 0 0 9px rgba(255,221,90,0)}100%{box-shadow:0 0 0 0 rgba(255,221,90,0)}}
+@media(prefers-reduced-motion:reduce){.celu-qr::before,.celu-qr svg .d,.celu-qr svg .ojo,.celu-qr svg .logo,.celu-estado .pto{animation:none}}

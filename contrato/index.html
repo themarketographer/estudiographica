@@ -243,6 +243,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
   <dialog class="confirmar" id="dlgCelu" aria-labelledby="celuTitulo">
     <p class="card-label" id="celuTitulo">Firma con tu celular</p>
     <div class="celu-qr" id="celuQr" aria-hidden="true"></div>
+    <p class="celu-estado" aria-live="polite"><i class="pto" id="celuPto"></i><span id="celuEstado">Preparando el código</span></p>
     <p class="conf-nota" id="celuNota">Abre la cámara del celular y apunta al código. Firma con el dedo y la firma aparece aquí.</p>
     <div class="conf-btns"><button type="button" class="btn-ghost" id="celuCerrar">Cancelar</button></div>
   </dialog>
@@ -852,6 +853,13 @@ const contratoConfig = [
 
   var modoEscribir = false;
   var sigTexto = document.getElementById('sigTexto');
+  var limite = null;   // al llegar la firma del celular se dibuja punto a punto; null = completa
+  function recortarTrazos() {
+    if (limite === null) return trazos;
+    var resto = limite, out = [];
+    for (var i = 0; i < trazos.length && resto > 0; i++) { out.push(trazos[i].slice(0, resto)); resto -= trazos[i].length; }
+    return out;
+  }
   function redibujar() {
     var rect = canvas.getBoundingClientRect();
     ctx.clearRect(0, 0, rect.width, rect.height);
@@ -866,7 +874,7 @@ const contratoConfig = [
       ctx.fillText(t, rect.width / 2, rect.height - 46);
       return;
     }
-    trazos.forEach(function (trazo) {
+    recortarTrazos().forEach(function (trazo) {
       if (trazo.length < 2) {
         // Un toque sin arrastre (p. ej. el punto de una "i" en la firma)
         // no forma una línea, pero sí debe verse como un punto — si no,
@@ -877,6 +885,18 @@ const contratoConfig = [
           ctx.fillStyle = ctx.strokeStyle;
           ctx.fill();
         }
+        return;
+      }
+      if (trazo[1].w !== undefined) {
+        // Firma del celular: el grosor cambia con la velocidad, como una tinta real.
+        for (var j = 1; j < trazo.length; j++) {
+          ctx.lineWidth = 2.4 * (trazo[j].w || 1);
+          ctx.beginPath();
+          ctx.moveTo(trazo[j - 1].x * rect.width, trazo[j - 1].y * rect.height);
+          ctx.lineTo(trazo[j].x * rect.width, trazo[j].y * rect.height);
+          ctx.stroke();
+        }
+        ctx.lineWidth = 2.4;
         return;
       }
       ctx.beginPath();
@@ -957,38 +977,96 @@ const contratoConfig = [
     var dlg = document.getElementById('dlgCelu');
     var qr = document.getElementById('celuQr');
     var nota = document.getElementById('celuNota');
-    var timer = null, fin = 0;
+    var estado = document.getElementById('celuEstado');
+    var pto = document.getElementById('celuPto');
+    var reducir = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var timer = null, fin = 0, visto = false;
     var API = '/.netlify/functions/firma-remota';
     function parar() { clearInterval(timer); timer = null; }
     function cerrar() { parar(); if (dlg.open) dlg.close(); }
     document.getElementById('celuCerrar').addEventListener('click', cerrar);
     dlg.addEventListener('close', parar);
+
+    // QR de puntos redondos, esquinas redondeadas y el logo en el centro (correccion de errores alta).
+    function qrSvg(q) {
+      var n = q.getModuleCount(), m = 2, tam = n + 2 * m, c0 = (n - 1) / 2, max = Math.SQRT2 * n / 2;
+      var logo = Math.round(n * 0.27); if ((logo % 2) !== (n % 2)) logo++;
+      var lo = (n - logo) / 2, hi = lo + logo;
+      var o = '<svg viewBox="0 0 ' + tam + ' ' + tam + '" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Código QR para firmar con el celular">';
+      o += '<rect width="' + tam + '" height="' + tam + '" rx="2.2" fill="#fff"/>';
+      function ojo(x, y) {
+        return '<g class="ojo"><rect x="' + (x + m + .5) + '" y="' + (y + m + .5) + '" width="6" height="6" rx="2" fill="none" stroke="#181818" stroke-width="1"/>' +
+               '<rect x="' + (x + m + 2) + '" y="' + (y + m + 2) + '" width="3" height="3" rx="1.1" fill="#181818"/></g>';
+      }
+      o += ojo(0, 0) + ojo(n - 7, 0) + ojo(0, n - 7);
+      for (var r = 0; r < n; r++) {
+        for (var c = 0; c < n; c++) {
+          if (!q.isDark(r, c)) continue;
+          if ((r < 7 && c < 7) || (r < 7 && c >= n - 7) || (r >= n - 7 && c < 7)) continue;
+          if (r >= lo && r < hi && c >= lo && c < hi) continue;
+          var d = Math.round(Math.hypot(r - c0, c - c0) / max * 380 / 10) * 10;
+          o += '<circle class="d" style="animation-delay:' + d + 'ms" cx="' + (c + m + .5) + '" cy="' + (r + m + .5) + '" r=".44" fill="#181818"/>';
+        }
+      }
+      o += '<g class="logo"><rect x="' + (lo + m) + '" y="' + (lo + m) + '" width="' + logo + '" height="' + logo + '" rx="' + (logo * .3).toFixed(2) + '" fill="#ffdd5a"/>' +
+           '<image href="/assets/logo-mark-black.png" x="' + (lo + m + logo * .27).toFixed(2) + '" y="' + (lo + m + logo * .2).toFixed(2) + '" width="' + (logo * .46).toFixed(2) + '" height="' + (logo * .6).toFixed(2) + '" preserveAspectRatio="xMidYMid meet"/></g>';
+      return o + '</svg>';
+    }
+
+    // La firma que llega se dibuja sola, punto a punto, en el recuadro del contrato.
+    function animarFirma() {
+      var total = 0; trazos.forEach(function (t) { total += t.length; });
+      if (modoEscribir) { limite = 0; cambiarModo(false); } else { limite = 0; estadoFirma(); }
+      if (reducir) { limite = null; redibujar(); return; }
+      var dur = Math.max(700, Math.min(1600, total * 6)), t0 = performance.now();
+      (function paso(ahora) {
+        var k = Math.min(1, (ahora - t0) / dur);
+        limite = k >= 1 ? null : Math.floor(total * (1 - Math.pow(1 - k, 3)));
+        redibujar();
+        if (k < 1) requestAnimationFrame(paso);
+      })(t0);
+    }
+
+    function pedir(t) {
+      fetch(API + '?t=' + t + '&leer=1', { cache: 'no-store' }).then(function (x) { return x.json(); }).then(function (s) {
+        if (s.estado === 'lista' && s.trazos) {
+          parar();
+          trazos = s.trazos;
+          estado.textContent = 'Firma recibida';
+          pto.className = 'pto ok';
+          qr.classList.add('sale');
+          setTimeout(function () { if (dlg.open) dlg.close(); animarFirma(); }, reducir ? 0 : 340);
+        } else if (s.estado === 'vencido') {
+          parar(); estado.textContent = 'El código venció'; pto.className = 'pto off';
+          nota.textContent = 'Cierra esto y vuelve a pulsar el botón.';
+        } else if (s.visto && !visto) {
+          visto = true; estado.textContent = 'Tu celular ya abrió la firma. Firma ahí.'; pto.className = 'pto ok';
+        }
+      }).catch(function () {});
+    }
+
     document.getElementById('sigCelu').addEventListener('click', function () {
       var r = canvas.getBoundingClientRect();
-      qr.innerHTML = ''; nota.textContent = 'Preparando el código...';
+      visto = false; qr.className = 'celu-qr'; qr.innerHTML = '';
+      estado.textContent = 'Preparando el código'; pto.className = 'pto';
+      nota.textContent = 'Abre la cámara del celular y apunta al código. Firma con el dedo y la firma aparece aquí.';
       dlg.showModal();
       fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ accion: 'crear', ratio: r.width / r.height }) })
         .then(function (x) { return x.json(); })
         .then(function (d) {
           if (!d.t) throw new Error('sin token');
-          var q = window.qrcode(0, 'M');
+          var q = window.qrcode(0, 'H');
           q.addData(location.origin + '/firmar-celular/?t=' + d.t); q.make();
-          qr.innerHTML = q.createSvgTag({ cellSize: 6, margin: 2, scalable: true });
-          nota.textContent = 'Abre la cámara del celular y apunta al código. Firma con el dedo y la firma aparece aquí.';
+          qr.innerHTML = qrSvg(q);
+          estado.textContent = 'Esperando tu firma';
           fin = Date.now() + 14 * 60 * 1000;
           parar();
           timer = setInterval(function () {
-            if (Date.now() > fin) { parar(); nota.textContent = 'El código venció. Cierra esto y vuelve a pulsar el botón.'; return; }
-            fetch(API + '?t=' + d.t + '&leer=1', { cache: 'no-store' }).then(function (x) { return x.json(); }).then(function (s) {
-              if (s.estado === 'lista' && s.trazos) {
-                trazos = s.trazos;
-                if (modoEscribir) cambiarModo(false); else estadoFirma();
-                cerrar();
-              } else if (s.estado === 'vencido') { parar(); nota.textContent = 'El código venció. Cierra esto y vuelve a pulsar el botón.'; }
-            }).catch(function () {});
+            if (Date.now() > fin) { parar(); estado.textContent = 'El código venció'; pto.className = 'pto off'; nota.textContent = 'Cierra esto y vuelve a pulsar el botón.'; return; }
+            pedir(d.t);
           }, 2000);
         })
-        .catch(function () { nota.textContent = 'No se pudo preparar el código. Inténtalo otra vez.'; });
+        .catch(function () { estado.textContent = 'No se pudo preparar el código'; pto.className = 'pto off'; });
     });
   })();
   function cambiarModo(escribir) {
