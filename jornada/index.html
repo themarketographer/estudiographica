@@ -87,6 +87,7 @@ Cal.ns.jornada("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-brand":"#
         </div>
         <input type="range" id="horasSlider" min="1" max="8" step="1" value="1" />
         <div class="range-labels"><span>1</span><span>8</span></div>
+        <div class="horas-btns" id="horasBtns" role="group" aria-label="Elegir horas"></div>
       </div>
 
       <div class="extras-block">
@@ -222,6 +223,28 @@ Cal.ns.jornada("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-brand":"#
     }
 
     horasSlider.addEventListener('input', calc);
+    (function () {
+      var cont = document.getElementById('horasBtns');
+      if (!cont) return;
+      for (var h = 1; h <= 8; h++) {
+        var b = document.createElement('button');
+        b.type = 'button'; b.textContent = h; b.dataset.h = h;
+        b.setAttribute('aria-label', h + (h === 1 ? ' hora' : ' horas'));
+        cont.appendChild(b);
+      }
+      function marcar() {
+        Array.prototype.forEach.call(cont.children, function (b) {
+          b.classList.toggle('on', b.dataset.h === horasSlider.value);
+        });
+      }
+      cont.addEventListener('click', function (e) {
+        var b = e.target.closest('button'); if (!b) return;
+        horasSlider.value = b.dataset.h;
+        horasSlider.dispatchEvent(new Event('input', { bubbles: true }));
+      });
+      horasSlider.addEventListener('input', marcar);
+      marcar();
+    })();
     calc();
     refreshCalConfig();
 
