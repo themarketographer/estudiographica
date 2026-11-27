@@ -474,3 +474,73 @@ body.con-barra .wrap{padding-bottom:110px}
 .envio-pasos li.err::before{border-color:currentColor;opacity:1}
 @keyframes girar{to{transform:rotate(360deg)}}
 @media(prefers-reduced-motion:reduce){.faltan.on,.confirmar[open],.pulso,.btn-primary.listo,.envio-pasos li.run::before{animation:none}}
+
+/* ── Firma v2: iconos, faltantes en filas, fecha y animaciones ── */
+:root{--ease-out:cubic-bezier(.23,1,.32,1)}
+.sig-tools{gap:4px}
+.sig-icon{display:grid;place-items:center;width:40px;height:40px;border:0;border-radius:12px;background:none;color:var(--ink);cursor:pointer;transition:background-color .2s ease,transform .16s var(--ease-out)}
+.sig-icon:active{transform:scale(.92)}
+.sig-icon[hidden]{display:none}
+@media(hover:hover) and (pointer:fine){.sig-icon:hover{background:rgba(24,24,24,.07)}}
+.sig-icon:focus-visible,.sig-tab:focus-visible,.faltan button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+
+/* Lista de lo que falta: filas con avance, sin píldoras */
+.faltan{display:none;margin:22px 0 0;padding:0;background:none;border-radius:0;font-size:14px}
+.faltan.on{display:block;animation:none}
+.faltan-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-weight:700;color:var(--ink)}
+.faltan-n{font-weight:600;font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+.faltan-barra{height:3px;border-radius:3px;background:var(--hair);margin:10px 0 4px;overflow:hidden}
+.faltan-barra i{display:block;height:100%;background:var(--ink);transform-origin:left;transform:scaleX(var(--avance,0));transition:transform .5s var(--ease-out)}
+.faltan ol{list-style:none;margin:0;padding:0}
+.faltan li{border-bottom:1px solid var(--hair);animation:filaIn .32s var(--ease-out) backwards;animation-delay:calc(var(--i,0) * 45ms)}
+.faltan li button{display:flex;width:100%;align-items:center;justify-content:space-between;gap:12px;border:0;border-radius:0;background:none;padding:13px 2px;font:500 14px/1.3 var(--f);color:var(--ink);cursor:pointer;text-align:left}
+.faltan li button svg{flex:0 0 auto;color:var(--muted);transition:transform .2s var(--ease-out),color .2s ease}
+@media(hover:hover) and (pointer:fine){.faltan li button:hover svg{transform:translateX(4px);color:var(--ink)}}
+@keyframes filaIn{from{opacity:0;transform:translateY(6px)}}
+
+/* Botón listo: el amarillo entra desde la izquierda, una sola vez */
+.pg-contrato .btn-primary{position:relative;overflow:hidden;isolation:isolate;transition:color .3s ease,opacity .3s ease}
+.pg-contrato .btn-primary:not(.listo){opacity:.55}
+.pg-contrato .btn-primary.listo{opacity:1;animation:none;color:var(--ink)}
+.pg-contrato .btn-primary::before{content:"";position:absolute;inset:0;z-index:-1;background:var(--y);clip-path:inset(0 100% 0 0);transition:clip-path .55s var(--ease-out)}
+.pg-contrato .btn-primary.listo::before{clip-path:inset(0 0 0 0)}
+@media(hover:hover) and (pointer:fine){.pg-contrato .btn-primary.listo:hover{background:var(--ink);color:var(--ink)}}
+
+/* Selector de fecha */
+.fecha-campo{position:relative;display:flex;align-items:center;gap:12px;min-height:54px;padding:0 16px;border:1.5px solid var(--hair);border-radius:16px;background:#fff;cursor:pointer;transition:border-color .2s ease,box-shadow .2s ease}
+.fecha-campo:focus-within{border-color:var(--ink);box-shadow:0 0 0 4px rgba(255,221,90,.55)}
+@media(hover:hover) and (pointer:fine){.fecha-campo:hover{border-color:var(--ink)}}
+.fecha-ico{flex:0 0 auto;color:var(--muted);transition:color .2s ease}
+.fecha-campo.con-valor .fecha-ico{color:var(--ink)}
+.fecha-txt{flex:1;min-width:0;font:500 15px/1.2 var(--f);color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fecha-campo.con-valor .fecha-txt{color:var(--ink);font-weight:600}
+.fecha-origen{flex:0 0 auto;font-size:11.5px;font-weight:600;color:var(--muted)}
+.fecha-campo input[type=date]{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;border:0;padding:0;margin:0}
+.fecha-campo input[type=date]::-webkit-calendar-picker-indicator{position:absolute;inset:0;width:100%;height:100%;cursor:pointer}
+.field.show-error .fecha-campo{border-color:var(--err)}
+
+/* Pad de firma: la línea base se marca cuando hay firma */
+.sig-baseline{transform-origin:left;transition:background-color .3s ease,transform .5s var(--ease-out)}
+.sig-pad.has-sig .sig-baseline{background:var(--ink);transform:scaleX(1)}
+.sig-pad:not(.has-sig) .sig-baseline{transform:scaleX(.6)}
+
+/* Confirmación: entra con escala corta y desenfoque */
+.confirmar[open]{animation:dlgIn .26s var(--ease-out)}
+.confirmar[open]::backdrop{animation:fondoIn .26s ease}
+@keyframes dlgIn{from{opacity:0;transform:scale(.96) translateY(8px);filter:blur(4px)}}
+@keyframes fondoIn{from{opacity:0}}
+
+/* Momento final: tu firma se escribe sola en la tarjeta de éxito */
+.ok-firma{display:block;width:min(260px,70%);height:auto;margin:6px auto 0;clip-path:inset(0 100% 0 0);animation:tinta 1.1s var(--ease-out) .35s forwards}
+@keyframes tinta{to{clip-path:inset(0 0 0 0)}}
+.ok-card .ok-icon svg path{stroke-dasharray:24;stroke-dashoffset:24;animation:trazo .5s var(--ease-out) .1s forwards}
+@keyframes trazo{to{stroke-dashoffset:0}}
+.envio-pasos li.ok::before{animation:puntoOk .3s var(--ease-out)}
+@keyframes puntoOk{from{transform:scale(.6)}}
+
+@media(prefers-reduced-motion:reduce){
+  .faltan li,.confirmar[open],.envio-pasos li.ok::before{animation:none}
+  .ok-firma{animation:none;clip-path:none}
+  .ok-card .ok-icon svg path{animation:none;stroke-dashoffset:0}
+  .pg-contrato .btn-primary::before,.faltan-barra i,.sig-baseline{transition:none}
+}

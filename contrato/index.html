@@ -167,7 +167,12 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
         </div>
         <div class="field" id="f-fecha">
           <label for="fecha">Fecha acordada de la sesión <span class="hint">— la que reservaste</span></label>
-          <input type="date" id="fecha" />
+          <div class="fecha-campo" id="fechaCampo">
+            <svg class="fecha-ico" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
+            <span class="fecha-txt" id="fechaTxt">Elige la fecha</span>
+            <span class="fecha-origen" id="fechaOrigen" hidden>De tu reserva</span>
+            <input type="date" id="fecha" aria-describedby="fechaTxt" />
+          </div>
           <span class="field-error">Elige la fecha que reservaste.</span>
         </div>
       </div>
@@ -194,8 +199,8 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
       <div class="sig-head">
         <span class="sig-title">Tu firma</span>
         <span class="sig-tools">
-          <button class="sig-clear" id="sigUndo" type="button">Deshacer trazo</button>
-          <button class="sig-clear" id="sigClear" type="button">Borrar</button>
+          <button class="sig-icon" id="sigUndo" type="button" aria-label="Deshacer el último trazo" title="Deshacer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></svg></button>
+          <button class="sig-icon" id="sigClear" type="button" aria-label="Borrar la firma" title="Borrar"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg></button>
         </span>
       </div>
       <div class="sig-modo" role="tablist" aria-label="Cómo quieres firmar">
@@ -212,7 +217,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
         </div>
       </div>
 
-      <ul class="faltan" id="faltan" aria-live="polite"></ul>
+      <div class="faltan" id="faltan" aria-live="polite"></div>
       <button class="btn-primary" id="btnFirmar" type="button">Firmar contrato y recibir mi PDF</button>
       <p class="sig-confianza">Te llega al correo en menos de un minuto, ya firmado también por Pablo Villarroel.</p>
       <p class="mail-status" id="preStatus"></p>
@@ -236,6 +241,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
     <div class="card ok-card">
       <div class="ok-icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
       <div class="ok-title">Contrato firmado</div>
+      <img class="ok-firma" id="okFirma" alt="Tu firma" hidden />
       <p class="ok-sub" id="okSub">Te enviamos tu PDF por correo. Ya solo falta apartar tu fecha con el adelanto.</p>
 
       <a class="btn-yellow" id="btnPagar" href="/gracias-sesion/">Continuar al pago <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>
@@ -550,8 +556,9 @@ const contratoConfig = [
   }
 
   // Restaura el borrador si el cliente ya había empezado a llenar
+  var borrador = {};
   try {
-    var borrador = JSON.parse(localStorage.getItem(LS_CONTRATO) || '{}');
+    borrador = JSON.parse(localStorage.getItem(LS_CONTRATO) || '{}');
     campos.forEach(function (id) { if (borrador[id]) inputs[id].value = borrador[id]; });
     if (borrador.whatsappPais) whatsappPais.value = borrador.whatsappPais;
   } catch (e) {}
@@ -559,7 +566,7 @@ const contratoConfig = [
   if (/^(attendeeInPerson|inPerson|organizerAddress|attendeeAddress|attendeePhone|attendeeDefined|somewhereElse|phone|userPhone|link|integrations:.*)$/i.test(inputs.direccion.value.trim())) inputs.direccion.value = '';
 
   // Prefill de fecha desde la URL (por si Cal.com la manda) o mínimo hoy
-  var hoyISO = new Date().toISOString().split('T')[0];
+  var hoyISO = new Date().toLocaleDateString('en-CA', { timeZone: 'America/La_Paz' });
   var fechaParam = new URLSearchParams(location.search).get('fecha');
   if (fechaParam) inputs.fecha.value = fechaParam;
   // Si no viene ?fecha=, usa el día de la reserva que Cal reenvió (startTime).
@@ -571,6 +578,27 @@ const contratoConfig = [
     } catch (e) {}
   }
   inputs.fecha.min = hoyISO;
+  if (inputs.fecha.value && !fechaParam && !(borrador && borrador.fecha)) document.getElementById('fechaOrigen').hidden = false;
+
+  // Fecha legible ("viernes 12 de diciembre") sobre el input nativo, que sigue
+  // abriendo el calendario del sistema al tocarlo.
+  var fechaTxt = document.getElementById('fechaTxt');
+  var fechaCampo = document.getElementById('fechaCampo');
+  function pintarFecha() {
+    var v = inputs.fecha.value;
+    if (!v) { fechaTxt.textContent = 'Elige la fecha'; fechaCampo.classList.remove('con-valor'); return; }
+    var d = new Date(v + 'T12:00:00');
+    var t = d.toLocaleDateString('es-BO', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+    fechaTxt.textContent = t.charAt(0).toUpperCase() + t.slice(1);
+    fechaCampo.classList.add('con-valor');
+  }
+  inputs.fecha.addEventListener('input', function () { document.getElementById('fechaOrigen').hidden = true; pintarFecha(); });
+  inputs.fecha.addEventListener('change', pintarFecha);
+  fechaCampo.addEventListener('click', function (e) {
+    if (e.target !== inputs.fecha) return;
+    try { inputs.fecha.showPicker(); } catch (err) {}
+  });
+  pintarFecha();
 
   function guardarBorrador() {
     var data = {};
@@ -820,7 +848,7 @@ const contratoConfig = [
       var t = sigTexto.value.trim();
       if (!t) return;
       var tam = Math.min(54, rect.width / Math.max(6, t.length * 0.5));
-      ctx.font = 'italic ' + tam + 'px "Segoe Script","Brush Script MT","Snell Roundhand","Apple Chancery",cursive';
+      ctx.font = Math.round(tam * 1.35) + 'px "EG Firma","Segoe Script",cursive';
       ctx.fillStyle = '#181818';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'alphabetic';
@@ -928,6 +956,13 @@ const contratoConfig = [
   document.getElementById('tabDibujar').addEventListener('click', function () { cambiarModo(false); });
   document.getElementById('tabEscribir').addEventListener('click', function () { cambiarModo(true); });
   sigTexto.addEventListener('input', estadoFirma);
+  // La fuente de firma se carga solo si el cliente elige escribir su nombre.
+  if (window.FontFace) {
+    var fuenteFirma = new FontFace('EG Firma', 'url(/fonts/mrs-saint-delafield.woff2)');
+    document.getElementById('tabEscribir').addEventListener('click', function () {
+      if (fuenteFirma.status === 'unloaded') fuenteFirma.load().then(function (f) { document.fonts.add(f); redibujar(); }).catch(function () {});
+    });
+  }
 
   window.addEventListener('resize', ajustarCanvas);
   ajustarCanvas();
@@ -957,16 +992,29 @@ const contratoConfig = [
   }
   var faltanEl = document.getElementById('faltan');
   var tocoBoton = false;
+  var firmaFaltan = '';
+  var TOTAL_PASOS = campos.length + 2;
+  var FLECHA = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
   function actualizarBoton() {
     var f = faltantes();
     var listo = f.length === 0;
     btnFirmar.classList.toggle('listo', listo);
     btnFirmar.setAttribute('aria-disabled', listo ? 'false' : 'true');
-    if (listo) { faltanEl.innerHTML = ''; faltanEl.classList.remove('on'); return; }
-    var n = f.length;
-    faltanEl.innerHTML = '<li class="faltan-t">' + (n === 1 ? 'Te falta 1 cosa:' : 'Te faltan ' + n + ' cosas:') + '</li>' +
-      f.map(function (x) { return '<li><button type="button" data-ir="' + x.id + '">' + escapeHtml(x.txt) + '</button></li>'; }).join('');
-    faltanEl.classList.toggle('on', tocoBoton || n <= 3);
+    var visible = !listo && (tocoBoton || f.length <= 3);
+    faltanEl.classList.toggle('on', visible);
+    var firma = f.map(function (x) { return x.id; }).join('|');
+    if (firma === firmaFaltan) return;   // solo se redibuja cuando cambia la lista
+    firmaFaltan = firma;
+    var hechos = TOTAL_PASOS - f.length;
+    faltanEl.style.setProperty('--avance', (hechos / TOTAL_PASOS).toFixed(3));
+    faltanEl.innerHTML = listo ? '' :
+      '<div class="faltan-head"><span>' + (f.length === 1 ? 'Te falta un detalle para firmar' : 'Te faltan ' + f.length + ' detalles para firmar') + '</span>' +
+      '<span class="faltan-n">' + hechos + ' de ' + TOTAL_PASOS + '</span></div>' +
+      '<div class="faltan-barra" aria-hidden="true"><i></i></div>' +
+      '<ol>' + f.map(function (x, i) {
+        var t = x.txt.charAt(0).toUpperCase() + x.txt.slice(1);
+        return '<li style="--i:' + i + '"><button type="button" data-ir="' + x.id + '"><span>' + escapeHtml(t) + '</span>' + FLECHA + '</button></li>';
+      }).join('') + '</ol>';
   }
   function irA(id) {
     var el = id === '_acepta' ? acceptRow : id === '_firma' ? sigPad : inputs[id];
@@ -1325,6 +1373,7 @@ const contratoConfig = [
     document.getElementById('firmado').style.display = 'block';
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
+    try { var okF = document.getElementById('okFirma'); okF.src = canvas.toDataURL('image/png'); okF.hidden = false; } catch (e) {}
     paso('pasoPdf', 'ok');
     paso('pasoCorreo', 'run');
     enviarPorCorreo();
