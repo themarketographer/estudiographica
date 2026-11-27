@@ -46,7 +46,8 @@ exports.handler = async (event) => {
         if (s.estado !== 'esperando') return reply(409, { error: 'usado' });
         const trazos = trazosValidos(b.trazos);
         if (!trazos) return reply(400, { error: 'firma' });
-        await store.setJSON(t, { estado: 'lista', ratio: s.ratio, creado: s.creado, visto: true, trazos });
+        const ratioCelu = Math.max(1, Math.min(5, Number(b.ratioCelu) || s.ratio));
+        await store.setJSON(t, { estado: 'lista', ratio: s.ratio, ratioCelu, creado: s.creado, visto: true, trazos });
         return reply(200, { ok: true });
       }
       return reply(400, {});
@@ -58,7 +59,7 @@ exports.handler = async (event) => {
     if (!s || Date.now() - s.creado > VIDA_MS) return reply(200, { estado: 'vencido' });
     if (q.leer === '1' && s.estado === 'lista') {
       await store.delete(t);
-      return reply(200, { estado: 'lista', trazos: s.trazos });
+      return reply(200, { estado: 'lista', trazos: s.trazos, ratioCelu: s.ratioCelu || s.ratio });
     }
     // El celular avisa que ya abrio la pagina de firma, para que el computador lo muestre.
     if (q.celu === '1' && s.estado === 'esperando' && !s.visto) {

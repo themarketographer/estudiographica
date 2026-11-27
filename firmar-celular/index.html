@@ -27,30 +27,28 @@ button:active{transform:scale(.97)}
 #enviar:disabled{opacity:.35}
 .fin{flex:1;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px}
 .fin h1{font-size:26px}
-.fin svg{width:84px;height:84px}
-.fin .anillo{stroke-dasharray:176;stroke-dashoffset:176}.fin .visto{stroke-dasharray:30;stroke-dashoffset:30}
-body.listo .anillo{animation:traza .5s cubic-bezier(.23,1,.32,1) forwards}body.listo .visto{animation:traza .3s cubic-bezier(.23,1,.32,1) .35s forwards}
-body.listo .fin h1,body.listo .fin p{animation:sube .4s cubic-bezier(.23,1,.32,1) .5s backwards}
-@keyframes traza{to{stroke-dashoffset:0}}@keyframes sube{from{opacity:0;transform:translateY(8px)}}
+.fin .disco{width:84px;height:84px;border-radius:28px;display:grid;place-items:center;background:linear-gradient(150deg,#ffe888,var(--y,#ffdd5a) 55%,#ffd13a);box-shadow:0 22px 40px -20px rgba(180,138,0,.7)}
+body.listo .disco{animation:sube .4s cubic-bezier(.23,1,.32,1) backwards}
+body.listo .fin h1,body.listo .fin p{animation:sube .4s cubic-bezier(.23,1,.32,1) .08s backwards}
+@keyframes sube{from{opacity:0;transform:translateY(10px) scale(.97)}}
 .hint{font-size:12.5px;text-align:center;color:var(--muted,#666)}
 body.listo .pad,body.listo .btns,body.listo .cab{display:none}
 body.listo .fin{display:flex}
 #err{color:var(--err,#b3261e);font-size:14px;min-height:18px}
-@media(prefers-reduced-motion:reduce){button:active{transform:none}body.listo .anillo,body.listo .visto{animation:none;stroke-dashoffset:0}body.listo .fin h1,body.listo .fin p{animation:none}}
+@media(prefers-reduced-motion:reduce){button:active{transform:none}body.listo .disco,body.listo .fin h1,body.listo .fin p{animation:none}}
 </style>
 </head>
 <body>
-<div class="cab"><h1>Firma con el dedo</h1><p>Tu firma aparece sola en la computadora.</p></div>
-<div class="pad"><div class="caja" id="caja"><canvas id="c"></canvas><div class="linea"></div><div class="ph" id="ph">Firma aquí</div></div></div>
-<p class="hint cab">Gira el celular de lado si quieres más espacio.</p>
+<div class="cab"><h1>Firma con el dedo</h1></div>
+<div class="pad"><div class="caja" id="caja"><canvas id="c"></canvas><div class="linea"></div></div></div>
 <div id="err" role="alert"></div>
 <div class="btns"><button type="button" id="borrar">Borrar</button><button type="button" id="enviar" disabled>Enviar firma</button></div>
-<div class="fin"><svg viewBox="0 0 64 64" fill="none" stroke="#181818" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle class="anillo" cx="32" cy="32" r="28" stroke="#ffdd5a"/><path class="visto" d="M20 33l8 8 16-17"/></svg><h1>Listo, firma enviada</h1><p>Ya puedes volver a la computadora. Puedes cerrar esta pestaña.</p></div>
+<div class="fin"><div class="disco" aria-hidden="true"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#181818" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div><h1>Listo, firma enviada</h1><p>Ya puedes volver a la computadora. Puedes cerrar esta pestaña.</p></div>
 <script>
 (function(){
   var t=(new URLSearchParams(location.search).get('t')||'');
   var caja=document.getElementById('caja'),cv=document.getElementById('c'),ctx=cv.getContext('2d');
-  var ph=document.getElementById('ph'),err=document.getElementById('err'),env=document.getElementById('enviar');
+  var err=document.getElementById('err'),env=document.getElementById('enviar');
   var ratio=2.6,trazos=[],actual=null,ult=null;
   function medir(){
     var pad=caja.parentNode.getBoundingClientRect();
@@ -68,7 +66,7 @@ body.listo .fin{display:flex}
       if(tr.length===1){ctx.beginPath();ctx.arc(tr[0].x*r.width,tr[0].y*r.height,1.2,0,7);ctx.fillStyle='#181818';ctx.fill();return}
       for(var i=1;i<tr.length;i++){ctx.lineWidth=2.4*(tr[i].w||1);ctx.beginPath();ctx.moveTo(tr[i-1].x*r.width,tr[i-1].y*r.height);ctx.lineTo(tr[i].x*r.width,tr[i].y*r.height);ctx.stroke()}
     });ctx.lineWidth=2.4;
-    ph.classList.toggle('off',trazos.length>0);env.disabled=trazos.length===0;
+    env.disabled=trazos.length===0;
   }
   function pos(e){var r=cv.getBoundingClientRect();return{x:(e.clientX-r.left)/r.width,y:(e.clientY-r.top)/r.height}}
   cv.addEventListener('pointerdown',function(e){e.preventDefault();cv.setPointerCapture(e.pointerId);var p=pos(e);p.w=1;actual=[p];ult={t:e.timeStamp,x:e.clientX,y:e.clientY,w:1};trazos.push(actual);pintar()});
@@ -81,14 +79,14 @@ body.listo .fin{display:flex}
   document.getElementById('borrar').addEventListener('click',function(){trazos=[];pintar()});
   env.addEventListener('click',function(){
     env.disabled=true;err.textContent='';
-    fetch('/.netlify/functions/firma-remota',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({accion:'enviar',t:t,trazos:trazos})})
+    fetch('/.netlify/functions/firma-remota',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({accion:'enviar',t:t,trazos:trazos,ratioCelu:ratio})})
       .then(function(r){if(r.ok){document.body.classList.add('listo');return}
         err.textContent=r.status===410?'Este código venció. Vuelve a escanear el QR en la computadora.':r.status===409?'Esta firma ya se envió.':'No se pudo enviar. Inténtalo de nuevo.';env.disabled=false})
       .catch(function(){err.textContent='Sin conexión. Inténtalo de nuevo.';env.disabled=false});
   });
   fetch('/.netlify/functions/firma-remota?celu=1&t='+encodeURIComponent(t),{cache:'no-store'}).then(function(r){return r.json()}).then(function(s){
     if(s.estado==='vencido'||!s.estado){err.textContent='Este código venció. Vuelve a escanear el QR en la computadora.';env.disabled=true;return}
-    if(s.ratio)ratio=s.ratio;medir();
+    if(s.ratio)ratio=Math.min(s.ratio,1.7);medir();
   }).catch(function(){medir()});
   medir();window.addEventListener('resize',medir);
 })();

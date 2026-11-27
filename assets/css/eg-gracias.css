@@ -155,3 +155,39 @@ body.pg-gracias>.wrap{position:relative;z-index:1}
   .pg-gracias .ben-toggle{display:inline-flex;align-items:center;margin:4px 0 10px;padding:0;background:none;border:0;color:var(--ink);text-decoration:underline;text-underline-offset:3px;font:600 13.5px/1 var(--f);cursor:pointer;min-height:36px}
   .pg-gracias .ben-toggle[hidden]{display:none}
 }
+
+/* ==========================================================================
+   Ronda 2 en gracias (cambios 20 al 27)
+   ========================================================================== */
+
+/* 27 · La tarjeta del paquete usa el mismo fondo oscuro con brillo amarillo que /precios */
+.pg-gracias .card.paquete-card{background:var(--ink);border-color:transparent;color:var(--paper)}
+.pg-gracias .card.paquete-card::after{display:block;background:radial-gradient(circle,rgba(255,221,90,.34),transparent 68%)}
+.pg-gracias .paquete-card .card-label{color:var(--y)}
+.pg-gracias .paquete-card .paquete-name,.pg-gracias .paquete-card .price{color:var(--paper)}
+.pg-gracias .paquete-card .price-note{color:rgba(248,248,248,.6)}
+.pg-gracias .paquete-card .benefits li{color:rgba(248,248,248,.9)}
+
+/* 20 · Un solo boton "Ver qué incluye" y "Cambiar mi paquete" como enlace aparte */
+.pg-gracias .ben-toggle{display:inline-flex;align-items:center;gap:6px;margin:6px 0 0;padding:0;background:none;border:0;color:var(--y);font:600 14px/1 var(--f);cursor:pointer;min-height:36px}
+.pg-gracias .ben-toggle[hidden]{display:none}
+.pg-gracias .ben-toggle svg{transition:transform .2s cubic-bezier(.23,1,.32,1)}
+.pg-gracias .ben-toggle[aria-expanded=true] svg{transform:rotate(180deg)}
+.pg-gracias .paquete-card .resumen-edit{display:flex;justify-content:flex-end;margin-top:14px;padding-top:12px;border-top:1px solid rgba(248,248,248,.14);color:rgba(248,248,248,.7);font-weight:500;text-decoration:none}
+.pg-gracias .paquete-card .resumen-edit::before{content:none}
+.pg-gracias .paquete-card .resumen-edit:hover{color:var(--y)}
+@media(max-width:720px){.pg-gracias #benefitsList:not(.abierta) li:nth-child(n+4){display:none}}
+
+/* 22 · Fuera el texto repetido debajo del QR del banco */
+.pg-gracias .qr-caption{display:none}
+
+/* 23 · Contrato firmado: una linea, no una tarjeta entera */
+.pg-gracias .eg-contrato-card.gx-ink.firmado{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:14px 18px;text-align:left}
+.pg-gracias .eg-contrato-card.firmado .gx-sign,.pg-gracias .eg-contrato-card.firmado .eg-contrato-desc{display:none}
+.pg-gracias .eg-contrato-card.firmado .eg-contrato-title{margin:0;font-size:16px;flex:1;min-width:140px}
+.pg-gracias .eg-contrato-card.gx-ink.firmado .eg-contrato-btn{min-height:40px;padding:0 16px;font-size:13.5px;margin:0}
+
+/* 24 · Comprobante por WhatsApp: tinta oscura con icono, sin verde sobre amarillo */
+.pg-gracias .btn-wa{background:var(--ink);color:var(--y);border:0;animation:none;gap:10px;box-shadow:0 18px 34px -18px rgba(24,24,24,.7)}
+.pg-gracias .btn-wa::before{content:"";width:20px;height:20px;flex:none;background:currentColor;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 2a8 8 0 1 1-4.3 14.7l-.3-.2-2.9.8.8-2.8-.2-.3A8 8 0 0 1 12 4z'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 2a8 8 0 1 1-4.3 14.7l-.3-.2-2.9.8.8-2.8-.2-.3A8 8 0 0 1 12 4z'/%3E%3C/svg%3E") center/contain no-repeat}
+.pg-gracias .btn-wa:hover{background:#000;color:var(--y)}

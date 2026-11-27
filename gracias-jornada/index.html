@@ -86,13 +86,14 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
        había reservado. Si de verdad quiere otra cantidad, el link de abajo
        lo manda a /precios YA con su paquete cargado (ver restauración
        agregada ahí), no desde cero. -->
-  <div class="card rv">
+  <div class="card rv paquete-card">
     <p class="card-label" id="eg-gs-card-label">Tu jornada reservada</p>
     <div class="paquete-name" id="paqueteName">Jornada Básica</div>
     <div class="price" id="precioValue">Bs. 350<span class="price-unit">pago único</span></div>
     <p class="price-note" id="eg-gs-price-note">Precio referencial. Se confirma en tu sesión.</p>
 
     <ul class="benefits" id="benefitsList"></ul>
+    <button type="button" class="ben-toggle" id="benToggleG" aria-expanded="false" hidden>Ver qué incluye<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
     <a class="resumen-edit" id="egCambiarPaquete" href="/jornada">Cambiar mi paquete</a>
   </div>
 
@@ -442,5 +443,11 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 </script>
 <script src="/assets/js/eg-ui.js" defer></script>
 <script src="/assets/js/gracias-cliente.js" defer></script>
+<script>
+(function(){var l=document.getElementById('benefitsList'),t=document.getElementById('benToggleG');if(!l||!t)return;
+function aj(){t.hidden=l.children.length<=3}
+new MutationObserver(aj).observe(l,{childList:true});aj();
+t.addEventListener('click',function(){var a=l.classList.toggle('abierta');t.setAttribute('aria-expanded',a)})})();
+</script>
 </body>
 </html>

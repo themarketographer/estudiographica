@@ -632,3 +632,50 @@ body.con-barra .wrap{padding-bottom:110px}
 @media(prefers-reduced-motion:reduce){.celu-qr::before,.celu-qr svg .d,.celu-qr svg .ojo,.celu-qr svg .logo,.celu-estado .pto{animation:none}}
 /* Los dialogos quedaban pegados arriba a la izquierda: el reset global les quitaba el margin auto */
 .confirmar{margin:auto}
+
+/* ==========================================================================
+   Ronda 2: consistencia y menos altura (cambios 16 al 29)
+   ========================================================================== */
+
+/* 26 · Icono arriba en todas las paginas del embudo, mismo disco que las paginas de gracias */
+.pg-ico{width:72px;height:72px;border-radius:24px;margin:0 auto 16px;display:grid;place-items:center;color:var(--ink);background:linear-gradient(150deg,#ffe888,var(--y) 55%,#ffd13a);box-shadow:0 22px 38px -20px rgba(180,138,0,.7),inset 0 2px 0 rgba(255,255,255,.6);animation:rise .6s var(--ease) backwards}
+@media(max-width:720px){.pg-ico{width:60px;height:60px;border-radius:20px;margin-bottom:12px}.pg-ico svg{width:30px;height:30px}}
+@media(prefers-reduced-motion:reduce){.pg-ico{animation:none}}
+
+/* 17 · Pie sin enlaces en el embudo: nadie se pierde camino al pago */
+.pg-precios .foot-links,.pg-jornada .foot-links,.pg-empezar .foot-links,.pg-contrato .foot-links,.pg-gracias .foot-links{display:none}
+
+/* 16 · Precios y Jornada: extras y sliders mas bajos en celular */
+@media(max-width:880px){
+  .slider-block{padding:14px 16px 16px;margin-bottom:12px}
+  .extras-block{margin-top:16px}
+  .extra-row{padding:12px 14px;margin-top:8px;border-radius:18px}
+  .extra-desc{display:none}
+  .extra-row.open .extra-desc{display:block}
+  .extra-name{font-size:15.5px}
+  .extra-foot{margin-top:8px;padding-top:8px}
+  .extra-more{margin-top:6px}
+  .left-col{padding:14px 10px}
+}
+
+/* 19 · Jornada: el precio queda fijo arriba mientras eliges las horas */
+@media(max-width:880px){
+  .pg-jornada .container>.card:has(.left-col) .right-col{order:-1;position:sticky;top:8px;z-index:6;padding:12px 12px 12px 18px;border-radius:22px;display:grid;grid-template-columns:1fr auto;align-items:center;column-gap:12px}
+  .pg-jornada .right-col .paquete-label,.pg-jornada .right-col .benefits,.pg-jornada .right-col .price-note,.pg-jornada .right-col .wa-link{display:none}
+  .pg-jornada .right-col .paquete-name{grid-column:1;font-size:13px;margin:0}
+  .pg-jornada .right-col .price{grid-column:1;margin:0;font-size:26px}
+  .pg-jornada .right-col #btnReservar{grid-column:2;grid-row:1/3;width:auto;min-height:48px;padding:0 20px;margin:0}
+}
+
+/* 38 · Foco visible para quien navega con teclado */
+:where(a,button,input,select,textarea,summary,[tabindex]):focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+
+/* 25 · QR de firma: aparece de una vez, sin armarse punto por punto */
+.celu-qr svg .d{animation:none}
+.celu-qr svg .ojo,.celu-qr svg .logo{animation:none}
+.celu-qr svg{animation:qrAparece .22s cubic-bezier(.23,1,.32,1) backwards}
+.celu-qr.sale svg{animation:qrSale .2s cubic-bezier(.23,1,.32,1) forwards}
+.celu-qr.sale svg .d{animation:none}
+@keyframes qrAparece{from{opacity:0;transform:scale(.97)}}
+@keyframes qrSale{to{opacity:0;transform:scale(.97)}}
+@media(prefers-reduced-motion:reduce){.celu-qr svg,.celu-qr.sale svg{animation:none}}
