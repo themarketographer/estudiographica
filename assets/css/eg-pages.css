@@ -544,3 +544,25 @@ body.con-barra .wrap{padding-bottom:110px}
   .ok-card .ok-icon svg path{animation:none;stroke-dashoffset:0}
   .pg-contrato .btn-primary::before,.faltan-barra i,.sig-baseline{transition:none}
 }
+
+/* ── Contrato en celular: menos capas, menos ruido ── */
+.cb-num{display:inline-block;min-width:22px;font-size:12px;font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums}
+@media(max-width:1099px){.cb-index{display:none}}
+@media(pointer:coarse){.sig-modo{display:none}}
+@media(max-width:720px){
+  .pg-contrato .card{padding:22px 18px;border-radius:28px}
+  .card-contrato .alert{display:none}
+  .contrato-box{background:none;border:0;border-radius:0;padding:0;font-size:14.5px}
+  .cb-resumen{margin:0 -4px 6px;padding:16px;border-radius:18px}
+  .cb-resumen .cb-nota{display:none}
+  .cb-tools{display:none}
+  details.cb>summary{font-size:15.5px;padding:16px 30px 16px 0}
+  details.cb>summary::after{top:13px}
+  .cb-simple{font-size:13px}
+  .accept-row{border:0;border-radius:16px;background:rgba(24,24,24,.04);padding:16px;gap:12px;margin-top:16px}
+  .accept-row.active{background:var(--y-soft)}
+  .accept-row .txt{font-size:14px}
+  .sig-head{margin-bottom:10px}
+  .faltan-n{display:none}
+  .sig-confianza{font-size:12px}
+}

@@ -688,7 +688,7 @@ const contratoConfig = [
         html += '<div class="cb-tools"><button type="button" class="cb-todo" id="cbTodo">Abrir todos los bloques</button></div>';
         return;
       }
-      html += '<details class="cb" data-i="' + i + '"' + (abiertos[i] ? ' open' : '') + '><summary>' + escapeHtml(c.titulo) + '</summary>' +
+      html += '<details class="cb" data-i="' + i + '"' + (abiertos[i] ? ' open' : '') + '><summary><span class="cb-num">' + i + '</span>' + escapeHtml(c.titulo.replace(/^Bloque \d+\.\s*/, '')) + '</summary>' +
         '<p class="cb-simple">' + escapeHtml(c.simple) + '</p>' +
         c.parrafos.map(function (t) { return '<p>' + aplicarVariables(t, vars) + '</p>'; }).join('') +
         (c.lista ? ul(c.lista, vars) : '') + '</details>';
