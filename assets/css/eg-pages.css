@@ -566,3 +566,28 @@ body.con-barra .wrap{padding-bottom:110px}
   .faltan-n{display:none}
   .sig-confianza{font-size:12px}
 }
+
+/* ==========================================================================
+   /precios en celular: precio arriba, beneficios plegados, un solo boton
+   ========================================================================== */
+.ben-toggle{display:none}
+@media(max-width:880px){
+  .container>.card:has(.left-col) .right-col{order:-1;padding:20px 20px 18px;border-radius:24px}
+  .container>.card:has(.left-col) .right-col .btn-img,
+  .container>.card:has(.left-col) .right-col #btnReservar{display:none}
+  .container>.card:has(.left-col) .right-col .price-note{margin-bottom:0}
+  .right-col .benefits{margin:16px 0 4px;gap:10px;position:relative}
+  .right-col .benefits:not(.abierta) li:nth-child(n+4){display:none}
+  .right-col .benefits li{animation:benIn .45s var(--ease-out,cubic-bezier(.23,1,.32,1)) backwards}
+  .right-col .benefits li:nth-child(2){animation-delay:.05s}
+  .right-col .benefits li:nth-child(3){animation-delay:.1s}
+  .right-col .benefits li:nth-child(n+4){animation-delay:.15s}
+  .ben-toggle{display:inline-flex;align-items:center;gap:6px;margin:6px 0 10px;padding:0;background:none;border:0;color:var(--y);font:600 13.5px/1 var(--f);cursor:pointer;min-height:36px}
+  .ben-toggle svg{transition:transform .2s cubic-bezier(.23,1,.32,1)}
+  .ben-toggle[aria-expanded=true] svg{transform:rotate(180deg)}
+  .slider-block--main{position:relative}
+}
+.rango-tip{display:none;margin-top:8px;font-size:12.5px;color:var(--muted)}
+@media(max-width:880px){.rango-tip{display:block}}
+@keyframes benIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.right-col .benefits li{animation:none}}

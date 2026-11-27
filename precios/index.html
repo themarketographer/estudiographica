@@ -114,6 +114,7 @@ addEventListener('load',function(){setTimeout(cargar,2500);});})();
           </div>
           <input type="range" id="fotosSlider" aria-label="Cantidad de fotos" min="8" max="24" step="1" value="15" />
           <div class="range-labels"><span>8</span><span>24</span></div>
+          <p class="rango-tip">La mayoría de restaurantes elige 15 fotos.</p>
         </div>
       </div>
 
@@ -164,6 +165,7 @@ addEventListener('load',function(){setTimeout(cargar,2500);});})();
       <div class="price-extras-line" id="extrasLine" style="display:none;"></div>
       <div class="price-note" data-t="pg_precios.t05">Precio referencial. Se confirma en tu sesión.</div>
       <ul class="benefits" id="benefitsList"></ul>
+      <button type="button" class="ben-toggle" id="benToggle" aria-expanded="false" hidden>Ver todo lo que incluye <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
       <button class="btn-primary" id="btnReservar">Reservar <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></button>
       <a class="wa-link" id="waLink" href="#" target="_blank" rel="noopener">o pídelo directo por WhatsApp</a>
     </div>
@@ -250,6 +252,17 @@ addEventListener('load',function(){setTimeout(cargar,2500);});})();
     var extrasList = document.getElementById('extrasList');
     var benefitsList = document.getElementById('benefitsList');
     var btnReservar = document.getElementById('btnReservar');
+    var benToggle = document.getElementById('benToggle');
+    function ajustarToggle() {
+      var n = benefitsList.children.length;
+      benToggle.hidden = n <= 3;
+    }
+    new MutationObserver(ajustarToggle).observe(benefitsList, { childList: true });
+    benToggle.addEventListener('click', function () {
+      var abre = benefitsList.classList.toggle('abierta');
+      benToggle.setAttribute('aria-expanded', abre);
+      benToggle.firstChild.nodeValue = abre ? 'Ver menos ' : 'Ver todo lo que incluye ';
+    });
     var waLink = document.getElementById('waLink');
     var egStickyName = document.getElementById('egStickyName');
     var egStickyPrice = document.getElementById('egStickyPrice');
