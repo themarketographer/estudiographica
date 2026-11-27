@@ -680,3 +680,7 @@ body.con-barra .wrap{padding-bottom:110px}
 @keyframes qrAparece{from{opacity:0;transform:scale(.97)}}
 @keyframes qrSale{to{opacity:0;transform:scale(.97)}}
 @media(prefers-reduced-motion:reduce){.celu-qr svg,.celu-qr.sale svg{animation:none}}
+@media(max-width:880px){
+  .pg-jornada .right-col .price-unit{display:none}
+  .pg-jornada .right-col .paquete-name,.pg-jornada .right-col .price{white-space:nowrap}
+}
