@@ -630,3 +630,5 @@ body.con-barra .wrap{padding-bottom:110px}
 .celu-estado .pto.off{background:var(--muted);animation:none}
 @keyframes ptoQr{70%{box-shadow:0 0 0 9px rgba(255,221,90,0)}100%{box-shadow:0 0 0 0 rgba(255,221,90,0)}}
 @media(prefers-reduced-motion:reduce){.celu-qr::before,.celu-qr svg .d,.celu-qr svg .ojo,.celu-qr svg .logo,.celu-estado .pto{animation:none}}
+/* Los dialogos quedaban pegados arriba a la izquierda: el reset global les quitaba el margin auto */
+.confirmar{margin:auto}
