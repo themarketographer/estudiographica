@@ -219,3 +219,10 @@ input[type=range]:focus-visible{outline:3px solid var(--y-deep);outline-offset:6
   .nav.on-dark{background:var(--ink)}
   .dock .btn{-webkit-backdrop-filter:none;backdrop-filter:none;background:var(--y)}
 }
+
+/* ---------- Movimiento global: respuesta al toque en botones ---------- */
+@media(pointer:coarse){
+  .btn-primary,.btn-dark,.btn-ghost,.eg-sticky-btn,button.dur-chip,.dur-chip{transition:transform .14s cubic-bezier(.23,1,.32,1),background .25s,color .25s}
+  .btn-primary:active,.btn-dark:active,.btn-ghost:active,.dur-chip:active{transform:scale(.97)}
+}
+@media(prefers-reduced-motion:reduce){.btn-primary:active,.btn-dark:active,.btn-ghost:active,.dur-chip:active{transform:none}}
