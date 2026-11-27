@@ -66,6 +66,15 @@ ul{margin:3px 0 7px;padding-left:17px}li{margin-bottom:3px;text-align:justify}
       horarioAtencion: C.horarioAtencion, zonaNorte: C.zonaNorte, zonaSur: C.zonaSur, zonaEste: C.zonaEste, zonaOeste: C.zonaOeste,
       avisoReprogramar: C.avisoReprogramar, diasMora: C.diasMora
     };
+    var fixes = [
+      ["Este contrato se firma el {{hoy}} entre Pablo Villarroel Rocabado, de Estudio Graphica (<b>el Fotógrafo</b>), y {{nombre}}, con documento de identidad {{ci}}, en representación de {{negocio}} (<b>tú</b>, o <b>el Cliente</b>).", "Este contrato se firma entre Pablo Villarroel Rocabado, de Estudio Graphica (<b>el Fotógrafo</b>), y la persona cuyo nombre, documento de identidad y negocio figuran en la ficha de arriba (<b>tú</b>, o <b>el Cliente</b>)."],
+      ["presta el servicio de fotografía {{servicio}}, {{paquete}} ({{detalle}}).", "presta el servicio de fotografía que describe la ficha (servicio, paquete y detalle)."],
+      ["La sesión es el {{fecha}} en {{direccion}}, salvo", "La sesión es en la fecha y la dirección que indica la ficha, salvo"],
+      ["El servicio cuesta Bs. {{precio}}.", "El servicio cuesta el precio total que indica la ficha."],
+      ["el 50% (Bs. {{adelanto}}) para reservar la fecha de la sesión y el 50% restante (Bs. {{saldo}}) cuando", "el 50% (el adelanto de la ficha) para reservar la fecha de la sesión y el 50% restante (el saldo de la ficha) cuando"],
+      ["Documento firmado el {{hoy}}, en la ciudad de Cochabamba, Bolivia.", "Documento firmado en la ciudad de Cochabamba, Bolivia."]
+    ];
+    var fix = function (t) { fixes.forEach(function (x) { t = t.split(x[0]).join(x[1]); }); return t; };
     var ap = function (t) { return t.replace(/\{\{(\w+)\}\}/g, function (m, k) { return V[k] !== undefined ? V[k] : m; }); };
     var cel = function (t, cls) { return '<div class="c ' + (cls || '') + '"><span>' + t + '</span></div>'; };
     var ficha = '<div class="ficha"><h2>Ficha del cliente</h2><div class="g">' +
@@ -74,7 +83,7 @@ ul{margin:3px 0 7px;padding-left:17px}li{margin-bottom:3px;text-align:justify}
       '<div class="g3">' + cel('Precio total (Bs.)') + cel('Adelanto (Bs.)') + cel('Saldo (Bs.)') + '</div></div>';
     var bloques = D.cl.filter(function (x) { return !x.nota; }).map(function (x, i) {
       return '<section class="blq"><h3><span class="n">' + (i + 1) + '</span>' + x.titulo.replace(/^Bloque \d+\.\s*/, '') + '</h3>' +
-        x.parrafos.map(function (t) { return '<p>' + ap(t) + '</p>'; }).join('') +
+        x.parrafos.map(function (t) { return '<p>' + ap(fix(t)) + '</p>'; }).join('') +
         (x.lista ? '<ul>' + x.lista.map(function (t) { return '<li>' + ap(t) + '</li>'; }).join('') + '</ul>' : '') + '</section>';
     }).join('');
     document.getElementById('hoja').innerHTML =
