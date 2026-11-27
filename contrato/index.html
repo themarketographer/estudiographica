@@ -217,6 +217,11 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
         </div>
       </div>
 
+      <div class="sig-iphone" id="sigIphoneRow" hidden>
+        <button type="button" class="sig-iphone-btn" id="sigIphone"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg>Firmar con mi iPhone</button>
+        <input type="file" id="sigArchivo" accept="image/*" hidden />
+        <span class="sig-iphone-nota" id="sigIphoneNota"></span>
+      </div>
       <div class="faltan" id="faltan" aria-live="polite"></div>
       <button class="btn-primary" id="btnFirmar" type="button">Firmar contrato y recibir mi PDF</button>
       <p class="sig-confianza">Te llega al correo en menos de un minuto, ya firmado también por Pablo Villarroel.</p>
@@ -839,6 +844,7 @@ const contratoConfig = [
     redibujar();
   }
 
+  var imgFirma = null;   // firma importada del iPhone, ya sin fondo
   var modoEscribir = false;
   var sigTexto = document.getElementById('sigTexto');
   function redibujar() {
@@ -854,6 +860,12 @@ const contratoConfig = [
       ctx.textBaseline = 'alphabetic';
       ctx.fillText(t, rect.width / 2, rect.height - 46);
       return;
+    }
+    if (imgFirma) {
+      var maxW = rect.width * 0.8, maxH = rect.height - 70;
+      var k = Math.min(maxW / imgFirma.width, maxH / imgFirma.height);
+      var w = imgFirma.width * k, h = imgFirma.height * k;
+      ctx.drawImage(imgFirma, (rect.width - w) / 2, rect.height - 46 - h, w, h);
     }
     trazos.forEach(function (trazo) {
       if (trazo.length < 2) {
@@ -922,7 +934,7 @@ const contratoConfig = [
   canvas.addEventListener('pointerleave', terminarTrazo);
 
   function estadoFirma() {
-    hayFirma = modoEscribir ? sigTexto.value.trim().length >= 3 : trazos.length > 0;
+    hayFirma = modoEscribir ? sigTexto.value.trim().length >= 3 : (trazos.length > 0 || !!imgFirma);
     sigPlaceholder.classList.toggle('hidden', hayFirma || modoEscribir);
     sigPad.classList.toggle('has-sig', hayFirma);
     redibujar();
@@ -930,14 +942,62 @@ const contratoConfig = [
   }
   document.getElementById('sigClear').addEventListener('click', function () {
     trazos = [];
+    imgFirma = null;
     sigTexto.value = '';
     estadoFirma();
   });
   document.getElementById('sigUndo').addEventListener('click', function () {
     if (modoEscribir) { sigTexto.value = sigTexto.value.slice(0, -1); }
-    else trazos.pop();
+    else if (trazos.length) trazos.pop();
+    else imgFirma = null;
     estadoFirma();
   });
+  // ── Firma desde el iPhone (Mac con Safari: el selector ofrece "Importar desde iPhone > Añadir boceto") ──
+  (function () {
+    var fila = document.getElementById('sigIphoneRow');
+    var btn = document.getElementById('sigIphone');
+    var inp = document.getElementById('sigArchivo');
+    var nota = document.getElementById('sigIphoneNota');
+    if (!/Macintosh/.test(navigator.userAgent) || !window.matchMedia('(pointer:fine)').matches) return;
+    fila.hidden = false;
+    btn.addEventListener('click', function () { inp.value = ''; inp.click(); });
+    inp.addEventListener('change', function () {
+      var f = inp.files && inp.files[0];
+      if (!f) return;
+      var url = URL.createObjectURL(f);
+      var im = new Image();
+      im.onload = function () {
+        URL.revokeObjectURL(url);
+        var esc = Math.min(1, 900 / Math.max(im.width, im.height));
+        var w = Math.max(1, Math.round(im.width * esc)), h = Math.max(1, Math.round(im.height * esc));
+        var c = document.createElement('canvas'); c.width = w; c.height = h;
+        var x = c.getContext('2d'); x.drawImage(im, 0, 0, w, h);
+        var d = x.getImageData(0, 0, w, h), px = d.data;
+        var minX = w, minY = h, maxX = -1, maxY = -1;
+        for (var i = 0; i < px.length; i += 4) {
+          var lum = 0.299 * px[i] + 0.587 * px[i + 1] + 0.114 * px[i + 2];
+          var a = px[i + 3] / 255;
+          var tinta = Math.max(0, Math.min(1, (235 - lum) / 150)) * a;   // blanco = sin tinta
+          px[i] = 24; px[i + 1] = 24; px[i + 2] = 24; px[i + 3] = Math.round(tinta * 255);
+          if (tinta > 0.25) {
+            var p = i / 4, cx = p % w, cy = (p - cx) / w;
+            if (cx < minX) minX = cx; if (cx > maxX) maxX = cx;
+            if (cy < minY) minY = cy; if (cy > maxY) maxY = cy;
+          }
+        }
+        if (maxX < 0) { nota.textContent = 'No se vio ninguna firma en la imagen. Prueba de nuevo.'; return; }
+        x.putImageData(d, 0, 0);
+        var cw = maxX - minX + 1, ch = maxY - minY + 1;
+        var rec = document.createElement('canvas'); rec.width = cw; rec.height = ch;
+        rec.getContext('2d').drawImage(c, minX, minY, cw, ch, 0, 0, cw, ch);
+        imgFirma = rec; trazos = [];
+        if (modoEscribir) cambiarModo(false); else estadoFirma();
+        nota.textContent = '';
+      };
+      im.onerror = function () { nota.textContent = 'No pude leer esa imagen.'; };
+      im.src = url;
+    });
+  })();
   function cambiarModo(escribir) {
     modoEscribir = escribir;
     document.getElementById('tabDibujar').classList.toggle('act', !escribir);

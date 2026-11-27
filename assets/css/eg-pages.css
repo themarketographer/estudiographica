@@ -599,3 +599,11 @@ body.con-barra .wrap{padding-bottom:110px}
 .horas-btns button.on{background:var(--ink);color:var(--y);border-color:var(--ink)}
 @media(pointer:coarse){.horas-btns{display:grid}.pg-jornada .slider-block--main input[type=range]{display:none}.pg-jornada .slider-block--main .range-labels{display:none}}
 @media(prefers-reduced-motion:reduce){.horas-btns button:active{transform:none}}
+
+/* Firma desde el iPhone (solo Mac) */
+.sig-iphone{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:10px 0 2px}
+.sig-iphone[hidden]{display:none}
+.sig-iphone-btn{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:0 16px;border-radius:999px;border:1px solid var(--hair);background:#fff;color:var(--ink);font:600 13.5px/1 var(--f);cursor:pointer;transition:transform .14s cubic-bezier(.23,1,.32,1),background .2s}
+.sig-iphone-btn:active{transform:scale(.97)}
+@media(hover:hover) and (pointer:fine){.sig-iphone-btn:hover{background:var(--y-soft,#fff3c4)}}
+.sig-iphone-nota{font-size:12.5px;color:var(--err,#b3261e)}
