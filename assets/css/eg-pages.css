@@ -593,12 +593,6 @@ body.con-barra .wrap{padding-bottom:110px}
 @media(prefers-reduced-motion:reduce){.right-col .benefits li{animation:none}}
 
 /* /jornada: botones de hora (mas faciles que un slider en celular) */
-.horas-btns{display:none;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:14px}
-.horas-btns button{min-height:48px;border-radius:14px;border:1px solid rgba(24,24,24,.18);background:#fff;color:var(--ink);font:600 17px/1 var(--f);cursor:pointer;transition:transform .14s cubic-bezier(.23,1,.32,1),background .2s,color .2s}
-.horas-btns button:active{transform:scale(.96)}
-.horas-btns button.on{background:var(--ink);color:var(--y);border-color:var(--ink)}
-@media(pointer:coarse){.horas-btns{display:grid}.pg-jornada .slider-block--main input[type=range]{display:none}.pg-jornada .slider-block--main .range-labels{display:none}}
-@media(prefers-reduced-motion:reduce){.horas-btns button:active{transform:none}}
 
 /* Firma desde el iPhone (solo Mac) */
 .sig-iphone{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:10px 0 2px}
@@ -696,3 +690,17 @@ body.con-barra .wrap{padding-bottom:110px}
 .extra-row.open .extra-info{background:var(--ink);color:var(--y);border-color:var(--ink)}
 
 @media(max-width:880px){.extra-info{display:grid}}
+
+/* Jornada: tipos de jornada como los planes, con icono y rango de horas */
+.pg-jornada .rango-tip{display:block;margin-top:10px;font-size:13px;color:rgba(24,24,24,.72)}
+.tier-chips{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}
+.tier-chip{display:grid;justify-items:center;gap:3px;padding:12px 6px;border-radius:16px;border:1.5px solid rgba(24,24,24,.2);background:#fff;color:var(--ink);font-family:var(--f);cursor:pointer;transition:transform .16s cubic-bezier(.23,1,.32,1),background .2s,color .2s,border-color .2s}
+.tier-chip b{font-size:14px;font-weight:700}
+.tier-chip small{font-size:11.5px;opacity:.65}
+.tier-chip:active{transform:scale(.97)}
+.tier-chip.on{background:var(--ink);color:var(--y);border-color:var(--ink)}
+.tier-chip.on small{opacity:.8}
+.pg-jornada .slider-block--main input[type=range]{display:block}
+.pg-jornada .slider-block--main .range-labels{display:flex}
+@media(prefers-reduced-motion:reduce){.tier-chip:active{transform:none}}
+@media(max-width:880px){.pg-jornada .container>.card:has(.left-col) .right-col .btn-img{display:none}}

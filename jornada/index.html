@@ -62,6 +62,7 @@ Cal.ns.jornada("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-brand":"#
 <link rel="stylesheet" href="/assets/css/eg-ui.css" />
 <link rel="stylesheet" href="/assets/css/eg-pages.css" />
 <link rel="stylesheet" href="/assets/css/funnel-ux.css" />
+<style>.btn-img{position:absolute;top:18px;right:18px;width:34px;height:34px;border-radius:50%;border:0;background:rgba(255,255,255,.12);color:#f8f8f8;display:grid;place-items:center;cursor:pointer;transition:background .2s}.btn-img:hover{background:rgba(255,221,90,.3);color:#ffdd5a}</style>
 </head>
 <body class="pg pg-jornada">
 
@@ -88,7 +89,8 @@ Cal.ns.jornada("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-brand":"#
         </div>
         <input type="range" id="horasSlider" min="1" max="8" step="1" value="1" />
         <div class="range-labels"><span>1</span><span>8</span></div>
-        <div class="horas-btns" id="horasBtns" role="group" aria-label="Elegir horas"></div>
+        <p class="rango-tip" id="horasTip"></p>
+        <div class="tier-chips" id="tierChips" role="group" aria-label="Elegir tipo de jornada"><button type="button" class="tier-chip" data-h="1"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8.5h14a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2zM8.5 8.5l1.2-2.2a1 1 0 0 1 .9-.5h2.8a1 1 0 0 1 .9.5L15.5 8.5M15 14a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/></svg><b>Básica</b><small>1 a 2 horas</small></button><button type="button" class="tier-chip" data-h="3"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg><b>Estándar</b><small>3 a 5 horas</small></button><button type="button" class="tier-chip" data-h="6"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5z"/></svg><b>Completa</b><small>6 a 8 horas</small></button></div>
       </div>
 
       <div class="extras-block">
@@ -98,6 +100,7 @@ Cal.ns.jornada("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-brand":"#
     </div>
 
     <div class="right-col">
+      <button type="button" id="btnImg" class="btn-img" title="Descargar resumen como imagen" aria-label="Descargar resumen como imagen"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></svg></button>
       <div class="paquete-label" id="paqueteLabel" data-t="pg_jornada.t07">Jornada de trabajo</div>
       <div class="paquete-name" id="paqueteName">Jornada Básica</div>
       <div class="price" id="precioValue">Bs. <span id="precioNum">350</span><span class="price-unit">pago único</span></div>
@@ -225,27 +228,114 @@ Cal.ns.jornada("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-brand":"#
 
     horasSlider.addEventListener('input', calc);
     (function () {
-      var cont = document.getElementById('horasBtns');
-      if (!cont) return;
-      for (var h = 1; h <= 8; h++) {
-        var b = document.createElement('button');
-        b.type = 'button'; b.textContent = h; b.dataset.h = h;
-        b.setAttribute('aria-label', h + (h === 1 ? ' hora' : ' horas'));
-        cont.appendChild(b);
-      }
+      var cont = document.getElementById('tierChips'), tip = document.getElementById('horasTip');
       function marcar() {
-        Array.prototype.forEach.call(cont.children, function (b) {
-          b.classList.toggle('on', b.dataset.h === horasSlider.value);
-        });
+        var h = parseInt(horasSlider.value, 10), t = h <= 2 ? '1' : h <= 5 ? '3' : '6';
+        Array.prototype.forEach.call(cont.children, function (c) { c.classList.toggle('on', c.dataset.h === t); });
+        tip.textContent = h + ' hora' + (h > 1 ? 's' : '') + ' de trabajo continuo, unas ' + (h * 15) + ' fotos (15 por hora).';
       }
       cont.addEventListener('click', function (e) {
-        var b = e.target.closest('button'); if (!b) return;
-        horasSlider.value = b.dataset.h;
+        var c = e.target.closest('button'); if (!c) return;
+        var h = parseInt(horasSlider.value, 10), n = parseInt(c.dataset.h, 10);
+        if (!(h >= n && h <= n + (n === 1 ? 1 : 2))) horasSlider.value = n;
         horasSlider.dispatchEvent(new Event('input', { bubbles: true }));
       });
       horasSlider.addEventListener('input', marcar);
       marcar();
     })();
+    var _FOTO = 'M5 8.5h14a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2zM8.5 8.5l1.2-2.2a1 1 0 0 1 .9-.5h2.8a1 1 0 0 1 .9.5L15.5 8.5M15 14a3 3 0 1 1-6 0 3 3 0 0 1 6 0z', _ENT = 'M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0zM12 7.5V12l3 2', _EDI = 'M4 8h9M17 8h3M4 16h3M11 16h9M17 8a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM11 16a2 2 0 1 1-4 0 2 2 0 0 1 4 0z', _ASI = 'M16 20v-1.5a3.5 3.5 0 0 0-3.5-3.5h-1A3.5 3.5 0 0 0 8 18.5V20M12 12a3 3 0 1 0 0-6 3 3 0 0 0 0 6z';
+    function iconoDe(t) { t = t.toLowerCase(); return /entrega/.test(t) ? _ENT : /edici/.test(t) ? _EDI : /asistente/.test(t) ? _ASI : _FOTO; }
+    var paqueteLabel = document.getElementById('paqueteLabel');
+    // ── Descargar resumen como imagen (PNG dibujado en canvas, sin librerías) ──
+    // Replica la tarjeta oscura: halo amarillo, "ceja" del paquete y checks amarillos.
+    document.getElementById('btnImg').addEventListener('click', function () {
+      var nombre = 'resumen-' + paqueteName.textContent.toLowerCase().replace(/\s+/g, '-') + '.png';
+      var ios = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+      // iOS Safari ignora "download": se abre la imagen en pestaña nueva (mantener presionada → Guardar).
+      // La pestaña se abre ya, dentro del toque, porque después de esperar Safari la bloquearía.
+      var win = ios ? window.open('', '_blank') : null;
+      var F = '"Izmir", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif';
+      var logo = new Image();
+      var logoListo = new Promise(function (res) { logo.onload = res; logo.onerror = res; logo.src = '/assets/logo-mark-white.png'; });
+      Promise.all([logoListo, document.fonts.load('700 20px Izmir'), document.fonts.load('500 20px Izmir'), document.fonts.load('600 20px Izmir')])
+        .catch(function () {}).then(function () {
+        var items = Array.prototype.map.call(benefitsList.querySelectorAll('li'), function (li) { return li.textContent.trim(); });
+        var cuando = new Date().toLocaleString('es-BO', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false });
+        var aviso = 'Válido por 24 horas desde el ' + cuando + '. Sujeto a actualizaciones: para precios actualizados, revisa estudiographica.com/jornada';
+        var M = 40, W = 900, CW = W - M * 2, P = 56, TW = CW - P * 2;
+        var m = document.createElement('canvas').getContext('2d');
+        function wrap(ctx, text, max) {
+          var out = [], line = '';
+          text.split(' ').forEach(function (w) {
+            var t = line ? line + ' ' + w : w;
+            if (ctx.measureText(t).width > max && line) { out.push(line); line = w; } else line = t;
+          });
+          if (line) out.push(line);
+          return out;
+        }
+        m.font = '500 26px ' + F;
+        var rows = items.map(function (t) { return wrap(m, t, TW - 43 - 14 - 28 - 14); });
+        m.font = '500 22px ' + F;
+        var avisoL = wrap(m, aviso, TW);
+        var H = M + P + 50 + 24 + 64 + 40 + 92 + 28 + 22 + 34
+          + rows.reduce(function (a, r) { return a + Math.max(43, r.length * 34) + 22; }, 0)
+          + 30 + 36 + avisoL.length * 30 + P - 6 + M;
+        var c = document.createElement('canvas'); c.width = W * 2; c.height = H * 2;
+        var g = c.getContext('2d'); g.scale(2, 2);
+        g.fillStyle = '#f8f8f8'; g.fillRect(0, 0, W, H);
+        // tarjeta oscura con halo amarillo
+        g.save(); g.beginPath(); g.roundRect(M, M, CW, H - M * 2, 50); g.clip();
+        g.fillStyle = '#181818'; g.fillRect(M, M, CW, H - M * 2);
+        var gl = g.createRadialGradient(M + CW - 88, M + 44, 0, M + CW - 88, M + 44, 330);
+        gl.addColorStop(0, 'rgba(255,221,90,.34)'); gl.addColorStop(.68, 'rgba(255,221,90,0)');
+        g.fillStyle = gl; g.fillRect(M, M, CW, H - M * 2);
+        g.restore();
+        g.textBaseline = 'alphabetic';
+        var x = M + P, y = M + P;
+        // isotipo de Estudio Graphica en blanco, arriba a la derecha sobre el halo
+        if (logo.naturalWidth) { var lh = 64, lw2 = lh * logo.naturalWidth / logo.naturalHeight; g.drawImage(logo, M + CW - P - lw2, M + P - 7, lw2, lh); }
+        // ceja del paquete
+        g.font = '600 22px ' + F;
+        var lab = paqueteLabel.textContent, lw = g.measureText(lab).width + 50;
+        g.fillStyle = 'rgba(255,221,90,.16)'; g.beginPath(); g.roundRect(x, y, lw, 50, 25); g.fill();
+        g.fillStyle = '#ffdd5a'; g.fillText(lab, x + 25, y + 33);
+        y += 50 + 24 + 50;
+        g.fillStyle = '#f8f8f8'; g.font = '700 56px ' + F; g.fillText(paqueteName.textContent, x, y);
+        y += 40 + 92;
+        g.fillStyle = '#ffdd5a'; g.font = '700 92px ' + F; g.fillText('Bs. ' + precioActual, x, y);
+        y += 42;
+        g.fillStyle = 'rgba(248,248,248,.92)'; g.font = '600 30px ' + F; g.fillText('pago único', x, y);
+        y += 36; g.fillStyle = 'rgba(248,248,248,.55)'; g.font = '500 22px ' + F;
+        g.fillText('Precio referencial. Se confirma en tu sesión.', x, y);
+        y += 40;
+        // beneficios con check amarillo
+        rows.forEach(function (lines) {
+          g.fillStyle = '#ffdd5a'; g.beginPath(); g.roundRect(x, y, 43, 43, 14); g.fill();
+          g.save(); var sc = 13 * 1.8 / 24; g.translate(x + (43 - 24 * sc) / 2, y + (43 - 24 * sc) / 2); g.scale(sc, sc);
+          g.strokeStyle = '#181818'; g.lineWidth = 3.2; g.lineCap = 'round'; g.lineJoin = 'round';
+          g.stroke(new Path2D('M5 12.5l4.5 4.5L19 7.5')); g.restore();
+          // icono chico del beneficio (ayuda a ver la variedad de lo incluido)
+          g.save(); g.translate(x + 43 + 14, y + 7.5); g.scale(28 / 24, 28 / 24);
+          g.strokeStyle = 'rgba(248,248,248,.78)'; g.lineWidth = 1.75; g.lineCap = 'round'; g.lineJoin = 'round';
+          g.stroke(new Path2D(iconoDe(items[rows.indexOf(lines)]))); g.restore();
+          g.fillStyle = 'rgba(248,248,248,.9)'; g.font = '500 26px ' + F;
+          lines.forEach(function (l, k) { g.fillText(l, x + 43 + 14 + 28 + 14, y + 30 + k * 34); });
+          y += Math.max(43, lines.length * 34) + 22;
+        });
+        // aviso de vigencia
+        y += 8; g.fillStyle = 'rgba(248,248,248,.18)'; g.fillRect(x, y, TW, 2);
+        y += 40; g.fillStyle = 'rgba(248,248,248,.62)'; g.font = '500 22px ' + F;
+        avisoL.forEach(function (l, k) { g.fillText(l, x, y + k * 30); });
+        c.toBlob(function (blob) {
+          var url = URL.createObjectURL(blob);
+          if (win) { win.location.href = url; return; }
+          var a = document.createElement('a');
+          a.download = nombre; a.href = url; a.click();
+          setTimeout(function () { URL.revokeObjectURL(url); }, 10000);
+        }, 'image/png');
+      });
+    });
+
     calc();
     refreshCalConfig();
 
