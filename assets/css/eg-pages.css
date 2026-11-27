@@ -520,7 +520,7 @@ body.con-barra .wrap{padding-bottom:110px}
 .field.show-error .fecha-campo{border-color:var(--err)}
 
 /* Pad de firma: la línea base se marca cuando hay firma */
-.sig-baseline{transform-origin:left;transition:background-color .3s ease,transform .5s var(--ease-out)}
+.sig-baseline{transform-origin:center;transition:background-color .3s ease,transform .5s var(--ease-out)}
 .sig-pad.has-sig .sig-baseline{background:var(--ink);transform:scaleX(1)}
 .sig-pad:not(.has-sig) .sig-baseline{transform:scaleX(.6)}
 
