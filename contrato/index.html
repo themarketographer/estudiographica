@@ -220,6 +220,8 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
       <div class="sig-iphone" id="sigIphoneRow" hidden>
         <button type="button" class="sig-iphone-btn" id="sigIphone"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg>Firmar con mi iPhone</button>
         <input type="file" id="sigArchivo" accept="image/*" hidden />
+        <div class="sig-zona" id="sigZona" contenteditable="true" spellcheck="false" role="textbox" aria-label="Zona para importar el dibujo del iPhone" data-ph="Haz clic derecho aquí, elige Importar desde iPhone y luego Agregar dibujo" hidden></div>
+        <button type="button" class="sig-iphone-link" id="sigArchivoLink">o elegir un archivo</button>
         <span class="sig-iphone-nota" id="sigIphoneNota"></span>
       </div>
       <div class="faltan" id="faltan" aria-live="polite"></div>
@@ -960,14 +962,11 @@ const contratoConfig = [
     var nota = document.getElementById('sigIphoneNota');
     if (!/Macintosh/.test(navigator.userAgent) || !window.matchMedia('(pointer:fine)').matches) return;
     fila.hidden = false;
-    btn.addEventListener('click', function () { inp.value = ''; inp.click(); });
-    inp.addEventListener('change', function () {
-      var f = inp.files && inp.files[0];
-      if (!f) return;
-      var url = URL.createObjectURL(f);
+    var zona = document.getElementById('sigZona');
+    function procesar(url, liberar) {
       var im = new Image();
       im.onload = function () {
-        URL.revokeObjectURL(url);
+        if (liberar) URL.revokeObjectURL(url);
         var esc = Math.min(1, 900 / Math.max(im.width, im.height));
         var w = Math.max(1, Math.round(im.width * esc)), h = Math.max(1, Math.round(im.height * esc));
         var c = document.createElement('canvas'); c.width = w; c.height = h;
@@ -991,11 +990,36 @@ const contratoConfig = [
         var rec = document.createElement('canvas'); rec.width = cw; rec.height = ch;
         rec.getContext('2d').drawImage(c, minX, minY, cw, ch, 0, 0, cw, ch);
         imgFirma = rec; trazos = [];
+        zona.hidden = true;
         if (modoEscribir) cambiarModo(false); else estadoFirma();
         nota.textContent = '';
       };
       im.onerror = function () { nota.textContent = 'No pude leer esa imagen.'; };
       im.src = url;
+    }
+    // Camino principal: cuadro editable. Safari lo trata como un campo de texto y el clic derecho
+    // ofrece Importar desde iPhone > Agregar dibujo, que inserta la imagen aqui.
+    btn.addEventListener('click', function () {
+      zona.hidden = false; nota.textContent = '';
+      zona.innerHTML = '';
+      zona.focus();
+    });
+    function revisarZona() {
+      var img = zona.querySelector('img');
+      if (!img) return;
+      var src = img.src;
+      procesar(src, false);
+      zona.innerHTML = '';
+    }
+    new MutationObserver(revisarZona).observe(zona, { childList: true, subtree: true });
+    zona.addEventListener('paste', function () { setTimeout(revisarZona, 50); });
+    zona.addEventListener('keydown', function (e) { if (!e.metaKey && !e.ctrlKey && e.key.length === 1) e.preventDefault(); });
+    // Plan B: elegir un archivo de imagen (en el Finder tambien se puede hacer clic derecho > Importar desde iPhone)
+    document.getElementById('sigArchivoLink').addEventListener('click', function () { inp.value = ''; inp.click(); });
+    inp.addEventListener('change', function () {
+      var f = inp.files && inp.files[0];
+      if (!f) return;
+      procesar(URL.createObjectURL(f), true);
     });
   })();
   function cambiarModo(escribir) {

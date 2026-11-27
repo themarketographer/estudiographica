@@ -607,3 +607,9 @@ body.con-barra .wrap{padding-bottom:110px}
 .sig-iphone-btn:active{transform:scale(.97)}
 @media(hover:hover) and (pointer:fine){.sig-iphone-btn:hover{background:var(--y-soft,#fff3c4)}}
 .sig-iphone-nota{font-size:12.5px;color:var(--err,#b3261e)}
+.sig-zona{flex:1 1 100%;min-height:76px;border:1.5px dashed rgba(24,24,24,.35);border-radius:16px;padding:14px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:14px;color:var(--muted);outline:none;caret-color:transparent;overflow:hidden}
+.sig-zona[hidden]{display:none}
+.sig-zona:empty::before{content:attr(data-ph)}
+.sig-zona:focus{border-color:var(--ink);background:var(--y-soft,#fff3c4)}
+.sig-zona img{max-width:100%;max-height:120px}
+.sig-iphone-link{background:none;border:0;padding:0;color:var(--muted);font:500 12.5px/1 var(--f);text-decoration:underline;text-underline-offset:3px;cursor:pointer;min-height:32px}
