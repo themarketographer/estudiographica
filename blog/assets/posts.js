@@ -226,5 +226,12 @@ window.EG_BLOG_POSTS = [
     "excerpt": "Cómo fotografiar bebidas y postres, qué cuidar en cada foto y cuántas necesitas para que tu carta venda también lo que se pide al final.",
     "img": "https://res.cloudinary.com/dplhu2z6j/image/upload/v1791601818/NZ5_7623_de_tama%C3%B1o_grande_fdy5kr.jpg",
     "eyebrow": "Guías · Bebidas y postres"
+  },
+  {
+    "slug": "fotos-platos-tipicos-restaurante-cochabamba",
+    "title": "Fotos de platos típicos para tu restaurante en Cochabamba",
+    "excerpt": "Cómo fotografiar silpancho, pique macho y otros platos típicos, qué cuidar en cada foto y cuántas necesitas para que tu carta venda lo que más se pide.",
+    "img": "https://res.cloudinary.com/dplhu2z6j/image/upload/v1791601668/_MG_2824_a4hpsv.jpg",
+    "eyebrow": "Guías · Platos típicos"
   }
 ];
