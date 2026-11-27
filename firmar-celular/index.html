@@ -8,15 +8,16 @@
 <title>Firma con tu celular · Estudio Graphica</title>
 <link rel="stylesheet" href="/assets/css/eg-ui.css" />
 <style>
+@font-face{font-family:'EG Firma';src:url(/fonts/mrs-saint-delafield.woff2) format('woff2');font-display:swap}
 html,body{height:100%;margin:0;overscroll-behavior:none}
 body{display:flex;flex-direction:column;background:var(--paper,#f8f8f8);color:var(--ink,#181818);font-family:var(--f,system-ui,sans-serif);padding:max(18px,env(safe-area-inset-top)) 18px max(18px,env(safe-area-inset-bottom));gap:14px;touch-action:none}
-h1{font-size:22px;line-height:1.15;margin:0;letter-spacing:-.02em}
+h1{font-size:20px;line-height:1.15;margin:0;letter-spacing:-.02em}
 p{margin:0;font-size:14.5px;line-height:1.45;color:var(--muted,#666)}
 .pad{position:relative;flex:1 1 auto;min-height:0;display:flex;align-items:center;justify-content:center}
 .caja{position:relative;width:100%;background:#fff;border:1px solid var(--hair,#e6e6e6);border-radius:22px;box-shadow:0 20px 40px -28px rgba(24,24,24,.4);overflow:hidden}
 canvas{display:block;width:100%;height:100%;touch-action:none}
 .linea{position:absolute;left:6%;right:6%;bottom:22%;border-bottom:1.5px solid rgba(24,24,24,.2);pointer-events:none}
-.ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:rgba(24,24,24,.4);font-size:15px;pointer-events:none;transition:opacity .2s}
+.ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:rgba(24,24,24,.22);font:400 44px/1 'EG Firma','Segoe Script',cursive;pointer-events:none;transition:opacity .2s}
 .ph.off{opacity:0}
 .btns{display:flex;gap:10px}
 button{font:600 16px/1 var(--f,system-ui);min-height:54px;border-radius:999px;border:0;cursor:pointer;transition:transform .14s cubic-bezier(.23,1,.32,1),opacity .2s}
@@ -26,25 +27,31 @@ button:active{transform:scale(.97)}
 #enviar:disabled{opacity:.35}
 .fin{flex:1;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px}
 .fin h1{font-size:26px}
-.fin svg{width:64px;height:64px;border-radius:50%;background:var(--y,#ffdd5a);padding:16px;box-sizing:border-box}
+.fin svg{width:84px;height:84px}
+.fin .anillo{stroke-dasharray:176;stroke-dashoffset:176}.fin .visto{stroke-dasharray:30;stroke-dashoffset:30}
+body.listo .anillo{animation:traza .5s cubic-bezier(.23,1,.32,1) forwards}body.listo .visto{animation:traza .3s cubic-bezier(.23,1,.32,1) .35s forwards}
+body.listo .fin h1,body.listo .fin p{animation:sube .4s cubic-bezier(.23,1,.32,1) .5s backwards}
+@keyframes traza{to{stroke-dashoffset:0}}@keyframes sube{from{opacity:0;transform:translateY(8px)}}
+.hint{font-size:12.5px;text-align:center;color:var(--muted,#666)}
 body.listo .pad,body.listo .btns,body.listo .cab{display:none}
 body.listo .fin{display:flex}
 #err{color:var(--err,#b3261e);font-size:14px;min-height:18px}
-@media(prefers-reduced-motion:reduce){button:active{transform:none}}
+@media(prefers-reduced-motion:reduce){button:active{transform:none}body.listo .anillo,body.listo .visto{animation:none;stroke-dashoffset:0}body.listo .fin h1,body.listo .fin p{animation:none}}
 </style>
 </head>
 <body>
-<div class="cab"><h1>Firma con el dedo</h1><p>Gira el celular de lado si necesitas más espacio. Tu firma aparece sola en la computadora.</p></div>
+<div class="cab"><h1>Firma con el dedo</h1><p>Tu firma aparece sola en la computadora.</p></div>
 <div class="pad"><div class="caja" id="caja"><canvas id="c"></canvas><div class="linea"></div><div class="ph" id="ph">Firma aquí</div></div></div>
+<p class="hint cab">Gira el celular de lado si quieres más espacio.</p>
 <div id="err" role="alert"></div>
 <div class="btns"><button type="button" id="borrar">Borrar</button><button type="button" id="enviar" disabled>Enviar firma</button></div>
-<div class="fin"><svg viewBox="0 0 24 24" fill="none" stroke="#181818" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><h1>Listo, firma enviada</h1><p>Ya puedes volver a la computadora. Puedes cerrar esta pestaña.</p></div>
+<div class="fin"><svg viewBox="0 0 64 64" fill="none" stroke="#181818" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle class="anillo" cx="32" cy="32" r="28" stroke="#ffdd5a"/><path class="visto" d="M20 33l8 8 16-17"/></svg><h1>Listo, firma enviada</h1><p>Ya puedes volver a la computadora. Puedes cerrar esta pestaña.</p></div>
 <script>
 (function(){
   var t=(new URLSearchParams(location.search).get('t')||'');
   var caja=document.getElementById('caja'),cv=document.getElementById('c'),ctx=cv.getContext('2d');
   var ph=document.getElementById('ph'),err=document.getElementById('err'),env=document.getElementById('enviar');
-  var ratio=2.6,trazos=[],actual=null;
+  var ratio=2.6,trazos=[],actual=null,ult=null;
   function medir(){
     var pad=caja.parentNode.getBoundingClientRect();
     var w=pad.width,h=w/ratio;
@@ -59,14 +66,16 @@ body.listo .fin{display:flex}
     var r=caja.getBoundingClientRect();ctx.clearRect(0,0,r.width,r.height);
     trazos.forEach(function(tr){
       if(tr.length===1){ctx.beginPath();ctx.arc(tr[0].x*r.width,tr[0].y*r.height,1.2,0,7);ctx.fillStyle='#181818';ctx.fill();return}
-      ctx.beginPath();ctx.moveTo(tr[0].x*r.width,tr[0].y*r.height);
-      for(var i=1;i<tr.length;i++)ctx.lineTo(tr[i].x*r.width,tr[i].y*r.height);ctx.stroke();
-    });
+      for(var i=1;i<tr.length;i++){ctx.lineWidth=2.4*(tr[i].w||1);ctx.beginPath();ctx.moveTo(tr[i-1].x*r.width,tr[i-1].y*r.height);ctx.lineTo(tr[i].x*r.width,tr[i].y*r.height);ctx.stroke()}
+    });ctx.lineWidth=2.4;
     ph.classList.toggle('off',trazos.length>0);env.disabled=trazos.length===0;
   }
   function pos(e){var r=cv.getBoundingClientRect();return{x:(e.clientX-r.left)/r.width,y:(e.clientY-r.top)/r.height}}
-  cv.addEventListener('pointerdown',function(e){e.preventDefault();cv.setPointerCapture(e.pointerId);actual=[pos(e)];trazos.push(actual);pintar()});
-  cv.addEventListener('pointermove',function(e){if(!actual)return;e.preventDefault();actual.push(pos(e));pintar()});
+  cv.addEventListener('pointerdown',function(e){e.preventDefault();cv.setPointerCapture(e.pointerId);var p=pos(e);p.w=1;actual=[p];ult={t:e.timeStamp,x:e.clientX,y:e.clientY,w:1};trazos.push(actual);pintar()});
+  cv.addEventListener('pointermove',function(e){if(!actual)return;e.preventDefault();
+    var dt=Math.max(1,e.timeStamp-ult.t),v=Math.hypot(e.clientX-ult.x,e.clientY-ult.y)/dt;   // px por ms
+    var w=ult.w*.6+Math.max(.6,Math.min(1.6,1.7-v*.8))*.4;
+    var p=pos(e);p.w=Math.round(w*100)/100;ult={t:e.timeStamp,x:e.clientX,y:e.clientY,w:w};actual.push(p);pintar()});
   function fin(){actual=null}
   cv.addEventListener('pointerup',fin);cv.addEventListener('pointercancel',fin);
   document.getElementById('borrar').addEventListener('click',function(){trazos=[];pintar()});
@@ -77,7 +86,7 @@ body.listo .fin{display:flex}
         err.textContent=r.status===410?'Este código venció. Vuelve a escanear el QR en la computadora.':r.status===409?'Esta firma ya se envió.':'No se pudo enviar. Inténtalo de nuevo.';env.disabled=false})
       .catch(function(){err.textContent='Sin conexión. Inténtalo de nuevo.';env.disabled=false});
   });
-  fetch('/.netlify/functions/firma-remota?t='+encodeURIComponent(t),{cache:'no-store'}).then(function(r){return r.json()}).then(function(s){
+  fetch('/.netlify/functions/firma-remota?celu=1&t='+encodeURIComponent(t),{cache:'no-store'}).then(function(r){return r.json()}).then(function(s){
     if(s.estado==='vencido'||!s.estado){err.textContent='Este código venció. Vuelve a escanear el QR en la computadora.';env.disabled=true;return}
     if(s.ratio)ratio=s.ratio;medir();
   }).catch(function(){medir()});
