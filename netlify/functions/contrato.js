@@ -13,6 +13,16 @@
  *                                   Por defecto: 'Estudio Graphica <contratos@estudiographica.com>'
  *   CONTRATO_TO      (opcional)     A dónde llega tu copia de archivo.
  *                                   Por defecto: 'hola@estudiographica.com'
+ *   FIRMA_FOTOGRAFO_PNG_B64 (opcional) Tu firma simplificada, en PNG con fondo
+ *                                   transparente, codificada en base64 (sin
+ *                                   "data:image/png;base64,"). Se estampa SOLO
+ *                                   en el PDF que sale por correo, nunca en el
+ *                                   PDF que se descarga en la web. Va en una
+ *                                   variable de entorno (y no en el repositorio)
+ *                                   para que nadie pueda copiarla de GitHub.
+ *                                   Netlify limita las variables a unos 4 KB en
+ *                                   total: la imagen debe ser pequeña.
+ *                                   Si falta, el correo sale igual, sin tu firma.
  *
  * Mientras RESEND_API_KEY no exista, esta función responde 200 con
  * { enviado: false, motivo: 'sin_configurar' } — la página de contrato lo
@@ -27,6 +37,51 @@ const TO_DEFECTO = 'hola@estudiographica.com';
 // Tope de tamaño del adjunto (base64). Un contrato normal pesa 100-400 KB;
 // 8 MB en base64 ≈ 6 MB de PDF, muy por encima de lo razonable.
 const MAX_BASE64 = 8 * 1024 * 1024;
+
+// Posición de la firma del Fotógrafo en la última página. Tiene que coincidir con
+// generarPdf() en contrato/index.html, donde la línea de firmas queda siempre en y = 690
+// (medida desde el borde superior) y la columna del Fotógrafo empieza en x = 319.
+const FIRMA_X = 319;
+const FIRMA_LINEA_Y = 690;
+const FIRMA_ANCHO = 190;
+const FIRMA_ALTO = 58;
+
+const TIPOS_UBICACION_CAL = /^(attendeeInPerson|inPerson|organizerAddress|attendeeAddress|attendeePhone|attendeeDefined|somewhereElse|phone|userPhone|link|integrations:.*)$/i;
+
+// La firma solo se estampa si el cliente completó todos los datos del contrato.
+function datosCompletos(d) {
+  const lleno = (v) => typeof v === 'string' && v.trim().length > 1;
+  return ['nombre', 'ci', 'negocio', 'direccion', 'whatsapp', 'fecha'].every((k) => lleno(d[k]))
+    && !TIPOS_UBICACION_CAL.test(d.direccion.trim())
+    && String(d.contratoTexto || '').length > 1500;
+}
+
+// Estampa la firma del Fotógrafo en la última página. Si algo falla, devuelve
+// el PDF original: el cliente recibe su contrato igual y el correo a Pablo avisa.
+async function estamparFirma(pdfBase64) {
+  const firma = process.env.FIRMA_FOTOGRAFO_PNG_B64;
+  if (!firma) return { base64: pdfBase64, estado: 'sin_firma_configurada' };
+  try {
+    const bytes = Buffer.from(pdfBase64, 'base64');
+    if (bytes.subarray(0, 4).toString() !== '%PDF') return { base64: pdfBase64, estado: 'error_firma' };
+    const { PDFDocument } = require('pdf-lib');
+    const pdf = await PDFDocument.load(bytes);
+    const paginas = pdf.getPages();
+    const ultima = paginas[paginas.length - 1];
+    const img = await pdf.embedPng(Buffer.from(firma.replace(/^data:image\/png;base64,/, '').trim(), 'base64'));
+    const escala = Math.min(FIRMA_ANCHO / img.width, FIRMA_ALTO / img.height);
+    ultima.drawImage(img, {
+      x: FIRMA_X,
+      y: ultima.getHeight() - FIRMA_LINEA_Y + 4,
+      width: img.width * escala,
+      height: img.height * escala,
+    });
+    return { base64: Buffer.from(await pdf.save()).toString('base64'), estado: 'firmado' };
+  } catch (err) {
+    console.error('[contrato] No se pudo estampar la firma del Fotógrafo:', err && err.message);
+    return { base64: pdfBase64, estado: 'error_firma' };
+  }
+}
 
 function respuesta(status, body) {
   return {
@@ -73,6 +128,12 @@ function htmlCliente(d) {
 
 // Correo que recibe PABLO (archivo interno)
 function htmlEstudio(d) {
+  const notaFirma = {
+    firmado: 'Va con tu firma.',
+    sin_firma_configurada: '⚠ Va sin tu firma: falta la variable FIRMA_FOTOGRAFO_PNG_B64 en Netlify.',
+    error_firma: '⚠ Va sin tu firma: no se pudo estampar, mira los logs de Netlify.',
+    datos_incompletos: '⚠ Va sin tu firma: el cliente no completó todos los datos.',
+  }[d.firmaEstado] || '';
   return `
   <div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;padding:24px;">
     <h2 style="margin:0 0 14px;color:#181818;">Contrato firmado — ${escapeHtml(d.negocio)}</h2>
@@ -89,7 +150,7 @@ function htmlEstudio(d) {
       <tr><td style="padding:5px 14px 5px 0;color:#6B6660;">Total</td><td style="padding:5px 0;font-weight:700;">Bs. ${escapeHtml(d.precio)} (adelanto Bs. ${escapeHtml(d.adelanto)})</td></tr>
       <tr><td style="padding:5px 14px 5px 0;color:#6B6660;">Firmado</td><td style="padding:5px 0;">${escapeHtml(new Date().toLocaleString('es-BO'))}</td></tr>
     </table>
-    <p style="font-size:13px;color:#6B6660;margin-top:18px;">El PDF firmado va adjunto. Falta que confirme el adelanto.</p>
+    <p style="font-size:13px;color:#6B6660;margin-top:18px;">El PDF firmado va adjunto. ${escapeHtml(notaFirma)} Falta que confirme el adelanto.</p>
   </div>`;
 }
 
@@ -141,7 +202,15 @@ exports.handler = async (event) => {
   const from = process.env.CONTRATO_FROM || FROM_DEFECTO;
   const to = process.env.CONTRATO_TO || TO_DEFECTO;
   const archivo = d.archivo || 'Contrato_EstudioGraphica.pdf';
-  const adjunto = [{ filename: archivo, content: d.pdfBase64 }];
+  // Tu firma va solo en el PDF que sale por correo, y solo si el cliente completó todos los datos.
+  let pdfFinal = d.pdfBase64;
+  d.firmaEstado = 'datos_incompletos';
+  if (datosCompletos(d)) {
+    const r = await estamparFirma(d.pdfBase64);
+    pdfFinal = r.base64;
+    d.firmaEstado = r.estado;
+  }
+  const adjunto = [{ filename: archivo, content: pdfFinal }];
 
   // "plan" → /gracias-plan, cualquier otra cosa → /gracias-sesion
   d.tipoPago = /plan/i.test(d.servicio || '') ? 'plan' : 'sesion';

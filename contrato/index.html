@@ -552,6 +552,8 @@ const contratoConfig = [
     campos.forEach(function (id) { if (borrador[id]) inputs[id].value = borrador[id]; });
     if (borrador.whatsappPais) whatsappPais.value = borrador.whatsappPais;
   } catch (e) {}
+  // Cal a veces reenvía el tipo de ubicación ("attendeeInPerson") en vez de la dirección escrita. Eso no es una dirección: se vacía el campo.
+  if (/^(attendeeInPerson|inPerson|organizerAddress|attendeeAddress|attendeePhone|attendeeDefined|somewhereElse|phone|userPhone|link|integrations:.*)$/i.test(inputs.direccion.value.trim())) inputs.direccion.value = '';
 
   // Prefill de fecha desde la URL (por si Cal.com la manda) o mínimo hoy
   var hoyISO = new Date().toISOString().split('T')[0];
@@ -956,9 +958,12 @@ const contratoConfig = [
       y += lineas.length * LH + 12;
     });
 
-    // Firmas
-    saltoSiHaceFalta(150);
-    y += 16;
+    // Firmas. La línea de firmas queda SIEMPRE en y = 690 de la última página:
+    // la función de correo (netlify/functions/contrato.js) estampa ahí la firma
+    // del Fotógrafo, solo en el PDF que sale por correo. En el PDF de esta
+    // página no va esa firma.
+    if (y > 615) doc.addPage();
+    y = 690;
     doc.setDrawColor(200, 197, 190);
     doc.line(MX, y, MX + 200, y);
     doc.line(MX + 263, y, MX + 463, y);

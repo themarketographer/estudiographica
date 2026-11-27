@@ -101,6 +101,22 @@ window.egOpt = function (url, w) {
   Cal("init", "reunion", {origin:"https://app.cal.com"});
   Cal.ns.reunion("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-brand":"#181818"},"dark":{"cal-brand":"#f8f8f8"}},"hideEventTypeDetails":false,"layout":"month_view"});
 </script>
+<script>
+  // Precarga de Cal: en la primera interacción (scroll, toque o tecla) el calendario se
+  // carga en segundo plano, así el clic en "Agendar" lo abre al instante.
+  // Para apagarla basta con borrar este bloque.
+  (function () {
+    var hecho = false;
+    function precargar() {
+      if (hecho) return;
+      hecho = true;
+      try { Cal.ns.reunion("preload", { calLink: "themarketographer/reunion" }); } catch (e) {}
+    }
+    ["pointerdown", "touchstart", "keydown", "scroll"].forEach(function (ev) {
+      window.addEventListener(ev, precargar, { once: true, passive: true });
+    });
+  })();
+</script>
 
 <link rel="preload" href="/fonts/izmir-regular.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="preload" href="/fonts/izmir-extrabold.woff2" as="font" type="font/woff2" crossorigin />

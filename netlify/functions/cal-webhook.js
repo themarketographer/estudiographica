@@ -149,6 +149,12 @@ exports.handler = async (event) => {
     const val = (r) => { const v = r && typeof r === 'object' ? r.value : r; return typeof v === 'string' ? v : ''; };
     const marca = val(resp.marca) || val(resp.title);
     const tel = extraerTelefono(resp) || '';
+    // Cal guarda en responses.location el TIPO ("attendeeInPerson") y en optionValue la dirección escrita.
+    const ubicacionReal = (b, r) => {
+      const l = r.location;
+      const o = l && typeof l === 'object' && typeof l.optionValue === 'string' ? l.optionValue.trim() : '';
+      return o || (typeof b.location === 'string' ? b.location : '');
+    };
     if (booking.uid && (marca || tel)) {
       const { getStore, connectLambda } = require('@netlify/blobs');
       connectLambda(event);
@@ -158,7 +164,7 @@ exports.handler = async (event) => {
         marca, whatsapp: tel,
         nombre: a0.name || '', email: a0.email || '',
         servicio: extraerSlug(payload), estado: payload.triggerEvent === 'BOOKING_CREATED' ? 'confirmada' : 'pendiente de confirmar',
-        inicio: booking.startTime || '', ubicacion: typeof booking.location === 'string' ? booking.location : '',
+        inicio: booking.startTime || '', ubicacion: ubicacionReal(booking, resp),
         paquete: booking.additionalNotes || val(resp.notes) || '',
         origen: (booking.metadata && booking.metadata.origen) || '',
         guardadoEn: new Date().toISOString(),

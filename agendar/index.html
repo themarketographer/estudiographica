@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Agenda tu reunión · Estudio Graphica</title>
+<meta name="description" content="Elige día y hora para tu reunión con Estudio Graphica." />
+<meta name="robots" content="noindex,nofollow" />
+<meta name="theme-color" content="#181818" />
+<link rel="icon" href="/favicon.ico" sizes="any" />
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<link rel="preconnect" href="https://app.cal.com" crossorigin />
+<link rel="dns-prefetch" href="https://app.cal.com" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+
+<!-- ═══════════ PIXEL + GA4 ═══════════ -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-9H6Z8N5DTP"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){ dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-9H6Z8N5DTP');
+</script>
+<script>
+  !(function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)})(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  fbq('set', 'autoConfig', false, '1059099676340072');
+  fbq('init', '1059099676340072');
+  fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=1059099676340072&ev=PageView&noscript=1"/></noscript>
+<!-- TikTok Pixel Code Start -->
+<script>
+!function (w, d, t) {
+  w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","holdConsent","revokeConsent","grantConsent"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(
+var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var r="https://analytics.tiktok.com/i18n/pixel/events.js",o=n&&n.partner;ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=r,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};n=document.createElement("script")
+;n.type="text/javascript",n.async=!0,n.src=r+"?sdkid="+e+"&lib="+t;e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(n,e)};
+
+
+  ttq.load('DA6J3MJC77UC8FLJ47I0');
+  ttq.page();
+}(window, document, 'ttq');
+</script>
+<!-- TikTok Pixel Code End -->
+<script src="/assets/js/tracking.js"></script>
+<style>
+  html,body{margin:0;background:#181818;color:#f2f2f2;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  .ag{max-width:980px;margin:0 auto;padding:28px 16px 48px}
+  .ag h1{font-size:clamp(26px,5vw,40px);line-height:1.1;margin:0 0 8px}
+  .ag p{margin:0 0 20px;color:#b9b9b9}
+  #cal-agendar{min-height:640px;background:#fff;border-radius:14px;overflow:hidden}
+</style>
+</head>
+<body>
+<main class="ag">
+  <h1>Elige tu horario</h1>
+  <p>Reunión de 30 minutos con Estudio Graphica. Selecciona el día y la hora que te queden mejor.</p>
+  <div id="cal-agendar"></div>
+</main>
+
+<script>
+(function (C, A, L) {
+  var p = function (a, ar) { a.q.push(ar); };
+  var d = C.document;
+  C.Cal = C.Cal || function () {
+    var cal = C.Cal, ar = arguments;
+    if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement('script')).src = A; cal.loaded = true; }
+    if (ar[0] === L) {
+      var api = function () { p(api, arguments); }, namespace = ar[1];
+      api.q = api.q || [];
+      if (typeof namespace === 'string') { cal.ns[namespace] = cal.ns[namespace] || api; p(cal.ns[namespace], ar); p(cal, ['initNamespace', namespace]); }
+      else p(cal, ar);
+      return;
+    }
+    p(cal, ar);
+  };
+})(window, 'https://app.cal.com/embed/embed.js', 'init');
+
+Cal('init', 'agendar', { origin: 'https://app.cal.com' });
+
+var config = { layout: 'month_view', useSlotsViewOnSmallScreen: 'true', theme: 'light' };
+try {
+  var eventId = window.EG.prepareCalBooking('agendar', 'interesado_reunion');
+  if (eventId) config['metadata[eventId]'] = eventId;
+  config['metadata[origen]'] = window.EG.getOrigen();
+  var fbp = window.EG.getFbp(), fbc = window.EG.getFbc();
+  if (fbp) config['metadata[fbp]'] = fbp;
+  if (fbc) config['metadata[fbc]'] = fbc;
+} catch (e) {}
+config['metadata[ua]'] = String(navigator.userAgent || '').slice(0, 450);
+config['metadata[pagina]'] = (location.origin + location.pathname).slice(0, 450);
+
+Cal.ns.agendar('inline', {
+  elementOrSelector: '#cal-agendar',
+  calLink: 'themarketographer/reunion',
+  layout: 'month_view',
+  config: config,
+});
+Cal.ns.agendar('ui', { theme: 'light', hideEventTypeDetails: false, layout: 'month_view' });
+Cal.ns.agendar('on', {
+  action: 'bookingSuccessfulV2',
+  callback: function () {
+    try {
+      window.EG.trackEvent('Lead', {
+        content_name: 'Reunión agendada',
+        content_type: 'reunion',
+        origen: window.EG.getOrigen(),
+        event_id: window.EG.getLastEventId('agendar'),
+      });
+    } catch (e) {}
+  },
+});
+</script>
+</body>
+</html>

@@ -260,7 +260,16 @@ window.EG = window.EG || {};
   // serializa cada tipo de pregunta — quedan confirmados recién con una
   // reserva real después de desplegar esto. Por eso se prueban varios
   // nombres candidatos por campo.
-  // Marca y WhatsApp los guarda cal-webhook.js por uid; el webhook puede tardar
+  // Cal reenvía en ?location= el TIPO de ubicación ("attendeeInPerson"), no la
+  // dirección que escribió el cliente. Si llega un tipo, se descarta para no
+  // pegarlo en el campo de dirección del contrato.
+  function direccionReal(v) {
+    v = String(v || '').trim();
+    var tipos = /^(attendeeInPerson|inPerson|organizerAddress|attendeeAddress|attendeePhone|attendeeDefined|somewhereElse|phone|userPhone|link|integrations:.*)$/i;
+    return v && !tipos.test(v) ? v : '';
+  }
+
+  // Marca, WhatsApp y dirección los guarda cal-webhook.js por uid; el webhook puede tardar
   // unos segundos en llegar, por eso se reintenta (8 veces, cada 1.5 s).
   function completarDesdeServidor(uid, intento) {
     intento = intento || 0;
@@ -268,9 +277,10 @@ window.EG = window.EG || {};
     fetch('/.netlify/functions/reserva?uid=' + encodeURIComponent(uid), { cache: 'no-store' })
       .then(function (r) { return r.json(); })
       .then(function (r) {
-        if (!r || (!r.marca && !r.whatsapp)) throw new Error('aun no');
+        if (!r || (!r.marca && !r.whatsapp && !r.ubicacion)) throw new Error('aun no');
         var c = getCliente();
         if (r.marca) c.negocio = r.marca;
+        if (!c.direccion && direccionReal(r.ubicacion)) c.direccion = direccionReal(r.ubicacion);
         if (r.whatsapp) c.whatsapp = String(r.whatsapp).replace(/[^\d+]/g, '').replace(/^\+?591/, '');
         localStorage.setItem('eg_contrato_v1', JSON.stringify(c));
         window.dispatchEvent(new Event('eg-cliente'));
@@ -304,7 +314,7 @@ window.EG = window.EG || {};
         nombre: primero('attendeeName', 'name'),
         negocio: primero('marca', 'Nombre-de-la-Marca'),
         email: primero('email'),
-        direccion: primero('location'),
+        direccion: direccionReal(primero('location')),
         whatsapp: soloNumeroLocal(primero('aiAgentCallPhoneNumber', 'Whatsapp', 'whatsapp', 'attendeePhoneNumber')),
       };
       // Hora de la reunión (solo para mostrarla en /gracias-reunion).
