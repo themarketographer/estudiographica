@@ -296,6 +296,17 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 const contratoClausulas = [
   {
     "titulo": "Resumen de lo esencial",
+    "proteccionTitulo": "Lo que te protege",
+    "proteccion": [
+      "El pago va en dos partes: el 50% para reservar la fecha y el 50% restante recién cuando recibes el material final (bloque 4).",
+      "El material final llega en 3 a 7 días hábiles, y ese plazo solo se extiende si ambos lo acuerdan por escrito (bloque 3).",
+      "Tienes una ronda de cambios incluida, dentro de los 7 días siguientes a la entrega (bloque 3).",
+      "El catálogo digital se mantiene hasta un año para que vuelvas a descargar tus fotos (bloque 3).",
+      "Las fotos son tuyas para el uso comercial de tu negocio (bloque 5).",
+      "Si el Fotógrafo no puede asistir, envía un reemplazo de nivel similar sin costo, o te devuelve el 100% de lo que abonaste (bloque 6).",
+      "Puedes reprogramar la sesión hasta 3 veces, incluso por fuerza mayor (bloque 6).",
+      "Todo trabajo extra se acuerda por escrito, y ningún producto físico se produce sin que apruebes el presupuesto (bloque 2)."
+],
     "nota": "Este resumen forma parte del contrato. Si una frase del resumen dice algo distinto al texto completo de abajo, manda el texto completo.",
     "lista": [
       "<b>Servicio:</b> {{servicio}}, {{paquete}} ({{detalle}}).",
@@ -698,6 +709,7 @@ const contratoConfig = [
     contratoClausulas.forEach(function (c, i) {
       if (c.nota) {
         html += '<div class="cb-resumen"><h3>' + escapeHtml(c.titulo) + '</h3><p class="cb-nota">' + escapeHtml(c.nota) + '</p>' + ul(c.lista, vars) + '</div>';
+        if (c.proteccion) html += '<div class="cb-protege"><h3>' + escapeHtml(c.proteccionTitulo || 'Lo que te protege') + '</h3><ul>' + c.proteccion.map(function (t) { return '<li>' + escapeHtml(t) + '</li>'; }).join('') + '</ul></div>';
         html += '<div class="cb-tools"><button type="button" class="cb-todo" id="cbTodo">Abrir todos los bloques</button></div>';
         return;
       }
@@ -726,6 +738,7 @@ const contratoConfig = [
       if (c.nota) lineas.push(c.nota);
       else { lineas.push(c.simple); c.parrafos.forEach(function (t) { lineas.push(quitarTags(aplicarVariables(t, vars))); }); }
       (c.lista || []).forEach(function (t) { lineas.push('• ' + quitarTags(aplicarVariables(t, vars))); });
+      if (c.proteccion) { lineas.push(''); lineas.push((c.proteccionTitulo || 'Lo que te protege') + ':'); c.proteccion.forEach(function (t) { lineas.push('• ' + t); }); }
       return { titulo: c.titulo, cuerpo: lineas.join('\n') };
     });
   }
