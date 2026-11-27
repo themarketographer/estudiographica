@@ -193,8 +193,16 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
     <div class="card">
       <div class="sig-head">
         <span class="sig-title">Tu firma</span>
-        <button class="sig-clear" id="sigClear" type="button">Borrar y volver a firmar</button>
+        <span class="sig-tools">
+          <button class="sig-clear" id="sigUndo" type="button">Deshacer trazo</button>
+          <button class="sig-clear" id="sigClear" type="button">Borrar</button>
+        </span>
       </div>
+      <div class="sig-modo" role="tablist" aria-label="Cómo quieres firmar">
+        <button type="button" class="sig-tab act" id="tabDibujar" role="tab" aria-selected="true">Dibujar mi firma</button>
+        <button type="button" class="sig-tab" id="tabEscribir" role="tab" aria-selected="false">Escribir mi nombre</button>
+      </div>
+      <input class="sig-input" id="sigTexto" type="text" maxlength="40" placeholder="Escribe tu nombre completo" autocomplete="name" hidden />
       <div class="sig-pad" id="sigPad">
         <canvas id="sigCanvas"></canvas>
         <div class="sig-baseline"></div>
@@ -204,11 +212,24 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
         </div>
       </div>
 
-      <button class="btn-primary" id="btnFirmar" disabled>Firmar contrato y recibir mi PDF</button>
+      <ul class="faltan" id="faltan" aria-live="polite"></ul>
+      <button class="btn-primary" id="btnFirmar" type="button">Firmar contrato y recibir mi PDF</button>
+      <p class="sig-confianza">Te llega al correo en menos de un minuto, ya firmado también por Pablo Villarroel.</p>
       <p class="mail-status" id="preStatus"></p>
     </div>
 
   </div>
+
+  <!-- ══════ CONFIRMACIÓN ANTES DE FIRMAR ══════ -->
+  <dialog class="confirmar" id="dlgConfirmar" aria-labelledby="dlgTitulo">
+    <p class="card-label" id="dlgTitulo">Revisa antes de firmar</p>
+    <dl class="conf-datos" id="confDatos"></dl>
+    <p class="conf-nota">Si algo no está bien, corrígelo ahora. Después de firmar, el PDF sale con estos datos.</p>
+    <div class="conf-btns">
+      <button type="button" class="btn-ghost" id="confCorregir">Corregir</button>
+      <button type="button" class="btn-primary" id="confFirmar">Confirmar y firmar</button>
+    </div>
+  </dialog>
 
   <!-- ══════ ESTADO FIRMADO ══════ -->
   <div id="firmado">
@@ -223,6 +244,11 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
         <button class="btn-ghost" id="btnDescargar" type="button"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></svg> Descargar PDF otra vez</button>
         <a class="btn-ghost" id="btnWa" target="_blank" rel="noopener" href="#">Avisar por WhatsApp</a>
       </div>
+      <ol class="envio-pasos" id="envioPasos">
+        <li id="pasoPdf">Armando tu PDF</li>
+        <li id="pasoCorreo">Enviando a tu correo</li>
+        <li id="pasoListo">Listo</li>
+      </ol>
       <p class="mail-status" id="mailStatus"></p>
     </div>
   </div>
@@ -785,9 +811,22 @@ const contratoConfig = [
     redibujar();
   }
 
+  var modoEscribir = false;
+  var sigTexto = document.getElementById('sigTexto');
   function redibujar() {
     var rect = canvas.getBoundingClientRect();
     ctx.clearRect(0, 0, rect.width, rect.height);
+    if (modoEscribir) {
+      var t = sigTexto.value.trim();
+      if (!t) return;
+      var tam = Math.min(54, rect.width / Math.max(6, t.length * 0.5));
+      ctx.font = 'italic ' + tam + 'px "Segoe Script","Brush Script MT","Snell Roundhand","Apple Chancery",cursive';
+      ctx.fillStyle = '#181818';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'alphabetic';
+      ctx.fillText(t, rect.width / 2, rect.height - 46);
+      return;
+    }
     trazos.forEach(function (trazo) {
       if (trazo.length < 2) {
         // Un toque sin arrastre (p. ej. el punto de una "i" en la firma)
@@ -816,6 +855,7 @@ const contratoConfig = [
   }
 
   canvas.addEventListener('pointerdown', function (e) {
+    if (modoEscribir) return;
     e.preventDefault();
     canvas.setPointerCapture(e.pointerId);
     dibujando = true;
@@ -853,14 +893,41 @@ const contratoConfig = [
   canvas.addEventListener('pointercancel', terminarTrazo);
   canvas.addEventListener('pointerleave', terminarTrazo);
 
+  function estadoFirma() {
+    hayFirma = modoEscribir ? sigTexto.value.trim().length >= 3 : trazos.length > 0;
+    sigPlaceholder.classList.toggle('hidden', hayFirma || modoEscribir);
+    sigPad.classList.toggle('has-sig', hayFirma);
+    redibujar();
+    actualizarBoton();
+  }
   document.getElementById('sigClear').addEventListener('click', function () {
     trazos = [];
-    hayFirma = false;
-    redibujar();
-    sigPlaceholder.classList.remove('hidden');
-    sigPad.classList.remove('has-sig');
-    actualizarBoton();
+    sigTexto.value = '';
+    estadoFirma();
   });
+  document.getElementById('sigUndo').addEventListener('click', function () {
+    if (modoEscribir) { sigTexto.value = sigTexto.value.slice(0, -1); }
+    else trazos.pop();
+    estadoFirma();
+  });
+  function cambiarModo(escribir) {
+    modoEscribir = escribir;
+    document.getElementById('tabDibujar').classList.toggle('act', !escribir);
+    document.getElementById('tabEscribir').classList.toggle('act', escribir);
+    document.getElementById('tabDibujar').setAttribute('aria-selected', String(!escribir));
+    document.getElementById('tabEscribir').setAttribute('aria-selected', String(escribir));
+    document.getElementById('sigUndo').hidden = escribir;
+    sigTexto.hidden = !escribir;
+    sigPad.classList.toggle('escrita', escribir);
+    if (escribir) {
+      if (!sigTexto.value && inputs.nombre.value.trim()) sigTexto.value = inputs.nombre.value.trim();
+      setTimeout(function () { sigTexto.focus(); }, 50);
+    }
+    estadoFirma();
+  }
+  document.getElementById('tabDibujar').addEventListener('click', function () { cambiarModo(false); });
+  document.getElementById('tabEscribir').addEventListener('click', function () { cambiarModo(true); });
+  sigTexto.addEventListener('input', estadoFirma);
 
   window.addEventListener('resize', ajustarCanvas);
   ajustarCanvas();
@@ -877,9 +944,42 @@ const contratoConfig = [
     });
   }
 
-  function actualizarBoton() {
-    btnFirmar.disabled = !(camposCompletos() && leyoTodo && acepta && hayFirma);
+  var ETIQUETAS = { nombre: 'tu nombre', ci: 'tu CI o NIT', negocio: 'tu negocio', direccion: 'la dirección de la sesión', email: 'un correo válido', whatsapp: 'tu WhatsApp', fecha: 'la fecha de la sesión' };
+  function faltantes() {
+    var f = [];
+    campos.forEach(function (id) {
+      var v = inputs[id].value.trim();
+      if (!v || (id === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v))) f.push({ id: id, txt: ETIQUETAS[id] || id });
+    });
+    if (!acepta) f.push({ id: '_acepta', txt: 'marcar que aceptas el contrato' });
+    if (!hayFirma) f.push({ id: '_firma', txt: 'tu firma' });
+    return f;
   }
+  var faltanEl = document.getElementById('faltan');
+  var tocoBoton = false;
+  function actualizarBoton() {
+    var f = faltantes();
+    var listo = f.length === 0;
+    btnFirmar.classList.toggle('listo', listo);
+    btnFirmar.setAttribute('aria-disabled', listo ? 'false' : 'true');
+    if (listo) { faltanEl.innerHTML = ''; faltanEl.classList.remove('on'); return; }
+    var n = f.length;
+    faltanEl.innerHTML = '<li class="faltan-t">' + (n === 1 ? 'Te falta 1 cosa:' : 'Te faltan ' + n + ' cosas:') + '</li>' +
+      f.map(function (x) { return '<li><button type="button" data-ir="' + x.id + '">' + escapeHtml(x.txt) + '</button></li>'; }).join('');
+    faltanEl.classList.toggle('on', tocoBoton || n <= 3);
+  }
+  function irA(id) {
+    var el = id === '_acepta' ? acceptRow : id === '_firma' ? sigPad : inputs[id];
+    if (!el) return;
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (id.charAt(0) !== '_') { setTimeout(function () { try { el.focus({ preventScroll: true }); } catch (e) {} }, 400); }
+    el.classList.add('pulso');
+    setTimeout(function () { el.classList.remove('pulso'); }, 1400);
+  }
+  faltanEl.addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-ir]');
+    if (b) irA(b.getAttribute('data-ir'));
+  });
 
   function marcarFaltantes() {
     var primerFalta = null;
@@ -1071,10 +1171,14 @@ const contratoConfig = [
   }
 
   // ── 10. Enviar por correo (Netlify Function) ────────────────────────
+  function paso(id, estado) {
+    var el = document.getElementById(id);
+    if (el) el.className = estado;
+  }
   function enviarPorCorreo() {
     var statusEl = document.getElementById('mailStatus');
     statusEl.className = 'mail-status';
-    statusEl.textContent = 'Enviando tu copia por correo…';
+    statusEl.textContent = '';
 
     return fetch(CFG.endpointCorreo, {
       method: 'POST',
@@ -1101,24 +1205,62 @@ const contratoConfig = [
       .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, body: j }; }); })
       .then(function (res) {
         if (res.ok && res.body && res.body.enviado) {
+          paso('pasoCorreo', 'ok'); paso('pasoListo', 'ok');
           statusEl.className = 'mail-status ok';
           statusEl.textContent = 'Copia enviada a ' + inputs.email.value.trim() + ' y a Estudio Graphica.';
         } else {
+          paso('pasoCorreo', 'err');
+          document.getElementById('okSub').textContent = 'Tu contrato está firmado. Descarga el PDF y mándalo por WhatsApp con los botones de abajo.';
           statusEl.className = 'mail-status warn';
           statusEl.textContent = 'El PDF quedó descargado en tu dispositivo. El envío automático por correo todavía no está activo, mándanos el archivo por WhatsApp.';
         }
       })
       .catch(function () {
+        paso('pasoCorreo', 'err');
+        document.getElementById('okSub').textContent = 'Tu contrato está firmado. Descarga el PDF y mándalo por WhatsApp con los botones de abajo.';
         statusEl.className = 'mail-status warn';
         statusEl.textContent = 'El PDF quedó descargado en tu dispositivo. No pudimos enviarlo por correo, mándanoslo por WhatsApp.';
       });
   }
 
   // ── 11. Firmar ──────────────────────────────────────────────────────
-  btnFirmar.addEventListener('click', function () {
-    if (!camposCompletos()) { marcarFaltantes(); return; }
-    if (!leyoTodo || !acepta || !hayFirma) return;
+  var dlg = document.getElementById('dlgConfirmar');
+  function abrirConfirmacion() {
+    var filas = [
+      ['Servicio', servicioNombre() + ', ' + paqueteNombre()],
+      ['Fecha', fechaLarga(inputs.fecha.value)],
+      ['Lugar', inputs.direccion.value.trim()],
+      ['Total', 'Bs. ' + PKG.precio],
+      ['Adelanto para reservar', 'Bs. ' + adelanto],
+      ['Firma a nombre de', inputs.nombre.value.trim() + ' (' + inputs.negocio.value.trim() + ')'],
+      ['El PDF llega a', inputs.email.value.trim()],
+    ];
+    document.getElementById('confDatos').innerHTML = filas.map(function (f) {
+      return '<dt>' + escapeHtml(f[0]) + '</dt><dd>' + escapeHtml(f[1]) + '</dd>';
+    }).join('');
+    if (dlg.showModal) dlg.showModal(); else firmarAhora();
+  }
+  document.getElementById('confCorregir').addEventListener('click', function () {
+    dlg.close();
+    inputs.nombre.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
+  document.getElementById('confFirmar').addEventListener('click', function () {
+    dlg.close();
+    firmarAhora();
+  });
 
+  btnFirmar.addEventListener('click', function () {
+    tocoBoton = true;
+    var f = faltantes();
+    if (f.length) {
+      actualizarBoton();
+      if (!camposCompletos()) marcarFaltantes(); else irA(f[0].id);
+      return;
+    }
+    abrirConfirmacion();
+  });
+
+  function firmarAhora() {
     btnFirmar.disabled = true;
     document.getElementById('preStatus').textContent = 'Generando tu PDF…';
 
@@ -1183,8 +1325,10 @@ const contratoConfig = [
     document.getElementById('firmado').style.display = 'block';
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
+    paso('pasoPdf', 'ok');
+    paso('pasoCorreo', 'run');
     enviarPorCorreo();
-  });
+  }
 
   // Chrome y Firefox bloquean, desde hace varios años, la navegación de una
   // pestaña a un data: URI directamente (por seguridad, para evitar
@@ -1244,12 +1388,20 @@ const contratoConfig = [
     bar.className = 'eg-float-cta'; bar.hidden = true;
     var b = document.createElement('button');
     b.type = 'button'; b.textContent = 'Ir a firmar \u2193';
-    b.onclick = function () { btn.scrollIntoView({ behavior: 'smooth', block: 'center' }); };
+    b.onclick = function () { (document.getElementById('acceptRow') || btn).scrollIntoView({ behavior: 'smooth', block: 'center' }); };
     bar.appendChild(b); document.body.appendChild(bar);
-    var firmaVisible = false;
-    function pintar() { bar.hidden = firmaVisible || (firmando && firmando.style.display === 'none'); }
+    var visibles = {};
+    function pintar() {
+      var algunoVisible = Object.keys(visibles).some(function (k) { return visibles[k]; });
+      bar.hidden = algunoVisible || (firmando && firmando.style.display === 'none');
+      document.body.classList.toggle('con-barra', !bar.hidden);
+    }
     if ('IntersectionObserver' in window) {
-      new IntersectionObserver(function (es) { firmaVisible = es[0].isIntersecting; pintar(); }).observe(document.getElementById('sigPad') || btn);
+      var io = new IntersectionObserver(function (es) {
+        es.forEach(function (e) { visibles[e.target.id] = e.isIntersecting; });
+        pintar();
+      }, { rootMargin: '0px 0px -90px 0px' });
+      ['acceptRow', 'sigPad', 'btnFirmar'].forEach(function (id) { var el = document.getElementById(id); if (el) io.observe(el); });
     }
     if (firmando && window.MutationObserver) new MutationObserver(pintar).observe(firmando, { attributes: true, attributeFilter: ['style'] });
     pintar();

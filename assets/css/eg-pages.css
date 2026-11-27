@@ -429,3 +429,48 @@ details.cb[open]{padding-bottom:10px}
   .cb-i.act{background:var(--ink);color:#fff;border-color:var(--ink);transform:none}
 }
 @media(prefers-reduced-motion:reduce){.cb-index,.cb-i,.cb-index-list::before{transition:none}}
+/* Firma: herramientas, modo escribir y lista de faltantes */
+.sig-tools{display:flex;gap:14px}
+.sig-tools [hidden]{display:none}
+.sig-modo{display:inline-flex;gap:4px;padding:4px;border-radius:999px;background:rgba(24,24,24,.06);margin-bottom:12px}
+.sig-tab{border:0;background:none;border-radius:999px;padding:8px 14px;font:600 13px/1 var(--f);color:var(--muted);cursor:pointer;transition:background .3s,color .3s}
+.sig-tab.act{background:#fff;color:var(--ink);box-shadow:0 2px 8px -3px rgba(24,24,24,.3)}
+.sig-input{width:100%;margin-bottom:12px;padding:14px 18px;border-radius:16px;border:1.5px solid var(--hair);font:500 15px var(--f);color:var(--ink)}
+.sig-input[hidden]{display:none}
+.sig-pad.escrita #sigCanvas{cursor:default}
+@media(max-width:640px){#sigCanvas{height:230px}}
+.faltan{list-style:none;margin:18px 0 0;padding:14px 16px;border-radius:18px;background:rgba(179,57,43,.07);display:none;flex-wrap:wrap;gap:6px 8px;align-items:center;font-size:13.5px}
+.faltan.on{display:flex;animation:rise .45s var(--ease)}
+.faltan-t{font-weight:700;color:var(--err);margin-right:4px}
+.faltan button{border:1px solid rgba(179,57,43,.3);background:#fff;border-radius:999px;padding:6px 12px;font:600 12.5px var(--f);color:var(--ink);cursor:pointer}
+.faltan button:hover{border-color:var(--ink)}
+.pg-contrato .btn-primary:not(.listo){opacity:.55}
+.pg-contrato .btn-primary.listo{opacity:1;animation:listoPulso 1.6s var(--ease) 1}
+@keyframes listoPulso{0%{box-shadow:0 0 0 0 rgba(255,221,90,.9)}100%{box-shadow:0 0 0 14px rgba(255,221,90,0)}}
+.sig-confianza{text-align:center;font-size:12.5px;color:var(--muted);margin:10px auto 0;max-width:none}
+.pulso{animation:pulsoCampo 1.3s var(--ease)}
+@keyframes pulsoCampo{0%,100%{box-shadow:0 0 0 0 rgba(255,221,90,0)}30%{box-shadow:0 0 0 6px rgba(255,221,90,.85)}}
+body.con-barra .wrap{padding-bottom:110px}
+/* Confirmación antes de firmar */
+.confirmar{border:0;border-radius:28px;padding:clamp(22px,4vw,32px);width:min(480px,calc(100% - 28px));box-shadow:0 30px 80px -30px rgba(24,24,24,.5)}
+.confirmar::backdrop{background:rgba(24,24,24,.45);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+.confirmar[open]{animation:rise .4s var(--ease)}
+.conf-datos{display:grid;grid-template-columns:auto 1fr;gap:8px 16px;margin:14px 0;font-size:14px}
+.conf-datos dt{color:var(--muted)}
+.conf-datos dd{margin:0;font-weight:600;color:var(--ink);overflow-wrap:anywhere}
+.conf-nota{font-size:12.5px;color:var(--muted);margin:0 0 16px}
+.conf-btns{display:flex;gap:10px}
+.conf-btns .btn-primary{margin-top:0;flex:1.4}
+.conf-btns .btn-ghost{flex:1}
+/* Pasos del envío */
+.envio-pasos{list-style:none;margin:16px auto 0;padding:0;display:flex;justify-content:center;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--muted)}
+.envio-pasos li{display:flex;align-items:center;gap:6px}
+.envio-pasos li::before{content:"";width:14px;height:14px;border-radius:50%;border:2px solid currentColor;opacity:.5}
+.envio-pasos li.run{color:var(--ink)}
+.envio-pasos li.run::before{border-color:var(--ink) transparent var(--ink) transparent;opacity:1;animation:girar .8s linear infinite}
+.envio-pasos li.ok{color:var(--ok);font-weight:600}
+.envio-pasos li.ok::before{background:currentColor;border-color:currentColor;opacity:1}
+.envio-pasos li.err{color:var(--err);font-weight:600}
+.envio-pasos li.err::before{border-color:currentColor;opacity:1}
+@keyframes girar{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.faltan.on,.confirmar[open],.pulso,.btn-primary.listo,.envio-pasos li.run::before{animation:none}}
