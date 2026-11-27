@@ -296,27 +296,16 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 const contratoClausulas = [
   {
     "titulo": "Resumen de lo esencial",
-    "proteccionTitulo": "Lo que te protege",
-    "proteccion": [
-      "El pago va en dos partes: el 50% para reservar la fecha y el 50% restante recién cuando recibes el material final (bloque 4).",
-      "El material final llega en 3 a 7 días hábiles, y ese plazo solo se extiende si ambos lo acuerdan por escrito (bloque 3).",
-      "Tienes una ronda de cambios incluida, dentro de los 7 días siguientes a la entrega (bloque 3).",
-      "El catálogo digital se mantiene hasta un año para que vuelvas a descargar tus fotos (bloque 3).",
-      "Las fotos son tuyas para el uso comercial de tu negocio (bloque 5).",
-      "Si el Fotógrafo no puede asistir, envía un reemplazo de nivel similar sin costo, o te devuelve el 100% de lo que abonaste (bloque 6).",
-      "Puedes reprogramar la sesión hasta 3 veces, incluso por fuerza mayor (bloque 6).",
-      "Todo trabajo extra se acuerda por escrito, y ningún producto físico se produce sin que apruebes el presupuesto (bloque 2)."
-],
     "nota": "Este resumen forma parte del contrato. Si una frase del resumen dice algo distinto al texto completo de abajo, manda el texto completo.",
     "lista": [
       "<b>Servicio:</b> {{servicio}}, {{paquete}} ({{detalle}}).",
       "<b>Sesión:</b> {{fecha}}, en {{direccion}}.",
-      "<b>Precio:</b> Bs. {{precio}}. Se paga Bs. {{adelanto}} para reservar la fecha y Bs. {{saldo}} al recibir el material final.",
+      "<b>Precio:</b> Bs. {{precio}}. Pagas Bs. {{adelanto}} para reservar la fecha y Bs. {{saldo}} recién al recibir el material final.",
+      "<b>Si el Fotógrafo no puede ir:</b> manda un reemplazo de nivel similar sin costo para ti, o te devuelve el 100% de lo que pagaste.",
       "<b>Entrega:</b> recibes el material final en un catálogo con marca de agua, 3 a 7 días hábiles después de la sesión. Si quieres elegir tú las fotos, esos 3 a 7 días hábiles corren desde que las eliges. Las descargas se habilitan cuando pagas el saldo.",
-      "<b>Cambios:</b> puedes pedir una ronda de ajustes dentro de los 7 días siguientes a la entrega.",
-      "<b>Uso de las fotos:</b> son tuyas para uso comercial de tu negocio. El Fotógrafo puede mostrarlas en su portafolio. Los archivos RAW no se entregan.",
-      "<b>Reprogramaciones:</b> no hay cancelaciones. Puedes reprogramar la sesión hasta 3 veces. Lo abonado no se devuelve si la sesión no se realiza por causa tuya.",
-      "<b>Si el Fotógrafo no puede ir:</b> manda un reemplazo de nivel similar o te devuelve el 100% de lo que pagaste.",
+      "<b>Cambios:</b> tienes una ronda de ajustes dentro de los 7 días siguientes a la entrega.",
+      "<b>Uso de las fotos:</b> son tuyas para uso comercial de tu negocio. El Fotógrafo puede mostrarlas en su portafolio siempre que no dañe tu imagen e identidad. Los archivos RAW no se entregan.",
+      "<b>Reprogramaciones:</b> no hay cancelaciones. Puedes reprogramar la sesión hasta 3 veces, incluso por fuerza mayor. Lo abonado no se devuelve si la sesión no se realiza por causa tuya.",
       "<b>Almacenamiento:</b> el catálogo digital se mantiene hasta un año como máximo desde la entrega, para que puedas volver a descargar tus fotos."
     ]
   },
@@ -341,38 +330,38 @@ const contratoClausulas = [
       "<b>Fecha y lugar.</b> La sesión es el {{fecha}} en {{direccion}}, salvo que ambos acuerden otra cosa. Autorizas al Fotógrafo a fotografiar a todos los asistentes que invites. Las fotos incluyen tomas directas y tomas con los retoques que el Fotógrafo considere necesarios.",
       "<b>Retrasos.</b> Si la sesión se retrasa de forma importante o debe reprogramarse por falta de organización, tardanza o negligencia tuya, el Fotógrafo puede cobrar un recargo por cada hora de espera adicional, o reprogramar la sesión con costos de desplazamiento o logística. Si no llegan a un nuevo acuerdo, puede dar la sesión por terminada y quedarse con lo abonado como pago por el tiempo invertido.",
       "<b>Zona de cobertura.</b> El precio cubre el traslado dentro del área entre Norte: {{zonaNorte}}, Sur: {{zonaSur}}, Este: {{zonaEste}} y Oeste: {{zonaOeste}}. Fuera de esa zona hay un recargo logístico, que se calcula según la distancia de ida y vuelta, el tiempo de traslado, el tipo de vía, el horario y el combustible. Si el recargo aplica, se paga antes de empezar la sesión.",
-      "<b>Trabajo extra.</b> Si pides algo que supera lo pactado (más tomas, más tiempo, más personas o más locaciones), el Fotógrafo puede cobrar un recargo acordado por escrito o negarse si eso afecta el trabajo original. Si no hay acuerdo, sigue con el servicio original y eso no cuenta como incumplimiento.",
+      "<b>Trabajo extra.</b> Si pides algo que supera lo pactado (más tomas, más tiempo, más personas o más locaciones), el Fotógrafo puede cobrar un recargo, y ese recargo solo aplica si lo acuerdan por escrito. Si no hay acuerdo, el Fotógrafo puede negarse cuando eso afecte el trabajo original y sigue con el servicio original, sin que eso cuente como incumplimiento.",
       "<b>Interferencias.</b> El único que toma las fotos es el Fotógrafo. Queda a tu cargo que las personas ajenas a la sesión no interfieran en su trabajo con dispositivos u objetos que impidan capturar las imágenes. Si por la imprudencia de otras personas se pierde una foto única e irrepetible, el Fotógrafo no responde.",
-      "<b>Productos físicos.</b> El precio incluye solo el servicio digital y la entrega del material final en formato digital. Los álbumes, impresiones, fotolibros y otros productos físicos se cotizan aparte, según la cantidad de fotos, el tamaño, el papel, la encuadernación y las demás especificaciones. Tienen sus propios tiempos y formas de pago. No se produce ni se entrega nada físico sin que apruebes el presupuesto y pagues el total por adelantado.",
-      "<b>Tus compromisos.</b> Te comprometes a avisar al Fotógrafo si no puedes asistir o vas a llegar tarde, y a facilitarle a tiempo el acceso a la información y los elementos que necesite. En sesiones de más de 4 horas te comprometes también a ofrecerle un espacio para descansar y guardar el equipo, alimentación para él y su equipo humano, y acceso razonable a las áreas principales del evento. Reconoces que viste su trabajo antes de contratarlo y que tiene la capacidad técnica y la habilidad para cumplir el servicio.",
-      "<b>Compromisos del Fotógrafo.</b> El Fotógrafo llega a tiempo a la sesión con todo el equipo necesario, entrega el material puntualmente, te avisa por escrito cualquier cambio de fecha, hora, lugar o costo, y atiende consultas por correo o WhatsApp dentro del horario {{horarioAtencion}}.",
+      "<b>Productos físicos.</b> El precio incluye solo el servicio digital y la entrega del material final en formato digital. Los álbumes, impresiones, fotolibros y otros productos físicos se cotizan aparte, según la cantidad de fotos, el tamaño, el papel, la encuadernación y las demás especificaciones. Tienen sus propios tiempos y formas de pago. Nada físico se produce ni se entrega sin que apruebes antes el presupuesto y pagues el total por adelantado.",
+      "<b>Lo que el Fotógrafo se compromete a hacer.</b> Llega a tiempo a la sesión con todo el equipo necesario, entrega el material puntualmente, te avisa por escrito cualquier cambio de fecha, hora, lugar o costo, y atiende consultas por correo o WhatsApp dentro del horario {{horarioAtencion}}.",
+      "<b>Tus compromisos.</b> Te comprometes a avisar al Fotógrafo si no puedes asistir o vas a llegar tarde, y a facilitarle a tiempo el acceso a la información y los elementos que necesite. En sesiones de más de 4 horas te comprometes también a coordinar un lugar donde el Fotógrafo descanse y guarde el equipo, alimentación para él y su equipo humano, y acceso razonable a las áreas principales del evento. Reconoces que viste su trabajo antes de contratarlo y que tiene la capacidad técnica y la habilidad para cumplir el servicio.",
       "<b>Fuera de su responsabilidad.</b> El Fotógrafo tiene libertad artística sobre las fotos de la sesión. No responde por la falta de permisos o licencias del lugar, por accidentes o percances ajenos a su trabajo (seguridad, clima, imprudencia de terceros) ni por diferencias de color o calidad en impresiones hechas por terceros que él no supervisó."
     ]
   },
   {
     "titulo": "Bloque 3. Entrega de las fotos",
-    "simple": "En simple: cómo y cuándo recibes las fotos, cuántos cambios puedes pedir y cuánto tiempo puedes volver a descargarlas.",
+    "simple": "En simple: cuándo recibes las fotos, qué cambios puedes pedir y cuánto tiempo puedes volver a descargarlas.",
     "parrafos": [
       "<b>Plazo de entrega.</b> El Fotógrafo te entrega el material final en un catálogo digital con marca de agua, en un plazo de 3 a 7 días hábiles desde la sesión. Ese plazo no se extiende salvo que ambos lo acuerden por escrito.",
       "<b>Si eliges tú las fotos.</b> Si quieres elegir tú las fotos, tienes 7 días para hacerlo y el plazo de 3 a 7 días hábiles corre desde el momento en que las eliges. Si no eliges, el Fotógrafo las escoge según su criterio y el plazo corre desde la sesión.",
       "<b>Descargas.</b> La descarga queda bloqueada hasta que pagues el saldo. Después se habilita en dos formatos: Máxima calidad (JPEG, sRGB, la mayor resolución posible) y Optimizado (JPEG, sRGB, redimensionado a 1080 x 1350 px).",
-      "<b>Recargos.</b> Se cobra un recargo si necesitas trabajo fuera del plazo, fechas de entrega no programadas, o si no entregaste a tiempo la información, los materiales o las aprobaciones que el Fotógrafo necesitaba.",
-      "<b>Cambios.</b> Puedes pedir cambios una sola vez, dentro de los 7 días siguientes a la entrega del material final. El Fotógrafo no puede garantizar que el trabajo quede libre de errores. Los cambios pedidos después tienen un costo extra. El Fotógrafo puede rechazar revisiones que tengan fines no acordados, contradigan la dirección artística acordada, sean técnicamente inviables o muy costosas frente al alcance original, dañen su reputación o vayan contra su ética profesional.",
+      "<b>Recargos.</b> Hay recargo solo en tres casos: si necesitas trabajo fuera del plazo, si pides fechas de entrega no programadas, o si la información, los materiales o las aprobaciones que el Fotógrafo necesitaba llegaron tarde.",
+      "<b>Cambios.</b> Tienes una ronda de cambios dentro de los 7 días siguientes a la entrega del material final. Los cambios pedidos después tienen un costo extra. El Fotógrafo puede rechazar revisiones que tengan fines no acordados, contradigan la dirección artística acordada, sean técnicamente inviables o muy costosas frente al alcance original, dañen su reputación o vayan contra su ética profesional. El Fotógrafo no puede garantizar que el trabajo quede libre de errores.",
       "<b>Almacenamiento.</b> El Fotógrafo mantiene el catálogo digital en un servidor privado hasta un año calendario como máximo desde la entrega, para que puedas volver a descargar tus fotos las veces que necesites. Pasado ese año no se garantiza que sigan disponibles. Si pides un reenvío después, depende de que exista un respaldo y se paga un cargo por recuperación y reenvío, según el volumen de archivos y el método de entrega.",
       "<b>Si no respondes.</b> Si en los 30 días siguientes a la entrega no eliges, no recoges o no recibes el material final, se resuelve el contrato (bloque 6) y el Fotógrafo puede reclamar los daños y perjuicios que haya sufrido."
     ]
   },
   {
     "titulo": "Bloque 4. Pagos",
-    "simple": "En simple: cuánto pagas, cuándo y cómo, y qué pasa si pagas tarde.",
+    "simple": "En simple: pagas en dos partes, el saldo recién al recibir el material, y se explica qué pasa si hay un pago tardío.",
     "parrafos": [
       "<b>Precio.</b> El servicio cuesta Bs. {{precio}}.",
       "<b>Cómo se paga.</b> El pago es en dos partes: el 50% (Bs. {{adelanto}}) para reservar la fecha de la sesión y el 50% restante (Bs. {{saldo}}) cuando recibes el material final. Puedes pagar por transferencia bancaria, depósito o QR a esta cuenta: {{banco}}, número de cuenta {{cuentaNumero}}, a nombre de {{cuentaTitular}}, {{cuentaTipo}}, carnet {{carnetTitular}}. El comprobante se envía de inmediato para que se valide.",
       "<b>Pagos de terceros.</b> Si otra persona paga por ti, se avisa antes. El Fotógrafo no responde por demoras o errores al identificar un pago hecho desde una cuenta ajena sin coordinación previa.",
       "<b>Pedidos urgentes.</b> Si pides una cotización o paquete con menos de 48 horas de anticipación a la sesión, el precio final sube.",
-      "<b>Factura.</b> Si necesitas factura, el precio se ajusta y el precio final de la cotización puede subir.",
-      "<b>Mora.</b> Si no pagas el saldo dentro de {{diasMora}} días hábiles desde que recibes el material final, se suma un interés de mora del 10% sobre el monto no pagado.",
-      "<b>Licencia condicionada al pago.</b> Tu licencia para usar las fotos depende del pago completo. Si incumples los plazos de pago o caes en mora, la licencia queda revocada. El Fotógrafo puede pedirte que retires cualquier imagen publicada, en medios físicos o digitales, hasta que pagues."
+      "<b>Factura.</b> Si necesitas factura, el precio final se ajusta.",
+      "<b>Mora.</b> Tienes {{diasMora}} días hábiles desde que recibes el material final para pagar el saldo. Pasado ese plazo, se suma un interés de mora del 10% sobre el monto no pagado.",
+      "<b>Licencia condicionada al pago.</b> La licencia para usar las fotos queda sujeta al pago completo. Si incumples los plazos de pago o caes en mora, la licencia se revoca, y el Fotógrafo puede pedir que retires cualquier imagen publicada, en medios físicos o digitales, hasta que se pague."
     ]
   },
   {
@@ -382,20 +371,20 @@ const contratoClausulas = [
       "<b>Tu uso.</b> Las fotos son para uso comercial. Eso incluye uso personal y publicación en sitios web y redes sociales, actuales y futuras, relacionados directamente con tu negocio. Puedes exhibirlas, ponerlas en catálogos, en medios impresos o electrónicos y en videos. Puedes ajustarlas para imprimirlas o exhibirlas, siempre que no cambies lo que muestran.",
       "<b>Otro fin.</b> Si quieres usar una foto para un fin que no acordaron, se pide autorización por escrito. El Fotógrafo hace los arreglos necesarios y, si corresponde, envía una cotización nueva. Un fin acordado por escrito antes de la sesión también vale.",
       "<b>Propiedad.</b> El material final es tuyo. Los derechos patrimoniales sobre el material, los documentos, bocetos, esquemas, negativos y archivos brutos (RAW) son del Fotógrafo. Los RAW no se entregan por ningún motivo.",
-      "<b>Lo que hace el Fotógrafo.</b> Puede mostrar las fotos como muestra de su trabajo, con el crédito respectivo, y usarlas para promocionar su marca: publicarlas en sus redes sociales, presentarlas a clientes o posibles clientes, enviarlas a un concurso de fotografía, publicarlas en un libro o una revista y decorar el estudio. Siempre que no dañe tu imagen e identidad. Para eso das tu consentimiento expreso a que te fotografíe y cedes el uso de tu imagen. El Fotógrafo nunca usará las imágenes fuera de la fotografía, el arte o la publicidad, y deja claro que contigo solo tuvo una relación profesional.",
+      "<b>Lo que hace el Fotógrafo.</b> Puede mostrar las fotos como muestra de su trabajo, siempre con el crédito respectivo y siempre que no dañe tu imagen e identidad. Eso incluye usarlas para promocionar su marca: publicarlas en sus redes sociales, presentarlas a clientes o posibles clientes, enviarlas a un concurso de fotografía, publicarlas en un libro o una revista y decorar el estudio. Para eso das tu consentimiento expreso a que te fotografíe y cedes el uso de tu imagen. El Fotógrafo nunca usa las imágenes fuera de la fotografía, el arte o la publicidad, y deja claro que contigo solo tuvo una relación profesional.",
       "<b>Cuidado de la reputación.</b> Las fotos no se alteran con filtros, ediciones, recortes, eliminación de fondo u otros medios cuando eso perjudica el honor o la reputación profesional del Fotógrafo. El Fotógrafo puede oponerse a que se exhiban imágenes que hayas alterado de esa forma, o que se usen en condiciones que perjudiquen su honor o con fines no permitidos.",
-      "<b>Transmisión a terceros.</b> No puedes transmitir a terceros la propiedad de las fotos sin autorización expresa del Fotógrafo.",
-      "<b>Comentarios públicos.</b> Las afirmaciones falsas, descalificatorias o engañosas que perjudiquen la reputación profesional del Fotógrafo no se difunden en redes sociales ni en foros. Si hay un problema con el servicio, primero se busca una solución directa y amistosa con él. Si se incumple, el Fotógrafo puede tomar acciones legales y es causal de resolución del contrato."
+      "<b>Transmisión a terceros.</b> La propiedad de las fotos no se transmite a terceros sin autorización expresa del Fotógrafo.",
+      "<b>Comentarios públicos.</b> Si hay un problema con el servicio, primero se busca una solución directa y amistosa con el Fotógrafo. Las afirmaciones falsas, descalificatorias o engañosas que perjudiquen su reputación profesional no se difunden en redes sociales ni en foros. Si eso ocurre, el Fotógrafo puede tomar acciones legales y es causal de resolución del contrato."
     ]
   },
   {
     "titulo": "Bloque 6. Reprogramaciones, devoluciones y fuerza mayor",
-    "simple": "En simple: qué pasa si tú o el Fotógrafo no pueden asistir, cuándo se devuelve el dinero y cuándo termina el contrato.",
+    "simple": "En simple: qué pasa si el Fotógrafo no puede ir, qué pasa si tú no puedes, cuándo se devuelve el dinero y cuándo termina el contrato.",
     "parrafos": [
-      "<b>Reprogramaciones.</b> El contrato no tiene cancelaciones. Si no puedes asistir en la fecha acordada, incluso por fuerza mayor o caso fortuito, puedes reprogramar la sesión hasta 3 veces como máximo. El aviso se hace por escrito, con {{avisoReprogramar}}.",
+      "<b>Si el Fotógrafo no puede ir.</b> Si por caso fortuito, fuerza mayor o emergencia no puede asistir, puede enviar a otro fotógrafo con su equipo, sin costo adicional para ti. El reemplazo cumple los mismos requisitos técnicos, artísticos y profesionales, con una trayectoria y una forma de trabajo similares, y el Fotógrafo decide quién es. Si no hay reemplazo o no lo aceptas, el Fotógrafo te devuelve el 100% de lo que abonaste, sin derecho a reclamo adicional, no entrega las fotos en ningún formato y pierde el derecho sobre el resultado final.",
+      "<b>Reprogramaciones.</b> El contrato no tiene cancelaciones: las sesiones se reprograman. Si no puedes asistir en la fecha acordada, incluso por fuerza mayor o caso fortuito, puedes reprogramarla hasta 3 veces como máximo. El aviso se hace por escrito, con {{avisoReprogramar}}.",
       "<b>Lo abonado no se devuelve.</b> Si la sesión no se realiza por causa tuya (retrasos, ausencia, falta de organización o más de 3 reprogramaciones), el Fotógrafo se queda con el 100% de lo que hayas pagado.",
       "<b>Retrasos el día de la sesión.</b> Si la sesión se retrasa o se interrumpe por tu causa, aplica lo explicado en el bloque 2.",
-      "<b>Si el Fotógrafo no puede ir.</b> Si por caso fortuito, fuerza mayor o emergencia no puede asistir, puede enviar a otro fotógrafo con su equipo, sin costo adicional para ti. El reemplazo cumple los mismos requisitos técnicos, artísticos y profesionales, con una trayectoria y una forma de trabajo similares, y el Fotógrafo decide quién es. Si no hay reemplazo o no lo aceptas, el Fotógrafo te devuelve el 100% de lo que abonaste, sin derecho a reclamo adicional, no entrega las fotos en ningún formato y pierde el derecho sobre el resultado final.",
       "<b>Terminar el contrato.</b> Cualquiera de las Partes puede resolver el contrato cuando la otra incumple sus obligaciones por más de 10 días hábiles. También se resuelve en los casos que el contrato indica: los comentarios públicos que dañan al Fotógrafo (bloque 5) y los 30 días sin respuesta después de la entrega (bloque 3)."
     ]
   },
@@ -709,7 +698,6 @@ const contratoConfig = [
     contratoClausulas.forEach(function (c, i) {
       if (c.nota) {
         html += '<div class="cb-resumen"><h3>' + escapeHtml(c.titulo) + '</h3><p class="cb-nota">' + escapeHtml(c.nota) + '</p>' + ul(c.lista, vars) + '</div>';
-        if (c.proteccion) html += '<div class="cb-protege"><h3>' + escapeHtml(c.proteccionTitulo || 'Lo que te protege') + '</h3><ul>' + c.proteccion.map(function (t) { return '<li>' + escapeHtml(t) + '</li>'; }).join('') + '</ul></div>';
         html += '<div class="cb-tools"><button type="button" class="cb-todo" id="cbTodo">Abrir todos los bloques</button></div>';
         return;
       }
@@ -738,7 +726,6 @@ const contratoConfig = [
       if (c.nota) lineas.push(c.nota);
       else { lineas.push(c.simple); c.parrafos.forEach(function (t) { lineas.push(quitarTags(aplicarVariables(t, vars))); }); }
       (c.lista || []).forEach(function (t) { lineas.push('• ' + quitarTags(aplicarVariables(t, vars))); });
-      if (c.proteccion) { lineas.push(''); lineas.push((c.proteccionTitulo || 'Lo que te protege') + ':'); c.proteccion.forEach(function (t) { lineas.push('• ' + t); }); }
       return { titulo: c.titulo, cuerpo: lineas.join('\n') };
     });
   }
