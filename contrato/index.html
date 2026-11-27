@@ -174,7 +174,8 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
     </div>
 
     <!-- Contrato -->
-    <div class="card">
+    <div class="card card-contrato">
+      <nav class="cb-index" id="cbIndex" aria-label="Índice del contrato"><div class="cb-index-in"><p class="cb-index-t">En este contrato</p><div class="cb-index-list" id="cbIndexList"></div></div></nav>
       <p class="card-label">Contrato de prestación de servicios</p>
       <div class="alert">
         <span class="alert-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20l1-4L16.5 4.5a2.1 2.1 0 0 1 3 3L8 19z"/><path d="M14.5 6.5l3 3"/></svg></span>
@@ -684,6 +685,54 @@ const contratoConfig = [
   // ── 4. El resumen siempre está a la vista y los 8 bloques se abren al tocarlos:
   //      el contrato completo queda disponible desde el inicio y viaja entero en el PDF.
   var leyoTodo = true;
+
+
+  // ── Índice animado del contrato ──────────────────────────────────────
+  // Lateral en pantallas anchas, barra de chips fija arriba en celular.
+  // Resalta el bloque que se está leyendo y, al tocar uno, lo abre y baja hasta él.
+  (function () {
+    var lista = document.getElementById('cbIndexList');
+    if (!lista) return;
+    var resumenEl = function () { return contratoBox.querySelector('.cb-resumen'); };
+    var items = contratoClausulas.map(function (c, i) {
+      var a = document.createElement('button');
+      a.type = 'button';
+      a.className = 'cb-i';
+      var nombre = c.nota ? 'Resumen' : c.titulo.replace(/^Bloque \d+\.\s*/, '');
+      a.innerHTML = '<span class="n">' + (c.nota ? '★' : (i)) + '</span><span class="l">' + escapeHtml(nombre) + '</span>';
+      a.addEventListener('click', function () {
+        var el = c.nota ? resumenEl() : contratoBox.querySelector('details[data-i="' + i + '"]');
+        if (!el) return;
+        if (el.tagName === 'DETAILS') el.open = true;
+        var arriba = el.getBoundingClientRect().top + window.scrollY - (window.innerWidth < 1100 ? 130 : 100);
+        window.scrollTo({ top: arriba, behavior: 'smooth' });
+      });
+      lista.appendChild(a);
+      return a;
+    });
+    var activo = -1;
+    function marcar() {
+      var mejor = 0, corte = (window.innerWidth < 1100 ? 150 : 120);
+      contratoClausulas.forEach(function (c, i) {
+        var el = c.nota ? resumenEl() : contratoBox.querySelector('details[data-i="' + i + '"]');
+        if (el && el.getBoundingClientRect().top <= corte) mejor = i;
+      });
+      var caja = contratoBox.getBoundingClientRect();
+      var visible = caja.top < window.innerHeight * 0.8 && caja.bottom > 120;
+      lista.parentNode.parentNode.classList.toggle('on', visible);
+      if (mejor === activo) return;
+      activo = mejor;
+      items.forEach(function (a, i) { a.classList.toggle('act', i === mejor); });
+      var act = items[mejor];
+      lista.style.setProperty('--y', act.offsetTop + 'px');
+      lista.style.setProperty('--h', act.offsetHeight + 'px');
+      if (window.innerWidth < 1100) lista.scrollTo({ left: act.offsetLeft - 40, behavior: 'smooth' });
+    }
+    window.addEventListener('scroll', marcar, { passive: true });
+    window.addEventListener('resize', marcar);
+    contratoBox.addEventListener('toggle', function () { setTimeout(marcar, 60); }, true);
+    setTimeout(marcar, 300);
+  })();
 
   // ── 5. Checkbox de aceptación ───────────────────────────────────────
   var acepta = false;
