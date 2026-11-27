@@ -290,3 +290,12 @@ h2{font-size:clamp(30px,3.9vw,50px)}
   .arrow,.cmp-tag,.tile figcaption,.lb,.lb-btn,.count,.arch-badge{-webkit-backdrop-filter:none;backdrop-filter:none}
   .arrow,.cmp-tag,.tile figcaption,.lb-btn{background:rgba(24,24,24,.95)}
 }
+
+/* Home: fotos del portafolio se revelan con clip-path al entrar (solo navegadores con scroll-driven) */
+@supports (animation-timeline:view()){
+  @media(prefers-reduced-motion:no-preference){
+    .tile{animation:tileReveal linear both;animation-timeline:view();animation-range:entry 0% entry 60%}
+    @keyframes tileReveal{from{clip-path:inset(14% 8% 14% 8% round 36px);opacity:.4}to{clip-path:inset(0 round 36px);opacity:1}}
+  }
+}
+@media(max-width:700px){.pad{padding-top:clamp(44px,12vw,64px);padding-bottom:clamp(44px,12vw,64px)}}
