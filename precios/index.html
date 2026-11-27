@@ -336,6 +336,7 @@ addEventListener('load',function(){setTimeout(cargar,2500);});})();
         '<span class="check-square">' + CHK + '</span>' +
         '<span class="extra-head"><span class="extra-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="' + (ICO[ex.id] || ICO_DEF) + '"/></svg></span>' +
         '<span class="extra-name">' + ex.label + '</span></span>' +
+        '<button type="button" class="extra-info" aria-expanded="false" aria-label="Ver de qué trata ' + ex.label + '">i</button>' +
         '<span class="extra-desc">' + ex.desc + '</span>' +
         '<button type="button" class="extra-more" hidden>Ver más</button>' +
         '<span class="extra-foot"><span class="extra-price">' + priceTag + '</span>' +
@@ -348,6 +349,13 @@ addEventListener('load',function(){setTimeout(cargar,2500);});})();
         '</span></div>';
     }).join('');
 
+    extrasList.querySelectorAll('.extra-info').forEach(function (b) {
+      b.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var row = b.closest('.extra-row');
+        b.setAttribute('aria-expanded', row.classList.toggle('open') ? 'true' : 'false');
+      });
+    });
     // "Ver más": la descripción se corta a 2 líneas; el botón solo aparece si de verdad hay texto oculto.
     extrasList.querySelectorAll('.extra-more').forEach(function (b) {
       b.addEventListener('click', function (e) {

@@ -650,8 +650,13 @@ body.con-barra .wrap{padding-bottom:110px}
   .slider-block{padding:14px 16px 16px;margin-bottom:12px}
   .extras-block{margin-top:16px}
   .extra-row{padding:12px 14px;margin-top:8px;border-radius:18px}
-  .extra-desc{display:none}
-  .extra-row.open .extra-desc{display:block}
+  .extra-row{grid-template-columns:auto 1fr auto;grid-template-areas:"chk head info" ". foot foot" ". desc desc";align-items:center}
+  .extra-desc{display:none;margin-top:8px}
+  .extra-row.open .extra-desc{display:block;animation:benIn .3s var(--ease,cubic-bezier(.23,1,.32,1)) backwards}
+  .extra-more{display:none!important}
+  .extra-foot{border-top:0;padding-top:0;margin-top:6px}
+  .extra-info{display:grid}
+  .extra-row>.check-square{width:26px;height:26px}
   .extra-name{font-size:15.5px}
   .extra-foot{margin-top:8px;padding-top:8px}
   .extra-more{margin-top:6px}
@@ -684,3 +689,8 @@ body.con-barra .wrap{padding-bottom:110px}
   .pg-jornada .right-col .price-unit{display:none}
   .pg-jornada .right-col .paquete-name,.pg-jornada .right-col .price{white-space:nowrap}
 }
+
+/* Boton "i" de los extras: abre la descripcion sin marcar el extra. Solo en celular. */
+.extra-info{display:none;grid-area:info;place-items:center;width:36px;height:36px;border-radius:50%;border:1.5px solid var(--hair);background:#fff;color:var(--ink);font:italic 700 15px/1 Georgia,serif;padding:0;cursor:pointer;transition:background .18s cubic-bezier(.23,1,.32,1),border-color .18s cubic-bezier(.23,1,.32,1),color .18s cubic-bezier(.23,1,.32,1)}
+.extra-info:active{background:var(--ink);color:var(--y)}
+.extra-row.open .extra-info{background:var(--ink);color:var(--y);border-color:var(--ink)}
