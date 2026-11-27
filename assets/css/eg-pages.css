@@ -615,3 +615,5 @@ body.con-barra .wrap{padding-bottom:110px}
 .sig-iphone-link{background:none;border:0;padding:0;color:var(--muted);font:500 12.5px/1 var(--f);text-decoration:underline;text-underline-offset:3px;cursor:pointer;min-height:32px}
 .celu-qr{width:min(260px,70vw);margin:6px auto 14px;aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:18px;background:#fff;border:1px solid var(--hair);padding:8px}
 .celu-qr svg{width:100%;height:100%;display:block}
+/* Los dialogos quedaban pegados arriba a la izquierda: el reset global les quitaba el margin auto */
+.confirmar{margin:auto}
