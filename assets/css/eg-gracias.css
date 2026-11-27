@@ -148,3 +148,10 @@ body.pg-gracias>.wrap{position:relative;z-index:1}
 .gr-det dd{margin:0;font-weight:600;overflow-wrap:anywhere;text-transform:none}
 .pg-gracias .btn-wa--float{position:fixed;left:16px;right:16px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:50;max-width:520px;margin:0 auto;min-height:64px;font-size:17px;font-weight:700;box-shadow:0 18px 40px -10px rgba(37,211,102,.8)}
 .pg-gracias:has(.btn-wa--float) .wrap{padding-bottom:120px}
+
+/* Gracias en celular: resumen corto para que el contrato quede a la vista */
+@media(max-width:720px){
+  .pg-gracias #benefitsList:not(.abierta) li:nth-child(n+4){display:none}
+  .pg-gracias .ben-toggle{display:inline-flex;align-items:center;margin:4px 0 10px;padding:0;background:none;border:0;color:var(--ink);text-decoration:underline;text-underline-offset:3px;font:600 13.5px/1 var(--f);cursor:pointer;min-height:36px}
+  .pg-gracias .ben-toggle[hidden]{display:none}
+}
