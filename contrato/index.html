@@ -181,11 +181,10 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
         <span>Tus datos se van escribiendo <b>en vivo</b> dentro del contrato mientras completas el formulario de arriba. Léelo completo antes de firmar.</span>
       </div>
       <div class="contrato-box" id="contratoBox"></div>
-      <p class="scroll-hint" id="scrollHint">Desplázate hasta el final para habilitar la firma</p>
 
       <div class="accept-row" id="acceptRow" role="checkbox" aria-checked="false" tabindex="0">
         <span class="check-square" id="acceptCheck"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
-        <span class="txt">He leído y acepto los términos de este contrato. Entiendo que mi firma digital tiene la misma validez que una firma manuscrita.</span>
+        <span class="txt">He leído el resumen y acepto el contrato completo. Entiendo que mi firma digital tiene la misma validez que una firma manuscrita.</span>
       </div>
     </div>
 
@@ -235,7 +234,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
    TEXTO DEL CONTRATO — el modelo real de Estudio Graphica, tal cual lo usa
    Pablo, cláusula por cláusula. Editable desde el panel con el mismo
    patrón "const NOMBRE = [...]" que usa el resto del sitio.
-   Cada cláusula es un objeto { titulo, cuerpo }. Dentro del cuerpo puedes
+   Cada bloque es un objeto { titulo, simple, parrafos[], lista[] }; el primero es el resumen { titulo, nota, lista[] }. Dentro del cuerpo puedes
    usar estas variables, que se reemplazan solas:
 
    Del cliente / la reserva (vienen del formulario o de /precios):
@@ -246,148 +245,121 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
    Fijas del estudio (se editan una sola vez, en contratoConfig más abajo):
      {{banco}} {{cuentaNumero}} {{cuentaTitular}} {{cuentaTipo}} {{carnetTitular}}
      {{horarioAtencion}} {{zonaNorte}} {{zonaSur}} {{zonaEste}} {{zonaOeste}}
+     {{avisoReprogramar}} {{diasMora}}
    ══════════════════════════════════════════════════════════════════════ */
 const contratoClausulas = [
   {
-    titulo: 'Partes',
-    cuerpo: 'Consta por el presente contrato de servicios firmado en fecha {{hoy}} entre <b>EL FOTÓGRAFO</b> (Pablo Villarroel Rocabado, Estudio Graphica) y <b>EL/LA CLIENTE</b> ({{nombre}}, con documento de identidad {{ci}}, en representación de {{negocio}}). En adelante conjuntamente serán reconocidos como LAS PARTES, y se obligan mutuamente a cumplir el presente contrato conforme a los términos y condiciones siguientes.',
+    "titulo": "Resumen de lo esencial",
+    "nota": "Este resumen forma parte del contrato. Si una frase del resumen dice algo distinto al texto completo de abajo, manda el texto completo.",
+    "lista": [
+      "<b>Servicio:</b> {{servicio}}, {{paquete}} ({{detalle}}).",
+      "<b>Sesión:</b> {{fecha}}, en {{direccion}}.",
+      "<b>Precio:</b> Bs. {{precio}}. Pagas Bs. {{adelanto}} para reservar la fecha y Bs. {{saldo}} al recibir el material final.",
+      "<b>Entrega:</b> recibes el material final en un catálogo con marca de agua, 3 a 7 días hábiles después de la sesión. Si quieres elegir tú las fotos, esos 3 a 7 días hábiles corren desde que las eliges. Las descargas se habilitan cuando pagas el saldo.",
+      "<b>Cambios:</b> puedes pedir una ronda de ajustes dentro de los 7 días siguientes a la entrega.",
+      "<b>Uso de las fotos:</b> son tuyas para uso comercial de tu negocio. El Fotógrafo puede mostrarlas en su portafolio. Los archivos RAW no se entregan.",
+      "<b>Reprogramaciones:</b> no hay cancelaciones. Puedes reprogramar la sesión hasta 3 veces. Lo abonado no se devuelve si la sesión no se realiza por causa tuya.",
+      "<b>Si el Fotógrafo no puede ir:</b> manda un reemplazo de nivel similar o te devuelve el 100% de lo que pagaste.",
+      "<b>Almacenamiento:</b> tus fotos quedan guardadas 60 días desde la entrega."
+    ]
   },
   {
-    titulo: 'Objeto',
-    cuerpo: 'El objeto del presente contrato es establecer los términos y condiciones bajo los cuales EL FOTÓGRAFO prestará sus servicios de fotografía a EL/LA CLIENTE, correspondientes a <b>{{servicio}} — {{paquete}}</b> ({{detalle}}), conforme a lo establecido en el presente documento. EL FOTÓGRAFO no presta ningún servicio que incluya diseño gráfico, community management, gestión de redes sociales, etc. ya que esto escapa de sus habilidades. En caso de ser necesarios alguno de estos servicios, se puede solicitar la subcontratación de personas especializadas en la ejecución de estas tareas.',
+    "titulo": "Bloque 1. Partes y objeto",
+    "simple": "En simple: quiénes firman y qué servicio se contrata.",
+    "parrafos": [
+      "Este contrato se firma el {{hoy}} entre Pablo Villarroel Rocabado, de Estudio Graphica (<b>el Fotógrafo</b>), y {{nombre}}, con documento de identidad {{ci}}, en representación de {{negocio}} (<b>tú</b>, o <b>el Cliente</b>). Juntos son <b>las Partes</b>.",
+      "El Fotógrafo presta el servicio de fotografía {{servicio}}, {{paquete}} ({{detalle}}). El contrato no incluye diseño gráfico, community management ni gestión de redes sociales. Si necesitas alguno, el Fotógrafo puede proponerte a una persona especializada, que se contrata aparte.",
+      "Tres palabras que se repiten en el contrato:"
+    ],
+    "lista": [
+      "<b>Sesión:</b> el día en que el Fotógrafo toma las fotos.",
+      "<b>Material:</b> todas las fotos tomadas en la sesión.",
+      "<b>Material final:</b> las fotos que ya pasaron por edición y retoque y quedan listas para entregarte."
+    ]
   },
   {
-    titulo: 'Definiciones',
-    cuerpo: 'Producción fotográfica: se entiende por el día en el cual se lleva a cabo la creación de las imágenes fotográficas por EL FOTÓGRAFO a los asistentes. Este es un proceso organizado y creativo que involucra la planificación, coordinación y ejecución de las imágenes fotográficas deseadas. Imágenes fotográficas: son representaciones visuales capturadas por el fotógrafo a través de la técnica de la fotografía, que permiten documentar, expresar, comunicar ideas y conceptos a través de la imagen. Material: son las imágenes fotográficas tomadas en la Producción Fotográfica. Material final: se entiende por material final a las imágenes fotográficas tomadas en la Producción Fotográfica que ya pasaron por un proceso de edición, corrección, retoques y se encuentran listas para ser entregadas a EL/LA CLIENTE.',
+    "titulo": "Bloque 2. La sesión",
+    "simple": "En simple: cuándo y dónde es, qué cubre el precio y qué pasa si algo se sale de lo pactado.",
+    "parrafos": [
+      "<b>Fecha y lugar.</b> La sesión es el {{fecha}} en {{direccion}}, salvo que ambos acuerden otra cosa. Autorizas al Fotógrafo a fotografiar a todos los asistentes que invites. Las fotos incluyen tomas directas y tomas con los retoques que el Fotógrafo considere necesarios.",
+      "<b>Retrasos.</b> Si la sesión se retrasa de forma importante o debe reprogramarse por falta de organización, tardanza o negligencia tuya, el Fotógrafo puede cobrar un recargo por cada hora de espera adicional, o reprogramar la sesión con costos de desplazamiento o logística. Si no llegan a un nuevo acuerdo, puede dar la sesión por terminada y quedarse con lo abonado como pago por el tiempo invertido.",
+      "<b>Zona de cobertura.</b> El precio cubre el traslado dentro del área entre Norte: {{zonaNorte}}, Sur: {{zonaSur}}, Este: {{zonaEste}} y Oeste: {{zonaOeste}}. Fuera de esa zona hay un recargo logístico, que se calcula según la distancia de ida y vuelta, el tiempo de traslado, el tipo de vía, el horario y el combustible. Si el recargo aplica, se paga antes de empezar la sesión.",
+      "<b>Trabajo extra.</b> Si pides algo que supera lo pactado (más tomas, más tiempo, más personas o más locaciones), el Fotógrafo puede cobrar un recargo acordado por escrito o negarse si eso afecta el trabajo original. Si no hay acuerdo, sigue con el servicio original y eso no cuenta como incumplimiento.",
+      "<b>Interferencias.</b> El único que toma las fotos es el Fotógrafo. Te encargas de que personas ajenas a la sesión no interfieran en su trabajo con dispositivos u objetos que impidan capturar las imágenes. Si por la imprudencia de otras personas se pierde una foto única e irrepetible, el Fotógrafo no responde.",
+      "<b>Productos físicos.</b> El precio incluye solo el servicio digital y la entrega del material final en formato digital. Los álbumes, impresiones, fotolibros y otros productos físicos se cotizan aparte, según la cantidad de fotos, el tamaño, el papel, la encuadernación y las demás especificaciones. Tienen sus propios tiempos y formas de pago. No se produce ni se entrega nada físico sin que apruebes el presupuesto y pagues el total por adelantado.",
+      "<b>Tus compromisos.</b> Avisas al Fotógrafo si no puedes asistir o vas a llegar tarde, y le facilitas a tiempo el acceso a la información y los elementos que necesite. En sesiones de más de 4 horas le das un espacio para descansar y guardar el equipo, alimentación para él y su equipo humano, y acceso razonable a las áreas principales del evento. Reconoces que viste su trabajo antes de contratarlo y que tiene la capacidad técnica y la habilidad para cumplir el servicio.",
+      "<b>Compromisos del Fotógrafo.</b> Llega a tiempo a la sesión con todo el equipo necesario, entrega el material puntualmente, te avisa por escrito cualquier cambio de fecha, hora, lugar o costo, y atiende consultas por correo o WhatsApp dentro del horario {{horarioAtencion}}.",
+      "<b>Fuera de su responsabilidad.</b> El Fotógrafo tiene libertad artística sobre las fotos de la sesión. No responde por la falta de permisos o licencias del lugar, por accidentes o percances ajenos a su trabajo (seguridad, clima, imprudencia de terceros) ni por diferencias de color o calidad en impresiones hechas por terceros que él no supervisó."
+    ]
   },
   {
-    titulo: 'Ejecución',
-    cuerpo: 'EL/LA CLIENTE autoriza a EL FOTÓGRAFO a tomarle imágenes fotográficas a todos los asistentes a la producción invitados por EL/LA CLIENTE. Las imágenes fotográficas incluirán tomas directas y tomas a las que se aplicarán los retoques necesarios a consideración y criterio de EL FOTÓGRAFO. La fecha y hora serán acordadas previamente por ambas partes; para este servicio, la fecha acordada es {{fecha}}. En caso de que la sesión sufra retrasos significativos o deba reprogramarse por falta de organización, incumplimientos, tardanza o negligencia de EL/LA CLIENTE, EL FOTÓGRAFO podrá cobrar un recargo por cada hora de espera adicional no pactada o reprogramar la sesión, aplicando costos de desplazamiento o logística. Si no se llega a un nuevo acuerdo para continuar, EL FOTÓGRAFO podrá considerar la sesión por terminada y retener los montos abonados como compensación por el tiempo invertido. El precio estipulado en la presente cotización cubre únicamente los costos de desplazamiento dentro del radio urbano comprendido en el área delimitada entre Norte: {{zonaNorte}}, Sur: {{zonaSur}}, Este: {{zonaEste}}, Oeste: {{zonaOeste}}. Toda locación ubicada fuera de dicha zona será considerada como desplazamiento adicional, y se le aplicará un recargo logístico, cuyo monto será calculado en función de la distancia total de ida y vuelta, el tiempo estimado de traslado, el tipo de vía o accesibilidad de la zona, el horario de producción y el uso de combustible o precio de traslado. En ningún caso se iniciará la producción sin la cancelación previa del monto correspondiente al recargo logístico, si éste aplica. La sesión se realizará en {{direccion}}, salvo acuerdo distinto entre las partes.',
+    "titulo": "Bloque 3. Entrega de las fotos",
+    "simple": "En simple: cómo y cuándo recibes las fotos, cuántos cambios puedes pedir y cuánto tiempo se guardan.",
+    "parrafos": [
+      "<b>Plazo de entrega.</b> El Fotógrafo te entrega el material final en un catálogo digital con marca de agua, en un plazo de 3 a 7 días hábiles desde la sesión. Ese plazo no se extiende salvo que ambos lo acuerden por escrito.",
+      "<b>Si eliges tú las fotos.</b> Si quieres elegir tú las fotos, tienes 7 días para hacerlo y el plazo de 3 a 7 días hábiles corre desde el momento en que las eliges. Si no eliges, el Fotógrafo las escoge según su criterio y el plazo corre desde la sesión.",
+      "<b>Descargas.</b> La descarga queda bloqueada hasta que pagues el saldo. Después se habilita en dos formatos: Máxima calidad (JPEG, sRGB, la mayor resolución posible) y Optimizado (JPEG, sRGB, redimensionado a 1080 x 1350 px).",
+      "<b>Recargos.</b> Pagas un recargo si necesitas trabajo fuera del plazo, fechas de entrega no programadas, o si no entregaste a tiempo la información, los materiales o las aprobaciones que el Fotógrafo necesitaba.",
+      "<b>Cambios.</b> Puedes pedir cambios una sola vez, dentro de los 7 días siguientes a la entrega del material final. El Fotógrafo no puede garantizar que el trabajo quede libre de errores. Los cambios pedidos después tienen un costo extra. El Fotógrafo puede rechazar revisiones que tengan fines no acordados, contradigan la dirección artística acordada, sean técnicamente inviables o muy costosas frente al alcance original, dañen su reputación o vayan contra su ética profesional.",
+      "<b>Almacenamiento.</b> Las fotos se guardan en un servidor privado del Fotógrafo durante 60 días calendario desde la entrega. Pasado ese plazo no se garantiza que sigan disponibles. Si pides un reenvío después, depende de que exista un respaldo y se paga un cargo por recuperación y reenvío, según el volumen de archivos y el método de entrega.",
+      "<b>Si no respondes.</b> Si en los 30 días siguientes a la entrega no eliges, no recoges o no recibes el material final, se resuelve el contrato (bloque 6) y el Fotógrafo puede reclamar los daños y perjuicios que haya sufrido."
+    ]
   },
   {
-    titulo: 'Sobrepaso de alcance (scope creep)',
-    cuerpo: 'Se entiende por "sobrepaso de alcance" cualquier requerimiento de EL/LA CLIENTE que exceda la cantidad de tomas, tiempo de producción, número de participantes o locaciones originalmente pactadas. En caso de que, durante o antes de la Producción Fotográfica, EL/LA CLIENTE solicite servicios adicionales no previstos, EL FOTÓGRAFO podrá cobrar un recargo adicional, cuyo importe se acordará por escrito, o negarse a efectuar tales servicios si afectan el desempeño profesional u operativo del proyecto inicial. De no alcanzarse un acuerdo, EL FOTÓGRAFO continuará con la prestación de los servicios originales sin que ello implique incumplimiento de su parte.',
+    "titulo": "Bloque 4. Pagos",
+    "simple": "En simple: cuánto pagas, cuándo y cómo, y qué pasa si pagas tarde.",
+    "parrafos": [
+      "<b>Precio.</b> El servicio cuesta Bs. {{precio}}.",
+      "<b>Cómo se paga.</b> Pagas el 50% (Bs. {{adelanto}}) para reservar la fecha de la sesión y el 50% restante (Bs. {{saldo}}) cuando recibes el material final. Puedes pagar por transferencia bancaria, depósito o QR a esta cuenta: {{banco}}, número de cuenta {{cuentaNumero}}, a nombre de {{cuentaTitular}}, {{cuentaTipo}}, carnet {{carnetTitular}}. Envía el comprobante de inmediato para que se valide.",
+      "<b>Pagos de terceros.</b> Si otra persona paga por ti, avisa antes. El Fotógrafo no responde por demoras o errores al identificar un pago hecho desde una cuenta ajena sin coordinación previa.",
+      "<b>Pedidos urgentes.</b> Si pides una cotización o paquete con menos de 48 horas de anticipación a la sesión, el precio final sube.",
+      "<b>Factura.</b> Si necesitas factura, el precio se ajusta y el precio final de la cotización puede subir.",
+      "<b>Mora.</b> Si no pagas el saldo dentro de {{diasMora}} días hábiles desde que recibes el material final, se suma un interés de mora del 10% sobre el monto no pagado.",
+      "<b>Licencia condicionada al pago.</b> Tu licencia para usar las fotos depende del pago completo. Si incumples los plazos de pago o caes en mora, la licencia queda revocada. El Fotógrafo puede pedirte que retires cualquier imagen publicada, en medios físicos o digitales, hasta que pagues."
+    ]
   },
   {
-    titulo: 'Entregables físicos',
-    cuerpo: 'El precio estipulado en este contrato contempla exclusivamente la prestación de servicios digitales de producción fotográfica y la entrega del material final en formato digital, según lo descrito anteriormente. En caso de que EL/LA CLIENTE requiera entregables físicos (tales como álbumes, impresiones, fotolibros u otros productos tangibles), estos no están incluidos en el precio señalado y deberán ser cotizados de manera independiente, en función de la cantidad total de imágenes a incluir, el tamaño y dimensiones del formato solicitado, el tipo de papel o material de impresión, el tipo de encuadernación y calidad de la tapa, y demás especificaciones requeridas por EL/LA CLIENTE. Estos productos se considerarán como servicios complementarios y estarán sujetos a tiempos de producción, condiciones de entrega y formas de pago distintos a los establecidos para la entrega digital. Ningún producto físico será elaborado ni entregado sin la aprobación expresa del presupuesto y el pago total por adelantado correspondiente a dicho servicio.',
+    "titulo": "Bloque 5. Uso de las imágenes",
+    "simple": "En simple: para qué puedes usar las fotos, qué puede hacer el Fotógrafo con ellas y cómo se cuidan ambos.",
+    "parrafos": [
+      "<b>Tu uso.</b> Las fotos son para uso comercial. Eso incluye uso personal y publicación en sitios web y redes sociales, actuales y futuras, relacionados directamente con tu negocio. Puedes exhibirlas, ponerlas en catálogos, en medios impresos o electrónicos y en videos. Puedes ajustarlas para imprimirlas o exhibirlas, siempre que no cambies lo que muestran.",
+      "<b>Otro fin.</b> Si quieres usar una foto para un fin que no acordaron, pide autorización por escrito. El Fotógrafo hace los arreglos necesarios y, si corresponde, envía una cotización nueva. Un fin acordado por escrito antes de la sesión también vale.",
+      "<b>Propiedad.</b> El material final es tuyo. Los derechos patrimoniales sobre el material, los documentos, bocetos, esquemas, negativos y archivos brutos (RAW) son del Fotógrafo. Los RAW no se entregan por ningún motivo.",
+      "<b>Lo que hace el Fotógrafo.</b> Puede mostrar las fotos como muestra de su trabajo, con el crédito respectivo, y usarlas para promocionar su marca: publicarlas en sus redes sociales, presentarlas a clientes o posibles clientes, enviarlas a un concurso de fotografía, publicarlas en un libro o una revista y decorar el estudio. Siempre que no dañe tu imagen e identidad. Para eso das tu consentimiento expreso a que te fotografíe y cedes el uso de tu imagen. El Fotógrafo nunca usará las imágenes fuera de la fotografía, el arte o la publicidad, y deja claro que contigo solo tuvo una relación profesional.",
+      "<b>Cuidado de la reputación.</b> No alteres las fotos con filtros, ediciones, recortes, eliminación de fondo u otros medios si eso perjudica el honor o la reputación profesional del Fotógrafo. El Fotógrafo puede oponerse a que se exhiban imágenes que hayas alterado de esa forma, o que se usen en condiciones que perjudiquen su honor o con fines no permitidos.",
+      "<b>Transmisión a terceros.</b> No puedes transmitir a terceros la propiedad de las fotos sin autorización expresa del Fotógrafo.",
+      "<b>Comentarios públicos.</b> No difundas, en redes sociales ni en foros, afirmaciones falsas, descalificatorias o engañosas que perjudiquen la reputación profesional del Fotógrafo. Si tienes un problema con el servicio, busca primero una solución directa y amistosa con él. Si lo incumples, el Fotógrafo puede tomar acciones legales y es causal de resolución del contrato."
+    ]
   },
   {
-    titulo: 'Obstáculos',
-    cuerpo: 'EL/LA CLIENTE reconoce y acepta que el único responsable de tomar las fotografías será EL FOTÓGRAFO. En consecuencia, EL/LA CLIENTE se compromete a garantizar que terceras personas externas a la producción fotográfica no interfieran en la labor de EL FOTÓGRAFO impidiendo la captura de imágenes mediante el uso de cualquier dispositivo u objeto. EL FOTÓGRAFO no asumirá ninguna responsabilidad en caso de que, debido a la imprudencia de otras personas, no sea posible capturar alguna fotografía única e irrepetible.',
+    "titulo": "Bloque 6. Reprogramaciones, devoluciones y fuerza mayor",
+    "simple": "En simple: qué pasa si tú o el Fotógrafo no pueden asistir, cuándo se devuelve el dinero y cuándo termina el contrato.",
+    "parrafos": [
+      "<b>Reprogramaciones.</b> El contrato no tiene cancelaciones. Si no puedes asistir en la fecha acordada, incluso por fuerza mayor o caso fortuito, puedes reprogramar la sesión hasta 3 veces como máximo. Avisa por escrito con {{avisoReprogramar}}.",
+      "<b>Lo abonado no se devuelve.</b> Si la sesión no se realiza por causa tuya (retrasos, ausencia, falta de organización o más de 3 reprogramaciones), el Fotógrafo se queda con el 100% de lo que hayas pagado.",
+      "<b>Retrasos el día de la sesión.</b> Si la sesión se retrasa o se interrumpe por tu causa, aplica lo explicado en el bloque 2.",
+      "<b>Si el Fotógrafo no puede ir.</b> Si por caso fortuito, fuerza mayor o emergencia no puede asistir, puede enviar a otro fotógrafo con su equipo, sin costo adicional para ti. El reemplazo cumple los mismos requisitos técnicos, artísticos y profesionales, con una trayectoria y una forma de trabajo similares, y el Fotógrafo decide quién es. Si no hay reemplazo o no lo aceptas, el Fotógrafo te devuelve el 100% de lo que abonaste, sin derecho a reclamo adicional, no entrega las fotos en ningún formato y pierde el derecho sobre el resultado final.",
+      "<b>Terminar el contrato.</b> Cualquiera de las Partes puede resolver el contrato cuando la otra incumple sus obligaciones por más de 10 días hábiles. También se resuelve en los casos que el contrato indica: los comentarios públicos que dañan al Fotógrafo (bloque 5) y los 30 días sin respuesta después de la entrega (bloque 3)."
+    ]
   },
   {
-    titulo: 'Formatos y medios',
-    cuerpo: 'El plazo de entrega del material final es de {{entrega}} desde la fecha de la producción fotográfica. El material final será entregado en un catálogo digital para que EL/LA CLIENTE pueda utilizarlas para el fin convenido en el presente contrato. Este catálogo estará protegido por marca de agua y la descarga de fotografías estará restringida hasta que se complete el pago de los honorarios. Ejecutado el pago, el catálogo se habilitará para su descarga en dos formatos: Alta Calidad (JPEG, con espacio de color sRGB en la máxima resolución posible) y Optimizado (JPEG, con espacio de color sRGB y con redimensionamiento a 1080px x 1350px). El material final podrá ser seleccionado por EL/LA CLIENTE si así lo desea, en un plazo de 7 días. Caso contrario, el material final será elegido a consideración de EL FOTÓGRAFO.',
+    "titulo": "Bloque 7. Datos y confidencialidad",
+    "simple": "En simple: cómo se cuida la información y los datos de las personas fotografiadas.",
+    "parrafos": [
+      "<b>Confidencialidad.</b> Ambas Partes mantienen confidencial la información que reciben de la otra durante el contrato. Esto no aplica a la información de dominio público. Cada Parte usa esa información solo para ejecutar este contrato y no la explota, por cuenta propia ni de un tercero, directa o indirectamente.",
+      "<b>Datos personales.</b> Si la ley exige un manejo especial de datos personales, como las imágenes que identifican a las personas, el Fotógrafo los trata de forma confidencial y no los usa para otro fin que el de este contrato. Tú garantizas que tienes la autorización de los participantes para fotografiarlos o filmarlos cuando la ley lo exija. También les informas las características y el propósito de la sesión y recabas las autorizaciones adicionales que correspondan."
+    ]
   },
   {
-    titulo: 'Honorarios',
-    cuerpo: 'Por la prestación de los servicios de fotografía, EL/LA CLIENTE efectuará la cancelación a EL FOTÓGRAFO por el monto señalado en la cotización, es decir <b>Bs. {{precio}}</b>. La cancelación podrá efectuarse por transferencia bancaria, depósito o por QR a la siguiente cuenta: Banco {{banco}}, número de cuenta {{cuentaNumero}}, a nombre de {{cuentaTitular}}, {{cuentaTipo}}, número de carnet {{carnetTitular}}.',
-  },
-  {
-    titulo: 'Métodos de pago',
-    cuerpo: 'La cancelación del monto se realizará de la siguiente manera: EL/LA CLIENTE realizará el abono del 50% del precio total (<b>Bs. {{adelanto}}</b>) para reservar la fecha de la producción fotográfica, y el 50% del saldo restante (<b>Bs. {{saldo}}</b>) se cancelará en el momento en el que EL/LA CLIENTE reciba el material final. La solicitud de una cotización o paquete, con un tiempo menor a 48 horas a la producción, implica un aumento del precio final de la sesión. Cualquier transacción efectuada por un tercero deberá ser notificada previamente; EL FOTÓGRAFO no se responsabiliza por demoras o errores en la identificación del pago si este se realizó desde una cuenta ajena, sin previa coordinación. El comprobante de pago deberá enviarse de forma inmediata para su validación.',
-  },
-  {
-    titulo: 'Facturación',
-    cuerpo: 'En caso de necesitar facturación por el servicio prestado, EL/LA CLIENTE acepta que al proceder de esta forma se harán los ajustes necesarios al precio facturado. Esto podrá implicar el aumento del precio final de la cotización.',
-  },
-  {
-    titulo: 'Mora',
-    cuerpo: 'En el caso de que EL/LA CLIENTE no pague el monto acordado en el plazo estipulado, se generará un interés del 10% por mora sobre el monto no cancelado.',
-  },
-  {
-    titulo: 'Finalidad',
-    cuerpo: 'La finalidad de las imágenes fotográficas será para uso comercial. Esto implica el uso personal y la publicación en sitios webs y redes sociales actuales y futuras relacionadas directamente con EL/LA CLIENTE. En el caso que se desee utilizar alguna imagen para un fin no acordado y requiera alguna modificación, se deberá solicitar a EL FOTÓGRAFO la autorización por escrito. EL FOTÓGRAFO realizará los arreglos de la imagen respectivos para el fin deseado y enviará una cotización nueva si fuese necesario.',
-  },
-  {
-    titulo: 'Propiedad',
-    cuerpo: 'La propiedad del material final corresponde a EL/LA CLIENTE. Sin embargo, LAS PARTES reconocen que los derechos patrimoniales sobre el material, así como documentos, bocetos, esquemas, negativos y brutos (RAWs), corresponden a EL FOTÓGRAFO. Bajo ningún motivo se entregarán las fotografías en formato RAW a EL/LA CLIENTE. EL/LA CLIENTE autoriza a EL FOTÓGRAFO exhibir las imágenes que haya efectuado por encargo como muestra de su trabajo, otorgando el crédito respectivo. Asimismo, EL/LA CLIENTE otorga el derecho a EL FOTÓGRAFO de hacer uso del material para fines de promoción de su propia marca y trabajo: publicarlos en sus redes sociales, presentar a otros clientes o posibles clientes, presentarlo a un concurso de fotografía, publicar un libro o una revista y para decoración del estudio fotográfico, siempre y cuando no dañe la imagen e identidad de EL/LA CLIENTE.',
-  },
-  {
-    titulo: 'Uso de las imágenes',
-    cuerpo: 'EL/LA CLIENTE tendrá el derecho de uso, de reproducción y comunicación pública del material final, como exhibir las imágenes fotográficas, plasmarla en catálogos, así como en otros medios impresos o electrónicos, o en videos. Esto será posible siempre y cuando el material final no sea utilizado para fines no acordados, salvo que el objetivo y la finalidad hayan sido expresados y acordados por escrito antes de realizarse la producción fotográfica. EL FOTÓGRAFO se reserva el derecho de oponerse al uso del material final, cuando la exhibición, presentación o plasmación se realice en condiciones que perjudiquen su honor o su reputación profesional, o cuando se haga uso con fines no permitidos.',
-  },
-  {
-    titulo: 'Transmisión a terceros',
-    cuerpo: 'EL/LA CLIENTE reconoce y acepta que no podrá transmitir a terceros la propiedad de las imágenes fotográficas objeto de este contrato, salvo que medie autorización expresa por EL FOTÓGRAFO.',
-  },
-  {
-    titulo: 'Revocación automática de licencia por incumplimiento de pago',
-    cuerpo: 'La licencia de uso de las imágenes finales está condicionada al pago completo de los honorarios acordados. Si EL/LA CLIENTE incumple con los plazos de pago o incurre en mora, se entenderá revocada cualquier licencia o autorización de uso que se haya otorgado sobre las imágenes. EL FOTÓGRAFO podrá exigir a EL/LA CLIENTE la inmediata retirada de cualquier imagen publicada en medios físicos o digitales hasta que se efectúe el pago correspondiente.',
-  },
-  {
-    titulo: 'No desprestigio',
-    cuerpo: 'EL/LA CLIENTE se obliga a no difundir, por ningún medio (incluyendo redes sociales y foros públicos), afirmaciones falsas, descalificatorias o engañosas que perjudiquen la reputación profesional de EL FOTÓGRAFO. Si EL/LA CLIENTE tiene algún desacuerdo o inconveniente con el servicio, se compromete a buscar una solución directa y amistosa con EL FOTÓGRAFO antes de emitir comentarios públicos. En caso de incumplimiento, EL FOTÓGRAFO se reserva las acciones legales pertinentes, además de considerarse causal de resolución de este contrato.',
-  },
-  {
-    titulo: 'Obligaciones de EL/LA CLIENTE',
-    cuerpo: 'EL/LA CLIENTE reconoce que EL FOTÓGRAFO cuenta con la capacidad técnica y el material necesarios para el desempeño y cumplimiento de los fines del presente contrato, y que examinó previamente el trabajo realizado por EL FOTÓGRAFO, manifestando que reconoce la competencia y la habilidad técnica que posee para cumplir con los objetivos y fines estipulados en el presente documento. EL/LA CLIENTE se compromete a: notificar a EL FOTÓGRAFO su ausencia o demora a la producción fotográfica si fuese el caso; aceptar el porcentaje del monto a ser retenido por EL FOTÓGRAFO por efecto de la cancelación de la producción fotográfica; cancelar el monto total al momento de recibir el material final; facilitar a EL FOTÓGRAFO de manera oportuna el acceso a toda la información y elementos necesarios para la prestación del servicio; en producciones de más de 4 horas, facilitar un espacio adecuado para descanso, almacenamiento de equipo técnico así como alimentación de EL FOTÓGRAFO y su equipo humano, y garantizar acceso razonable a las áreas principales del evento; cumplir de manera íntegra, sin excepción, todos los términos y condiciones estipulados en el presente documento; evitar alterar o modificar, de cualquier manera o por cualquier medio (filtros, edición, recortes, eliminación de fondo, etc.), el contenido o tamaño del material final entregado, de modo que perjudique al honor y/o reputación profesional de EL FOTÓGRAFO; cumplir con la cláusula de confidencialidad; e informar a los participantes sobre las características y propósitos de la Producción Fotográfica, recabando autorizaciones adicionales si correspondiesen.',
-  },
-  {
-    titulo: 'Obligaciones de EL FOTÓGRAFO',
-    cuerpo: 'EL FOTÓGRAFO se compromete a: contar con la capacidad técnica y el material necesario para el desempeño y cumplimiento de los fines del presente contrato; presentarse el día de la producción fotográfica a tiempo y con todo el equipo necesario; entregar puntualmente el material y el material final a EL/LA CLIENTE; devolver el 100% del abono cancelado por EL/LA CLIENTE en el caso que, por fuerza mayor o caso fortuito, EL FOTÓGRAFO no pueda cumplir con el contrato; no hacer mal uso de las imágenes y nunca utilizarlas en un contexto distinto a la fotografía, el arte o la publicidad, dejando siempre claro que no tenía con EL/LA CLIENTE otra relación que profesional en el momento de la producción fotográfica; comunicar a EL/LA CLIENTE por escrito cualquier cambio de fecha, hora, lugar o costo referente a la producción fotográfica; cumplir con la cláusula de confidencialidad; y atender consultas y solicitudes exclusivamente por los canales acordados (correo electrónico y/o número de WhatsApp proporcionado), dentro del horario de atención de {{horarioAtencion}}.',
-  },
-  {
-    titulo: 'Derechos de EL/LA CLIENTE',
-    cuerpo: 'EL FOTÓGRAFO declara que no puede garantizar que el trabajo final estará completamente libre de errores, por lo que EL/LA CLIENTE tiene derecho a solicitar cambios o modificaciones en 1 ocasión en los 7 días siguientes a la entrega del material final; los cambios posteriores al plazo indicado implicarán una compensación extra. EL/LA CLIENTE puede hacer los ajustes que sean necesarios de las imágenes fotográficas para su impresión o exhibición, sin que afecte el contenido intrínseco de los materiales. EL/LA CLIENTE otorga consentimiento expreso, sin que medie vicio, de que EL FOTÓGRAFO le tome fotografías para el fin convenido, y cede el uso de su imagen a EL FOTÓGRAFO con el fin de publicarlos en sus redes sociales, presentar a otros clientes o posibles clientes, presentarlo a un concurso de fotografía, para publicar un libro o una revista y para decoración del estudio fotográfico, siempre y cuando no dañe la imagen e identidad de EL/LA CLIENTE.',
-  },
-  {
-    titulo: 'Derechos de EL FOTÓGRAFO',
-    cuerpo: 'EL FOTÓGRAFO puede oponerse a la exhibición, plasmación o presentación de imágenes que hayan sufrido alguna modificación, edición o alteración por parte de EL/LA CLIENTE, de modo que perjudique su honor y/o su reputación profesional, y se reserva el derecho de rechazar solicitudes de revisiones que tengan fines no acordados, contravengan la dirección artística acordada, sean técnicamente inviables o excesivamente onerosas en relación con el alcance original, menoscaben su reputación o vayan en contra de su ética profesional. EL FOTÓGRAFO tiene la libertad artística sobre las imágenes fotográficas que vayan a ser tomadas el día de la producción fotográfica, y no se responsabiliza por la falta de permisos o licencias del lugar donde se realice la sesión, por accidentes o percances que ocurran durante la producción por motivos ajenos a su labor (condiciones de seguridad, clima, imprudencia de terceros, etc.), ni por diferencias en color o calidad al momento de la impresión en servicios de terceros no supervisados por EL FOTÓGRAFO.',
-  },
-  {
-    titulo: 'Confidencialidad',
-    cuerpo: 'Ambas partes se comprometen a tomar todas las medidas necesarias para mantener de carácter confidencial toda la información que se les haya sido comunicada por la otra parte, o información que hayan adquirido, durante la ejecución del presente contrato. La obligación de esta cláusula no se aplicará a toda aquella información que sea del dominio público. Ambas partes se comprometen a utilizar la información compartida únicamente para la ejecución del presente contrato, y a no explotar, por cuenta propia o por un tercero, directa o indirectamente, toda o parte de dicha información.',
-  },
-  {
-    titulo: 'Protección de datos personales',
-    cuerpo: 'En caso de que la legislación local exija un manejo específico de datos personales (tales como imágenes que identifiquen a las personas), EL FOTÓGRAFO se compromete a dar tratamiento confidencial a dichos datos y no usarlos con fines distintos a los establecidos en este contrato. EL/LA CLIENTE garantiza que cuenta con la autorización de los participantes para ser fotografiados o filmados, de ser legalmente necesario.',
-  },
-  {
-    titulo: 'Almacenamiento de las imágenes',
-    cuerpo: 'Las imágenes fotográficas serán almacenadas en un servidor privado de EL FOTÓGRAFO por un plazo de 60 días calendario, computables desde la entrega del material final. Posterior a este tiempo, la re-entrega de dichas fotografías implicará una nueva cotización o un recargo adicional a consideración de EL FOTÓGRAFO. Vencido este plazo de 60 días, EL FOTÓGRAFO no garantiza la disponibilidad del material. En caso de requerirse una reentrega posterior, esta estará sujeta a la existencia de un respaldo disponible y al pago de un cargo adicional por el servicio de recuperación y reenvío, cuyo valor será determinado según el volumen de archivos y el método de entrega requerido.',
-  },
-  {
-    titulo: 'Entrega del material final',
-    cuerpo: 'EL FOTÓGRAFO tendrá un plazo improrrogable de 3 a 7 días hábiles para entregar el material final, computables desde la selección de fotos por parte de EL/LA CLIENTE, salvo previo acuerdo expreso entre las partes. EL/LA CLIENTE deberá abonar un recargo por cualquier servicio que requiera trabajar fuera del plazo establecido, por fechas de entrega no programadas, o como consecuencia de que EL/LA CLIENTE no haya cumplido con la entrega de la información, materiales o aprobaciones. En el caso en que EL/LA CLIENTE no se manifieste para escoger, recoger o recibir el material final en los siguientes 30 días a su entrega, aplicará automáticamente la cláusula de resolución, sin perjuicio a los daños y perjuicios incurridos por EL FOTÓGRAFO.',
-  },
-  {
-    titulo: 'Fuerza mayor',
-    cuerpo: 'EL FOTÓGRAFO, en el caso de no poder asistir al día de la producción fotográfica por caso fortuito o fuerza mayor, podrá ser reemplazado por otro fotógrafo y su equipo sin coste adicional para EL/LA CLIENTE. El fotógrafo y su equipo de reemplazo cumplirán con iguales requisitos técnicos, artísticos y profesionales, con trayectorias y formas de trabajo similares a la de EL FOTÓGRAFO. Queda a exclusiva decisión y criterio de EL FOTÓGRAFO la elección de los reemplazantes.',
-  },
-  {
-    titulo: 'Incumplimiento del contrato',
-    cuerpo: 'Por EL FOTÓGRAFO: se compromete a cubrir la producción fotográfica o hacer lo posible por cumplir con su ejecución. Sin embargo, si por caso fortuito, fuerza mayor o emergencias EL FOTÓGRAFO incumple el presente contrato, se compromete a devolver el 100% del dinero cancelado, sin derecho a reclamación adicional; por la resolución del contrato, las fotografías no serán entregadas en ningún formato y perderá el derecho sobre el resultado final. Por EL/LA CLIENTE: en el caso de que se haya reservado la fecha para la prestación del servicio y, debido a circunstancias de fuerza mayor o caso fortuito, EL/LA CLIENTE manifieste que ya no requiere el servicio, EL FOTÓGRAFO tendrá el derecho de retener un porcentaje del abono previamente cancelado en calidad de indemnización por los daños y perjuicios emergentes.',
-  },
-  {
-    titulo: 'Daños y perjuicios',
-    cuerpo: 'El porcentaje de la indemnización estará sujeto a variación según la antelación con la cual EL/LA CLIENTE notifique por escrito a EL FOTÓGRAFO su ausencia: mayor a 2 semanas, se retendrá a consideración de EL FOTÓGRAFO hasta un 50% de lo acordado; menor a 2 semanas hasta un día antes, se podrá retener hasta el 100% de lo abonado; después de haberse realizado la producción, se retendrá el 100% de lo abonado sin derecho al reclamo del material final.',
-  },
-  {
-    titulo: 'Resolución del contrato',
-    cuerpo: 'Cualquiera de las partes podrá resolver el contrato cuando la otra incumpla sus obligaciones establecidas en el presente contrato por un tiempo mayor a 10 días hábiles.',
-  },
-  {
-    titulo: 'Controversias',
-    cuerpo: 'LAS PARTES acuerdan sin objeción alguna que toda controversia, litigio, discrepancia, cuestión o reclamación de la ejecución o interpretación del presente contrato o relacionada con él, directa o indirectamente, o de sus documentos complementarios o modificatorios, será resuelta en primera instancia en común acuerdo, y en caso contrario mediante conciliación.',
-  },
-  {
-    titulo: 'Ley aplicable y jurisdicción competente',
-    cuerpo: 'El presente contrato está sujeto y se interpretará de conformidad con la legislación vigente, que comprende la integridad de los pactos celebrados entre LAS PARTES en relación con el objeto del presente contrato y, por tanto, anula y prevalece sobre cualesquiera otros pactos escritos o verbales que pudieran existir entre ellas con anterioridad a la fecha de la firma del presente contrato. En caso de cualquier desacuerdo o controversia entre LAS PARTES en relación con la ejecución, eficacia o interpretación del presente contrato, LAS PARTES se someten expresamente a la jurisdicción y competencia de los Juzgados y Tribunales de Cochabamba, Bolivia.',
-  },
-  {
-    titulo: 'Vigencia',
-    cuerpo: 'El presente contrato será aplicable desde el momento en que EL/LA CLIENTE reciba y acepte el mismo. El presente documento anula y reemplaza cualquier contrato o acuerdo previo entre LAS PARTES con el mismo objeto y solo podrá ser modificado por un nuevo acuerdo.',
-  },
-  {
-    titulo: 'Aceptación',
-    cuerpo: 'LAS PARTES, de su libre y espontánea voluntad, declaran su conformidad y aceptación con todas y cada una de las cláusulas del presente contrato. En señal de aceptación se obligan a su fiel y estricto cumplimiento del mismo, firmando al pie en constancia. Documento firmado el {{hoy}}, en la ciudad de Cochabamba, Bolivia.',
-  },
-  {
-    titulo: 'Firma digital',
-    cuerpo: 'LAS PARTES acuerdan que la aceptación escrita y/o firma digital de este contrato (por correo electrónico, plataforma de firma digital u otro medio aprobado por las partes) es válida y produce los mismos efectos legales que la firma manuscrita tradicional.',
-  },
+    "titulo": "Bloque 8. Cierre legal y firma",
+    "simple": "En simple: cómo se resuelven los desacuerdos, desde cuándo vale el contrato y cómo se firma.",
+    "parrafos": [
+      "<b>Desacuerdos.</b> Si hay un reclamo o desacuerdo sobre la ejecución o la interpretación del contrato, o de sus documentos complementarios o modificatorios, las Partes primero lo resuelven de común acuerdo y, si no se puede, mediante conciliación.",
+      "<b>Ley y juzgados.</b> El contrato se rige por la legislación vigente y reúne todo lo pactado entre las Partes sobre su objeto. Anula cualquier pacto escrito o verbal anterior. Para cualquier desacuerdo sobre su ejecución, eficacia o interpretación, las Partes se someten a los Juzgados y Tribunales de Cochabamba, Bolivia.",
+      "<b>Vigencia.</b> El contrato rige desde que lo recibes y lo aceptas. Reemplaza cualquier contrato o acuerdo previo con el mismo objeto y solo se cambia con un nuevo acuerdo.",
+      "<b>Aceptación y firma.</b> Las Partes declaran su conformidad con todas las cláusulas y se obligan a cumplirlas. Documento firmado el {{hoy}}, en la ciudad de Cochabamba, Bolivia. La aceptación escrita o la firma digital (por correo electrónico, plataforma de firma digital u otro medio aprobado por las Partes) vale lo mismo que una firma manuscrita."
+    ]
+  }
 ];
 
 /* ══════════════════════════════════════════════════════════════════════
@@ -412,6 +384,10 @@ const contratoConfig = [
 
     // Horario de atención (cláusula "Obligaciones de EL FOTÓGRAFO")
     horarioAtencion: 'lunes a sábado de 11:00 a 19:00',
+
+    // Plazos de las cláusulas "Reprogramaciones" y "Mora"
+    avisoReprogramar: '48 horas de anticipación',
+    diasMora: '5',
 
     // Radio urbano sin recargo logístico (cláusula "Ejecución")
     zonaNorte: 'Av. Segunda Circunvalación',
@@ -627,6 +603,8 @@ const contratoConfig = [
       zonaSur: CFG.zonaSur,
       zonaEste: CFG.zonaEste,
       zonaOeste: CFG.zonaOeste,
+      avisoReprogramar: CFG.avisoReprogramar,
+      diasMora: CFG.diasMora,
     };
   }
 
@@ -638,20 +616,53 @@ const contratoConfig = [
 
   var contratoBox = document.getElementById('contratoBox');
 
-  function renderContrato() {
-    var vars = variables(false);
-    contratoBox.innerHTML = contratoClausulas.map(function (c) {
-      return '<h3>' + escapeHtml(c.titulo) + '</h3><p>' + aplicarVariables(c.cuerpo, vars) + '</p>';
-    }).join('');
+  // Una lista de ítems (HTML) como <ul>
+  function ul(items, vars) {
+    return '<ul>' + items.map(function (t) { return '<li>' + aplicarVariables(t, vars) + '</li>'; }).join('') + '</ul>';
   }
 
-  // Versión en texto plano, para el PDF
-  function contratoPlano() {
+  function renderContrato() {
+    var vars = variables(false);
+    // Recuerda qué bloques estaban abiertos: este render corre en cada tecla.
+    var abiertos = {};
+    contratoBox.querySelectorAll('details[data-i]').forEach(function (d) { if (d.open) abiertos[d.getAttribute('data-i')] = true; });
+    var html = '';
+    contratoClausulas.forEach(function (c, i) {
+      if (c.nota) {
+        html += '<div class="cb-resumen"><h3>' + escapeHtml(c.titulo) + '</h3><p class="cb-nota">' + escapeHtml(c.nota) + '</p>' + ul(c.lista, vars) + '</div>';
+        html += '<div class="cb-tools"><button type="button" class="cb-todo" id="cbTodo">Abrir todos los bloques</button></div>';
+        return;
+      }
+      html += '<details class="cb" data-i="' + i + '"' + (abiertos[i] ? ' open' : '') + '><summary>' + escapeHtml(c.titulo) + '</summary>' +
+        '<p class="cb-simple">' + escapeHtml(c.simple) + '</p>' +
+        c.parrafos.map(function (t) { return '<p>' + aplicarVariables(t, vars) + '</p>'; }).join('') +
+        (c.lista ? ul(c.lista, vars) : '') + '</details>';
+    });
+    contratoBox.innerHTML = html;
+    var btnTodo = document.getElementById('cbTodo');
+    if (btnTodo) btnTodo.addEventListener('click', function () {
+      var ds = contratoBox.querySelectorAll('details.cb');
+      var abrir = !Array.prototype.every.call(ds, function (d) { return d.open; });
+      ds.forEach(function (d) { d.open = abrir; });
+      btnTodo.textContent = abrir ? 'Cerrar todos los bloques' : 'Abrir todos los bloques';
+    });
+  }
+
+  function quitarTags(t) { return t.replace(/<[^>]+>/g, ''); }
+
+  // Versión en texto plano (resumen + 8 bloques completos), para el PDF y el correo
+  function contratoPartes() {
     var vars = variables(true);
     return contratoClausulas.map(function (c) {
-      var cuerpo = aplicarVariables(c.cuerpo, vars).replace(/<[^>]+>/g, '');
-      return c.titulo.toUpperCase() + '\n' + cuerpo;
-    }).join('\n\n');
+      var lineas = [];
+      if (c.nota) lineas.push(c.nota);
+      else { lineas.push(c.simple); c.parrafos.forEach(function (t) { lineas.push(quitarTags(aplicarVariables(t, vars))); }); }
+      (c.lista || []).forEach(function (t) { lineas.push('• ' + quitarTags(aplicarVariables(t, vars))); });
+      return { titulo: c.titulo, cuerpo: lineas.join('\n') };
+    });
+  }
+  function contratoPlano() {
+    return contratoPartes().map(function (c) { return c.titulo.toUpperCase() + '\n' + c.cuerpo; }).join('\n\n');
   }
 
   campos.forEach(function (id) {
@@ -670,25 +681,9 @@ const contratoConfig = [
   });
   renderContrato();
 
-  // ── 4. Scroll del contrato: habilita el checkbox al llegar al final ──
-  var leyoTodo = false;
-  var scrollHint = document.getElementById('scrollHint');
-  function chequearScroll() {
-    if (leyoTodo) return;
-    var alcanzable = contratoBox.scrollHeight - contratoBox.clientHeight;
-    // Si el contrato entra completo en pantalla no hay nada que desplazar:
-    // ya está leído. Si sí hay scroll, damos por leído al 88% para no
-    // pelear con el rebote del scroll táctil en celulares.
-    var listo = alcanzable <= 8 || contratoBox.scrollTop >= alcanzable * 0.88;
-    if (listo) {
-      leyoTodo = true;
-      scrollHint.classList.add('hidden');
-      actualizarBoton();
-    }
-  }
-  contratoBox.addEventListener('scroll', chequearScroll, { passive: true });
-  window.addEventListener('resize', chequearScroll);
-  setTimeout(chequearScroll, 300);
+  // ── 4. El resumen siempre está a la vista y los 8 bloques se abren al tocarlos:
+  //      el contrato completo queda disponible desde el inicio y viaja entero en el PDF.
+  var leyoTodo = true;
 
   // ── 5. Checkbox de aceptación ───────────────────────────────────────
   var acepta = false;
@@ -941,10 +936,8 @@ const contratoConfig = [
     y += 86;
 
     // Cuerpo del contrato
-    var vars = variables(true);
-    contratoClausulas.forEach(function (c) {
-      var cuerpo = aplicarVariables(c.cuerpo, vars).replace(/<[^>]+>/g, '');
-      var lineas = doc.splitTextToSize(cuerpo, ANCHO);
+    contratoPartes().forEach(function (c) {
+      var lineas = doc.splitTextToSize(c.cuerpo, ANCHO);
       saltoSiHaceFalta(24 + lineas.length * LH);
       doc.setFont(FUENTE, 'bold');
       doc.setFontSize(10);
